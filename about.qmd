@@ -2,8 +2,8 @@
 title: "About"
 ---
 
-About this site
+This is a website created as part of ISSS608 Visual Analytics and Application under Singapore Management University (SMU) Master of IT in Business (MITB). This website is created using RStudio using Quarto.
 
-```{r}
-1 + 1
-```
+The author, Calvin Tan Song Hao is an aspiring a Data Analyst and a student at SMU MITB. I aim leverage my background as an R&D engineer to solve problems and uncover insights that drive impactful decisions.
+
+[My LinkedIn](https://www.linkedin.com/in/calvintansh/)
