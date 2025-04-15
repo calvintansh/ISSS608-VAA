@@ -18,20 +18,223 @@
     "href": "Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html",
     "title": "Hands-on Exercise 1",
     "section": "",
-    "text": "The code chunk below uses p_load() of pacman package to check if tidyverse packages are installed in the computer. If they are, then they will be launched into R.\n\npacman::p_load(tidyverse)\n\n\n\n\n\nexam_data &lt;- read_csv(\"data/Exam_data.csv\")\n\nRows: 322 Columns: 7\n── Column specification ────────────────────────────────────────────────────────\nDelimiter: \",\"\nchr (4): ID, CLASS, GENDER, RACE\ndbl (3): ENGLISH, MATHS, SCIENCE\n\nℹ Use `spec()` to retrieve the full column specification for this data.\nℹ Specify the column types or set `show_col_types = FALSE` to quiet this message."
+    "text": "The code chunk below uses p_load() of pacman package to check if tidyverse these packages are installed in the computer. If they are, then they will be launched into R.\n\npacman::p_load(patchwork, tidyverse)\n\n\n\n\nFor the purpose of this exercise, a data file called Exam_data will be used. It consists of year end examination grades of a cohort of primary 3 students from a local school. It is in csv file format.\n\nexam_data &lt;- read_csv(\"data/Exam_data.csv\")\n\nRows: 322 Columns: 7\n── Column specification ────────────────────────────────────────────────────────\nDelimiter: \",\"\nchr (4): ID, CLASS, GENDER, RACE\ndbl (3): ENGLISH, MATHS, SCIENCE\n\nℹ Use `spec()` to retrieve the full column specification for this data.\nℹ Specify the column types or set `show_col_types = FALSE` to quiet this message."
   },
   {
     "objectID": "Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html#install-and-launch-r-packages",
     "href": "Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html#install-and-launch-r-packages",
     "title": "Hands-on Exercise 1",
     "section": "",
-    "text": "The code chunk below uses p_load() of pacman package to check if tidyverse packages are installed in the computer. If they are, then they will be launched into R.\n\npacman::p_load(tidyverse)"
+    "text": "The code chunk below uses p_load() of pacman package to check if tidyverse these packages are installed in the computer. If they are, then they will be launched into R.\n\npacman::p_load(patchwork, tidyverse)"
   },
   {
     "objectID": "Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html#importing-the-data",
     "href": "Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html#importing-the-data",
     "title": "Hands-on Exercise 1",
     "section": "",
-    "text": "exam_data &lt;- read_csv(\"data/Exam_data.csv\")\n\nRows: 322 Columns: 7\n── Column specification ────────────────────────────────────────────────────────\nDelimiter: \",\"\nchr (4): ID, CLASS, GENDER, RACE\ndbl (3): ENGLISH, MATHS, SCIENCE\n\nℹ Use `spec()` to retrieve the full column specification for this data.\nℹ Specify the column types or set `show_col_types = FALSE` to quiet this message."
+    "text": "For the purpose of this exercise, a data file called Exam_data will be used. It consists of year end examination grades of a cohort of primary 3 students from a local school. It is in csv file format.\n\nexam_data &lt;- read_csv(\"data/Exam_data.csv\")\n\nRows: 322 Columns: 7\n── Column specification ────────────────────────────────────────────────────────\nDelimiter: \",\"\nchr (4): ID, CLASS, GENDER, RACE\ndbl (3): ENGLISH, MATHS, SCIENCE\n\nℹ Use `spec()` to retrieve the full column specification for this data.\nℹ Specify the column types or set `show_col_types = FALSE` to quiet this message."
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html#plotting-a-simple-bar-chart",
+    "href": "Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html#plotting-a-simple-bar-chart",
+    "title": "Hands-on Exercise 1",
+    "section": "Plotting a Simple Bar Chart",
+    "text": "Plotting a Simple Bar Chart\n\nggplot(data=exam_data, \n       aes(x=RACE)) +\n  geom_bar()\n\n\n\n\n\n\n\n\n\nUse #| eval: false to show code without plotting graph\n\nggplot(data=exam_data, \n       aes(x=RACE)) +\n  geom_bar()\n\n\n\nUse #| echo: false to plot graph without showing code"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html#using-stat",
+    "href": "Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html#using-stat",
+    "title": "Hands-on Exercise 1",
+    "section": "Using stat()",
+    "text": "Using stat()\n\nggplot(data=exam_data, \n       aes(y = MATHS, x= GENDER)) +\n  geom_boxplot() +\n  stat_summary(geom = \"point\",       \n               fun = \"mean\",         \n               colour =\"red\",        \n               size=4)"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html#a-blank-graph",
+    "href": "Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html#a-blank-graph",
+    "title": "Hands-on Exercise 1",
+    "section": "A blank graph",
+    "text": "A blank graph\n\nggplot(data=exam_data)"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html#default",
+    "href": "Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html#default",
+    "title": "Hands-on Exercise 1",
+    "section": "Default",
+    "text": "Default\n\nggplot(data=exam_data, \n       aes(y = MATHS, x= GENDER)) +\n  geom_boxplot()"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html#using-the-stat_summary-method",
+    "href": "Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html#using-the-stat_summary-method",
+    "title": "Hands-on Exercise 1",
+    "section": "Using the stat_summary() method",
+    "text": "Using the stat_summary() method\n\nggplot(data=exam_data, \n       aes(y = MATHS, x= GENDER)) +\n  geom_boxplot() +\n  stat_summary(geom = \"point\",       \n               fun = \"mean\",         \n               colour =\"red\",        \n               size=4)  \n\n\n\n\n\n\n\n\nAdds a red marker to represent the mean"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html#using-the-geom-method",
+    "href": "Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html#using-the-geom-method",
+    "title": "Hands-on Exercise 1",
+    "section": "Using the geom() method",
+    "text": "Using the geom() method\n\nggplot(data=exam_data, \n       aes(y = MATHS, x= GENDER)) +\n  geom_boxplot() +\n  geom_point(stat=\"summary\",        \n             fun=\"mean\",           \n             colour=\"red\",          \n             size=4) \n\n\n\n\n\n\n\n\nDifferent method but same result"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html#adding-a-best-fit-to-a-scatterplot",
+    "href": "Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html#adding-a-best-fit-to-a-scatterplot",
+    "title": "Hands-on Exercise 1",
+    "section": "Adding a best fit to a scatterplot",
+    "text": "Adding a best fit to a scatterplot\n\nDefault\n\nggplot(data=exam_data, \n       aes(x= MATHS, y=ENGLISH)) +\n  geom_point()\n\n\n\n\n\n\n\n\n\n\nBest Fit Curve vs Best Fit Line\n\nf1 &lt;- ggplot(data=exam_data, \n       aes(x= MATHS, y=ENGLISH)) +\n  geom_point() +\n  geom_smooth(linewidth=0.5)\n\nf2 &lt;- ggplot(data=exam_data, \n       aes(x= MATHS, \n           y=ENGLISH)) +\n  geom_point() +\n  geom_smooth(method=lm, \n              linewidth=0.5)\n\nf1 + f2\n\n`geom_smooth()` using method = 'loess' and formula = 'y ~ x'\n`geom_smooth()` using formula = 'y ~ x'"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html#purpose-of-aes-function",
+    "href": "Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html#purpose-of-aes-function",
+    "title": "Hands-on Exercise 1",
+    "section": "Purpose of aes() function",
+    "text": "Purpose of aes() function\n\nggplot(data=exam_data, \n       aes(x= MATHS))\n\n\n\n\n\n\n\n\nAll aesthetics of a plot are specified in the aes() function call and the code above adds MATHS to the x-axis."
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html#plotting-a-simple-dot-graph",
+    "href": "Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html#plotting-a-simple-dot-graph",
+    "title": "Hands-on Exercise 1",
+    "section": "Plotting a Simple Dot Graph",
+    "text": "Plotting a Simple Dot Graph\n\nWith y-axis vs without y-axis\n\nd1 &lt;- ggplot(data=exam_data, \n       aes(x = MATHS)) +\n  geom_dotplot(dotsize = 0.5)\n\nd2 &lt;- ggplot(data=exam_data, \n       aes(x = MATHS)) +\n  geom_dotplot(binwidth=2.5,         \n               dotsize = 0.5) +      \n  scale_y_continuous(NULL,           \n                     breaks = NULL)\n\nd1 + d2\n\nBin width defaults to 1/30 of the range of the data. Pick better value with\n`binwidth`."
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html#ploting-a-simple-histogram",
+    "href": "Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html#ploting-a-simple-histogram",
+    "title": "Hands-on Exercise 1",
+    "section": "Ploting a Simple Histogram",
+    "text": "Ploting a Simple Histogram\n\nDefault vs Modifying Bins and Colour\n\nh1 &lt;- ggplot(data=exam_data, \n       aes(x = MATHS)) +\n  geom_histogram()  \n\nh2 &lt;- ggplot(data=exam_data, \n       aes(x= MATHS)) +\n  geom_histogram(bins=20,            \n                 color=\"black\",      \n                 fill=\"light blue\") \n\nh1 + h2\n\n`stat_bin()` using `bins = 30`. Pick better value with `binwidth`.\n\n\n\n\n\n\n\n\n\n\n\nAdding Gender Sub-group\n\nggplot(data=exam_data, \n       aes(x= MATHS, \n           fill = GENDER)) +\n  geom_histogram(bins=20, \n                 color=\"grey30\")"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html#plotting-a-simple-kernal-density-estimate",
+    "href": "Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html#plotting-a-simple-kernal-density-estimate",
+    "title": "Hands-on Exercise 1",
+    "section": "Plotting a Simple Kernal Density Estimate",
+    "text": "Plotting a Simple Kernal Density Estimate\n\nDefault vs Gender Sub-group\n\nk1 &lt;- ggplot(data=exam_data, \n       aes(x = MATHS)) +\n  geom_density() \n\nk2 &lt;- ggplot(data=exam_data, \n       aes(x = MATHS, \n           colour = GENDER)) +\n  geom_density()\n\nk1 + k2"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html#plotting-a-simple-box-plot",
+    "href": "Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html#plotting-a-simple-box-plot",
+    "title": "Hands-on Exercise 1",
+    "section": "Plotting a Simple Box Plot",
+    "text": "Plotting a Simple Box Plot\n\nDefault vs Notched\n\nb1 &lt;- ggplot(data=exam_data, \n       aes(y = MATHS,       \n           x= GENDER)) +    \n  geom_boxplot()\n\nb2 &lt;- ggplot(data=exam_data, \n       aes(y = MATHS, \n           x= GENDER)) +\n  geom_boxplot(notch=TRUE)\n\nb1 + b2\n\n\n\n\n\n\n\n\nNotches are used in box plots to help visually assess whether the medians of distributions differ. If the notches do not overlap, this is evidence that the medians are different."
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html#plotting-a-simple-violin-plot",
+    "href": "Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html#plotting-a-simple-violin-plot",
+    "title": "Hands-on Exercise 1",
+    "section": "Plotting a Simple Violin Plot",
+    "text": "Plotting a Simple Violin Plot\n\nggplot(data=exam_data, \n       aes(y = MATHS, \n           x= GENDER)) +\n  geom_violin()"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html#plotting-a-simple-scatterplot",
+    "href": "Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html#plotting-a-simple-scatterplot",
+    "title": "Hands-on Exercise 1",
+    "section": "Plotting a Simple Scatterplot",
+    "text": "Plotting a Simple Scatterplot\n\nggplot(data=exam_data, \n       aes(x= MATHS, \n           y=ENGLISH)) +\n  geom_point()"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html#plotting-a-combined-boxplot-and-scatterplot",
+    "href": "Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html#plotting-a-combined-boxplot-and-scatterplot",
+    "title": "Hands-on Exercise 1",
+    "section": "Plotting a Combined Boxplot and Scatterplot",
+    "text": "Plotting a Combined Boxplot and Scatterplot\n\nggplot(data=exam_data, \n       aes(y = MATHS, \n           x= GENDER)) +\n  geom_boxplot() +                    \n  geom_point(position=\"jitter\", \n             size = 0.5)"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html#adding-statistic-functions-to-plots",
+    "href": "Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html#adding-statistic-functions-to-plots",
+    "title": "Hands-on Exercise 1",
+    "section": "Adding Statistic Functions to Plots",
+    "text": "Adding Statistic Functions to Plots\n\nDefault\n\nggplot(data=exam_data, \n       aes(y = MATHS, x= GENDER)) +\n  geom_boxplot()\n\n\n\n\n\n\n\n\nThe boxplots below are incomplete because the positions of the means were not shown.\n\n\nUsing the stat_summary() method vs Using the geom() method\n\ns1 &lt;- ggplot(data=exam_data, \n       aes(y = MATHS, x= GENDER)) +\n  geom_boxplot() +\n  stat_summary(geom = \"point\",       \n               fun = \"mean\",         \n               colour =\"red\",        \n               size=4)\n\ns2 &lt;- ggplot(data=exam_data, \n       aes(y = MATHS, x= GENDER)) +\n  geom_boxplot() +\n  geom_point(stat=\"summary\",        \n             fun=\"mean\",           \n             colour=\"red\",          \n             size=4)\n\ns1 + s2\n\n\n\n\n\n\n\n\nBoth methods achieves the same result by adding a red marker to represent the mean."
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html#generating-trellis-plots",
+    "href": "Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html#generating-trellis-plots",
+    "title": "Hands-on Exercise 1",
+    "section": "Generating Trellis Plots",
+    "text": "Generating Trellis Plots\n\nUsing facet_wrap()\n\nggplot(data=exam_data, \n       aes(x= MATHS)) +\n  geom_histogram(bins=20) +\n    facet_wrap(~ CLASS)\n\n\n\n\n\n\n\n\nfacet_wrap wraps a 1d sequence of panels into 2d. This is generally a better use of screen space than facet_grid because most displays are roughly rectangular.\n\n\nUsing facet_grid()\n\nggplot(data=exam_data, \n       aes(x= MATHS)) +\n  geom_histogram(bins=20) +\n    facet_grid(~ CLASS)\n\n\n\n\n\n\n\n\nfacet_grid() forms a matrix of panels defined by row and column facetting variables. It is most useful when you have two discrete variables, and all combinations of the variables exist in the data."
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html#using-coordinates",
+    "href": "Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html#using-coordinates",
+    "title": "Hands-on Exercise 1",
+    "section": "Using Coordinates",
+    "text": "Using Coordinates\n\nVertical vs Horizontal Bar Chart\n\nb3 &lt;- ggplot(data=exam_data, \n       aes(x=RACE)) +\n  geom_bar()\n\nb4 &lt;- ggplot(data=exam_data, \n       aes(x=RACE)) +\n  geom_bar() +\n  coord_flip()\n\nb3 + b4\n\n\n\n\n\n\n\n\n\n\nChanging the y- and x-axis range\n\nDefault vs Equal y- and x-axis range\n\nr1 &lt;- ggplot(data=exam_data, \n       aes(x= MATHS, y=ENGLISH)) +\n  geom_point() +\n  geom_smooth(method=lm, size=0.5)\n\nWarning: Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.\nℹ Please use `linewidth` instead.\n\nr2 &lt;- ggplot(data=exam_data, \n       aes(x= MATHS, y=ENGLISH)) +\n  geom_point() +\n  geom_smooth(method=lm, \n              size=0.5) +  \n  coord_cartesian(xlim=c(0,100),\n                  ylim=c(0,100))\n\nr1 + r2\n\n`geom_smooth()` using formula = 'y ~ x'\n`geom_smooth()` using formula = 'y ~ x'"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html#plotting-a-bar-chart",
+    "href": "Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html#plotting-a-bar-chart",
+    "title": "Hands-on Exercise 1",
+    "section": "Plotting a Bar Chart",
+    "text": "Plotting a Bar Chart\n\nggplot(data=exam_data, \n       aes(x=RACE)) +\n  geom_bar()\n\n\n\n\n\n\n\n\n\nUse #| eval: false to show code without plotting graph\n\nggplot(data=exam_data, \n       aes(x=RACE)) +\n  geom_bar()\n\n\n\nUse #| echo: false to plot graph without showing code"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html#plotting-a-dot-graph",
+    "href": "Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html#plotting-a-dot-graph",
+    "title": "Hands-on Exercise 1",
+    "section": "Plotting a Dot Graph",
+    "text": "Plotting a Dot Graph\n\nWith y-axis vs without y-axis\n\nd1 &lt;- ggplot(data=exam_data, \n       aes(x = MATHS)) +\n  geom_dotplot(dotsize = 0.5)\n\nd2 &lt;- ggplot(data=exam_data, \n       aes(x = MATHS)) +\n  geom_dotplot(binwidth=2.5,         \n               dotsize = 0.5) +      \n  scale_y_continuous(NULL,           \n                     breaks = NULL)\n\nd1 + d2\n\nBin width defaults to 1/30 of the range of the data. Pick better value with\n`binwidth`.\n\n\n\n\n\n\n\n\n\nThe y scale is not very useful, in fact it is very misleading."
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html#ploting-a-histogram",
+    "href": "Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html#ploting-a-histogram",
+    "title": "Hands-on Exercise 1",
+    "section": "Ploting a Histogram",
+    "text": "Ploting a Histogram\n\nDefault vs Modifying Bins and Colour\n\nh1 &lt;- ggplot(data=exam_data, \n       aes(x = MATHS)) +\n  geom_histogram()  \n\nh2 &lt;- ggplot(data=exam_data, \n       aes(x= MATHS)) +\n  geom_histogram(bins=20,            \n                 color=\"black\",      \n                 fill=\"light blue\") \n\nh1 + h2\n\n`stat_bin()` using `bins = 30`. Pick better value with `binwidth`.\n\n\n\n\n\n\n\n\n\nFixing bin size fixes the gap and adding colour makes the plot more visually appealing.\n\n\nAdding Gender Sub-group\n\nggplot(data=exam_data, \n       aes(x= MATHS, \n           fill = GENDER)) +\n  geom_histogram(bins=20, \n                 color=\"grey30\")\n\n\n\n\n\n\n\n\nUsing sub-groups allows for bivariate analysis."
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html#plotting-a-kernal-density-estimate",
+    "href": "Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html#plotting-a-kernal-density-estimate",
+    "title": "Hands-on Exercise 1",
+    "section": "Plotting a Kernal Density Estimate",
+    "text": "Plotting a Kernal Density Estimate\n\nDefault vs Gender Sub-group\n\nk1 &lt;- ggplot(data=exam_data, \n       aes(x = MATHS)) +\n  geom_density() \n\nk2 &lt;- ggplot(data=exam_data, \n       aes(x = MATHS, \n           colour = GENDER)) +\n  geom_density()\n\nk1 + k2"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html#plotting-a-box-plot",
+    "href": "Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html#plotting-a-box-plot",
+    "title": "Hands-on Exercise 1",
+    "section": "Plotting a Box Plot",
+    "text": "Plotting a Box Plot\n\nDefault vs Notched\n\nb1 &lt;- ggplot(data=exam_data, \n       aes(y = MATHS,       \n           x= GENDER)) +    \n  geom_boxplot()\n\nb2 &lt;- ggplot(data=exam_data, \n       aes(y = MATHS, \n           x= GENDER)) +\n  geom_boxplot(notch=TRUE)\n\nb1 + b2\n\n\n\n\n\n\n\n\nNotches are used in box plots to help visually assess whether the medians of distributions differ. If the notches do not overlap, this is evidence that the medians are different."
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html#plotting-a-violin-plot",
+    "href": "Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html#plotting-a-violin-plot",
+    "title": "Hands-on Exercise 1",
+    "section": "Plotting a Violin Plot",
+    "text": "Plotting a Violin Plot\n\nggplot(data=exam_data, \n       aes(y = MATHS, \n           x= GENDER)) +\n  geom_violin()"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html#plotting-a-scatterplot",
+    "href": "Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html#plotting-a-scatterplot",
+    "title": "Hands-on Exercise 1",
+    "section": "Plotting a Scatterplot",
+    "text": "Plotting a Scatterplot\n\nggplot(data=exam_data, \n       aes(x= MATHS, \n           y=ENGLISH)) +\n  geom_point()"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html#vertical-vs-horizontal-bar-chart",
+    "href": "Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html#vertical-vs-horizontal-bar-chart",
+    "title": "Hands-on Exercise 1",
+    "section": "Vertical vs Horizontal Bar Chart",
+    "text": "Vertical vs Horizontal Bar Chart\n\nb3 &lt;- ggplot(data=exam_data, \n       aes(x=RACE)) +\n  geom_bar()\n\nb4 &lt;- ggplot(data=exam_data, \n       aes(x=RACE)) +\n  geom_bar() +\n  coord_flip()\n\nb3 + b4"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html#changing-the-y--and-x-axis-range",
+    "href": "Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html#changing-the-y--and-x-axis-range",
+    "title": "Hands-on Exercise 1",
+    "section": "Changing the y- and x-axis range",
+    "text": "Changing the y- and x-axis range\n\nDefault vs Equal y- and x-axis range\n\nr1 &lt;- ggplot(data=exam_data, \n       aes(x= MATHS, y=ENGLISH)) +\n  geom_point() +\n  geom_smooth(method=lm, size=0.5)\n\nWarning: Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.\nℹ Please use `linewidth` instead.\n\nr2 &lt;- ggplot(data=exam_data, \n       aes(x= MATHS, y=ENGLISH)) +\n  geom_point() +\n  geom_smooth(method=lm, \n              size=0.5) +  \n  coord_cartesian(xlim=c(0,100),\n                  ylim=c(0,100))\n\nr1 + r2\n\n`geom_smooth()` using formula = 'y ~ x'\n`geom_smooth()` using formula = 'y ~ x'\n\n\n\n\n\n\n\n\n\nThe default scatterplot on the left is slightly misleading because the y-aixs and x-axis range are not equal. The scatterplot on the right fixes both the y-axis and x-axis range to be from 0-100."
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html#default-vs-grey-theme",
+    "href": "Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html#default-vs-grey-theme",
+    "title": "Hands-on Exercise 1",
+    "section": "Default vs Grey Theme",
+    "text": "Default vs Grey Theme\n\nt1 &lt;- ggplot(data=exam_data, \n       aes(x=RACE)) +\n  geom_bar() +\n  coord_flip()\n\nt2 &lt;- ggplot(data=exam_data, \n       aes(x=RACE)) +\n  geom_bar() +\n  coord_flip() +\n  theme_gray()\n\nt1 + t2"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html#other-themes",
+    "href": "Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html#other-themes",
+    "title": "Hands-on Exercise 1",
+    "section": "Other Themes",
+    "text": "Other Themes\n\nt3 &lt;- ggplot(data=exam_data, \n       aes(x=RACE)) +\n  geom_bar() +\n  coord_flip() +\n  theme_classic()\n\nt4 &lt;- ggplot(data=exam_data, \n       aes(x=RACE)) +\n  geom_bar() +\n  coord_flip() +\n  theme_minimal()\n\nt3 + t4"
   }
 ]
