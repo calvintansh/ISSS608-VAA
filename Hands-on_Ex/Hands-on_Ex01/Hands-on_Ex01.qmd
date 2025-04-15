@@ -29,4 +29,4 @@ ggplot(data = exam_data,
 
 Use #\| eval: false to show code without plotting graph
 
-Use #\| echo: false to show graph without showing code
+Use #\| echo: false to plot graph without showing code
