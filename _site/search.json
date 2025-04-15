@@ -11,7 +11,7 @@
     "href": "about.html",
     "title": "About",
     "section": "",
-    "text": "This is a website created as part of ISSS608 Visual Analytics and Application under Singapore Management University (SMU) Master of IT in Business (MITB). This website is created using RStudio using Quarto.\nThe author, Calvin Tan Song Hao is an aspiring a Data Analyst and a student at SMU MITB. I aim leverage my background as an R&D engineer to solve problems and uncover insights that drive impactful decisions.\nMy LinkedIn"
+    "text": "This is a website created as part of ISSS608 Visual Analytics and Application under Singapore Management University (SMU) Master of IT in Business (MITB). This website is created using RStudio using Quarto, stored in GitHub and published using Netlify.\nThe author, Calvin Tan Song Hao is an aspiring a Data Analyst and a student at SMU MITB. I aim leverage my background as an R&D engineer to solve problems and uncover insights that drive impactful decisions.\nMy LinkedIn\nMy GitHub"
   },
   {
     "objectID": "Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html",
