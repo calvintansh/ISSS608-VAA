@@ -3,42 +3,72 @@ title: "Hands-on Exercise 1"
 author: "Calvin Tan"
 ---
 
+
+
+
 # Getting Started
 
 ## Install and Launch R Packages
 
 The code chunk below uses p_load() of pacman package to check if tidyverse these packages are installed in the computer. If they are, then they will be launched into R.
 
+
+
+
 ```{r}
 pacman::p_load(patchwork, tidyverse)
 ```
+
+
+
 
 ## Importing the Data
 
 For the purpose of this exercise, a data file called Exam_data will be used. It consists of year end examination grades of a cohort of primary 3 students from a local school. It is in csv file format.
 
+
+
+
 ```{r}
 exam_data <- read_csv("data/Exam_data.csv")
 ```
+
+
+
 
 # Plotting Simple Graphs
 
 ## A blank graph
 
+
+
+
 ```{r}
 ggplot(data=exam_data)
 ```
 
+
+
+
 ## Purpose of aes() function
+
+
+
 
 ```{r}
 ggplot(data=exam_data, 
        aes(x= MATHS))
 ```
 
+
+
+
 All aesthetics of a plot are specified in the aes() function call and the code above adds MATHS to the x-axis.
 
 ## Plotting a Bar Chart
+
+
+
 
 ```{r}
 ggplot(data=exam_data, 
@@ -46,9 +76,15 @@ ggplot(data=exam_data,
   geom_bar()
 ```
 
+
+
+
 ### What if I want to show the code only or the graph only?
 
 #### Use #\| eval: false to show code without plotting graph
+
+
+
 
 ```{r}
 #| eval: false
@@ -57,7 +93,13 @@ ggplot(data=exam_data,
   geom_bar()
 ```
 
+
+
+
 #### Use #\| echo: false to plot graph without showing code
+
+
+
 
 ```{r}
 #| echo: false
@@ -66,9 +108,15 @@ ggplot(data=exam_data,
   geom_bar()
 ```
 
+
+
+
 ## Plotting a Dot Graph
 
 ### With y-axis vs without y-axis
+
+
+
 
 ```{r}
 d1 <- ggplot(data=exam_data, 
@@ -85,11 +133,17 @@ d2 <- ggplot(data=exam_data,
 d1 + d2
 ```
 
+
+
+
 The y scale is not very useful, in fact it is very misleading.
 
 ## Plotting a Histogram
 
 ### Default vs Modifying Bins and Colour
+
+
+
 
 ```{r}
 h1 <- ggplot(data=exam_data, 
@@ -105,9 +159,15 @@ h2 <- ggplot(data=exam_data,
 h1 + h2
 ```
 
+
+
+
 Adjusting bin size fixes the gap and adding colour makes the plot more visually appealing.
 
 ### Adding Gender Sub-group
+
+
+
 
 ```{r}
 ggplot(data=exam_data, 
@@ -117,11 +177,17 @@ ggplot(data=exam_data,
                  color="grey30")
 ```
 
+
+
+
 Using sub-groups allows for bivariate analysis.
 
 ## Plotting a Kernel Density Estimate
 
 ### Default vs Gender Sub-group
+
+
+
 
 ```{r}
 k1 <- ggplot(data=exam_data, 
@@ -136,9 +202,15 @@ k2 <- ggplot(data=exam_data,
 k1 + k2
 ```
 
+
+
+
 ## Plotting a Box Plot
 
 ### Default vs Notched
+
+
+
 
 ```{r}
 b1 <- ggplot(data=exam_data, 
@@ -154,9 +226,15 @@ b2 <- ggplot(data=exam_data,
 b1 + b2
 ```
 
+
+
+
 Notches are used in box plots to help visually assess whether the medians of distributions differ. If the notches do not overlap, this is evidence that the medians are different.
 
 ## Plotting a Violin Plot
+
+
+
 
 ```{r}
 ggplot(data=exam_data, 
@@ -165,7 +243,13 @@ ggplot(data=exam_data,
   geom_violin()
 ```
 
+
+
+
 ## Plotting a Scatterplot
+
+
+
 
 ```{r}
 ggplot(data=exam_data, 
@@ -174,9 +258,15 @@ ggplot(data=exam_data,
   geom_point()  
 ```
 
+
+
+
 # Plotting More Complex Plots
 
 ## Plotting a Combined Boxplot and Scatterplot
+
+
+
 
 ```{r}
 ggplot(data=exam_data, 
@@ -187,9 +277,15 @@ ggplot(data=exam_data,
              size = 0.5) 
 ```
 
+
+
+
 ## Adding Statistical Functions to Plots
 
 ### Default
+
+
+
 
 ```{r}
 ggplot(data=exam_data, 
@@ -197,9 +293,15 @@ ggplot(data=exam_data,
   geom_boxplot()
 ```
 
+
+
+
 The boxplots below are incomplete because the positions of the means were not shown.
 
 ### Using the stat_summary() method vs Using the geom() method
+
+
+
 
 ```{r}
 s1 <- ggplot(data=exam_data, 
@@ -221,11 +323,17 @@ s2 <- ggplot(data=exam_data,
 s1 + s2
 ```
 
+
+
+
 Both methods achieves the same result by adding a red marker to represent the mean.
 
 ## Adding a Best-fit to a Scatterplot
 
 ### Default
+
+
+
 
 ```{r}
 ggplot(data=exam_data, 
@@ -233,7 +341,13 @@ ggplot(data=exam_data,
   geom_point()
 ```
 
+
+
+
 ### Best-fit Curve vs Best-fit Line
+
+
+
 
 ```{r}
 f1 <- ggplot(data=exam_data, 
@@ -251,9 +365,15 @@ f2 <- ggplot(data=exam_data,
 f1 + f2
 ```
 
+
+
+
 ## Generating Trellis Plots
 
 ### Using facet_wrap()
+
+
+
 
 ```{r}
 ggplot(data=exam_data, 
@@ -262,9 +382,15 @@ ggplot(data=exam_data,
     facet_wrap(~ CLASS)
 ```
 
+
+
+
 facet_wrap wraps a 1d sequence of panels into 2d. This is generally a better use of screen space than facet_grid because most displays are roughly rectangular.
 
 ### Using facet_grid()
+
+
+
 
 ```{r}
 ggplot(data=exam_data, 
@@ -273,11 +399,17 @@ ggplot(data=exam_data,
     facet_grid(~ CLASS)
 ```
 
+
+
+
 facet_grid() forms a matrix of panels defined by row and column facetting variables. It is most useful when you have two discrete variables, and all combinations of the variables exist in the data.
 
 # Using Coordinates
 
 ## Vertical vs Horizontal Bar Chart
+
+
+
 
 ```{r}
 b3 <- ggplot(data=exam_data, 
@@ -292,9 +424,15 @@ b4 <- ggplot(data=exam_data,
 b3 + b4
 ```
 
+
+
+
 ## Changing the y- and x-axis Range
 
 ### Default vs Equal y- and x-axis Range
+
+
+
 
 ```{r}
 r1 <- ggplot(data=exam_data, 
@@ -313,6 +451,9 @@ r2 <- ggplot(data=exam_data,
 r1 + r2
 ```
 
+
+
+
 The default scatterplot on the left is slightly misleading because the y-aixs and x-axis range are not equal. The scatterplot on the right fixes both the y-axis and x-axis range to be from 0-100.
 
 # Using Themes
@@ -320,6 +461,9 @@ The default scatterplot on the left is slightly misleading because the y-aixs an
 Themes can make the plots more visually appealing.
 
 ## Default vs Grey Theme
+
+
+
 
 ```{r}
 t1 <- ggplot(data=exam_data, 
@@ -336,7 +480,13 @@ t2 <- ggplot(data=exam_data,
 t1 + t2
 ```
 
+
+
+
 ## Other Themes
+
+
+
 
 ```{r}
 t3 <- ggplot(data=exam_data, 
@@ -353,3 +503,4 @@ t4 <- ggplot(data=exam_data,
 
 t3 + t4
 ```
+

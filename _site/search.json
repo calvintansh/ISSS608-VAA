@@ -80,8 +80,8 @@
     "objectID": "Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html#adding-a-best-fit-to-a-scatterplot",
     "href": "Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html#adding-a-best-fit-to-a-scatterplot",
     "title": "Hands-on Exercise 1",
-    "section": "Adding a best fit to a scatterplot",
-    "text": "Adding a best fit to a scatterplot\n\nDefault\n\nggplot(data=exam_data, \n       aes(x= MATHS, y=ENGLISH)) +\n  geom_point()\n\n\n\n\n\n\n\n\n\n\nBest Fit Curve vs Best Fit Line\n\nf1 &lt;- ggplot(data=exam_data, \n       aes(x= MATHS, y=ENGLISH)) +\n  geom_point() +\n  geom_smooth(linewidth=0.5)\n\nf2 &lt;- ggplot(data=exam_data, \n       aes(x= MATHS, \n           y=ENGLISH)) +\n  geom_point() +\n  geom_smooth(method=lm, \n              linewidth=0.5)\n\nf1 + f2\n\n`geom_smooth()` using method = 'loess' and formula = 'y ~ x'\n`geom_smooth()` using formula = 'y ~ x'"
+    "section": "Adding a Best-fit to a Scatterplot",
+    "text": "Adding a Best-fit to a Scatterplot\n\nDefault\n\nggplot(data=exam_data, \n       aes(x= MATHS, y=ENGLISH)) +\n  geom_point()\n\n\n\n\n\n\n\n\n\n\nBest-fit Curve vs Best-fit Line\n\nf1 &lt;- ggplot(data=exam_data, \n       aes(x= MATHS, y=ENGLISH)) +\n  geom_point() +\n  geom_smooth(linewidth=0.5)\n\nf2 &lt;- ggplot(data=exam_data, \n       aes(x= MATHS, \n           y=ENGLISH)) +\n  geom_point() +\n  geom_smooth(method=lm, \n              linewidth=0.5)\n\nf1 + f2\n\n`geom_smooth()` using method = 'loess' and formula = 'y ~ x'\n`geom_smooth()` using formula = 'y ~ x'"
   },
   {
     "objectID": "Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html#purpose-of-aes-function",
@@ -165,7 +165,7 @@
     "href": "Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html#plotting-a-bar-chart",
     "title": "Hands-on Exercise 1",
     "section": "Plotting a Bar Chart",
-    "text": "Plotting a Bar Chart\n\nggplot(data=exam_data, \n       aes(x=RACE)) +\n  geom_bar()\n\n\n\n\n\n\n\n\n\nUse #| eval: false to show code without plotting graph\n\nggplot(data=exam_data, \n       aes(x=RACE)) +\n  geom_bar()\n\n\n\nUse #| echo: false to plot graph without showing code"
+    "text": "Plotting a Bar Chart\n\nggplot(data=exam_data, \n       aes(x=RACE)) +\n  geom_bar()"
   },
   {
     "objectID": "Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html#plotting-a-dot-graph",
@@ -220,8 +220,8 @@
     "objectID": "Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html#changing-the-y--and-x-axis-range",
     "href": "Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html#changing-the-y--and-x-axis-range",
     "title": "Hands-on Exercise 1",
-    "section": "Changing the y- and x-axis range",
-    "text": "Changing the y- and x-axis range\n\nDefault vs Equal y- and x-axis range\n\nr1 &lt;- ggplot(data=exam_data, \n       aes(x= MATHS, y=ENGLISH)) +\n  geom_point() +\n  geom_smooth(method=lm, size=0.5)\n\nWarning: Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.\nℹ Please use `linewidth` instead.\n\nr2 &lt;- ggplot(data=exam_data, \n       aes(x= MATHS, y=ENGLISH)) +\n  geom_point() +\n  geom_smooth(method=lm, \n              size=0.5) +  \n  coord_cartesian(xlim=c(0,100),\n                  ylim=c(0,100))\n\nr1 + r2\n\n`geom_smooth()` using formula = 'y ~ x'\n`geom_smooth()` using formula = 'y ~ x'\n\n\n\n\n\n\n\n\n\nThe default scatterplot on the left is slightly misleading because the y-aixs and x-axis range are not equal. The scatterplot on the right fixes both the y-axis and x-axis range to be from 0-100."
+    "section": "Changing the y- and x-axis Range",
+    "text": "Changing the y- and x-axis Range\n\nDefault vs Equal y- and x-axis Range\n\nr1 &lt;- ggplot(data=exam_data, \n       aes(x= MATHS, y=ENGLISH)) +\n  geom_point() +\n  geom_smooth(method=lm, size=0.5)\n\nWarning: Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.\nℹ Please use `linewidth` instead.\n\nr2 &lt;- ggplot(data=exam_data, \n       aes(x= MATHS, y=ENGLISH)) +\n  geom_point() +\n  geom_smooth(method=lm, \n              size=0.5) +  \n  coord_cartesian(xlim=c(0,100),\n                  ylim=c(0,100))\n\nr1 + r2\n\n`geom_smooth()` using formula = 'y ~ x'\n`geom_smooth()` using formula = 'y ~ x'\n\n\n\n\n\n\n\n\n\nThe default scatterplot on the left is slightly misleading because the y-aixs and x-axis range are not equal. The scatterplot on the right fixes both the y-axis and x-axis range to be from 0-100."
   },
   {
     "objectID": "Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html#default-vs-grey-theme",
@@ -236,5 +236,40 @@
     "title": "Hands-on Exercise 1",
     "section": "Other Themes",
     "text": "Other Themes\n\nt3 &lt;- ggplot(data=exam_data, \n       aes(x=RACE)) +\n  geom_bar() +\n  coord_flip() +\n  theme_classic()\n\nt4 &lt;- ggplot(data=exam_data, \n       aes(x=RACE)) +\n  geom_bar() +\n  coord_flip() +\n  theme_minimal()\n\nt3 + t4"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html#scores-analysis",
+    "href": "Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html#scores-analysis",
+    "title": "Hands-on Exercise 1",
+    "section": "Scores Analysis",
+    "text": "Scores Analysis\n\nPlot\n\nlibrary(ggplot2)\n\nggplot(data = exam_data, \n       aes(x = MATHS, y = ENGLISH)) +\n  geom_point() +\n  geom_smooth(method = lm, size = 0.5) +\n  geom_label(aes(label = ID), hjust = .5, vjust = -0.5) +\n  coord_cartesian(xlim = c(0, 100), ylim = c(0, 100)) +\n  ggtitle(\"English scores versus Maths scores for Primary 3\")\n\nWarning: Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.\nℹ Please use `linewidth` instead.\n\n\n`geom_smooth()` using formula = 'y ~ x'\n\n\n\n\n\n\n\n\n\n\n\nCode\n\nggplot(data = exam_data, \n       aes(x = MATHS, y = ENGLISH)) +\n  geom_point() +\n  geom_smooth(method = lm, size = 0.5) +\n  geom_label(aes(label = ID), hjust = .5, vjust = -0.5) +\n  coord_cartesian(xlim = c(0, 100), ylim = c(0, 100)) +\n  ggtitle(\"English scores versus Maths scores for Primary 3\")\n\n`geom_smooth()` using formula = 'y ~ x'\n\n\n\n\n\n\n\n\n\n\n\nUse #| eval: false to show code without plotting graph\n\nggplot(data=exam_data, \n       aes(x=RACE)) +\n  geom_bar()\n\n\n\nUse #| echo: false to plot graph without showing code"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html#plotting-a-histogram",
+    "href": "Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html#plotting-a-histogram",
+    "title": "Hands-on Exercise 1",
+    "section": "Plotting a Histogram",
+    "text": "Plotting a Histogram\n\nDefault vs Modifying Bins and Colour\n\nh1 &lt;- ggplot(data=exam_data, \n       aes(x = MATHS)) +\n  geom_histogram()  \n\nh2 &lt;- ggplot(data=exam_data, \n       aes(x= MATHS)) +\n  geom_histogram(bins=20,            \n                 color=\"black\",      \n                 fill=\"light blue\") \n\nh1 + h2\n\n`stat_bin()` using `bins = 30`. Pick better value with `binwidth`.\n\n\n\n\n\n\n\n\n\nAdjusting bin size fixes the gap and adding colour makes the plot more visually appealing.\n\n\nAdding Gender Sub-group\n\nggplot(data=exam_data, \n       aes(x= MATHS, \n           fill = GENDER)) +\n  geom_histogram(bins=20, \n                 color=\"grey30\")\n\n\n\n\n\n\n\n\nUsing sub-groups allows for bivariate analysis."
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html#plotting-a-kernel-density-estimate",
+    "href": "Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html#plotting-a-kernel-density-estimate",
+    "title": "Hands-on Exercise 1",
+    "section": "Plotting a Kernel Density Estimate",
+    "text": "Plotting a Kernel Density Estimate\n\nDefault vs Gender Sub-group\n\nk1 &lt;- ggplot(data=exam_data, \n       aes(x = MATHS)) +\n  geom_density() \n\nk2 &lt;- ggplot(data=exam_data, \n       aes(x = MATHS, \n           colour = GENDER)) +\n  geom_density()\n\nk1 + k2"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html#adding-statistical-functions-to-plots",
+    "href": "Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html#adding-statistical-functions-to-plots",
+    "title": "Hands-on Exercise 1",
+    "section": "Adding Statistical Functions to Plots",
+    "text": "Adding Statistical Functions to Plots\n\nDefault\n\nggplot(data=exam_data, \n       aes(y = MATHS, x= GENDER)) +\n  geom_boxplot()\n\n\n\n\n\n\n\n\nThe boxplots below are incomplete because the positions of the means were not shown.\n\n\nUsing the stat_summary() method vs Using the geom() method\n\ns1 &lt;- ggplot(data=exam_data, \n       aes(y = MATHS, x= GENDER)) +\n  geom_boxplot() +\n  stat_summary(geom = \"point\",       \n               fun = \"mean\",         \n               colour =\"red\",        \n               size=4)\n\ns2 &lt;- ggplot(data=exam_data, \n       aes(y = MATHS, x= GENDER)) +\n  geom_boxplot() +\n  geom_point(stat=\"summary\",        \n             fun=\"mean\",           \n             colour=\"red\",          \n             size=4)\n\ns1 + s2\n\n\n\n\n\n\n\n\nBoth methods achieves the same result by adding a red marker to represent the mean."
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html#race-analysis",
+    "href": "Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html#race-analysis",
+    "title": "Hands-on Exercise 1",
+    "section": "Race Analysis",
+    "text": "Race Analysis\n\nPlot\n\nlibrary(ggplot2)\n\nggplot(data = exam_data, \n       aes(x = RACE)) +\n  geom_bar()\n\n\n\n\n\n\n\n\n\n\nCode\n\nggplot(data = exam_data, \n       aes(x = RACE)) +\n  geom_bar()\n\n\n\n\n\n\n\n\n\n\nUse #| eval: false to show code without plotting graph\n\nggplot(data=exam_data, \n       aes(x=RACE)) +\n  geom_bar()\n\n\n\nUse #| echo: false to plot graph without showing code"
   }
 ]
