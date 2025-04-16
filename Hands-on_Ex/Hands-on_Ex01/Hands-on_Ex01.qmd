@@ -321,7 +321,7 @@ The default scatterplot on the left is slightly misleading because the y-aixs an
 
 Themes can make the plots more visually appealing. The available themes are: theme_grey() theme_gray() theme_bw() theme_linedraw() theme_light() theme_dark() theme_minimal() theme_classic() theme_void() theme_test()
 
-## Default (I) vs Gray (II) vs Grey (III) Theme 
+## Default (I) vs Gray (II) vs Grey (III) Theme
 
 ```{r}
 t1 <- ggplot(data=exam_data, 
@@ -344,11 +344,13 @@ t3 <- ggplot(data=exam_data,
 (t1 | (t2 / t3)) +
   plot_annotation(tag_levels = 'I')
 ```
+
 They are all the same theme! The default is theme_gray() and theme_grey() is an alias to theme_gray().
 
 ## Other Themes
 
 ### Classic (I) vs Minimal (II) vs BW (III) vs Linedraw (IV)
+
 ```{r}
 t4 <- ggplot(data=exam_data, 
        aes(x=RACE)) +
@@ -379,6 +381,7 @@ t7 <- ggplot(data=exam_data,
 ```
 
 ### Light (I) vs Dark (II) vs Void (III) vs Test (IV)
+
 ```{r}
 t8 <- ggplot(data=exam_data, 
        aes(x=RACE)) +

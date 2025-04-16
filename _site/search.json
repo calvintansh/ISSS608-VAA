@@ -277,6 +277,6 @@
     "href": "Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html#default-i-vs-gray-ii-vs-grey-iii-theme",
     "title": "Hands-on Exercise 1",
     "section": "Default (I) vs Gray (II) vs Grey (III) Theme",
-    "text": "Default (I) vs Gray (II) vs Grey (III) Theme\n\nt1 &lt;- ggplot(data=exam_data, \n       aes(x=RACE)) +\n  geom_bar() +\n  coord_flip()\n\nt2 &lt;- ggplot(data=exam_data, \n       aes(x=RACE)) +\n  geom_bar() +\n  coord_flip() +\n  theme_gray()\n\nt3 &lt;- ggplot(data=exam_data, \n       aes(x=RACE)) +\n  geom_bar() +\n  coord_flip() +\n  theme_grey()\n\n(t1 | (t2 / t3)) +\n  plot_annotation(tag_levels = 'I')"
+    "text": "Default (I) vs Gray (II) vs Grey (III) Theme\n\nt1 &lt;- ggplot(data=exam_data, \n       aes(x=RACE)) +\n  geom_bar() +\n  coord_flip()\n\nt2 &lt;- ggplot(data=exam_data, \n       aes(x=RACE)) +\n  geom_bar() +\n  coord_flip() +\n  theme_gray()\n\nt3 &lt;- ggplot(data=exam_data, \n       aes(x=RACE)) +\n  geom_bar() +\n  coord_flip() +\n  theme_grey()\n\n(t1 | (t2 / t3)) +\n  plot_annotation(tag_levels = 'I')\n\n\n\n\n\n\n\n\nThey are all the same theme! The default is theme_gray() and theme_grey() is an alias to theme_gray()."
   }
 ]
