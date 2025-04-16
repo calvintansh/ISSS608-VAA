@@ -165,7 +165,7 @@
     "href": "Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html#plotting-a-bar-chart",
     "title": "Hands-on Exercise 1",
     "section": "Plotting a Bar Chart",
-    "text": "Plotting a Bar Chart\n\nggplot(data=exam_data, \n       aes(x=RACE)) +\n  geom_bar()"
+    "text": "Plotting a Bar Chart\n\nggplot(data=exam_data, \n       aes(x=RACE)) +\n  geom_bar()\n\n\n\n\n\n\n\n\n\nWhat if I want to show the code only or the graph only?\n\nUse #| eval: false to show code without plotting graph\n\nggplot(data=exam_data, \n       aes(x=RACE)) +\n  geom_bar()\n\n\n\nUse #| echo: false to plot graph without showing code"
   },
   {
     "objectID": "Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html#plotting-a-dot-graph",
