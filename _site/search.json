@@ -151,7 +151,7 @@
     "href": "Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html#generating-trellis-plots",
     "title": "Hands-on Exercise 1",
     "section": "Generating Trellis Plots",
-    "text": "Generating Trellis Plots\n\nUsing facet_wrap()\n\nggplot(data=exam_data, \n       aes(x= MATHS)) +\n  geom_histogram(bins=20) +\n    facet_wrap(~ CLASS)\n\n\n\n\n\n\n\n\nfacet_wrap wraps a 1d sequence of panels into 2d. This is generally a better use of screen space than facet_grid because most displays are roughly rectangular.\n\n\nUsing facet_grid()\n\nggplot(data=exam_data, \n       aes(x= MATHS)) +\n  geom_histogram(bins=20) +\n    facet_grid(~ CLASS)\n\n\n\n\n\n\n\n\nfacet_grid() forms a matrix of panels defined by row and column facetting variables. It is most useful when you have two discrete variables, and all combinations of the variables exist in the data."
+    "text": "Generating Trellis Plots\n\nUsing facet_wrap()\n\nggplot(data=exam_data, \n       aes(x= MATHS)) +\n  geom_histogram(bins=20) +\n    facet_wrap(~ CLASS)\n\n\n\n\n\n\n\n\nfacet_wrap wraps a 1d sequence of panels into 2d. This is generally a better use of screen space than facet_grid because most displays are roughly rectangular.\n\n\nUsing facet_grid()\n\nggplot(data=exam_data, \n       aes(x= MATHS)) +\n  geom_histogram(bins=20) +\n    facet_grid(~ CLASS)\n\n\n\n\n\n\n\n\nfacet_grid() forms a matrix of panels defined by row and column facetting variables. It is most useful when you have two discrete variables, and all combinations of the variables exist in the data.\nIt is also ideal for displaying sequential variables like the performance of different classes so facet_grid() is better than facet_wrap() for this case."
   },
   {
     "objectID": "Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html#using-coordinates",
@@ -235,7 +235,7 @@
     "href": "Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html#other-themes",
     "title": "Hands-on Exercise 1",
     "section": "Other Themes",
-    "text": "Other Themes\n\nt3 &lt;- ggplot(data=exam_data, \n       aes(x=RACE)) +\n  geom_bar() +\n  coord_flip() +\n  theme_classic()\n\nt4 &lt;- ggplot(data=exam_data, \n       aes(x=RACE)) +\n  geom_bar() +\n  coord_flip() +\n  theme_minimal()\n\nt3 + t4"
+    "text": "Other Themes\n\nClassic (I) vs Minimal (II) vs BW (III) vs Linedraw (IV)\n\nt4 &lt;- ggplot(data=exam_data, \n       aes(x=RACE)) +\n  geom_bar() +\n  coord_flip() +\n  theme_classic()\n\nt5 &lt;- ggplot(data=exam_data, \n       aes(x=RACE)) +\n  geom_bar() +\n  coord_flip() +\n  theme_minimal()\n\nt6 &lt;- ggplot(data=exam_data, \n       aes(x=RACE)) +\n  geom_bar() +\n  coord_flip() +\n  theme_bw()\n\nt7 &lt;- ggplot(data=exam_data, \n       aes(x=RACE)) +\n  geom_bar() +\n  coord_flip() +\n  theme_linedraw()\n\n((t4 / t5) | (t6 / t7)) +\n  plot_annotation(tag_levels = 'I')\n\n\n\n\n\n\n\n\n\n\nLight (I) vs Dark (II) vs Void (III) vs Test (IV)\n\nt8 &lt;- ggplot(data=exam_data, \n       aes(x=RACE)) +\n  geom_bar() +\n  coord_flip() +\n  theme_light()\n\nt9 &lt;- ggplot(data=exam_data, \n       aes(x=RACE)) +\n  geom_bar() +\n  coord_flip() +\n  theme_dark()\n\nt10 &lt;- ggplot(data=exam_data, \n       aes(x=RACE)) +\n  geom_bar() +\n  coord_flip() +\n  theme_void()\n\nt11 &lt;- ggplot(data=exam_data, \n       aes(x=RACE)) +\n  geom_bar() +\n  coord_flip() +\n  theme_test()\n\n((t8 / t9) | (t10 / t11)) +\n  plot_annotation(tag_levels = 'I')"
   },
   {
     "objectID": "Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html#scores-analysis",
@@ -271,5 +271,12 @@
     "title": "Hands-on Exercise 1",
     "section": "Race Analysis",
     "text": "Race Analysis\n\nPlot\n\nlibrary(ggplot2)\n\nggplot(data = exam_data, \n       aes(x = RACE)) +\n  geom_bar()\n\n\n\n\n\n\n\n\n\n\nCode\n\nggplot(data = exam_data, \n       aes(x = RACE)) +\n  geom_bar()\n\n\n\n\n\n\n\n\n\n\nUse #| eval: false to show code without plotting graph\n\nggplot(data=exam_data, \n       aes(x=RACE)) +\n  geom_bar()\n\n\n\nUse #| echo: false to plot graph without showing code"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html#default-i-vs-gray-ii-vs-grey-iii-theme",
+    "href": "Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html#default-i-vs-gray-ii-vs-grey-iii-theme",
+    "title": "Hands-on Exercise 1",
+    "section": "Default (I) vs Gray (II) vs Grey (III) Theme",
+    "text": "Default (I) vs Gray (II) vs Grey (III) Theme\n\nt1 &lt;- ggplot(data=exam_data, \n       aes(x=RACE)) +\n  geom_bar() +\n  coord_flip()\n\nt2 &lt;- ggplot(data=exam_data, \n       aes(x=RACE)) +\n  geom_bar() +\n  coord_flip() +\n  theme_gray()\n\nt3 &lt;- ggplot(data=exam_data, \n       aes(x=RACE)) +\n  geom_bar() +\n  coord_flip() +\n  theme_grey()\n\n(t1 | (t2 / t3)) +\n  plot_annotation(tag_levels = 'I')"
   }
 ]

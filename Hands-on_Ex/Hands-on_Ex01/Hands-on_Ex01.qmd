@@ -275,6 +275,8 @@ ggplot(data=exam_data,
 
 facet_grid() forms a matrix of panels defined by row and column facetting variables. It is most useful when you have two discrete variables, and all combinations of the variables exist in the data.
 
+It is also ideal for displaying sequential variables like the performance of different classes so facet_grid() is better than facet_wrap() for this case.
+
 # Using Coordinates
 
 ## Vertical vs Horizontal Bar Chart
@@ -317,9 +319,9 @@ The default scatterplot on the left is slightly misleading because the y-aixs an
 
 # Using Themes
 
-Themes can make the plots more visually appealing.
+Themes can make the plots more visually appealing. The available themes are: theme_grey() theme_gray() theme_bw() theme_linedraw() theme_light() theme_dark() theme_minimal() theme_classic() theme_void() theme_test()
 
-## Default vs Grey Theme
+## Default (I) vs Gray (II) vs Grey (III) Theme 
 
 ```{r}
 t1 <- ggplot(data=exam_data, 
@@ -333,23 +335,75 @@ t2 <- ggplot(data=exam_data,
   coord_flip() +
   theme_gray()
 
-t1 + t2
+t3 <- ggplot(data=exam_data, 
+       aes(x=RACE)) +
+  geom_bar() +
+  coord_flip() +
+  theme_grey()
+
+(t1 | (t2 / t3)) +
+  plot_annotation(tag_levels = 'I')
 ```
+They are all the same theme! The default is theme_gray() and theme_grey() is an alias to theme_gray().
 
 ## Other Themes
 
+### Classic (I) vs Minimal (II) vs BW (III) vs Linedraw (IV)
 ```{r}
-t3 <- ggplot(data=exam_data, 
+t4 <- ggplot(data=exam_data, 
        aes(x=RACE)) +
   geom_bar() +
   coord_flip() +
   theme_classic()
 
-t4 <- ggplot(data=exam_data, 
+t5 <- ggplot(data=exam_data, 
        aes(x=RACE)) +
   geom_bar() +
   coord_flip() +
   theme_minimal()
 
-t3 + t4
+t6 <- ggplot(data=exam_data, 
+       aes(x=RACE)) +
+  geom_bar() +
+  coord_flip() +
+  theme_bw()
+
+t7 <- ggplot(data=exam_data, 
+       aes(x=RACE)) +
+  geom_bar() +
+  coord_flip() +
+  theme_linedraw()
+
+((t4 / t5) | (t6 / t7)) +
+  plot_annotation(tag_levels = 'I')
+```
+
+### Light (I) vs Dark (II) vs Void (III) vs Test (IV)
+```{r}
+t8 <- ggplot(data=exam_data, 
+       aes(x=RACE)) +
+  geom_bar() +
+  coord_flip() +
+  theme_light()
+
+t9 <- ggplot(data=exam_data, 
+       aes(x=RACE)) +
+  geom_bar() +
+  coord_flip() +
+  theme_dark()
+
+t10 <- ggplot(data=exam_data, 
+       aes(x=RACE)) +
+  geom_bar() +
+  coord_flip() +
+  theme_void()
+
+t11 <- ggplot(data=exam_data, 
+       aes(x=RACE)) +
+  geom_bar() +
+  coord_flip() +
+  theme_test()
+
+((t8 / t9) | (t10 / t11)) +
+  plot_annotation(tag_levels = 'I')
 ```
