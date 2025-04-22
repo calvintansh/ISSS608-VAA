@@ -1,6 +1,8 @@
 ---
-title: "Hands-on Exercise 1"
-author: "Calvin Tan"
+title: "[Hands-on Exercise 1:]{style='color:DarkOrange'} A Layered Grammar of Graphics: ggplot2 methods"
+date: 2025-04-14
+date-modified: "last-modified"
+warning: false
 ---
 
 # Getting Started

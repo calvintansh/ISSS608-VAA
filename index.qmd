@@ -1,5 +1,7 @@
 ---
-title: "ISSS608-VAA"
+title: "Visual Analytics and Applications"
 ---
 
-Welcome to **ISSS608 Visual Analytics and Applications**. In this website, you will find my coursework prepared for this course.
+This webpage serves as a portfolio showcasing my coursework for ISSS608: Visual Analytics and Applications at Singapore Management University (SMU).
+
+Throughout the course, I gained hands-on experience in using RStudio for implementing various data visualization techniques, as well as Tableau for creating interactive dashboards. I also developed an understanding of version control using GitHub and learned how to publish analytical reports and dashboards using Quarto and deploy them as a website via Netlify. This portfolio reflects the practical skills and concepts I acquired in the course.
