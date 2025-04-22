@@ -116,7 +116,7 @@ ggplot2 is an implementation of Leland Wilkinson’s Grammar of Graphics. Figure
 
 ![](/Hands-on_Ex/Hands-on_Ex01/image/layer.jpg){fig-align="center" width="800"}
 
-Reference: Hadley Wickham (2010) [“A layered grammar of graphics.”](https://vita.had.co.nz/papers/layered-grammar.html) Journal of Computational and Graphical Statistics, vol. 19, no. 1, pp. 3–28.
+[Reference: Hadley Wickham (2010) [“A layered grammar of graphics.”](https://vita.had.co.nz/papers/layered-grammar.html) Journal of Computational and Graphical Statistics, vol. 19, no. 1, pp. 3–28.]{style="color:grey" style="font-size: 10px;"}
 
 A short description of each building block are as follows:
 
@@ -825,7 +825,6 @@ Themes can make the plots more visually appealing. The available built-in themes
 :::
 
 ::: panel-tabset
-
 ## Default Vs Gray Vs Grey
 
 ```{r}
@@ -936,7 +935,7 @@ ggplot(data=exam_data,
 ```
 :::
 
-:::callout-note
+::: callout-note
 The Default, Gray and Grey themes are all the same theme! The default is theme_gray() and theme_grey() is an alias to theme_gray().
 :::
 
