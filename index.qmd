@@ -4,7 +4,9 @@ title: "Visual Analytics and Applications"
 
 ![](cover_pic.jpg){fig-align="center" width="800"}
 
-[Reference: [Picture Link](https://unsplash.com/photos/graphical-user-interface--WXQm_NTK0U)]{style="color:grey" style="font-size: 10px;"}
+<span style="color: grey; font-size: 12px;">
+Reference: [Picture Link](https://unsplash.com/photos/graphical-user-interface--WXQm_NTK0U)
+</span>
 
 This webpage serves as a portfolio showcasing my coursework for ISSS608: Visual Analytics and Applications at Singapore Management University (SMU).
 

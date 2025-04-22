@@ -116,7 +116,9 @@ ggplot2 is an implementation of Leland Wilkinson’s Grammar of Graphics. Figure
 
 ![](/Hands-on_Ex/Hands-on_Ex01/image/layer.jpg){fig-align="center" width="800"}
 
-[Reference: Hadley Wickham (2010) [“A layered grammar of graphics.”](https://vita.had.co.nz/papers/layered-grammar.html) Journal of Computational and Graphical Statistics, vol. 19, no. 1, pp. 3–28.]{style="color:grey" style="font-size: 10px;"}
+<span style="color: grey; font-size: 12px;">
+Reference: Hadley Wickham (2010) [“A layered grammar of graphics.”](https://vita.had.co.nz/papers/layered-grammar.html) Journal of Computational and Graphical Statistics, vol. 19, no. 1, pp. 3–28.
+</span>
 
 A short description of each building block are as follows:
 
