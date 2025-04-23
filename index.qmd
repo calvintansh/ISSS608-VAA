@@ -4,12 +4,12 @@ title: "Visual Analytics and Applications"
 
 ![](cover_pic.jpg){fig-align="center" width="800"}
 
-<span style="color: grey; font-size: 12px;">
-Reference: [Picture Link](https://unsplash.com/photos/graphical-user-interface--WXQm_NTK0U)
-</span>
+[ Reference: [Picture Link](https://unsplash.com/photos/graphical-user-interface--WXQm_NTK0U) ]{style="color: grey; font-size: 12px;"}
 
 This webpage serves as a portfolio showcasing my coursework for ISSS608: Visual Analytics and Applications at Singapore Management University (SMU).
 
 Throughout the course, I gained hands-on experience in using RStudio for implementing various data visualization techniques, as well as Tableau for creating interactive dashboards. I also developed an understanding of version control using GitHub and learned how to publish analytical reports and dashboards using Quarto and deploy them as a website via Netlify. This portfolio reflects the practical skills and concepts I acquired in the course.
 
+::: callout-note
 Please use the toggle at the top right to switch between light and dark mode based on your preference!
+:::

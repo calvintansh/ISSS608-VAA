@@ -1,11 +1,21 @@
 ---
 title: "About"
+image: profile.jpg
+about:
+  template: jolla
+  links:
+    - icon: linkedin
+      text: LinkedIn
+      href: https://www.linkedin.com/in/calvintansh/
+    - icon: github
+      text: GitHub
+      href: https://github.com/calvintansh
 ---
 
-This is a website created as part of ISSS608 Visual Analytics and Application under Singapore Management University (SMU) Master of IT in Business (MITB). This website is created using RStudio using Quarto, stored in GitHub and published using Netlify.
+This website was created as part of the coursework for ISSS608: Visual Analytics and Applications, a module under the Master of IT in Business (MITB) program at Singapore Management University (SMU). It was developed using RStudio with Quarto, version-controlled via GitHub, and published through Netlify.
 
-The author, Calvin Tan Song Hao is an aspiring a Data Analyst and a student at SMU MITB. I aim leverage my background as an R&D engineer to solve problems and uncover insights that drive impactful decisions.
+The author, Calvin Tan Song Hao, is an aspiring Data Analyst and a current student in the SMU MITB program. With a background in R&D engineering, I aim to leverage my analytical skills and technical expertise to solve real-world problems and uncover data-driven insights that support impactful decision-making.
 
-[My LinkedIn](https://www.linkedin.com/in/calvintansh/)
-
-[My GitHub](https://github.com/calvintansh)
+::: callout-note
+Please feel free to click on my LinkedIn and GitHub links for more info!
+:::

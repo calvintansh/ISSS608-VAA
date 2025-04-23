@@ -4,7 +4,7 @@
     "href": "index.html",
     "title": "Visual Analytics and Applications",
     "section": "",
-    "text": "Reference: Picture Link \nThis webpage serves as a portfolio showcasing my coursework for ISSS608: Visual Analytics and Applications at Singapore Management University (SMU).\nThroughout the course, I gained hands-on experience in using RStudio for implementing various data visualization techniques, as well as Tableau for creating interactive dashboards. I also developed an understanding of version control using GitHub and learned how to publish analytical reports and dashboards using Quarto and deploy them as a website via Netlify. This portfolio reflects the practical skills and concepts I acquired in the course.\nPlease use the toggle at the top right to switch between light and dark mode based on your preference!"
+    "text": "Reference: Picture Link\nThis webpage serves as a portfolio showcasing my coursework for ISSS608: Visual Analytics and Applications at Singapore Management University (SMU).\nThroughout the course, I gained hands-on experience in using RStudio for implementing various data visualization techniques, as well as Tableau for creating interactive dashboards. I also developed an understanding of version control using GitHub and learned how to publish analytical reports and dashboards using Quarto and deploy them as a website via Netlify. This portfolio reflects the practical skills and concepts I acquired in the course.\n\n\n\n\n\n\nNote\n\n\n\nPlease use the toggle at the top right to switch between light and dark mode based on your preference!"
   },
   {
     "objectID": "Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html",
@@ -102,7 +102,7 @@
     "href": "about.html",
     "title": "About",
     "section": "",
-    "text": "This is a website created as part of ISSS608 Visual Analytics and Application under Singapore Management University (SMU) Master of IT in Business (MITB). This website is created using RStudio using Quarto, stored in GitHub and published using Netlify.\nThe author, Calvin Tan Song Hao is an aspiring a Data Analyst and a student at SMU MITB. I aim leverage my background as an R&D engineer to solve problems and uncover insights that drive impactful decisions.\nMy LinkedIn\nMy GitHub"
+    "text": "This website was created as part of the coursework for ISSS608: Visual Analytics and Applications, a module under the Master of IT in Business (MITB) program at Singapore Management University (SMU). It was developed using RStudio with Quarto, version-controlled via GitHub, and published through Netlify.\nThe author, Calvin Tan Song Hao, is an aspiring Data Analyst and a current student in the SMU MITB program. With a background in R&D engineering, I aim to leverage my analytical skills and technical expertise to solve real-world problems and uncover data-driven insights that support impactful decision-making.\n\n\n\n\n\n\nNote\n\n\n\nPlease feel free to click on my LinkedIn and GitHub links for more info!"
   },
   {
     "objectID": "Hands-on_Ex/Hands-on_Ex02/Hands-on_Ex02.html",

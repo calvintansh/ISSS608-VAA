@@ -2,19 +2,20 @@ project:
   type: website
 
 website:
-  title: "ISSS608-VAA"
+  title: "<i class='bi bi-file-bar-graph'></i> ISSS608-VAA"
   navbar:
     left:
-    - text: "Hands-on Exercise"
+    - text: "<i class='bi bi-bar-chart-line'></i> Hands-on Exercise"
       menu:
-        - text: "Hands-on Exercise 1"
+        - text: "Hands-on Exercise 1: A Layered Grammar of Graphics: ggplot2 methods"
           href: "Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html"
-        - text: "Hands-on Exercise 2"
+        - text: "Hands-on Exercise 2: Beyond ggplot2 Fundamentals"
           href: "Hands-on_Ex/Hands-on_Ex02/Hands-on_Ex02.html"
     right:
       - href: index.qmd
-        text: Home
-      - about.qmd
+        text: "<i class='bi bi-house-door'></i> Home"
+      - href: about.qmd
+        text: "<i class='bi bi-person'></i> About"
 
 format:
   html:
