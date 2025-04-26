@@ -822,7 +822,7 @@ Things to learn from the code chunk:
 
 ::: panel-tabset
 
-# Plot
+## Plot
 ``` {r}
 #| echo: false
 d <- highlight_key(exam_data)
