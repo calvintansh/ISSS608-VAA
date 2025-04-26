@@ -7,16 +7,31 @@ website:
     left:
     - text: "<i class='bi bi-bar-chart-line'></i> Hands-on Exercise"
       menu:
-        - text: "Hands-on Exercise 1: A Layered Grammar of Graphics: ggplot2 methods"
+        - text: "Hands-On Exercise 1: A Layered Grammar of Graphics: ggplot2 methods"
           href: "Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html"
-        - text: "Hands-on Exercise 2: Beyond ggplot2 Fundamentals"
+        - text: "Hands-On Exercise 2: Beyond ggplot2 Fundamentals"
           href: "Hands-on_Ex/Hands-on_Ex02/Hands-on_Ex02.html"
+        - text: "Hands-On Exercise 3-1: Programming Interactive Data Visualisation with R"
+          href: "Hands-on_Ex/Hands-on_Ex03-1/Hands-on_Ex03-1.html"
     right:
       - href: index.qmd
         text: "<i class='bi bi-house-door'></i> Home"
       - href: about.qmd
         text: "<i class='bi bi-person'></i> About"
-
+  sidebar:
+    - title: "Hands-On Exercise"
+      style: "floating"
+      collapse-level: 2
+      align: left
+      contents:
+        - section: "Hands-On Exercise"
+          contents:
+            - text: "1: A Layered Grammar of Graphics: ggplot2 methods"
+              href: Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.qmd
+            - text: "2: Beyond ggplot2 Fundamentals"
+              href: Hands-on_Ex/Hands-on_Ex02/Hands-on_Ex02.qmd
+            - text: "3-1: Programming Interactive Data Visualisation with R"
+              href: Hands-on_Ex/Hands-on_Ex03-1/Hands-on_Ex03-1.qmd
 format:
   html:
     theme:

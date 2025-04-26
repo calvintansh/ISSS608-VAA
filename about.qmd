@@ -9,7 +9,6 @@ about:
       href: https://www.linkedin.com/in/calvintansh/
     - icon: github
       text: GitHub
-      href: https://github.com/calvintansh
 ---
 
 This website was created as part of the coursework for ISSS608: Visual Analytics and Applications, a module under the Master of IT in Business (MITB) program at Singapore Management University (SMU). It was developed using RStudio with Quarto, version-controlled via GitHub, and published through Netlify.

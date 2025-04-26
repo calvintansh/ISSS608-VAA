@@ -2,7 +2,13 @@
 title: "[Hands-on Exercise 2:]{style='color:DarkOrange'} Beyond ggplot2 Fundamentals"
 date: 2025-04-22
 date-modified: "last-modified"
-warning: false
+format: html
+editor: visual
+execute: 
+  eval: true
+  echo: true
+  warning: false
+  freeze: true
 ---
 
 ## [2.1]{style="color:DarkOrange"} Overview
@@ -24,7 +30,7 @@ Code chunk below will be used to check if these packages have been installed and
 ```{r}
 pacman::p_load(ggrepel, patchwork,
                ggthemes, hrbrthemes,
-               tidyverse)
+               tidyverse,stringr)
 ```
 
 ### [2.2.2]{style="color:DarkOrange"} Importing Data
@@ -638,7 +644,8 @@ p3 <- ggplot(data=exam_data,
               size=0.5) +  
   coord_cartesian(xlim=c(0,100),
                   ylim=c(0,100)) +
-  ggtitle("English scores versus Maths scores for Primary 3")
+  ggtitle(str_wrap("English scores versus Maths scores for Primary 3", width = 30)) +
+  theme(plot.title = element_text(hjust = 0.5, size = 15, face = "bold"))
 p3
 ```
 
@@ -654,7 +661,8 @@ p3 <- ggplot(data=exam_data,
               size=0.5) +  
   coord_cartesian(xlim=c(0,100),
                   ylim=c(0,100)) +
-  ggtitle("English scores versus Maths scores for Primary 3")
+  ggtitle(str_wrap("English scores versus Maths scores for Primary 3", width = 30)) +
+  theme(plot.title = element_text(hjust = 0.5, size = 15, face = "bold"))
 ```
 :::
 
@@ -770,13 +778,15 @@ p3 + inset_element(p2,
 
 ### [2.5.6]{style="color:darkorange"} Creating a Composite Figure by Using patchwork and ggtheme
 
-The figure below is created by combining patchwork and theme_economist() of [ggthemes package](https://isss608-ay2024-25t3.netlify.app/hands-on_ex/hands-on_ex02/hands-on_ex02#working-with-ggtheme-package) discussed earlier.
+The figure below is created by combining patchwork and theme_economist() of [ggthemes package](https://isss608-ay2024-25t3.netlify.app/hands-on_ex/hands-on_ex02/hands-on_ex02#beyond-ggplot2-themes) discussed earlier.
 
 ::: panel-tabset
 ## Plot
 
 ```{r}
 #| echo: false
+#| fig-width: 12
+#| fig-height: 7
 patchwork <- (p1 / p2) | p3 
 patchwork & theme_economist()
 ```
@@ -785,6 +795,8 @@ patchwork & theme_economist()
 
 ```{r}
 #| eval: false
+#| fig-width: 12
+#| fig-height: 7
 patchwork <- (p1 / p2) | p3 
 patchwork & theme_economist()
 ```
@@ -795,7 +807,7 @@ patchwork & theme_economist()
 -   [Patchwork R package goes nerd viral](https://www.littlemissdata.com/blog/patchwork)
 -   [ggrepel](https://ggrepel.slowkow.com/)
 -   [ggthemes](https://ggplot2.tidyverse.org/reference/ggtheme.html)
--   [hrbrthemes](https://cinc.rud.is/web/packages/hrbrthemes/)
--   [ggplot tips: Arranging plots](https://albert-rapp.de/post/2021-10-28-extend-plot-variety/)
+-   [hrbrthemes](https://cinc.rud.is/web/packages/hrbrthemes/) Link is broken
+-   [ggplot tips: Arranging plots](https://albert-rapp.de/post/2021-10-28-extend-plot-variety/) Link is broken
 -   [ggplot2 Theme Elements Demonstration](https://henrywang.nl/ggplot2-theme-elements-demonstration/)
 -   [ggplot2 Theme Elements Reference Sheet](https://isabella-b.com/blog/ggplot2-theme-elements-reference/)

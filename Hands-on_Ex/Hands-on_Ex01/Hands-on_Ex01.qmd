@@ -1,8 +1,14 @@
 ---
-title: "[Hands-on Exercise 1:]{style='color:DarkOrange'} A Layered Grammar of Graphics: ggplot2 methods"
+title: "[Hands-On Exercise 1:]{style='color:DarkOrange'} A Layered Grammar of Graphics: ggplot2 methods"
 date: 2025-04-14
 date-modified: "last-modified"
-warning: false
+format: html
+editor: visual
+execute: 
+  eval: true
+  echo: true
+  warning: false
+  freeze: true
 ---
 
 ## [1.1]{style="color:DarkOrange"} Learning Outcome
@@ -26,7 +32,7 @@ pacman::p_load(tidyverse, patchwork)
 ```
 
 ::: callout-note
-Patchwork is used for easier comparisons between graphs. Further explanation on how to create it can be found in [Hands-on Exercise 2: Section 2.5.1](https://r4va.netlify.app/chap02#creating-composite-graphics-pathwork-methods)
+Patchwork is used for easier comparisons between graphs. Further explanation on how to create it can be found in [Hands-On Exercise 2: Section 2.5.1](https://isss608-ay2024-25t3.netlify.app/hands-on_ex/hands-on_ex02/hands-on_ex02#creating-composite-graphics-patchwork-methods)
 :::
 
 ### [1.2.2]{style="color:DarkOrange"} Importing the Data
@@ -116,9 +122,7 @@ ggplot2 is an implementation of Leland Wilkinson’s Grammar of Graphics. Figure
 
 ![](/Hands-on_Ex/Hands-on_Ex01/image/layer.jpg){fig-align="center" width="800"}
 
-<span style="color: grey; font-size: 12px;">
-Reference: Hadley Wickham (2010) [“A layered grammar of graphics.”](https://vita.had.co.nz/papers/layered-grammar.html) Journal of Computational and Graphical Statistics, vol. 19, no. 1, pp. 3–28.
-</span>
+[ Reference: Hadley Wickham (2010) [“A layered grammar of graphics.”](https://vita.had.co.nz/papers/layered-grammar.html) Journal of Computational and Graphical Statistics, vol. 19, no. 1, pp. 3–28. ]{style="color: grey; font-size: 12px;"}
 
 A short description of each building block are as follows:
 
@@ -272,7 +276,7 @@ The code chunk below performs the following two steps:
 :::
 
 ::: callout-note
-The code uses patchwork for easier comparisons between graphs. Further explanation on how to create it can be found in [Hands-on Exercise 2: Section 2.5.1](https://r4va.netlify.app/chap02#creating-composite-graphics-pathwork-methods)
+The code uses patchwork for easier comparisons between graphs. Further explanation on how to create it can be found in [Hands-On Exercise 2: Section 2.5.1](https://r4va.netlify.app/chap02#creating-composite-graphics-pathwork-methods)
 :::
 
 ### [1.7.3]{style="color:DarkOrange"} Geometric Objects: geom_histogram()
