@@ -889,7 +889,11 @@ subplot(
 
 ```{r}
 #| echo: false
-DT::datatable(exam_data, class = "compact")
+DT::datatable(exam_data, 
+              class = "compact",
+              options = list(
+                pageLength = 5)
+)
 ```
 
 ## Code
@@ -900,7 +904,7 @@ DT::datatable(exam_data, class = "compact")
 ```
 :::
 
-### [3.8.2]{style="color:DarkOrange"} Linked brushing: crosstalk method
+### [3.8.2]{style="color:DarkOrange"} Linked brushing: crosstalk Method
 
 ::: panel-tabset
 ## Plot
@@ -944,6 +948,120 @@ crosstalk::bscols(gg,
 ```
 :::
 
+::: callout-note
+Things to learn from the code chunk:
+
+- *highlight()* is a function of **plotly** package. It sets a variety of options for brushing (i.e., highlighting) multiple plots. These options are primarily designed for linking multiple plotly graphs, and may not behave as expected when linking plotly to another htmlwidget package via crosstalk. In some cases, other htmlwidgets will respect these options, such as persistent selection in leaflet.
+- *bscols()* is a helper function of **crosstalk** package. It makes it easy to put HTML elements side by side. It can be called directly from the console but is especially designed to work in an R Markdown document. **Warning**: This will bring in all of Bootstrap!.
+:::
+
+## [3.8.3]{style="color:DarkOrange"} Fixing Data Table
+The DataTables above have 2 extra columns (tooltip and onclick). This is because they were added in [Hands-On Exercise 3 :Section 3.5.1](https://isss608-ay2024-25t3.netlify.app/hands-on_ex/hands-on_ex03/hands-on_ex03#displaying_multiple_information_on_tooltip) for tooltip and in [Hands-On Exercise 3 :Section 3.6.6](https://isss608-ay2024-25t3.netlify.app/hands-on_ex/hands-on_ex03/hands-on_ex03#click_effect_with_onclick) for onclick.
+
+A new dataset will be read to view how the DataTable should look like without the additional columns.
+
+```{r}
+exam_data_2 <- read_csv("data/Exam_data.csv")
+```
+
+:::callout-note
+pageLength is used to set the default number of entries to 5 for a more compact table
+:::
+
+::: panel-tabset
+
+## Plot
+
+```{r}
+#| echo: false
+DT::datatable(exam_data_2, 
+              class = "compact",
+              options = list(
+                pageLength = 5)
+)
+```
+
+## Code
+```{r}
+#| eval: false
+DT::datatable(exam_data_2, 
+              class = "compact",
+              options = list(
+                pageLength = 5)
+)
+```
+:::
+
+## [3.8.4]{style="color:DarkOrange"} Fixing crosstalk table
+The crosstalk table in [Hands-On Exercise 3 :Section 3.8.2](https://isss608-ay2024-25t3.netlify.app/hands-on_ex/hands-on_ex03/hands-on_ex03#linked_brushing:_crosstalk_method) has a very long DataTable on the right. This requires horizontal scrolling of the DataTable which is not an ideal user interface design. Therefore, the crosstalk layout has been changed from side-by-side to top-and-bottom by setting width to 12.
+
+:::callout-note
+- Also applied compact class and set the default entity size to 5
+- Used *layout()* control the size of the plot to be a square shape since the axis are equal
+- Used *div()* to control the height allocated to the plot
+:::
+
+:::callout-tip
+This crosstalk table is more compact and user friendly by showing all the necessary information without unnecessary scrolling!
+:::
+
+::: panel-tabset
+
+## Plot
+```{r}
+#| echo: false
+library(htmltools)
+
+d <- highlight_key(exam_data_2)
+p <- ggplot(d,
+            aes(ENGLISH,
+                MATHS)) +
+  geom_point(size = 1) +
+  coord_cartesian(xlim = c(0,100),
+                  ylim = c(0,100))
+
+gg <- highlight(
+  ggplotly(p) %>% layout(height = 300, width = 300),
+  "plotly_selected"
+)
+
+crosstalk::bscols(
+  widths = 12,
+  div(style = "height: 300px;", gg),
+  DT::datatable(d, 
+                class = "compact",
+                options = list(pageLength = 5))
+)
+```
+
+## Code
+```{r}
+#| eval: false
+# library(htmltools)
+
+d <- highlight_key(exam_data_2)
+p <- ggplot(d,
+            aes(ENGLISH,
+                MATHS)) +
+  geom_point(size = 1) +
+  coord_cartesian(xlim = c(0,100),
+                  ylim = c(0,100))
+
+gg <- highlight(
+  ggplotly(p) %>% layout(height = 300, width = 300),
+  "plotly_selected"
+)
+
+crosstalk::bscols(
+  widths = 12,
+  div(style = "height: 300px;", gg),
+  DT::datatable(d, 
+                class = "compact",
+                options = list(pageLength = 5))
+)
+```
+:::
+
 ## [3.9]{style="color:DarkOrange"} Reference
 
 ### [3.9.1]{style="color:DarkOrange"} ggiraph
@@ -964,5 +1082,5 @@ This [link](https://davidgohel.github.io/ggiraph/) provides an online version of
 -   [Plotly R Library Fundamentals](https://plotly.com/r/plotly-fundamentals/) is a good place to learn the fundamental features of Plotly's R API.
 -   [Getting Started](https://gganimate.com/articles/gganimate.html)
 - This [link](https://rpubs.com/raymondteo/dataviz8) provides a very interesting implementation of gganimate by an SMU senior.
--   [Building an animation step-by-step with gganimate](https://www.alexcookson.com/post/2020-10-18-building-an-animation-step-by-step-with-gganimate/).
+-   [Building an animation step-by-step with gganimate](https://www.alexcookson.com/post/2020-10-18-building-an-animation-step-by-step-with-gganimate/)
 -   [Creating a composite gif with multiple gganimate panels](https://solarchemist.se/2021/08/02/composite-gif-gganimate/)

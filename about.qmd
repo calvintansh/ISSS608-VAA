@@ -9,6 +9,13 @@ about:
       href: https://www.linkedin.com/in/calvintansh/
     - icon: github
       text: GitHub
+format: html
+editor: visual
+execute: 
+  eval: true
+  echo: true
+  warning: false
+  freeze: true
 ---
 
 This website was created as part of the coursework for ISSS608: Visual Analytics and Applications, a module under the Master of IT in Business (MITB) program at Singapore Management University (SMU). It was developed using RStudio with Quarto, version-controlled via GitHub, and published through Netlify.
@@ -18,3 +25,59 @@ The author, Calvin Tan Song Hao, is an aspiring Data Analyst and a current stude
 ::: callout-note
 Please feel free to click on my LinkedIn and GitHub links for more info!
 :::
+
+```{r}
+pacman::p_load(ggiraph, plotly,
+               patchwork, DT, tidyverse)
+```
+
+```{r}
+exam_data_2 <- read_csv("C:/calvintansh/ISSS608-VAA/Hands-on_Ex/Hands-on_Ex03-1/data/Exam_data.csv")
+```
+
+```{r}
+d <- highlight_key(exam_data_2)
+p <- ggplot(d,
+            aes(ENGLISH,
+                MATHS)) +
+  geom_point(size = 1) +
+  coord_cartesian(xlim = c(0,100),
+                  ylim = c(0,100))
+
+gg <- highlight(ggplotly(p),
+                "plotly_selected")
+
+crosstalk::bscols(gg,
+                  DT::datatable(d, 
+                                class = "compact",
+                                options = list(
+                                  pageLength = 5)
+                                ),
+                  widths = 12)   
+```
+
+
+```{r}
+library(htmltools)
+
+d <- highlight_key(exam_data_2)
+p <- ggplot(d,
+            aes(ENGLISH,
+                MATHS)) +
+  geom_point(size = 1) +
+  coord_cartesian(xlim = c(0,100),
+                  ylim = c(0,100))
+
+gg <- highlight(
+  ggplotly(p) %>% layout(height = 300, width = 300),   # <<-- set height here
+  "plotly_selected"
+)
+
+crosstalk::bscols(
+  widths = 12,
+  div(style = "height: 300px;", gg),  # <-- control plot container height
+  DT::datatable(d, 
+                class = "compact",
+                options = list(pageLength = 5))
+)
+```
