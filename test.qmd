@@ -10,35 +10,30 @@ execute:
 ---
 
 ```{r}
-pacman::p_load(ggiraph, plotly,
-               patchwork, DT, tidyverse)
+pacman::p_load(readxl, gifski, gapminder,
+               plotly, gganimate, tidyverse)
 ```
 
 ```{r}
-exam_data_2 <- read_csv("C:/calvintansh/ISSS608-VAA/Hands-on_Ex/Hands-on_Ex03-1/data/Exam_data.csv")
+col <- c("Country", "Continent")
+globalPop <- read_xls("C:/calvintansh/ISSS608-VAA/Hands-on_Ex/Hands-on_Ex03-2/data/GlobalPopulation.xls",
+                      sheet = "Data") %>%
+  mutate(across(col, as.factor)) %>% # mutate(across())
+  mutate(Year = as.integer(Year))
 ```
 
-```{r}
-library(htmltools)
-
-d <- highlight_key(exam_data_2)
-p <- ggplot(d,
-            aes(ENGLISH,
-                MATHS)) +
-  geom_point(size = 1) +
-  coord_cartesian(xlim = c(0,100),
-                  ylim = c(0,100))
-
-gg <- highlight(
-  ggplotly(p) %>% layout(height = 300, width = 300),
-  "plotly_selected"
-)
-
-crosstalk::bscols(
-  widths = 12,
-  div(style = "height: 300px; display: flex; justify-content: center; align-items: center;", gg),
-  DT::datatable(d, 
-                class = "compact",
-                options = list(pageLength = 5))
-)
+``` {r}
+bp <- globalPop %>%
+  plot_ly(x = ~Old,
+          y = ~Young,
+          size = ~Population,
+          color = ~Continent,
+          sizes = c(10,600),
+          frame = ~Year,
+          text = ~Country,
+          hoverinfo = "text",
+          type = 'scatter',
+          mode = 'markers'
+          )
+bp
 ```

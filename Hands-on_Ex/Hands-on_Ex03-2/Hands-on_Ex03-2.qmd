@@ -70,6 +70,7 @@ globalPop <- read_xls("data/GlobalPopulation.xls",
 
 ::: callout-note
 ## Things to learn from the code chunk above
+
 -   [`read_xls`](https://readxl.tidyverse.org/reference/read_excel.html) of **readxl** package is used to import the Excel worksheet
 -   `mutate_each_()` of dplyr package is used to convert all character data type into factor
 -   `mutate` of dplyr package is used to convert data values of Year field into integer
@@ -77,13 +78,13 @@ globalPop <- read_xls("data/GlobalPopulation.xls",
 
 Unfortunately, `mutate_each_()` was deprecated in dplyr 0.7.0 and `funs()` was deprecated in dplyr 0.8.0.
 
-- In view of this, we will re-write the code by using [`mutate_at()`](https://dplyr.tidyverse.org/reference/mutate_all.html)(link is different from notes) as shown in the code chunk below
-- Instead of using `mutate_at()`, [`across()`](https://dplyr.tidyverse.org/reference/across.html) can be used to derive the same outputs
+-   In view of this, we will re-write the code by using [`mutate_at()`](https://dplyr.tidyverse.org/reference/mutate_all.html)(link is different from notes) as shown in the code chunk below
+-   Instead of using `mutate_at()`, [`across()`](https://dplyr.tidyverse.org/reference/across.html) can be used to derive the same outputs
 
 ::: panel-tabset
-
 ## Using mutate_at()
-``` {r}
+
+```{r}
 col <- c("Country", "Continent")
 globalPop <- read_xls("data/GlobalPopulation.xls",
                       sheet = "Data") %>%
@@ -92,6 +93,7 @@ globalPop <- read_xls("data/GlobalPopulation.xls",
 ```
 
 ## Using mutate(across())
+
 ```{r}
 col <- c("Country", "Continent")
 globalPop <- read_xls("data/GlobalPopulation.xls",
@@ -99,6 +101,10 @@ globalPop <- read_xls("data/GlobalPopulation.xls",
   mutate(across(col, as.factor)) %>% # mutate(across())
   mutate(Year = as.integer(Year))
 ```
+:::
+
+::: callout-note
+Both methods achieve the same results!
 :::
 
 ## [3-2.3]{style="color:darkorange"} Animated Data Visualisation: gganimate Methods
@@ -117,6 +123,7 @@ In the code chunk below, the basic ggplot2 functions are used to create a static
 
 ::: panel-tabset
 ## Plot
+
 ```{r}
 #| echo: false
 ggplot(globalPop, aes(x = Old, y = Young,
@@ -132,6 +139,7 @@ ggplot(globalPop, aes(x = Old, y = Young,
 ```
 
 ## Code
+
 ```{r}
 #| eval: false
 ggplot(globalPop, aes(x = Old, y = Young,
@@ -149,14 +157,13 @@ ggplot(globalPop, aes(x = Old, y = Young,
 
 ### [3-2.3.2]{style="color:darkorange"} Building the Animated Bubble Plot
 
-In the code chunk below, 
+In the code chunk below,
 
-- [`transition_time()`](https://gganimate.com/reference/transition_time.html) of **gganimate** is used to create transition through distinct states in time (i.e. Year) 
-- `ease_aes()` is used to control easing of aesthetics. The default is `linear`. 
-    - Other methods are: quadratic, cubic, quartic, quintic, sine, circular, exponential, elastic, back, and bounce.
+-   [`transition_time()`](https://gganimate.com/reference/transition_time.html) of **gganimate** is used to create transition through distinct states in time (i.e. Year)
+-   `ease_aes()` is used to control easing of aesthetics. The default is `linear`.
+    -   Other methods are: quadratic, cubic, quartic, quintic, sine, circular, exponential, elastic, back, and bounce.
 
 ::: panel-tabset
-
 ## Plot
 
 ```{r}
@@ -226,7 +233,7 @@ ggplotly(gg)
 
 ## Code
 
-``` {r}
+```{r}
 #| eval: false
 gg <- ggplot(globalPop, 
        aes(x = Old, 
@@ -271,8 +278,8 @@ The animated bubble plot above includes a play/pause button and a slider compone
 ::: callout-note
 ## Things to learn from the code chunk above
 
-- Appropriate ggplot2 functions are used to create a static bubble plot. The output is then saved as an R object called *gg*.
-- `ggplotly()` is then used to convert the R graphic object into an animated svg object.
+-   Appropriate ggplot2 functions are used to create a static bubble plot. The output is then saved as an R object called *gg*.
+-   `ggplotly()` is then used to convert the R graphic object into an animated svg object.
 :::
 
 Notice that although `show.legend = FALSE` argument was used, the legend still appears on the plot. To overcome this problem, `theme(legend.position='none')` should be used as shown in the plot and code chunk below.
@@ -301,7 +308,7 @@ ggplotly(gg)
 
 ## Code
 
-``` {r}
+```{r}
 #| eval: false
 gg <- ggplot(globalPop, 
        aes(x = Old, 
@@ -349,7 +356,7 @@ bp
 
 ## plot_ly() Code
 
-``` {r}
+```{r}
 #| eval: false
 bp <- globalPop %>%
   plot_ly(x = ~Old,
@@ -369,7 +376,7 @@ bp
 
 ## ggplotly() Code
 
-``` {r}
+```{r}
 #| eval: false
 gg <- ggplot(globalPop, 
        aes(x = Old, 
@@ -391,7 +398,53 @@ ggplotly(gg)
 
 ::: callout-note
 The plot_ly() method is much simpler and easier to read and code compared to the ggplotly() method due to its simpler syntax and fewer layers of customisation.
+
+-   The execution time needed for plot_ly() is also lower.
 :::
+
+### [3-2.4.3]{style="color:darkorange"} Improving Animated Bubble Plot: `plot_ly()` Method
+
+Changes implemented: - Bubble size - Added legend
+
+::: panel-tabset
+## Plot
+
+```{r}
+#| echo: false
+bp <- globalPop %>%
+  plot_ly(x = ~Old,
+          y = ~ Young,
+          size = ~Population,
+          color = ~Continent,
+          sizes = c(10,600),
+          frame = ~Year,
+          text = ~Country,
+          hoverinfo = "text",
+          type = 'scatter',
+          mode = 'markers'
+          )
+bp
+
+```
+
+## Code
+
+```{r}
+#| eval: false
+bp <- globalPop %>%
+  plot_ly(x = ~Old,
+          y = ~ Young,
+          size = ~Population,
+          color = ~Continent,
+          sizes = c(10,600),
+          frame = ~Year,
+          text = ~Country,
+          hoverinfo = "text",
+          type = 'scatter',
+          mode = 'markers'
+          )
+bp
+```
 
 ## [3-2.5]{style="color:darkorange"} Reference
 
@@ -399,3 +452,4 @@ The plot_ly() method is much simpler and easier to read and code compared to the
 -   Visit this [link](https://rpubs.com/raymondteo/dataviz8) for a very interesting implementation of gganimate by an SMU senior
 -   [Building an animation step-by-step with gganimate](https://www.alexcookson.com/post/2020-10-18-building-an-animation-step-by-step-with-gganimate/)
 -   [Creating a composite gif with multiple gganimate panels](https://solarchemist.se/2021/08/02/composite-gif-gganimate/)
+:::
