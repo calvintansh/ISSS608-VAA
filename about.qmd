@@ -12,9 +12,6 @@ about:
 format: html
 editor: visual
 execute: 
-  eval: true
-  echo: true
-  warning: false
   freeze: true
 ---
 

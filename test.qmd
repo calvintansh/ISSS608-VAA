@@ -1,0 +1,44 @@
+---
+title: "test"
+format: html
+editor: visual
+execute: 
+  eval: true
+  echo: true
+  warning: false
+  freeze: true
+---
+
+```{r}
+pacman::p_load(ggiraph, plotly,
+               patchwork, DT, tidyverse)
+```
+
+```{r}
+exam_data_2 <- read_csv("C:/calvintansh/ISSS608-VAA/Hands-on_Ex/Hands-on_Ex03-1/data/Exam_data.csv")
+```
+
+```{r}
+library(htmltools)
+
+d <- highlight_key(exam_data_2)
+p <- ggplot(d,
+            aes(ENGLISH,
+                MATHS)) +
+  geom_point(size = 1) +
+  coord_cartesian(xlim = c(0,100),
+                  ylim = c(0,100))
+
+gg <- highlight(
+  ggplotly(p) %>% layout(height = 300, width = 300),
+  "plotly_selected"
+)
+
+crosstalk::bscols(
+  widths = 12,
+  div(style = "height: 300px; display: flex; justify-content: center; align-items: center;", gg),
+  DT::datatable(d, 
+                class = "compact",
+                options = list(pageLength = 5))
+)
+```
