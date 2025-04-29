@@ -1,0 +1,12 @@
+---
+title: "Take-home_Ex01"
+date: 2025-04-29
+date-modified: "last-modified"
+format: html
+editor: visual
+execute: 
+  eval: true
+  echo: true
+  warning: false
+  freeze: true
+---
