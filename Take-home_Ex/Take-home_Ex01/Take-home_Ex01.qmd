@@ -10,3 +10,200 @@ execute:
   warning: false
   freeze: true
 ---
+
+# Importing Packages
+```{r}
+pacman::p_load(ggrepel, patchwork,
+               ggthemes, hrbrthemes,
+               tidyverse,stringr,
+               knitr)
+```
+
+# Importing Data
+```{r}
+sg_data <- read_csv("data/respopagesex2024.csv")
+```
+
+# Exploring Data
+
+:::: columns
+::: {.column width="50%"}
+### Categorical Variables
+
+-   PA: Planning Area
+-   SZ: Subzone
+-   Age: Single Year of Age
+-   Sex
+:::
+
+::: {.column width="50%"}
+### Continuous Variables
+
+-   Pop: Resident Count
+-   Time: Time / Period
+:::
+::::
+
+::: {.callout-note appearance="minimal" collapse="true"}
+## Code
+```{r}
+sapply(sg_data, class)
+```
+:::
+
+```{r}
+#| echo: false
+kable(head(sg_data), n=10)
+```
+
+::: {.callout-note appearance="minimal" collapse="true"}
+## Code
+```{r}
+#| eval: false
+kable(head(sg_data), n=10)
+```
+:::
+
+::: callout-warning
+Age looks like it should be a continuous variable but it is recognised as a categorical variable!
+:::
+
+There are 91 unique values in the Age column. It ranges from 0 to 89 which are numeric but the last value consists of a string "90_and_Over". This is causing the Age column to be recognised as a categorical variable instead of a continuous variable.
+
+::: {.callout-note appearance="minimal" collapse="true"}
+## Code
+```{r}
+unique(sg_data$Age)
+```
+:::
+
+# Fixing Data Issue
+
+::: {.callout-note appearance="minimal" collapse="true"}
+## Code
+```{r}
+sg_data$Age <- as.character(sg_data$Age)
+
+sg_data$Age[sg_data$Age == "90_and_Over"] <- "90"
+
+sg_data$Age <- as.numeric(sg_data$Age)
+
+sg_data$Age_Group <- cut(
+  sg_data$Age,
+  breaks = c(-1, 24, 64, Inf),
+  labels = c("Young", "Economically_Active", "Aged"),
+  right = TRUE
+)
+
+unique(sg_data$Age_Group)
+```
+:::
+
+```{r}
+#| echo: false
+kable(head(sg_data), n=10)
+```
+
+# Visualisations
+
+## Percentage of Age Groups across Planning Areas
+
+::: {.callout-note appearance="minimal" collapse="true"}
+## Code
+```{r}
+demography <- sg_data %>%
+  group_by(PA, Age_Group) %>%
+  summarise(Pop = sum(Pop, na.rm = TRUE)) %>%
+  tidyr::pivot_wider(
+    names_from = Age_Group,
+    values_from = Pop,
+    values_fill = 0
+  ) %>%
+  mutate(Total = Young + Economically_Active + Aged)
+
+demography <- demography %>%
+  filter(Total > 0)
+
+pct_demography <- demography %>%
+  mutate(
+    Pct_Young = (Young / Total) * 100,
+    Pct_Economically_Active = (Economically_Active / Total) * 100,
+    Pct_Aged = (Aged / Total) * 100
+  ) %>%
+  select(PA, Pct_Young, Pct_Economically_Active, Pct_Aged)
+
+pct_demography <- pct_demography %>%
+  mutate(across(starts_with("pct"), ~ round(.x, 1)))
+```
+:::
+
+::: panel-tabset
+
+## Young
+```{r}
+#| echo: false
+pct_demography$PA <- factor(pct_demography$PA, levels = rev(sort(unique(pct_demography$PA))))
+
+ggplot(data = pct_demography, 
+       aes(x = PA, y = Pct_Young)) +
+  geom_bar(stat = "identity") +
+  coord_flip() +
+  theme_minimal() +
+  labs(
+    x = "Planing Area",  # Set a custom x-axis title
+    y = "Percentage"   # Set a custom y-axis title
+  ) +
+  ggtitle("Percentage of Young across Planning Area") +
+  scale_y_continuous(limits = c(0, 100))
+```
+
+## Economically Active
+```{r}
+#| echo: false
+ggplot(data = pct_demography, 
+       aes(x = PA, y = Pct_Economically_Active)) +
+  geom_bar(stat = "identity") +
+  coord_flip() +
+  theme_minimal() +
+  labs(
+    x = "Planing Area",  # Set a custom x-axis title
+    y = "Percentage"   # Set a custom y-axis title
+  ) +
+  ggtitle("Percentage of Economically Active across Planning Area") +
+  scale_y_continuous(limits = c(0, 100))
+```
+
+## Aged
+```{r}
+#| echo: false
+ggplot(data = pct_demography, 
+       aes(x = PA, y = Pct_Aged)) +
+  geom_bar(stat = "identity") +
+  coord_flip() +
+  theme_minimal() +
+  labs(
+    x = "Planing Area",  # Set a custom x-axis title
+    y = "Percentage"   # Set a custom y-axis title
+  ) +
+  ggtitle("Percentage of Aged across Planning Area") +
+  scale_y_continuous(limits = c(0, 100))
+```
+
+## Code
+```{r}
+#| eval: false
+pct_demography$PA <- factor(pct_demography$PA, levels = rev(sort(unique(pct_demography$PA))))
+
+ggplot(data = pct_demography, 
+       aes(x = PA, y = Pct_Young)) +
+  geom_bar(stat = "identity") +
+  coord_flip() +
+  theme_minimal() +
+  labs(
+    x = "Planing Area",  # Set a custom x-axis title
+    y = "Percentage"   # Set a custom y-axis title
+  ) +
+  ggtitle("Percentage of Young across Planning Area") +
+  scale_y_continuous(limits = c(0, 100))
+```
+:::
