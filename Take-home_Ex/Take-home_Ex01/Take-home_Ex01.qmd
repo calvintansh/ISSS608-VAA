@@ -1,5 +1,5 @@
 ---
-title: "Take-home_Ex01"
+title: "Take-home_Ex01: Demographic Structures and Distribution of Singapore in 2024"
 date: 2025-04-29
 date-modified: "last-modified"
 format: html
@@ -11,7 +11,35 @@ execute:
   freeze: true
 ---
 
-# Importing Packages
+# [1]{style="color:DarkOrange"} Overview
+
+## [1.1]{style="color:DarkOrange"} Background
+
+A local online media company that publishes daily content on digital platforms is planning to release an article on demographic structures and distribution of Singapore in 2024.
+
+Assuming the role of the graphical editor of the media company, I am tasked to prepare at most three data visualisation for this article.
+
+::: callout-tip
+Creating enlightening and truthful data visualizations involves focusing on accuracy, transparency, and the ability to effectively communicate insights. It is about presenting data in a way that is both informative and aesthetically pleasing, ensuring the audience can grasp the information quickly and accurately.
+:::
+
+The data should also be processed by using appropriate tidyverse family of packages and the data visualisation must be prepared using ggplot2 and its extensions. In addition, no interactive data visualisation are required.
+
+## [1.2]{style="color:DarkOrange"} Data Source
+
+The data for this exercise is the [Singapore Residents by Planning Area / Subzone, Single Year of Age and Sex, June 2024](https://www.singstat.gov.sg/find-data/search-by-theme/population/geographic-distribution/latest-data) dataset, retrieved by [Department of Statistics, Singapore (DOS)](https://www.singstat.gov.sg/).
+
+## [1.3]{style="color:DarkOrange"} Install and Load the Required Libraries
+
+In this exercise, besides tidyverse, four R packages will be used. They are: 
+
+1. **ggrepel:** an R package providing geoms for ggplot2 to repel overlapping text labels 
+2. **ggthemes:** an R package providing some extra themes, geoms, and scales for ggplot2 
+3. **hrbrthemes:** an R package providing typography-centric themes and theme components for ggplot2 
+4. **patchwork:** an R package for preparing composite figure created using ggplot2
+
+Code chunk below will be used to check if these packages have been installed and also load them onto my working R environment.
+
 ```{r}
 pacman::p_load(ggrepel, patchwork,
                ggthemes, hrbrthemes,
@@ -19,12 +47,17 @@ pacman::p_load(ggrepel, patchwork,
                knitr)
 ```
 
-# Importing Data
+## [1.4]{style="color:DarkOrange"} Importing Data
+For the purpose of this exercise, a data file called respopagesex2024 will be used. It consists of data about Singapore Residents by Planning Area / Subzone, categorised by a Single Year of Age and Sex,for June 2024. It is in a csv file format.
+
+The code chunk below imports respopagesex2024.csv into R environment by using read_csv() function of readr package. readr is one of the tidyverse package.
+
 ```{r}
 sg_data <- read_csv("data/respopagesex2024.csv")
 ```
 
-# Exploring Data
+# [2]{style="color:DarkOrange"} Exploratory Data Analysis (EDA)
+There are a total of six attributes in the sg_data tibble data frame. Four of them are categorical data type and the other two are in continuous data type.
 
 :::: columns
 ::: {.column width="50%"}
@@ -51,6 +84,8 @@ sapply(sg_data, class)
 ```
 :::
 
+The first 10 rows of the data are displayed using kable to get a basic understanding of the data.
+
 ```{r}
 #| echo: false
 kable(head(sg_data), n=10)
@@ -64,11 +99,26 @@ kable(head(sg_data), n=10)
 ```
 :::
 
-::: callout-warning
-Age looks like it should be a continuous variable but it is recognised as a categorical variable!
+## [2.1]{style="color:DarkOrange"} Checking for duplicates
+
+Before proceeding further with the EDA, a check for duplicated records is done using group_by_all() and filtering rows with more than 1 count. The results of the code below confirms that there are no duplicated records.
+
+::: {.callout-note appearance="minimal" collapse="true"}
+## Code
+```{r}
+duplicate <- sg_data %>% 
+  group_by_all() %>% 
+  filter(n()>1)
+  
+duplicate
+```
 :::
 
-There are 91 unique values in the Age column. It ranges from 0 to 89 which are numeric but the last value consists of a string "90_and_Over". This is causing the Age column to be recognised as a categorical variable instead of a continuous variable.
+## [2.2]{style="color:DarkOrange"} Fixing Age Column Inconsisency 
+
+However, the earlier EDA of the variable types and table has revealed that the column Age looks like it should be a continuous variable but it was recognised as a categorical variable!
+
+Upon further analysis of the **Age** column using the code below, it was found that there are 91 unique values. These values ranges from 0 to 89 wand are numeric, but the last value is a string, *"90_and_Over"*. This is causing the **Age** column to be recognised as a categorical variable instead of a continuous one.
 
 ::: {.callout-note appearance="minimal" collapse="true"}
 ## Code
@@ -77,7 +127,7 @@ unique(sg_data$Age)
 ```
 :::
 
-# Fixing Data Issue
+Therefore, the code below changes the string *"90_and_Over"* into a numerical value *90* and sets the **Age** column to be numeric.
 
 ::: {.callout-note appearance="minimal" collapse="true"}
 ## Code
@@ -87,7 +137,20 @@ sg_data$Age <- as.character(sg_data$Age)
 sg_data$Age[sg_data$Age == "90_and_Over"] <- "90"
 
 sg_data$Age <- as.numeric(sg_data$Age)
+```
+:::
 
+## [2.3]{style="color:DarkOrange"} Binning Age Column
+
+Even after fixing the inconsistent data type in the  **Age** column, there are still 91 unique values, which is too many for meaningful analysis. Therefore, the **Age** column will be binned into the following categorise using the code below:
+
+- Young: Singapore residents aged 0 to 24
+- Economically_Active: Singapore residents aged 25 to 64
+- Aged: Singapore residents aged 65 and above
+
+::: {.callout-note appearance="minimal" collapse="true"}
+## Code
+```{r}
 sg_data$Age_Group <- cut(
   sg_data$Age,
   breaks = c(-1, 24, 64, Inf),
@@ -95,18 +158,26 @@ sg_data$Age_Group <- cut(
   right = TRUE
 )
 
-unique(sg_data$Age_Group)
+unique(sg_data$Age_Group) # shows that the binning works
 ```
 :::
+
+The code above results in the table below.
 
 ```{r}
 #| echo: false
 kable(head(sg_data), n=10)
 ```
 
-# Visualisations
+# [3]{style="color:DarkOrange"} Visualisations
 
-## Percentage of Age Groups across Planning Areas
+## [3.1]{style="color:DarkOrange"} Percentage of Age Groups across Planning Areas
+The visualisation aims to show the percentage distribution of age Groups (Young, Economically_Active and Aged) across Planning Areas. This will provide insights into how Singapore residents are demographically distributed.
+
+### [3.1.1]{style="color:DarkOrange"} Feature Engineering
+To prepare the data for visualisation, the data was first grouped by Planning Area (PA) and Age Group to calculate the total population for each age group within each planning area. This was achieved using the group_by() and summarise() functions to compute population counts, followed by reshaping the data into a wide format with separate columns for "Young", "Economically_Active", and "Aged" using pivot_wider(). A new column, Total, was then created to represent the total population for each Planning Area by summing the values across the three Age Groups. To remove non-residential Planning Areas, rows where the Total population was zero were removed using filter().
+
+Subsequently, the percentage distribution of each Age Group was computed for every Planning Area. This was done by dividing each Age Group’s population by the Total population and multiplying by 100. The resulting percentages were stored in 3 new columns: Pct_Young, Pct_Economically_Active, and Pct_Aged. Only the relevant columns were retained for the final output using select(). Lastly, the percentage values were rounded to one decimal place for better readability using the mutate(across()) function.
 
 ::: {.callout-note appearance="minimal" collapse="true"}
 ## Code
@@ -114,7 +185,7 @@ kable(head(sg_data), n=10)
 demography <- sg_data %>%
   group_by(PA, Age_Group) %>%
   summarise(Pop = sum(Pop, na.rm = TRUE)) %>%
-  tidyr::pivot_wider(
+  pivot_wider(
     names_from = Age_Group,
     values_from = Pop,
     values_fill = 0
@@ -136,6 +207,8 @@ pct_demography <- pct_demography %>%
   mutate(across(starts_with("pct"), ~ round(.x, 1)))
 ```
 :::
+
+### [3.1.2]{style="color:DarkOrange"} Plots and Analysis
 
 ::: panel-tabset
 

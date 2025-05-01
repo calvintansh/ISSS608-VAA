@@ -23,7 +23,12 @@ In this chapter, several ggplot2 extensions were used to create a more elegant a
 
 ### [2.2.1]{style="color:DarkOrange"} Install and Load the Required Libraries
 
-In this exercise, besides tidyverse (Explored in [Hands-on Exercised 1](https://isss608-ay2024-25t3.netlify.app/hands-on_ex/hands-on_ex01/hands-on_ex01)), four R packages will be used. They are: 1. **ggrepel:** an R package providing geoms for ggplot2 to repel overlapping text labels 2. **ggthemes:** an R package providing some extra themes, geoms, and scales for ggplot2 3. **hrbrthemes:** an R package providing typography-centric themes and theme components for ggplot2 4. **patchwork:** an R package for preparing composite figure created using ggplot2
+In this exercise, besides tidyverse (Explored in [Hands-on Exercised 1](https://isss608-ay2024-25t3.netlify.app/hands-on_ex/hands-on_ex01/hands-on_ex01)), four R packages will be used. They are:
+
+1.  **ggrepel:** an R package providing geoms for ggplot2 to repel overlapping text labels
+2.  **ggthemes:** an R package providing some extra themes, geoms, and scales for ggplot2
+3.  **hrbrthemes:** an R package providing typography-centric themes and theme components for ggplot2
+4.  **patchwork:** an R package for preparing composite figure created using ggplot2
 
 Code chunk below will be used to check if these packages have been installed and also load them onto my working R environment.
 
@@ -37,7 +42,7 @@ pacman::p_load(ggrepel, patchwork,
 
 For the purpose of this exercise, a data file called *`Exam_data`* will be used. It consists of year end examination grades of a cohort of primary 3 students from a local school. It is in csv file format.
 
-The code chunk below imports exam_data.csv into R environment by using [*`read_csv()`*](https://readr.tidyverse.org/reference/read_delim.html) function of [**readr**](https://readr.tidyverse.org/) package. **readr** is one of the tidyversepackage.
+The code chunk below imports exam_data.csv into R environment by using [*`read_csv()`*](https://readr.tidyverse.org/reference/read_delim.html) function of [**readr**](https://readr.tidyverse.org/) package. **readr** is one of the tidyverse package.
 
 ```{r}
 exam_data <- read_csv("data/Exam_data.csv")
