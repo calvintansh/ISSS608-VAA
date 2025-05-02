@@ -171,10 +171,300 @@ kable(head(sg_data), n=10)
 
 # [3]{style="color:DarkOrange"} Visualisations
 
-## [3.1]{style="color:DarkOrange"} Percentage of Age Groups across Planning Areas
-The visualisation aims to show the percentage distribution of age Groups (Young, Economically_Active and Aged) across Planning Areas. This will provide insights into how Singapore residents are demographically distributed.
+## [3.1]{style="color:DarkOrange"} Distribution of Population Across Planning Areas by Sex
+This section examines the distribution of the population across Planning Areas, categorized by sex, to understand demographic patterns in different regions.
 
 ### [3.1.1]{style="color:DarkOrange"} Feature Engineering
+
+::: {.callout-note appearance="minimal" collapse="true"}
+## Code
+```{r}
+demography_sex <- sg_data %>%
+  group_by(PA, Sex) %>%
+  summarise(Pop = sum(Pop)) %>%
+  group_by(PA) %>%
+  mutate(Total = sum(Pop))
+
+demography_sex <- demography_sex %>%
+  filter(Total > 0)
+
+kable(head(demography_sex), n=10)
+```
+:::
+
+### [3.1.1]{style="color:DarkOrange"} Plots and Analysis
+
+::: panel-tabset
+
+## Plot
+
+```{r}
+#| echo: false
+#| fig-width: 9
+#| fig-height: 6
+pa_order <- demography_sex %>%
+  distinct(PA, Total) %>%
+  arrange(Total) %>%
+  pull(PA)
+
+demography_sex <- demography_sex %>%
+  mutate(
+    PA = factor(PA, levels = pa_order),
+    Sex = factor(Sex, levels = c("Females", "Males"))
+  )
+
+s1 <- ggplot(data = demography_sex, 
+       aes(x = PA, y = Pop, fill = Sex)) +
+  geom_bar(stat = "identity", position = "stack") +
+  coord_flip() +
+  theme_minimal() +
+  labs(
+    x = "Planing Area",
+    y = "Population",
+    fill = "Sex"
+  ) +
+  ggtitle("Population Across Planning Areas by Sex") +
+  scale_fill_manual(
+    values = c(
+      "Males" = "#88CCEE",
+      "Females" = "#CC6677"
+    ),
+    breaks = c("Males", "Females")
+  ) +
+  scale_y_continuous(labels = scales::comma)
+
+demography_sex_bottom10 <- demography_sex %>%
+  filter(PA %in% head(pa_order, 10))
+
+s2 <- ggplot(data = demography_sex_bottom10, 
+       aes(x = PA, y = Pop, fill = Sex)) +
+  geom_bar(stat = "identity", position = "stack") +
+  coord_flip() +
+  theme_minimal() +
+  labs(
+    x = NULL,
+    y = NULL,
+    fill = NULL
+  ) +
+  scale_fill_manual(
+    values = c(
+      "Males" = "#88CCEE",
+      "Females" = "#CC6677"
+    ),
+    breaks = c("Males", "Females")
+  ) +
+  theme(
+    legend.position = "none",
+    panel.grid.major = element_blank(),
+    panel.grid.minor = element_blank(),
+    axis.text.x = element_blank(),
+    axis.ticks.x = element_blank(),
+    axis.line.x = element_blank()
+  )
+
+s1 + inset_element(s2,
+                   left = 0.2,
+                   bottom = 0.05,
+                   right = 1,
+                   top = 0.35)
+```
+## Code
+```{r}
+#| eval: false
+#| fig-width: 9
+#| fig-height: 6
+pa_order <- demography_sex %>%
+  distinct(PA, Total) %>%
+  arrange(Total) %>%
+  pull(PA)
+
+demography_sex <- demography_sex %>%
+  mutate(
+    PA = factor(PA, levels = pa_order),
+    Sex = factor(Sex, levels = c("Females", "Males"))
+  )
+
+s1 <- ggplot(data = demography_sex, 
+       aes(x = PA, y = Pop, fill = Sex)) +
+  geom_bar(stat = "identity", position = "stack") +
+  coord_flip() +
+  theme_minimal() +
+  labs(
+    x = "Planing Area",
+    y = "Population",
+    fill = "Sex"
+  ) +
+  ggtitle("Population Across Planning Areas by Sex") +
+  scale_fill_manual(
+    values = c(
+      "Males" = "#88CCEE",
+      "Females" = "#CC6677"
+    ),
+    breaks = c("Males", "Females")
+  ) +
+  scale_y_continuous(labels = scales::comma)
+
+demography_sex_bottom10 <- demography_sex %>%
+  filter(PA %in% head(pa_order, 10))
+
+s2 <- ggplot(data = demography_sex_bottom10, 
+       aes(x = PA, y = Pop, fill = Sex)) +
+  geom_bar(stat = "identity", position = "stack") +
+  coord_flip() +
+  theme_minimal() +
+  labs(
+    x = NULL,
+    y = NULL,
+    fill = NULL
+  ) +
+  scale_fill_manual(
+    values = c(
+      "Males" = "#88CCEE",
+      "Females" = "#CC6677"
+    ),
+    breaks = c("Males", "Females")
+  ) +
+  theme(
+    legend.position = "none",
+    panel.grid.major = element_blank(),
+    panel.grid.minor = element_blank(),
+    axis.text.x = element_blank(),
+    axis.ticks.x = element_blank(),
+    axis.line.x = element_blank()
+  )
+
+s1 + inset_element(s2,
+                   left = 0.2,
+                   bottom = 0.05,
+                   right = 1,
+                   top = 0.35)
+```
+:::
+
+## [3.2]{style="color:DarkOrange"} Percentage of Age Groups Across Planning Areas
+The visualisation aims to show the percentage distribution of age Groups (Young, Economically_Active and Aged) across Planning Areas. This will provide insights into how Singapore residents are demographically distributed.
+
+### [3.2.1]{style="color:DarkOrange"} Feature Engineering
+To analyse the demographic composition of each planning area, the dataset was first grouped by Planning Area (PA) and Age Group. For each combination, the population was summed using the group_by() and summarise() functions to obtain the total number of individuals in each age group within each planning area. Next, the data was regrouped by planning area to calculate the total population across all age groups for each area. This total was added as a new column, Total, using mutate().
+
+To ensure meaningful percentage calculations, rows with a total population of zero were removed using filter(). The relative proportion of each age group within its respective planning area was then calculated by dividing the population of that age group by the total population and multiplying by 100. These values were stored in a new column named Pct_Age_Group. The dataset was simplified using select() to remove the Pop Column, and the resulting percentages were rounded to one decimal place for clarity using the mutate(across()) function.
+
+::: {.callout-note appearance="minimal" collapse="true"}
+## Code
+```{r}
+demography_age <- sg_data %>%
+  group_by(PA, Age_Group) %>%
+  summarise(Pop = sum(Pop)) %>%
+  group_by(PA) %>%
+  mutate(Total = sum(Pop))
+
+demography_age <- demography_age %>%
+  filter(Total > 0)
+
+pct_demography_age <- demography_age %>%
+  mutate(Pct_Age_Group = (Pop / Total) * 100) %>%
+  select(PA, Age_Group, Pct_Age_Group)
+
+pct_demography_age <- pct_demography_age %>%
+  mutate(across(Pct_Age_Group, ~ round(.x, 1)))
+
+kable(head(pct_demography_age), n=10)
+```
+:::
+
+### [3.2.2]{style="color:DarkOrange"} Plots and Analysis
+
+::: panel-tabset
+
+## Plot
+```{r}
+#| echo: false
+#| fig-width: 9
+#| fig-height: 6
+pct_demography_age <- pct_demography_age %>%
+  mutate(
+    PA = factor(PA, levels = rev(sort(unique(PA)))),
+    Age_Group = factor(Age_Group, levels = c("Aged", "Economically_Active", "Young"))
+  )
+
+ggplot(data = pct_demography_age, 
+       aes(x = PA, y = Pct_Age_Group, fill = Age_Group)) +
+  geom_bar(stat = "identity", position = "stack") +
+  coord_flip() +
+  theme_minimal() +
+  labs(
+    x = "Planing Area",
+    y = "Percentage",
+    fill = "Age Group"
+  ) +
+  ggtitle("Percentage of Age Groups across Planning Area") +
+  scale_fill_manual(
+    values = c(
+      "Young" = "#88CCEE",
+      "Economically_Active" = "#44AA99",
+      "Aged" = "#DDCC77"
+    ),
+    breaks = c("Young", "Economically_Active", "Aged")
+  )
+```
+
+## Code
+```{r}
+#| eval: false
+#| fig-width: 9
+#| fig-height: 6
+pct_demography_age <- pct_demography_age %>%
+  mutate(
+    PA = factor(PA, levels = rev(sort(unique(PA)))),
+    Age_Group = factor(Age_Group, levels = c("Aged", "Economically_Active", "Young"))
+  )
+
+ggplot(data = pct_demography, 
+       aes(x = PA, y = Pct_Age_Group, fill = Age_Group)) +
+  geom_bar(stat = "identity", position = "stack") +
+  coord_flip() +
+  theme_minimal() +
+  labs(
+    x = "Planing Area",
+    y = "Percentage",
+    fill = "Age Group"
+  ) +
+  ggtitle("Percentage of Age Groups across Planning Area") +
+  scale_fill_manual(
+    values = c(
+      "Young" = "#88CCEE",
+      "Economically_Active" = "#44AA99",
+      "Aged" = "#DDCC77"
+    ),
+    breaks = c("Young", "Economically_Active", "Aged")
+  )
+```
+:::
+
+
+
+
+
+
+
+
+
+## Age Groups by Sex
+
+
+
+
+
+
+
+
+
+# [5]{style="color:DarkOrange"} Appendix
+
+## [5.1]{style="color:DarkOrange"} Percentage of Age Groups Across Planning Areas
+The visualisation aims to show the percentage distribution of age Groups (Young, Economically_Active and Aged) across Planning Areas. This will provide insights into how Singapore residents are demographically distributed.
+
+### [3.2.1]{style="color:DarkOrange"} Feature Engineering
 To prepare the data for visualisation, the data was first grouped by Planning Area (PA) and Age Group to calculate the total population for each age group within each planning area. This was achieved using the group_by() and summarise() functions to compute population counts, followed by reshaping the data into a wide format with separate columns for "Young", "Economically_Active", and "Aged" using pivot_wider(). A new column, Total, was then created to represent the total population for each Planning Area by summing the values across the three Age Groups. To remove non-residential Planning Areas, rows where the Total population was zero were removed using filter().
 
 Subsequently, the percentage distribution of each Age Group was computed for every Planning Area. This was done by dividing each Age Group’s population by the Total population and multiplying by 100. The resulting percentages were stored in 3 new columns: Pct_Young, Pct_Economically_Active, and Pct_Aged. Only the relevant columns were retained for the final output using select(). Lastly, the percentage values were rounded to one decimal place for better readability using the mutate(across()) function.
@@ -208,7 +498,7 @@ pct_demography <- pct_demography %>%
 ```
 :::
 
-### [3.1.2]{style="color:DarkOrange"} Plots and Analysis
+### [3.2.2]{style="color:DarkOrange"} Plots and Analysis
 
 ::: panel-tabset
 
