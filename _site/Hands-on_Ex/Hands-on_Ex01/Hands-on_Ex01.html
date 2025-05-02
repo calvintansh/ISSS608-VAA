@@ -240,23 +240,27 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <ul>
   <li><a href="#learning-outcome" id="toc-learning-outcome" class="nav-link active" data-scroll-target="#learning-outcome"><span style="color:DarkOrange">1.1</span> Learning Outcome</a></li>
   <li><a href="#getting-started" id="toc-getting-started" class="nav-link" data-scroll-target="#getting-started"><span style="color:DarkOrange">1.2</span> Getting Started</a>
-  <ul class="collapse">
+  <ul>
   <li><a href="#install-and-load-the-required-libraries" id="toc-install-and-load-the-required-libraries" class="nav-link" data-scroll-target="#install-and-load-the-required-libraries"><span style="color:DarkOrange">1.2.1</span> Install and Load the Required Libraries</a></li>
   <li><a href="#importing-the-data" id="toc-importing-the-data" class="nav-link" data-scroll-target="#importing-the-data"><span style="color:DarkOrange">1.2.2</span> Importing the Data</a></li>
   </ul></li>
   <li><a href="#introducing-ggplot" id="toc-introducing-ggplot" class="nav-link" data-scroll-target="#introducing-ggplot"><span style="color:DarkOrange">1.3</span> Introducing ggplot</a>
-  <ul class="collapse">
+  <ul>
   <li><a href="#r-graphics-vs-ggplot" id="toc-r-graphics-vs-ggplot" class="nav-link" data-scroll-target="#r-graphics-vs-ggplot"><span style="color:DarkOrange">1.3.1</span> R Graphics VS ggplot</a></li>
   </ul></li>
   <li><a href="#grammar-of-graphics" id="toc-grammar-of-graphics" class="nav-link" data-scroll-target="#grammar-of-graphics"><span style="color:DarkOrange">1.4</span> Grammar of Graphics</a>
-  <ul class="collapse">
+  <ul>
   <li><a href="#a-layered-grammar-of-graphics" id="toc-a-layered-grammar-of-graphics" class="nav-link" data-scroll-target="#a-layered-grammar-of-graphics"><span style="color:DarkOrange">1.4.1</span> A Layered Grammar of Graphics</a></li>
   </ul></li>
   <li><a href="#essential-grammatical-elements-in-ggplot2-data" id="toc-essential-grammatical-elements-in-ggplot2-data" class="nav-link" data-scroll-target="#essential-grammatical-elements-in-ggplot2-data"><span style="color:DarkOrange">1.5</span> Essential Grammatical Elements in ggplot2: Data</a></li>
   <li><a href="#essential-grammatical-elements-in-ggplot2-aesthetic-mappings" id="toc-essential-grammatical-elements-in-ggplot2-aesthetic-mappings" class="nav-link" data-scroll-target="#essential-grammatical-elements-in-ggplot2-aesthetic-mappings"><span style="color:DarkOrange">1.6</span> Essential Grammatical Elements in ggplot2: Aesthetic Mappings</a></li>
   <li><a href="#essential-grammatical-elements-in-ggplot2-geom" id="toc-essential-grammatical-elements-in-ggplot2-geom" class="nav-link" data-scroll-target="#essential-grammatical-elements-in-ggplot2-geom"><span style="color:DarkOrange">1.7</span> Essential Grammatical Elements in ggplot2: geom</a>
+  <ul>
+  <li><a href="#geometric-objects-geom_bar" id="toc-geometric-objects-geom_bar" class="nav-link" data-scroll-target="#geometric-objects-geom_bar"><span style="color:DarkOrange">1.7.1</span> Geometric Objects: geom_bar()</a>
   <ul class="collapse">
-  <li><a href="#geometric-objects-geom_bar" id="toc-geometric-objects-geom_bar" class="nav-link" data-scroll-target="#geometric-objects-geom_bar"><span style="color:DarkOrange">1.7.1</span> Geometric Objects: geom_bar()</a></li>
+  <li><a href="#use-eval-false-to-show-code-without-plotting-graph" id="toc-use-eval-false-to-show-code-without-plotting-graph" class="nav-link" data-scroll-target="#use-eval-false-to-show-code-without-plotting-graph">Use #| eval: false to show code without plotting graph</a></li>
+  <li><a href="#use-echo-false-to-plot-graph-without-showing-code" id="toc-use-echo-false-to-plot-graph-without-showing-code" class="nav-link" data-scroll-target="#use-echo-false-to-plot-graph-without-showing-code">Use #| echo: false to plot graph without showing code</a></li>
+  </ul></li>
   <li><a href="#geometric-objects-geom_dotplot" id="toc-geometric-objects-geom_dotplot" class="nav-link" data-scroll-target="#geometric-objects-geom_dotplot"><span style="color:DarkOrange">1.7.2</span> Geometric Objects: geom_dotplot()</a></li>
   <li><a href="#geometric-objects-geom_histogram" id="toc-geometric-objects-geom_histogram" class="nav-link" data-scroll-target="#geometric-objects-geom_histogram"><span style="color:DarkOrange">1.7.3</span> Geometric Objects: geom_histogram()</a></li>
   <li><a href="#modifying-a-geometric-object-by-changing-geom" id="toc-modifying-a-geometric-object-by-changing-geom" class="nav-link" data-scroll-target="#modifying-a-geometric-object-by-changing-geom"><span style="color:DarkOrange">1.7.4</span> Modifying a geometric object by changing geom()</a></li>
@@ -268,19 +272,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#geom-objects-can-be-combined" id="toc-geom-objects-can-be-combined" class="nav-link" data-scroll-target="#geom-objects-can-be-combined"><span style="color:DarkOrange">1.7.10</span> geom objects can be combined</a></li>
   </ul></li>
   <li><a href="#essential-grammatical-elements-in-ggplot2-stat" id="toc-essential-grammatical-elements-in-ggplot2-stat" class="nav-link" data-scroll-target="#essential-grammatical-elements-in-ggplot2-stat"><span style="color:DarkOrange">1.8</span> Essential Grammatical Elements in ggplot2: Stat</a>
-  <ul class="collapse">
+  <ul>
   <li><a href="#working-with-stat" id="toc-working-with-stat" class="nav-link" data-scroll-target="#working-with-stat"><span style="color:DarkOrange">1.8.1</span> Working with <code>stat()</code></a></li>
   <li><a href="#working-with-stat---the-stat_summary-method" id="toc-working-with-stat---the-stat_summary-method" class="nav-link" data-scroll-target="#working-with-stat---the-stat_summary-method"><span style="color:DarkOrange">1.8.2</span> Working with stat - the stat_summary() method</a></li>
   <li><a href="#working-with-stat---the-geom-method" id="toc-working-with-stat---the-geom-method" class="nav-link" data-scroll-target="#working-with-stat---the-geom-method"><span style="color:DarkOrange">1.8.3</span> Working with stat - the geom() method</a></li>
   <li><a href="#adding-a-best-fit-curve-on-a-scatterplot" id="toc-adding-a-best-fit-curve-on-a-scatterplot" class="nav-link" data-scroll-target="#adding-a-best-fit-curve-on-a-scatterplot"><span style="color:DarkOrange">1.8.4</span> Adding a Best-Fit Curve on a Scatterplot?</a></li>
   </ul></li>
   <li><a href="#essential-grammatical-elements-in-ggplot2-facets" id="toc-essential-grammatical-elements-in-ggplot2-facets" class="nav-link" data-scroll-target="#essential-grammatical-elements-in-ggplot2-facets"><span style="color:DarkOrange">1.9</span> Essential Grammatical Elements in ggplot2: Facets</a>
-  <ul class="collapse">
+  <ul>
   <li><a href="#working-with-facet_wrap" id="toc-working-with-facet_wrap" class="nav-link" data-scroll-target="#working-with-facet_wrap"><span style="color:DarkOrange">1.9.1</span> Working with <code>facet_wrap()</code></a></li>
   <li><a href="#working-with-facet_grid" id="toc-working-with-facet_grid" class="nav-link" data-scroll-target="#working-with-facet_grid"><span style="color:DarkOrange">1.9.2</span> Working with <code>facet_grid()</code></a></li>
   </ul></li>
   <li><a href="#essential-grammatical-elements-in-ggplot2-coordinates" id="toc-essential-grammatical-elements-in-ggplot2-coordinates" class="nav-link" data-scroll-target="#essential-grammatical-elements-in-ggplot2-coordinates"><span style="color:DarkOrange">1.10</span> Essential Grammatical Elements in ggplot2: Coordinates</a>
-  <ul class="collapse">
+  <ul>
   <li><a href="#working-with-coordinate" id="toc-working-with-coordinate" class="nav-link" data-scroll-target="#working-with-coordinate"><span style="color:DarkOrange">1.10.1</span> Working with Coordinate</a></li>
   <li><a href="#changing-the-y--and-x-axis-range" id="toc-changing-the-y--and-x-axis-range" class="nav-link" data-scroll-target="#changing-the-y--and-x-axis-range"><span style="color:DarkOrange">1.10.1</span> Changing the y- and x-axis Range</a></li>
   </ul></li>

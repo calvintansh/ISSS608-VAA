@@ -40,6 +40,15 @@ website:
               href: Hands-on_Ex/Hands-on_Ex03-1/Hands-on_Ex03-1.qmd
             - text: "3-2: Programming Animated Statistical Graphics with R"
               href: Hands-on_Ex/Hands-on_Ex03-2/Hands-on_Ex03-2.qmd
+    - title: "Take-Home Exercise"
+      style: "floating"
+      collapse-level: 2
+      align: left
+      contents:
+        - section: "Take-Home Exercise"
+          contents:
+            - text: "1: Demographic Structures and Distribution of Singapore in 2024"
+              href: Take-home_Ex/Take-home_Ex01/Take-home_Ex01.qmd
 format:
   html:
     theme:
@@ -47,5 +56,6 @@ format:
         dark: darkly
     css: styles.css
     toc: true
+    toc-depth: 4
 
 editor: visual

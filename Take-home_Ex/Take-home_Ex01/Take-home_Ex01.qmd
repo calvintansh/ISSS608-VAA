@@ -88,7 +88,7 @@ The first 10 rows of the data are displayed using kable (under knitr) to get a b
 
 ```{r}
 #| echo: false
-kable(head(sg_data), n=10)
+kable(head(sg_data, 10))
 ```
 
 ::: {.callout-note appearance="minimal" collapse="true"}
@@ -96,7 +96,7 @@ kable(head(sg_data), n=10)
 
 ```{r}
 #| eval: false
-kable(head(sg_data), n=10)
+kable(head(sg_data, 10))
 ```
 :::
 
@@ -171,7 +171,7 @@ After completing the data manipulation steps described in earlier, the resulting
 
 ```{r}
 #| echo: false
-kable(head(sg_data), n=10)
+kable(head(sg_data, 10))
 ```
 
 # [3]{style="color:DarkOrange"} Visualisations
@@ -181,17 +181,19 @@ kable(head(sg_data), n=10)
 This section examines the distribution of the **Population** across **Planning Areas**, categorized by **Sex**, to understand demographic patterns in different regions.
 
 ### [3.1.1]{style="color:DarkOrange"} Feature Engineering
+
 In this step, the following features were added to support the visual analysis:
 
-- The dataset sg_data was grouped by **Planning Area (PA)** and **Sex** to calculate the **Population (Pop)** for each subgroup using summarise(Pop = sum(Pop)).
-- A second grouping by **PA** was performed to calculate the **Total** population per **PA**, stored in a new column **Total**.
-- Rows with a **Total** population of 0 were removed using filter(Total > 0) to eliminate empty **PA** from the analysis.
-- The resulting data structure, demography_sex, now contains the **Total** population broken down by **Sex** and **PA**, along with overall population **Total** per **PA**.
+-   The dataset sg_data was grouped by **Planning Area (PA)** and **Sex** to calculate the **Population (Pop)** for each subgroup using summarise(Pop = sum(Pop)).
+-   A second grouping by **PA** was performed to calculate the **Total** population per **PA**, stored in a new column **Total**.
+-   Rows with a **Total** population of 0 were removed using filter(Total \> 0) to eliminate empty **PA** from the analysis.
+-   The resulting data structure, demography_sex, now contains the **Total** population broken down by **Sex** and **PA**, along with overall population **Total** per **PA**.
 
 The code below performs the transformation necessary in preparation for analysis and comparing population distribution between **Males** and **Females** across different **PAs**.
 
 ::: {.callout-note appearance="minimal" collapse="true"}
 ## Code
+
 ```{r}
 demography_sex <- sg_data %>%
   group_by(PA, Sex) %>%
@@ -202,21 +204,22 @@ demography_sex <- sg_data %>%
 demography_sex <- demography_sex %>%
   filter(Total > 0)
 
-kable(head(demography_sex), n=10)
+kable(head(demography_sex, 10))
 ```
 :::
 
 ### [3.1.1]{style="color:DarkOrange"} Plots and Analysis
+
 The aim is to create a detailed view of **Population** distribution by **Sex** across Singapore’s **Planning Areas**. These were the steps taken to create a stacked horizontal bar chart for visualisation:
 
-- The **PA** was ordered by ascending **Total** population using the pa_order vector. Although the factor levels were in ascending, the use of coord_flip() in the plot reverses the axis orientation, resunting in a horizontal bar chart that appears in the descending order for **Totals**.
-- Similar to the reason above, the Sex variable is converted into a factor with levels set as Females first, followed by Males, such that it will appear as Males followed by Females horizontal bar chart.
-- ggplot() was used with geom_bar() (with stat = "identity" and position = "stack") to create a stacked horizontal bar chart (s1), displaying the **Pop** by **Sex** across **PA**.
-- theme_minimal() was applied for a clean visual style, and labs()/ggtitle() were used to customize axis labels and the plot title.
-- scale_fill_manual() was used to assign distinct colors to **Males and Females** and to control the legend order, explicitly setting it as: Males, Femals instead of the reversed order if left as default.
-- scale_y_continuous(labels = scales::comma) was used to show numerical numbers rather than the scientific notation.
-- A zoomed-in plot (s2) shows the bottom 10 **PA** and was embedded into the main plot using inset_element() (under patchwork). This method makes it easier to examine less populous **PA** in the same figure.
-- Since the zoomed-in plot (s2) was overlaid on top of the main chart (s1), theme() function was used to remove its axis and gridlines so avoid visual interference with the background plot (s1).
+-   The **PA** was ordered by ascending **Total** population using the pa_order vector. Although the factor levels were in ascending, the use of coord_flip() in the plot reverses the axis orientation, resunting in a horizontal bar chart that appears in the descending order for **Totals**.
+-   Similar to the reason above, the Sex variable is converted into a factor with levels set as Females first, followed by Males, such that it will appear as Males followed by Females horizontal bar chart.
+-   ggplot() was used with geom_bar() (with stat = "identity" and position = "stack") to create a stacked horizontal bar chart (s1), displaying the **Pop** by **Sex** across **PA**.
+-   theme_minimal() was applied for a clean visual style, and labs()/ggtitle() were used to customize axis labels and the plot title.
+-   scale_fill_manual() was used to assign distinct colors to **Males and Females** and to control the legend order, explicitly setting it as: Males, Femals instead of the reversed order if left as default.
+-   scale_y_continuous(labels = scales::comma) was used to show numerical numbers rather than the scientific notation.
+-   A zoomed-in plot (s2) shows the bottom 10 **PA** and was embedded into the main plot using inset_element() (under patchwork). This method makes it easier to examine less populous **PA** in the same figure.
+-   Since the zoomed-in plot (s2) was overlaid on top of the main chart (s1), theme() function was used to remove its axis and gridlines so avoid visual interference with the background plot (s1).
 
 ::: panel-tabset
 ## Plot
@@ -293,6 +296,7 @@ s1 + inset_element(s2,
 ```
 
 ## Code
+
 ```{r}
 #| eval: false
 #| fig-width: 9
@@ -365,20 +369,23 @@ s1 + inset_element(s2,
 ```
 :::
 
-fdafdsafdsagdwateafdsa
+::: callout-tip
+## Insights
+:::
 
 ## [3.2]{style="color:DarkOrange"} Percentage of Age Groups Across Planning Areas
 
 This visualisation aims to show the percentage distribution of **Age Groups** (Young, Economically_Active and Aged) across **Planning Areas**. This will provide insights into how Singapore residents are demographically distributed across Singapore.
 
 ### [3.2.1]{style="color:DarkOrange"} Feature Engineering
+
 In this step, the following features were created to support the visual analysis:
 
-- The dataset sg_data was grouped by **PA** and **Age_Group** to calculate the **Population (Pop)** for each subgroup using summarise(Pop = sum(Pop)).
-- A second grouping by **PA** was performed to compute the **Total** population per **PA**, stored in a new column **Total** using mutate(Total = sum(Pop)).
-- Rows with a **Total** population of 0 were removed using filter(Total > 0) to eliminate empty **PA** from the analysis.
-- The data was then transformed to compute percentage composition of each **Age Group** within each **PA** using mutate(Pct_Age_Group = (Pop / Total) * 100).
-- Percentages of **Age Group** were rounded to 1 decimal place using mutate(across(Pct_Age_Group, ~ round(.x, 1))).
+-   The dataset sg_data was grouped by **PA** and **Age_Group** to calculate the **Population (Pop)** for each subgroup using summarise(Pop = sum(Pop)).
+-   A second grouping by **PA** was performed to compute the **Total** population per **PA**, stored in a new column **Total** using mutate(Total = sum(Pop)).
+-   Rows with a **Total** population of 0 were removed using filter(Total \> 0) to eliminate empty **PA** from the analysis.
+-   The data was then transformed to compute percentage composition of each **Age Group** within each **PA** using mutate(Pct_Age_Group = (Pop / Total) \* 100).
+-   Percentages of **Age Group** were rounded to 1 decimal place using mutate(across(Pct_Age_Group, \~ round(.x, 1))).
 
 The code below transforms the data and results in the final output pct_demography_age. It contains the percentage of **Age Group** (Young, Economically Active) for each **PA**.
 
@@ -402,16 +409,17 @@ pct_demography_age <- demography_age %>%
 pct_demography_age <- pct_demography_age %>%
   mutate(across(Pct_Age_Group, ~ round(.x, 1)))
 
-kable(head(pct_demography_age), n=10)
+kable(head(pct_demography_age, 10))
 ```
 :::
 
 ### [3.2.2]{style="color:DarkOrange"} Plots and Analysis
+
 To visualize the distribution of age groups across planning areas, the following plotting steps were performed:
 
-- The PA follows the same order as the [Population Across Planning Areas by Sex](https://isss608-ay2024-25t3.netlify.app/take-home_ex/take-home_ex01/take-home_ex01#population-across-planning-areas-by-sex) plot above.
-- The Age_Group variable was explicitly ordered as Aged → Economically Active → Young so that the stacked bars chart will be in the reversed order after coord_flip().
-- The rest of the functions have been explained in the [Population Across Planning Areas by Sex](https://isss608-ay2024-25t3.netlify.app/take-home_ex/take-home_ex01/take-home_ex01#population-across-planning-areas-by-sex) plot above.
+-   The PA follows the same order as the [Population Across Planning Areas by Sex](https://isss608-ay2024-25t3.netlify.app/take-home_ex/take-home_ex01/take-home_ex01#population-across-planning-areas-by-sex) plot above.
+-   The Age_Group variable was explicitly ordered as Aged → Economically Active → Young so that the stacked bars chart will be in the reversed order after coord_flip().
+-   The rest of the functions have been explained in the [Population Across Planning Areas by Sex](https://isss608-ay2024-25t3.netlify.app/take-home_ex/take-home_ex01/take-home_ex01#population-across-planning-areas-by-sex) plot above.
 
 ::: panel-tabset
 ## Plot
@@ -477,115 +485,104 @@ ggplot(data = pct_demography_age,
 ```
 :::
 
-## [3.3]{style="color:DarkOrange"} Age Distribution by Sex
+##### Economically Active Population (Working Age 25 to 64)
 
-### [3.3.1]{style="color:DarkOrange"} Feature Engineering
-In this step, the dataset was prepared to visualize **Age** distributions by **Sex**:
-
-- The dataset sg_data was grouped by **Age** and **Sex**, then summarized using sum(Pop) to get the population count for each **Age-Sex** group.
-- The resulting grouped data demography_sex_age was expanded into individual-level observations using uncount(weights = Pop).
-    - This transformation duplicates each row according to the population count, effectively simulating individual records. This is a requirement for plotting accurate violin plots of distributions.
-
-The code below performs the steps above and finally splits the *demography_sex_age* data into two subsets (**Males** and **Females**) to allow overlaying their respective violin plots for easier visual comaprison.
+- Extremely high proportions of working-age residents:
+    -   Museum
+    -   Downtown Core
+    -   Orchard
+        -   Low proportions of Young and Aged population
+        -   Museum and Seletar have no recorded Aged population
 
 ::: {.callout-note appearance="minimal" collapse="true"}
 ## Code
+
 ```{r}
-demography_sex_age <- sg_data %>%
-  group_by(Age, Sex) %>%
-  summarise(Pop = sum(Pop))
+economically_active_data <- pct_demography_age %>%
+  filter(Age_Group == "Economically_Active") %>%
+  arrange(desc(Pct_Age_Group))
 
-kable(head(demography_sex_age), n=10)
+mean(economically_active_data$Pct_Age_Group)
 
-demography_sex_age <- demography_sex_age %>% uncount(weights = Pop)
-
-demography_males <- demography_sex_age %>%
-  filter(Sex == "Males")
-
-demography_females <- demography_sex_age %>%
-  filter(Sex == "Females")
+kable(head(economically_active_data, 10))
 ```
+
+These patterns suggests that such areas are primarily dominated by working adults and may serve commercial or business purposes (Museum, Downtown Core, and Orchard), or military functions (Seletar and Tengah air bases).
 :::
 
-### [3.3.2]{style="color:DarkOrange"} Plots and Analysis
-To create a overlayed violin plot comparing **Age** distributions between **Males** and **Females**:
+##### Young Population (Aged 0 to 24)
+- Highest concentrations of Young:
+    -   Punggol
+    -   Sembawang
+    -   Sengkang
+        -   Higher concentrations of Economically Active and lower proportions of Aged
 
-- A ggplot() object was initialized to save as the base plot that the violin plots will be overlayed on.
-- geom_violin() used twice, once for each sex, with shared x-axis "All" to overlay both distributions.
-- alpha = 0.5 was set to add transparency, allowing both violins to be visible when they overlap.
-- scale = "area" ensures the violins are scaled proportionally to the size of their age groups.
-- A custom fill color was set for each sex using scale_fill_manual(), and breaks = c("Males", "Females") ensures the legend appears with Males being first.
-- theme(axis.text.x = element_blank()) hides the x-axis label since both violins are plotted at a shared position "All".
-
-::: panel-tabset
-## Plot
-```{r}
-#| echo: false
-#| fig-width: 9
-#| fig-height: 6
-ggplot() +
-  geom_violin(data = demography_females, 
-              aes(x = "All", y = Age, fill = "Females"), 
-              scale = "area", alpha = 0.5) +
-  geom_violin(data = demography_males, 
-              aes(x = "All", y = Age, fill = "Males"), 
-              scale = "area", alpha = 0.5) +
-  theme_minimal() +
-  labs(
-    x = "Sex",
-    y = "Age",
-    title = "Age Distribution by Sex"
-  ) +
-  scale_fill_manual(
-    name = "Sex",
-    values = c(
-      "Males" = "#88CCEE",
-      "Females" = "#CC6677"),
-    breaks = c("Males", "Females")
-  ) +
-  theme(axis.text.x = element_blank())
-```
-
+::: {.callout-note appearance="minimal" collapse="true"}
 ## Code
+
 ```{r}
-#| eval: false
-#| fig-width: 9
-#| fig-height: 6
-demography_males <- demography_sex_age %>%
-  filter(Sex == "Males")
+young_data <- pct_demography_age %>%
+  filter(Age_Group == "Young") %>%
+  arrange(desc(Pct_Age_Group))
 
-demography_females <- demography_sex_age %>%
-  filter(Sex == "Females")
+mean(young_data$Pct_Age_Group)
 
-ggplot() +
-  geom_violin(data = demography_females, 
-              aes(x = "All", y = Age, fill = "Females"), 
-              scale = "area", alpha = 0.5) +
-  geom_violin(data = demography_males, 
-              aes(x = "All", y = Age, fill = "Males"), 
-              scale = "area", alpha = 0.5) +
-  theme_minimal() +
-  labs(
-    x = "Sex",
-    y = "Age",
-    title = "Age Distribution by Sex"
-  ) +
-  scale_fill_manual(
-    name = "Sex",
-    values = c(
-      "Males" = "#88CCEE",
-      "Females" = "#CC6677"),
-    breaks = c("Males", "Females")
-  ) +
-  theme(axis.text.x = element_blank())
+kable(head(young_data, 10))
 ```
+
+These consists of newer non-mature estates (Refer to [Appendix: Singapore's Estate Classification](https://isss608-ay2024-25t3.netlify.app/take-home_ex/take-home_ex01/take-home_ex01#singapore's-estate-classification)) such as Punggol, Sengkang, and Sembawang, which are actively being developed by the Singapore government. These are particularly appealing to newly married couples, since many of the new Build-To-Order (BTO) projects in these areas are designed for budget-conscious young families. These households will tend to include Economically Active individuals as well.
 :::
 
-# [4]{style="color:DarkOrange"} Workings - Plots created before Improving to the Final Version in Section 3
+##### Aged Population (Aged 65 and above)
 
-## [4.1]{style="color:DarkOrange"} Percentage of Age Groups Across Planning Areas
+- Highest concentration of Aged:
+  -   Ang Mo Kio
+  -   Bukit Merah
+  -   Kallang
 
-### [4.1.1]{style="color:DarkOrange"} Feature Engineering
+::: {.callout-note appearance="minimal" collapse="true"}
+## Code
+
+```{r}
+aged_data <- pct_demography_age %>%
+  filter(Age_Group == "Aged") %>%
+  arrange(desc(Pct_Age_Group))
+
+mean(aged_data$Pct_Age_Group)
+
+kable(head(aged_data, 10))
+```
+
+These are mainly mature estates with a higher proportion of elderly residents, many of whom have lived there since their younger years.
+:::
+
+::: callout-tip
+## Insights
+
+##### Central districts (e.g., Museum, Downtown Core, Orchard):
+
+-   Have a high proportion of Economically Active residents, with relatively low concentration of Youth and Aged.
+-   These are likely business or commercial hubs.
+
+##### Mature estates (e.g., Ang Mo Kio, Bukit Merah, Kallang):
+
+-   Show a more balanced demographic distribution, though with a noticeably aging population.
+
+##### New estates (e.g., Punggol, Sembawang, Sengkang):
+
+-   Skew heavily toward the Young and Economically Active, with fewer Aged residents.
+-   This reflects their appeal to new families, likely due to the availability and price of new housing developments.
+:::
+
+### [3.2.3]{style="color:DarkOrange"} Workings - Plots created before Improving to the Final Version Above
+
+::: callout-tip
+## Reflections
+
+I initially considered using tabs to view the graphs separately, but later realised that by restructuring the data, all three graphds could be combined into a single stacked bar chart. This thought led to the final plot presented above.
+:::
+
+#### Feature Engineering
 
 ::: {.callout-note appearance="minimal" collapse="true"}
 ## Code
@@ -617,7 +614,7 @@ pct_demography <- pct_demography %>%
 ```
 :::
 
-### [4.1.2]{style="color:DarkOrange"} Plots and Reflections
+#### Plots and Reflections
 
 ::: panel-tabset
 ## Young
@@ -693,17 +690,128 @@ ggplot(data = pct_demography,
 ```
 :::
 
-::: callout-tip
-## Reflections
-I initially thought to flip through the different tabs to view the graphs separately but I realised I could prepare the data differently such that these 3 graphs can be stacked. This resulted in the final graph in [Section 3.2: Percentage of Age Groups Across Planning Areas](https://isss608-ay2024-25t3.netlify.app/take-home_ex/take-home_ex01/take-home_ex01#percentage-of-age-groups-across-planning-areas)
-:::
+## [3.3]{style="color:DarkOrange"} Age Distribution by Sex
 
-## [4.2]{style="color:DarkOrange"} Age Distribution by Sex
+### [3.3.1]{style="color:DarkOrange"} Feature Engineering
 
-### [4.2.1]{style="color:DarkOrange"} Feature Engineering
+In this step, the dataset was prepared to visualize **Age** distributions by **Sex**:
+
+-   The dataset sg_data was grouped by **Age** and **Sex**, then summarized using sum(Pop) to get the population count for each **Age-Sex** group.
+-   The resulting grouped data demography_sex_age was expanded into individual-level observations using uncount(weights = Pop).
+    -   This transformation duplicates each row according to the population count, effectively simulating individual records. This is a requirement for plotting accurate violin plots of distributions.
+
+The code below performs the steps above and finally splits the *demography_sex_age* data into two subsets (**Males** and **Females**) to allow overlaying their respective violin plots for easier visual comaprison.
 
 ::: {.callout-note appearance="minimal" collapse="true"}
 ## Code
+
+```{r}
+demography_sex_age <- sg_data %>%
+  group_by(Age, Sex) %>%
+  summarise(Pop = sum(Pop))
+
+kable(head(demography_sex_age, 10))
+
+demography_sex_age <- demography_sex_age %>% uncount(weights = Pop)
+
+demography_males <- demography_sex_age %>%
+  filter(Sex == "Males")
+
+demography_females <- demography_sex_age %>%
+  filter(Sex == "Females")
+```
+:::
+
+### [3.3.2]{style="color:DarkOrange"} Plots and Analysis
+
+To create a overlayed violin plot comparing **Age** distributions between **Males** and **Females**:
+
+-   A ggplot() object was initialized to save as the base plot that the violin plots will be overlayed on.
+-   geom_violin() used twice, once for each sex, with shared x-axis "All" to overlay both distributions.
+-   alpha = 0.5 was set to add transparency, allowing both violins to be visible when they overlap.
+-   scale = "area" ensures the violins are scaled proportionally to the size of their age groups.
+-   A custom fill color was set for each sex using scale_fill_manual(), and breaks = c("Males", "Females") ensures the legend appears with Males being first.
+-   theme(axis.text.x = element_blank()) hides the x-axis label since both violins are plotted at a shared position "All".
+
+::: panel-tabset
+## Plot
+
+```{r}
+#| echo: false
+#| fig-width: 9
+#| fig-height: 6
+ggplot() +
+  geom_violin(data = demography_females, 
+              aes(x = "All", y = Age, fill = "Females"), 
+              scale = "area", alpha = 0.5) +
+  geom_violin(data = demography_males, 
+              aes(x = "All", y = Age, fill = "Males"), 
+              scale = "area", alpha = 0.5) +
+  theme_minimal() +
+  labs(
+    x = "Sex",
+    y = "Age",
+    title = "Age Distribution by Sex"
+  ) +
+  scale_fill_manual(
+    name = "Sex",
+    values = c(
+      "Males" = "#88CCEE",
+      "Females" = "#CC6677"),
+    breaks = c("Males", "Females")
+  ) +
+  theme(axis.text.x = element_blank())
+```
+
+## Code
+
+```{r}
+#| eval: false
+#| fig-width: 9
+#| fig-height: 6
+demography_males <- demography_sex_age %>%
+  filter(Sex == "Males")
+
+demography_females <- demography_sex_age %>%
+  filter(Sex == "Females")
+
+ggplot() +
+  geom_violin(data = demography_females, 
+              aes(x = "All", y = Age, fill = "Females"), 
+              scale = "area", alpha = 0.5) +
+  geom_violin(data = demography_males, 
+              aes(x = "All", y = Age, fill = "Males"), 
+              scale = "area", alpha = 0.5) +
+  theme_minimal() +
+  labs(
+    x = "Sex",
+    y = "Age",
+    title = "Age Distribution by Sex"
+  ) +
+  scale_fill_manual(
+    name = "Sex",
+    values = c(
+      "Males" = "#88CCEE",
+      "Females" = "#CC6677"),
+    breaks = c("Males", "Females")
+  ) +
+  theme(axis.text.x = element_blank())
+```
+:::
+
+### [3.3.3]{style="color:DarkOrange"} Workings - Plots created before Improving to the Final Version Above
+
+::: callout-tip
+## Reflections
+
+I initially avoided expanding the data into individual-level observations using uncount(weights = Pop), since it is possible to pass weights = Pop in aes(). However, the resulting violin plot look weird. Therefore, I tried the uncount() method and found that the 2 methods produces very different plots. Upon further research, I found that while geom_violin() can estimate the probability density function (PDF) using the weights, density estimation with weights may be less precise or behave unexpectedly depending on implementation. Therefore, I chose to use uncount() above, as working with raw, individual-level distributions seems to produce more accurate and vidually realistic results.
+:::
+
+**Feature Engineering**
+
+::: {.callout-note appearance="minimal" collapse="true"}
+## Code
+
 ```{r}
 demography_sex_age_2 <- sg_data %>%
   group_by(Age, Sex) %>%
@@ -713,10 +821,11 @@ demography_sex_age_2
 ```
 :::
 
-### [4.2.2]{style="color:DarkOrange"} Plots and Reflections
+**Plots and Reflections**
 
 ::: panel-tabset
 ## Plot
+
 ```{r}
 #| echo: false
 ggplot(data=demography_sex_age_2, 
@@ -739,6 +848,7 @@ ggplot(data=demography_sex_age_2,
 ```
 
 ## Code
+
 ```{r}
 #| eval: false
 ggplot(data=demography_sex_age_2, 
@@ -761,7 +871,10 @@ ggplot(data=demography_sex_age_2,
 ```
 :::
 
-::: callout-tip
-## Reflections
-I initially did not want to do expanded the data into individual-level observations using uncount(weights = Pop) since it is possible to use weights = Pop directly in ggplot. However, the graph looks very different and research showed that geom_violin() approximates the probability density function (PDF) using the weights, but density estimation with weights can be less precise or behave unexpectedly depending on implementation. Therefore, I used the uncount() method since gives more realistic results since raw distributions work better than weighted approximations
-:::
+# [4]{style="color:DarkOrange"} Appendix
+
+## [4.1]{style="color:DarkOrange"} Singapore's Estate Classification
+
+![](/Take-Home_Ex/Take-Home_Ex01/image/estate.png){fig-align="center" width="800"}
+
+[Reference: <https://www.hdb.gov.sg/-/media/doc/SCEG/20082023-Annexes/Annex-A1.ashx>]{style="color: grey; font-size: 12px;"}
