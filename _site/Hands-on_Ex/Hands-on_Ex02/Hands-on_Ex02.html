@@ -8,7 +8,7 @@
 
 <meta name="dcterms.date" content="2025-04-22">
 
-<title>Hands-on Exercise 2: Beyond ggplot2 Fundamentals – &lt;i class='bi bi-file-bar-graph'&gt;&lt;/i&gt; ISSS608-VAA</title>
+<title>Hands-On Exercise 2: Beyond ggplot2 Fundamentals – &lt;i class='bi bi-file-bar-graph'&gt;&lt;/i&gt; ISSS608-VAA</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -271,7 +271,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html">Hands-On Exercise</a></li><li class="breadcrumb-item"><a href="../../Hands-on_Ex/Hands-on_Ex02/Hands-on_Ex02.html">2: Beyond ggplot2 Fundamentals</a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title"><span style="color:DarkOrange">Hands-on Exercise 2:</span> Beyond ggplot2 Fundamentals</h1>
+<h1 class="title"><span style="color:DarkOrange">Hands-On Exercise 2:</span> Beyond ggplot2 Fundamentals</h1>
 </div>
 
 
@@ -289,7 +289,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Modified</div>
     <div class="quarto-title-meta-contents">
-      <p class="date-modified">May 2, 2025</p>
+      <p class="date-modified">May 3, 2025</p>
     </div>
   </div>
     
@@ -313,7 +313,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h2 class="anchored" data-anchor-id="getting-started"><span style="color:DarkOrange">2.2</span> Getting started</h2>
 <section id="install-and-load-the-required-libraries" class="level3">
 <h3 class="anchored" data-anchor-id="install-and-load-the-required-libraries"><span style="color:DarkOrange">2.2.1</span> Install and Load the Required Libraries</h3>
-<p>In this exercise, besides tidyverse (Explored in <a href="https://isss608-ay2024-25t3.netlify.app/hands-on_ex/hands-on_ex01/hands-on_ex01">Hands-on Exercised 1</a>), four R packages will be used. They are: 1. <strong>ggrepel:</strong> an R package providing geoms for ggplot2 to repel overlapping text labels 2. <strong>ggthemes:</strong> an R package providing some extra themes, geoms, and scales for ggplot2 3. <strong>hrbrthemes:</strong> an R package providing typography-centric themes and theme components for ggplot2 4. <strong>patchwork:</strong> an R package for preparing composite figure created using ggplot2</p>
+<p>In this exercise, besides tidyverse (Explored in <a href="https://isss608-ay2024-25t3.netlify.app/hands-on_ex/hands-on_ex01/hands-on_ex01">Hands-on Exercised 1</a>), four R packages will be used. They are:</p>
+<ol type="1">
+<li><strong>ggrepel:</strong> an R package providing geoms for ggplot2 to repel overlapping text labels</li>
+<li><strong>ggthemes:</strong> an R package providing some extra themes, geoms, and scales for ggplot2</li>
+<li><strong>hrbrthemes:</strong> an R package providing typography-centric themes and theme components for ggplot2</li>
+<li><strong>patchwork:</strong> an R package for preparing composite figure created using ggplot2</li>
+</ol>
 <p>Code chunk below will be used to check if these packages have been installed and also load them onto my working R environment.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(ggrepel, patchwork,</span>
@@ -324,7 +330,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="importing-data" class="level3">
 <h3 class="anchored" data-anchor-id="importing-data"><span style="color:DarkOrange">2.2.2</span> Importing Data</h3>
 <p>For the purpose of this exercise, a data file called <em><code>Exam_data</code></em> will be used. It consists of year end examination grades of a cohort of primary 3 students from a local school. It is in csv file format.</p>
-<p>The code chunk below imports exam_data.csv into R environment by using <a href="https://readr.tidyverse.org/reference/read_delim.html"><em><code>read_csv()</code></em></a> function of <a href="https://readr.tidyverse.org/"><strong>readr</strong></a> package. <strong>readr</strong> is one of the tidyversepackage.</p>
+<p>The code chunk below imports exam_data.csv into R environment by using <a href="https://readr.tidyverse.org/reference/read_delim.html"><em><code>read_csv()</code></em></a> function of <a href="https://readr.tidyverse.org/"><strong>readr</strong></a> package. <strong>readr</strong> is one of the tidyverse package.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>exam_data <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"data/Exam_data.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
@@ -870,7 +876,7 @@ Tip
 </section>
 <section id="creating-a-composite-figure-by-using-patchwork-and-ggtheme" class="level3">
 <h3 class="anchored" data-anchor-id="creating-a-composite-figure-by-using-patchwork-and-ggtheme"><span style="color:darkorange">2.5.6</span> Creating a Composite Figure by Using patchwork and ggtheme</h3>
-<p>The figure below is created by combining patchwork and theme_economist() of <a href="https://isss608-ay2024-25t3.netlify.app/hands-on_ex/hands-on_ex02/hands-on_ex02#working-with-ggtheme-package">ggthemes package</a> discussed earlier.</p>
+<p>The figure below is created by combining patchwork and theme_economist() of <a href="https://isss608-ay2024-25t3.netlify.app/hands-on_ex/hands-on_ex02/hands-on_ex02#beyond-ggplot2-themes">ggthemes package</a> discussed earlier.</p>
 <div class="tabset-margin-container"></div><div class="panel-tabset">
 <ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-13-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-13-1" role="tab" aria-controls="tabset-13-1" aria-selected="true">Plot</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-13-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-13-2" role="tab" aria-controls="tabset-13-2" aria-selected="false">Code</a></li></ul>
 <div class="tab-content">
