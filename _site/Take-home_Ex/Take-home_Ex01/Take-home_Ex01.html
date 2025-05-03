@@ -238,13 +238,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#population-across-planning-areas-by-sex" id="toc-population-across-planning-areas-by-sex" class="nav-link" data-scroll-target="#population-across-planning-areas-by-sex"><span style="color:DarkOrange">3.1</span> Population Across Planning Areas by Sex</a>
   <ul class="collapse">
   <li><a href="#feature-engineering" id="toc-feature-engineering" class="nav-link" data-scroll-target="#feature-engineering"><span style="color:DarkOrange">3.1.1</span> Feature Engineering</a></li>
-  <li><a href="#plots-and-analysis" id="toc-plots-and-analysis" class="nav-link" data-scroll-target="#plots-and-analysis"><span style="color:DarkOrange">3.1.1</span> Plots and Analysis</a></li>
+  <li><a href="#plots-and-analysis" id="toc-plots-and-analysis" class="nav-link" data-scroll-target="#plots-and-analysis"><span style="color:DarkOrange">3.1.2</span> Plots and Analysis</a></li>
+  <li><a href="#reflections" id="toc-reflections" class="nav-link" data-scroll-target="#reflections"><span style="color:DarkOrange">3.2.3</span> Reflections</a></li>
   </ul></li>
   <li><a href="#percentage-of-age-groups-across-planning-areas" id="toc-percentage-of-age-groups-across-planning-areas" class="nav-link" data-scroll-target="#percentage-of-age-groups-across-planning-areas"><span style="color:DarkOrange">3.2</span> Percentage of Age Groups Across Planning Areas</a>
   <ul class="collapse">
   <li><a href="#feature-engineering-1" id="toc-feature-engineering-1" class="nav-link" data-scroll-target="#feature-engineering-1"><span style="color:DarkOrange">3.2.1</span> Feature Engineering</a></li>
   <li><a href="#plots-and-analysis-1" id="toc-plots-and-analysis-1" class="nav-link" data-scroll-target="#plots-and-analysis-1"><span style="color:DarkOrange">3.2.2</span> Plots and Analysis</a></li>
-  <li><a href="#workings---plots-created-before-improving-to-the-final-version-above" id="toc-workings---plots-created-before-improving-to-the-final-version-above" class="nav-link" data-scroll-target="#workings---plots-created-before-improving-to-the-final-version-above"><span style="color:DarkOrange">3.2.3</span> Workings - Plots created before Improving to the Final Version Above</a>
+  <li><a href="#reflections-and-initial-workings" id="toc-reflections-and-initial-workings" class="nav-link" data-scroll-target="#reflections-and-initial-workings"><span style="color:DarkOrange">3.2.3</span> Reflections and Initial Workings</a>
   <ul class="collapse">
   <li><a href="#feature-engineering-2" id="toc-feature-engineering-2" class="nav-link" data-scroll-target="#feature-engineering-2">Feature Engineering</a></li>
   <li><a href="#plots-and-reflections" id="toc-plots-and-reflections" class="nav-link" data-scroll-target="#plots-and-reflections">Plots and Reflections</a></li>
@@ -254,7 +255,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <ul class="collapse">
   <li><a href="#feature-engineering-3" id="toc-feature-engineering-3" class="nav-link" data-scroll-target="#feature-engineering-3"><span style="color:DarkOrange">3.3.1</span> Feature Engineering</a></li>
   <li><a href="#plots-and-analysis-2" id="toc-plots-and-analysis-2" class="nav-link" data-scroll-target="#plots-and-analysis-2"><span style="color:DarkOrange">3.3.2</span> Plots and Analysis</a></li>
-  <li><a href="#workings---plots-created-before-improving-to-the-final-version-above-1" id="toc-workings---plots-created-before-improving-to-the-final-version-above-1" class="nav-link" data-scroll-target="#workings---plots-created-before-improving-to-the-final-version-above-1"><span style="color:DarkOrange">3.3.3</span> Workings - Plots created before Improving to the Final Version Above</a></li>
+  <li><a href="#reflections-and-initial-workings-1" id="toc-reflections-and-initial-workings-1" class="nav-link" data-scroll-target="#reflections-and-initial-workings-1"><span style="color:DarkOrange">3.3.3</span> Reflections and Initial Workings</a></li>
   </ul></li>
   </ul></li>
   <li><a href="#summary" id="toc-summary" class="nav-link" data-scroll-target="#summary"><span style="color:DarkOrange">4</span> Summary</a></li>
@@ -288,7 +289,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Modified</div>
     <div class="quarto-title-meta-contents">
-      <p class="date-modified">May 3, 2025</p>
+      <p class="date-modified">May 4, 2025</p>
     </div>
   </div>
     
@@ -326,16 +327,17 @@ Tip
 </section>
 <section id="install-and-load-the-required-libraries" class="level2">
 <h2 class="anchored" data-anchor-id="install-and-load-the-required-libraries"><span style="color:DarkOrange">1.3</span> Install and Load the Required Libraries</h2>
-<p>In this exercise, besides tidyverse, four R packages will be used. They are:</p>
+<p>In this exercise, besides tidyverse, five R packages will be used. They are:</p>
 <ol type="1">
-<li><strong>tidyverse:</strong> A collection of R packages designed for data science. It includes packages like dplyr, ggplot2, tidyr, and readr that simplify data wrangling and visualization.</li>
+<li><strong>tidyverse:</strong> A collection of R packages designed for data science. It includes packages like <em>dplyr</em>, <em>ggplot2</em>, <em>tidyr</em>, and <em>readr</em> that simplify data wrangling and visualization.</li>
 <li><strong>patchwork:</strong> An R package that allows users to easily combine multiple ggplot2 plots into a single composite layout, useful for comparative visual analysis.</li>
 <li><strong>ggthemes:</strong> This package adds extra themes, scales, and geoms to ggplot2, making it easier to apply distinct themes to plots.</li>
 <li><strong>knitr:</strong> A reporting package that integrates R code with markdown, enabling dynamic report generation in formats such as HTML, PDF, and Word, often used with R Markdown and Quarto.</li>
+<li><strong>cowplot:</strong> An extension of ggplot2 that simplifies plot arrangement and annotation. It provides functions like <em>ggdraw()</em> and <em>draw_plot()</em> for overlaying and aligning plots, often used for fine-tuned visual layouts.</li>
 </ol>
 <p>Code chunk below will be used to check if these packages have been installed and also load them onto my working R environment.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(tidyverse, patchwork, ggthemes, knitr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(tidyverse, patchwork, ggthemes, knitr, cowplot)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="importing-data" class="level2">
@@ -885,18 +887,12 @@ Code
 </div>
 </section>
 <section id="plots-and-analysis" class="level3">
-<h3 class="anchored" data-anchor-id="plots-and-analysis"><span style="color:DarkOrange">3.1.1</span> Plots and Analysis</h3>
+<h3 class="anchored" data-anchor-id="plots-and-analysis"><span style="color:DarkOrange">3.1.2</span> Plots and Analysis</h3>
 <p>The aim is to create a detailed view of <strong>Population</strong> distribution by <strong>Sex</strong> across Singapore’s <strong>Planning Areas</strong>. These were the steps taken to create a stacked horizontal bar chart for visualisation:</p>
-<ul>
-<li>To create a horizontal bar chart with population <strong>Total</strong> in descending order, the <strong>PA</strong> was initially ordered by ascending <strong>Total</strong> using the <em>pa_order()</em> vector. Although the factor levels were arranged in ascending order, the use of <em>coord_flip()</em> in the plot reverses the axis orientation, resulting in <strong>Total</strong> being displayed in descending order as intended.</li>
-<li>Similar to the reason above, the <strong>Sex</strong> variable was converted into a factor with levels set as <strong>Females</strong> first, followed by <strong>Males</strong>, such that it will appear as <strong>Males</strong> followed by <strong>Females</strong> in the stacked bar chart.</li>
-<li><em>ggplot()</em> was used with <em>geom_bar() (with stat = “identity” and position = “stack”)</em> to create a stacked horizontal bar chart (s1), displaying the <strong>Pop</strong> by <strong>Sex</strong> across <strong>PA</strong>.</li>
-<li><em>theme_minimal()</em> was applied for a clean visual style, and <em>labs()</em> with <em>ggtitle()</em> were used to customise the axis labels and plot title.</li>
-<li><em>scale_fill_manual()</em> was used to assign distinct colours to <strong>Males and Females</strong> and to control the legend order, explicitly setting it as: Males -&gt; Females instead of the reversed order if left as default.</li>
-<li><em>scale_y_continuous(labels = scales::comma)</em> was used to show numerical numbers rather than the scientific notation.</li>
-<li>A zoomed-in plot (s2) shows the bottom 10 <strong>PA</strong> and was embedded into the main plot using <em>inset_element()</em> (under <em>patchwork</em>). This method makes it easier to examine less populous <strong>PAs</strong> in the same figure.</li>
-<li>Since the zoomed-in plot (s2) was overlaid on top of the main chart (s1), <em>theme_test()</em> was used to provide a contrast with the s1 plot in the background.</li>
-</ul>
+<p>Horizontal Bar Chart s1: - To create a horizontal bar chart with population <strong>Total</strong> in descending order, the <strong>PA</strong> was initially ordered by ascending <strong>Total</strong> using the <em>pa_order()</em> vector. Although the factor levels were arranged in ascending order, the use of <em>coord_flip()</em> in the plot reverses the axis orientation, resulting in <strong>Total</strong> being displayed in descending order as intended. - Similar to the reason above, the <strong>Sex</strong> variable was converted into a factor with levels set as <strong>Females</strong> first, followed by <strong>Males</strong>, such that it will appear as <strong>Males</strong> followed by <strong>Females</strong> in the stacked bar chart. - <em>ggplot()</em> was used with <em>geom_bar() (with stat = “identity” and position = “stack”)</em> to create a stacked horizontal bar chart (s1), displaying the <strong>Pop</strong> by <strong>Sex</strong> across <strong>PA</strong>. - <em>theme_minimal()</em> was applied for a clean visual style, and <em>labs()</em> with <em>ggtitle()</em> were used to customise the axis labels and plot title. - <em>scale_fill_manual()</em> was used to assign distinct colours to <strong>Males and Females</strong> and to control the legend order, explicitly setting it as: Males -&gt; Females instead of the reversed order if left as default. - <em>scale_y_continuous(labels = scales::comma)</em> was used to show numerical numbers rather than the scientific notation.</p>
+<p>Zoomed-in Plot s2: - A zoomed-in plot (s2) shows the bottom 10 <strong>PA</strong> and was embedded into the main plot using <em>inset_element()</em> (under <em>patchwork</em>). This method makes it easier to examine less populous <strong>PAs</strong> in the same figure. - Since the zoomed-in plot (s2) was overlaid on top of the main chart (s1), <em>theme_test()</em> was used to provide a contrast with the s1 plot in the background.</p>
+<p>Zoom Rectangle: - Created as a transparent dotted line rectangle to highlight the zoomed-in location using <em>cowplot()</em>.</p>
+<p>Overlaid Plots: - <em>ggdraw()</em> was used to create an empty canvas, and <em>draw_plot()</em> was used to overlay s1, s2, and the zoom rectangle. These functions are part of the <em>cowplot</em> package.</p>
 <div class="tabset-margin-container"></div><div class="panel-tabset">
 <ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true" aria-current="page">Plot</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false">Code</a></li></ul>
 <div class="tab-content">
@@ -965,13 +961,18 @@ Code
 <span id="cb14-50"><a href="#cb14-50" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
 <span id="cb14-51"><a href="#cb14-51" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
 <span id="cb14-52"><a href="#cb14-52" aria-hidden="true" tabindex="-1"></a>    <span class="at">legend.position =</span> <span class="st">"none"</span>,</span>
-<span id="cb14-53"><a href="#cb14-53" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb14-54"><a href="#cb14-54" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-55"><a href="#cb14-55" aria-hidden="true" tabindex="-1"></a>s1 <span class="sc">+</span> <span class="fu">inset_element</span>(s2,</span>
-<span id="cb14-56"><a href="#cb14-56" aria-hidden="true" tabindex="-1"></a>                   <span class="at">left =</span> <span class="fl">0.2</span>,</span>
-<span id="cb14-57"><a href="#cb14-57" aria-hidden="true" tabindex="-1"></a>                   <span class="at">bottom =</span> <span class="fl">0.05</span>,</span>
-<span id="cb14-58"><a href="#cb14-58" aria-hidden="true" tabindex="-1"></a>                   <span class="at">right =</span> <span class="dv">1</span>,</span>
-<span id="cb14-59"><a href="#cb14-59" aria-hidden="true" tabindex="-1"></a>                   <span class="at">top =</span> <span class="fl">0.35</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb14-53"><a href="#cb14-53" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.background =</span> <span class="fu">element_rect</span>(<span class="at">fill =</span> <span class="st">"transparent"</span>, <span class="at">colour =</span> <span class="cn">NA</span>)</span>
+<span id="cb14-54"><a href="#cb14-54" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb14-55"><a href="#cb14-55" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-56"><a href="#cb14-56" aria-hidden="true" tabindex="-1"></a>zoom_rect <span class="ot">&lt;-</span> <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb14-57"><a href="#cb14-57" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_rect</span>(<span class="fu">aes</span>(<span class="at">xmin =</span> <span class="dv">0</span>, <span class="at">xmax =</span> <span class="dv">1</span>, <span class="at">ymin =</span> <span class="dv">0</span>, <span class="at">ymax =</span> <span class="dv">1</span>),</span>
+<span id="cb14-58"><a href="#cb14-58" aria-hidden="true" tabindex="-1"></a>            <span class="at">fill =</span> <span class="cn">NA</span>, <span class="at">color =</span> <span class="st">"black"</span>, <span class="at">linetype =</span> <span class="st">"dashed"</span>) <span class="sc">+</span></span>
+<span id="cb14-59"><a href="#cb14-59" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_void</span>()</span>
+<span id="cb14-60"><a href="#cb14-60" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-61"><a href="#cb14-61" aria-hidden="true" tabindex="-1"></a><span class="fu">ggdraw</span>() <span class="sc">+</span></span>
+<span id="cb14-62"><a href="#cb14-62" aria-hidden="true" tabindex="-1"></a>  <span class="fu">draw_plot</span>(s1, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb14-63"><a href="#cb14-63" aria-hidden="true" tabindex="-1"></a>  <span class="fu">draw_plot</span>(s2, <span class="fl">0.35</span>, <span class="fl">0.1</span>, <span class="fl">0.5</span>, <span class="fl">0.26</span>) <span class="sc">+</span></span>
+<span id="cb14-64"><a href="#cb14-64" aria-hidden="true" tabindex="-1"></a>  <span class="fu">draw_plot</span>(zoom_rect, <span class="fl">0.005</span>, <span class="fl">0.068</span>, <span class="fl">0.26</span>, <span class="fl">0.225</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 </div>
@@ -1014,7 +1015,7 @@ Insights
 <section id="residential-areas" class="level5">
 <h5 class="anchored" data-anchor-id="residential-areas">Residential Areas</h5>
 <ul>
-<li>The most populated <strong>PAs</strong> consists of a mix of mature estates (e.g., Tampines, Bedok) and newer estates (e.g, Sengkang, Jurong West, Woodlands) (Refer to <a href="https://isss608-ay2024-25t3.netlify.app/take-home_ex/take-home_ex01/take-home_ex01#singapore's-estate-classification">Section 5 Appendix: Singapore’s Estate Classification</a>)</li>
+<li>The most populated <strong>PAs</strong> consists of a mix of mature estates (e.g., Tampines, Bedok) and newer estates (e.g, Sengkang, Jurong West, Woodlands) (Refer to <a href="https://isss608-ay2024-25t3.netlify.app/take-home_ex/take-home_ex01/take-home_ex01#singapores-estate-classification">Section 5 Appendix: Singapore’s Estate Classification</a></li>
 <li>This reflects Singapore’s government direction and success in transforming newer towns or underutilised land into well-developed residential hubs comparable to mature estates.</li>
 </ul>
 </section>
@@ -1030,6 +1031,23 @@ Insights
 </div>
 </div>
 </section>
+</section>
+<section id="reflections" class="level3">
+<h3 class="anchored" data-anchor-id="reflections"><span style="color:DarkOrange">3.2.3</span> Reflections</h3>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Reflections
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The <em>ggforce</em> package includes the <em>facet_zoom()</em> function that allows for zooming in on a part of a plot and automatically draws a box to indicate the zoomed region.</p>
+<p>However, <em>facet_zoom()</em> does not support zooming in on discrete scales like the bottom 10 <strong>PAs</strong> in <strong>Pop</strong>. Therefore, I manually created a separate zoomed-in plot (s2) and a zoom rectangle to highlight the region that will be zoomed-in.</p>
+</div>
+</div>
 </section>
 </section>
 <section id="percentage-of-age-groups-across-planning-areas" class="level2">
@@ -1047,7 +1065,7 @@ Insights
 </ul>
 <p>The code below transforms the data and results in the final output <em>pct_demography_age</em>. It contains the percentage of <strong>Age Group</strong> (Young, Economically Active) for each <strong>PA</strong>.</p>
 <div class="callout callout-style-simple callout-note no-icon callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-10-contents" aria-controls="callout-10" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-11-contents" aria-controls="callout-11" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
 </div>
@@ -1056,7 +1074,7 @@ Code
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-10" class="callout-10-contents callout-collapse collapse">
+<div id="callout-11" class="callout-11-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <div class="cell">
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>demography_age <span class="ot">&lt;-</span> sg_data <span class="sc">%&gt;%</span></span>
@@ -1148,9 +1166,9 @@ Code
 <h3 class="anchored" data-anchor-id="plots-and-analysis-1"><span style="color:DarkOrange">3.2.2</span> Plots and Analysis</h3>
 <p>To visualize the distribution of age groups across planning areas, the following plotting steps were performed:</p>
 <ul>
-<li>The PA order in this plot matches the order used in <a href="https://isss608-ay2024-25t3.netlify.app/take-home_ex/take-home_ex01/take-home_ex01#population-across-planning-areas-by-sex">Section 3.1: Population Across Planning Areas by Sex</a>, allowing for easy comparisons between them.</li>
+<li>The <strong>PA</strong> order in this plot matches the order used in <a href="https://isss608-ay2024-25t3.netlify.app/take-home_ex/take-home_ex01/take-home_ex01#population-across-planning-areas-by-sex">Section 3.1: Population Across Planning Areas by Sex</a>, allowing for easy comparisons between them.</li>
 <li>The <strong>Age Group</strong> variable was explicitly ordered as <strong>Aged</strong> → <strong>Economically Active</strong> → <strong>Young</strong> so that the stacked bars chart will be in the reversed order after <em>coord_flip()</em>.</li>
-<li>The remainingo functions have been explained in the plot above in <a href="https://isss608-ay2024-25t3.netlify.app/take-home_ex/take-home_ex01/take-home_ex01#population-across-planning-areas-by-sex">Section 3.1: Population Across Planning Areas by Sex</a>.</li>
+<li>The remaining functions have been explained in the plot above in <a href="https://isss608-ay2024-25t3.netlify.app/take-home_ex/take-home_ex01/take-home_ex01#population-across-planning-areas-by-sex">Section 3.1: Population Across Planning Areas by Sex</a>.</li>
 </ul>
 <div class="tabset-margin-container"></div><div class="panel-tabset">
 <ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-2-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-1" role="tab" aria-controls="tabset-2-1" aria-selected="true">Plot</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-2" role="tab" aria-controls="tabset-2-2" aria-selected="false">Code</a></li></ul>
@@ -1210,7 +1228,7 @@ Code
 </ul></li>
 </ul>
 <div class="callout callout-style-simple callout-note no-icon callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-11-contents" aria-controls="callout-11" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-12-contents" aria-controls="callout-12" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
 </div>
@@ -1219,7 +1237,7 @@ Code
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-11" class="callout-11-contents callout-collapse collapse">
+<div id="callout-12" class="callout-12-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <div class="cell">
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>economically_active_data <span class="ot">&lt;-</span> pct_demography_age <span class="sc">%&gt;%</span></span>
@@ -1314,7 +1332,7 @@ Code
 </ul></li>
 </ul>
 <div class="callout callout-style-simple callout-note no-icon callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-12-contents" aria-controls="callout-12" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-13-contents" aria-controls="callout-13" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
 </div>
@@ -1323,7 +1341,7 @@ Code
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-12" class="callout-12-contents callout-collapse collapse">
+<div id="callout-13" class="callout-13-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <div class="cell">
 <div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>young_data <span class="ot">&lt;-</span> pct_demography_age <span class="sc">%&gt;%</span></span>
@@ -1399,7 +1417,7 @@ Code
 </table>
 </div>
 </div>
-<p>These consists of newer non-mature estates (Refer to <a href="https://isss608-ay2024-25t3.netlify.app/take-home_ex/take-home_ex01/take-home_ex01#singapore's-estate-classification">Section 5 Appendix: Singapore’s Estate Classification</a>) such as Punggol, Sengkang, and Sembawang, which are actively being developed by the Singapore government. These are particularly appealing to newly married couples, since many of the new Build-To-Order (BTO) projects in these areas are designed for budget-conscious young families. These households will tend to include more <strong>Economically Active</strong> individuals as well.</p>
+<p>These consists of newer non-mature estates (Refer to <a href="https://isss608-ay2024-25t3.netlify.app/take-home_ex/take-home_ex01/take-home_ex01#singapores-estate-classification">Section 5 Appendix: Singapore’s Estate Classification</a> such as Punggol, Sengkang, and Sembawang, which are actively being developed by the Singapore government. These are particularly appealing to newly married couples, since many of the new Build-To-Order (BTO) projects in these areas are designed for budget-conscious young families. These households will tend to include more <strong>Economically Active</strong> individuals as well.</p>
 </div>
 </div>
 </div>
@@ -1415,7 +1433,7 @@ Code
 </ul></li>
 </ul>
 <div class="callout callout-style-simple callout-note no-icon callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-13-contents" aria-controls="callout-13" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-14-contents" aria-controls="callout-14" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
 </div>
@@ -1424,7 +1442,7 @@ Code
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-13" class="callout-13-contents callout-collapse collapse">
+<div id="callout-14" class="callout-14-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <div class="cell">
 <div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>aged_data <span class="ot">&lt;-</span> pct_demography_age <span class="sc">%&gt;%</span></span>
@@ -1538,9 +1556,9 @@ Insights
 </div>
 </section>
 </section>
-<section id="workings---plots-created-before-improving-to-the-final-version-above" class="level3">
-<h3 class="anchored" data-anchor-id="workings---plots-created-before-improving-to-the-final-version-above"><span style="color:DarkOrange">3.2.3</span> Workings - Plots created before Improving to the Final Version Above</h3>
-<div class="callout callout-style-default callout-tip callout-titled">
+<section id="reflections-and-initial-workings" class="level3">
+<h3 class="anchored" data-anchor-id="reflections-and-initial-workings"><span style="color:DarkOrange">3.2.3</span> Reflections and Initial Workings</h3>
+<div class="callout callout-style-default callout-important callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
@@ -1556,7 +1574,7 @@ Reflections
 <section id="feature-engineering-2" class="level4">
 <h4 class="anchored" data-anchor-id="feature-engineering-2">Feature Engineering</h4>
 <div class="callout callout-style-simple callout-note no-icon callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-16-contents" aria-controls="callout-16" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-17-contents" aria-controls="callout-17" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
 </div>
@@ -1565,7 +1583,7 @@ Code
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-16" class="callout-16-contents callout-collapse collapse">
+<div id="callout-17" class="callout-17-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <div class="cell">
 <div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>demography <span class="ot">&lt;-</span> sg_data <span class="sc">%&gt;%</span></span>
@@ -1674,7 +1692,7 @@ Code
 </ul>
 <p>The code below performs the steps above and finally splits the <em>demography_sex_age</em> data into two subsets (<strong>Males</strong> and <strong>Females</strong>) to allow overlaying their respective violin plots for easier visual comparison.</p>
 <div class="callout callout-style-simple callout-note no-icon callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-17-contents" aria-controls="callout-17" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-18-contents" aria-controls="callout-18" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
 </div>
@@ -1683,7 +1701,7 @@ Code
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-17" class="callout-17-contents callout-collapse collapse">
+<div id="callout-18" class="callout-18-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <div class="cell">
 <div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co"># First Part</span></span>
@@ -1864,34 +1882,35 @@ Code
 <span id="cb31-18"><a href="#cb31-18" aria-hidden="true" tabindex="-1"></a>      <span class="st">"Females"</span> <span class="ot">=</span> <span class="st">"#CC6677"</span>),</span>
 <span id="cb31-19"><a href="#cb31-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">breaks =</span> <span class="fu">c</span>(<span class="st">"Males"</span>, <span class="st">"Females"</span>)</span>
 <span id="cb31-20"><a href="#cb31-20" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
-<span id="cb31-21"><a href="#cb31-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_blank</span>())</span>
-<span id="cb31-22"><a href="#cb31-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-23"><a href="#cb31-23" aria-hidden="true" tabindex="-1"></a>p2 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(pct_total_by_sex, <span class="fu">aes</span>(<span class="at">x =</span> <span class="st">""</span>, <span class="at">y =</span> Pct_Sex, <span class="at">fill =</span> Sex)) <span class="sc">+</span></span>
-<span id="cb31-24"><a href="#cb31-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">"identity"</span>, <span class="at">color =</span> <span class="st">"black"</span>) <span class="sc">+</span></span>
-<span id="cb31-25"><a href="#cb31-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_polar</span>(<span class="st">"y"</span>) <span class="sc">+</span></span>
-<span id="cb31-26"><a href="#cb31-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_test</span>() <span class="sc">+</span></span>
-<span id="cb31-27"><a href="#cb31-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Population by Sex"</span>) <span class="sc">+</span></span>
-<span id="cb31-28"><a href="#cb31-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(</span>
-<span id="cb31-29"><a href="#cb31-29" aria-hidden="true" tabindex="-1"></a>    <span class="at">values =</span> <span class="fu">c</span>(<span class="st">"Males"</span> <span class="ot">=</span> <span class="st">"#88CCEE"</span>, <span class="st">"Females"</span> <span class="ot">=</span> <span class="st">"#CC6677"</span>)</span>
-<span id="cb31-30"><a href="#cb31-30" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
-<span id="cb31-31"><a href="#cb31-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
-<span id="cb31-32"><a href="#cb31-32" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="cn">NULL</span>,</span>
-<span id="cb31-33"><a href="#cb31-33" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="cn">NULL</span></span>
-<span id="cb31-34"><a href="#cb31-34" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
-<span id="cb31-35"><a href="#cb31-35" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="fu">aes</span>(<span class="at">y =</span> ypos, <span class="at">label =</span> label), <span class="at">color =</span> <span class="st">"black"</span>, <span class="at">size =</span> <span class="dv">4</span>) <span class="sc">+</span></span>
-<span id="cb31-36"><a href="#cb31-36" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
-<span id="cb31-37"><a href="#cb31-37" aria-hidden="true" tabindex="-1"></a>    <span class="at">legend.position =</span> <span class="st">"none"</span>,</span>
-<span id="cb31-38"><a href="#cb31-38" aria-hidden="true" tabindex="-1"></a>    <span class="at">panel.grid.major =</span> <span class="fu">element_blank</span>(),</span>
-<span id="cb31-39"><a href="#cb31-39" aria-hidden="true" tabindex="-1"></a>    <span class="at">panel.grid.minor=</span> <span class="fu">element_blank</span>(),</span>
-<span id="cb31-40"><a href="#cb31-40" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.text.x =</span> <span class="fu">element_blank</span>(),</span>
-<span id="cb31-41"><a href="#cb31-41" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.ticks =</span> <span class="fu">element_blank</span>()</span>
-<span id="cb31-42"><a href="#cb31-42" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb31-43"><a href="#cb31-43" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-44"><a href="#cb31-44" aria-hidden="true" tabindex="-1"></a>p1 <span class="sc">+</span> <span class="fu">inset_element</span>(p2,</span>
-<span id="cb31-45"><a href="#cb31-45" aria-hidden="true" tabindex="-1"></a>                   <span class="at">left =</span> .<span class="dv">7</span>,</span>
-<span id="cb31-46"><a href="#cb31-46" aria-hidden="true" tabindex="-1"></a>                   <span class="at">bottom =</span> <span class="fl">0.6</span>,</span>
-<span id="cb31-47"><a href="#cb31-47" aria-hidden="true" tabindex="-1"></a>                   <span class="at">right =</span> <span class="fl">1.3</span>,</span>
-<span id="cb31-48"><a href="#cb31-48" aria-hidden="true" tabindex="-1"></a>                   <span class="at">top =</span> <span class="fl">1.05</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb31-21"><a href="#cb31-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_blank</span>()) <span class="sc">+</span></span>
+<span id="cb31-22"><a href="#cb31-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">breaks =</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">90</span>, <span class="at">by =</span> <span class="dv">10</span>))</span>
+<span id="cb31-23"><a href="#cb31-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-24"><a href="#cb31-24" aria-hidden="true" tabindex="-1"></a>p2 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(pct_total_by_sex, <span class="fu">aes</span>(<span class="at">x =</span> <span class="st">""</span>, <span class="at">y =</span> Pct_Sex, <span class="at">fill =</span> Sex)) <span class="sc">+</span></span>
+<span id="cb31-25"><a href="#cb31-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">"identity"</span>, <span class="at">color =</span> <span class="st">"black"</span>) <span class="sc">+</span></span>
+<span id="cb31-26"><a href="#cb31-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_polar</span>(<span class="st">"y"</span>) <span class="sc">+</span></span>
+<span id="cb31-27"><a href="#cb31-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_test</span>() <span class="sc">+</span></span>
+<span id="cb31-28"><a href="#cb31-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Population by Sex"</span>) <span class="sc">+</span></span>
+<span id="cb31-29"><a href="#cb31-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(</span>
+<span id="cb31-30"><a href="#cb31-30" aria-hidden="true" tabindex="-1"></a>    <span class="at">values =</span> <span class="fu">c</span>(<span class="st">"Males"</span> <span class="ot">=</span> <span class="st">"#88CCEE"</span>, <span class="st">"Females"</span> <span class="ot">=</span> <span class="st">"#CC6677"</span>)</span>
+<span id="cb31-31"><a href="#cb31-31" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb31-32"><a href="#cb31-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb31-33"><a href="#cb31-33" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="cn">NULL</span>,</span>
+<span id="cb31-34"><a href="#cb31-34" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="cn">NULL</span></span>
+<span id="cb31-35"><a href="#cb31-35" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb31-36"><a href="#cb31-36" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="fu">aes</span>(<span class="at">y =</span> ypos, <span class="at">label =</span> label), <span class="at">color =</span> <span class="st">"black"</span>, <span class="at">size =</span> <span class="dv">4</span>) <span class="sc">+</span></span>
+<span id="cb31-37"><a href="#cb31-37" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb31-38"><a href="#cb31-38" aria-hidden="true" tabindex="-1"></a>    <span class="at">legend.position =</span> <span class="st">"none"</span>,</span>
+<span id="cb31-39"><a href="#cb31-39" aria-hidden="true" tabindex="-1"></a>    <span class="at">panel.grid.major =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb31-40"><a href="#cb31-40" aria-hidden="true" tabindex="-1"></a>    <span class="at">panel.grid.minor=</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb31-41"><a href="#cb31-41" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.text.x =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb31-42"><a href="#cb31-42" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.ticks =</span> <span class="fu">element_blank</span>()</span>
+<span id="cb31-43"><a href="#cb31-43" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb31-44"><a href="#cb31-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-45"><a href="#cb31-45" aria-hidden="true" tabindex="-1"></a>p1 <span class="sc">+</span> <span class="fu">inset_element</span>(p2,</span>
+<span id="cb31-46"><a href="#cb31-46" aria-hidden="true" tabindex="-1"></a>                   <span class="at">left =</span> .<span class="dv">7</span>,</span>
+<span id="cb31-47"><a href="#cb31-47" aria-hidden="true" tabindex="-1"></a>                   <span class="at">bottom =</span> <span class="fl">0.6</span>,</span>
+<span id="cb31-48"><a href="#cb31-48" aria-hidden="true" tabindex="-1"></a>                   <span class="at">right =</span> <span class="fl">1.3</span>,</span>
+<span id="cb31-49"><a href="#cb31-49" aria-hidden="true" tabindex="-1"></a>                   <span class="at">top =</span> <span class="fl">1.05</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 </div>
@@ -1944,9 +1963,9 @@ Insights
 </div>
 </div>
 </section>
-<section id="workings---plots-created-before-improving-to-the-final-version-above-1" class="level3">
-<h3 class="anchored" data-anchor-id="workings---plots-created-before-improving-to-the-final-version-above-1"><span style="color:DarkOrange">3.3.3</span> Workings - Plots created before Improving to the Final Version Above</h3>
-<div class="callout callout-style-default callout-tip callout-titled">
+<section id="reflections-and-initial-workings-1" class="level3">
+<h3 class="anchored" data-anchor-id="reflections-and-initial-workings-1"><span style="color:DarkOrange">3.3.3</span> Reflections and Initial Workings</h3>
+<div class="callout callout-style-default callout-important callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
@@ -1961,7 +1980,7 @@ Reflections
 </div>
 <p><strong>Feature Engineering</strong></p>
 <div class="callout callout-style-simple callout-note no-icon callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-20-contents" aria-controls="callout-20" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-21-contents" aria-controls="callout-21" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
 </div>
@@ -1970,7 +1989,7 @@ Code
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-20" class="callout-20-contents callout-collapse collapse">
+<div id="callout-21" class="callout-21-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <div class="cell">
 <div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>demography_sex_age_2 <span class="ot">&lt;-</span> sg_data <span class="sc">%&gt;%</span></span>
@@ -2042,7 +2061,7 @@ Code
 </section>
 <section id="summary" class="level1">
 <h1><span style="color:DarkOrange">4</span> Summary</h1>
-<p>Singapore, being land-scarce, has designated different areas for specific purposes. Least populated zones tend to be commercial, industrial, or military, such as central districts which, while less residential, tend to have a higher concentration of working-age adults. In contrast, the most populated areas comprise both mature and newer estates, reflecting the government’s successful urban development. Newer estates are skewed toward younger and economically active residents, attracting young families, while mature estates have a larger proportion of aged residents. Like most developed countries, Singapore has an ageing demographic, with the population peaking around age 35 and the 35–60 age group forming the largest segment. From this point onward, the population declines, and females begin to outnumber males in the older age groups due to longer life expectancy. As a result, Singapore’s overall population has slightly more females, though the younger age groups maintain a roughly equal gender distribution.</p>
+<p>Singapore, being land-scarce, has designated different areas for specific purposes. Least populated zones tend to be industrial, military or commercial, such as central districts which, while less residential, tend to have a higher concentration of working-age adults. In contrast, the most populated areas comprise both mature and newer estates, reflecting the government’s successful urban development. Newer estates are skewed toward younger and economically active residents, since it is attractive to young families, while mature estates have a larger proportion of aged residents. Like most developed countries, Singapore has an ageing demographic, with the population peaking around age 35 and the 35–60 age group forming the largest segment. From this point onward, the population declines, and females begin to outnumber males in the older age groups due to longer life expectancy. As a result, Singapore’s overall population has slightly more females, though the younger age groups maintain a roughly equal gender distribution.</p>
 </section>
 <section id="appendix" class="level1">
 <h1><span style="color:DarkOrange">5</span> Appendix</h1>
