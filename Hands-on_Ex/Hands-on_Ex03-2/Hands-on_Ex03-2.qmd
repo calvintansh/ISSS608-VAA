@@ -1,5 +1,5 @@
 ---
-title: "[Hands-on Exercise 3-2:]{style='color:DarkOrange'} Programming Animated Statistical Graphics with R"
+title: "[Hands-On Exercise 3-2:]{style='color:DarkOrange'} Programming Animated Statistical Graphics with R"
 date: 2025-04-28
 date-modified: "last-modified"
 format: html

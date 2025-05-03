@@ -8,7 +8,7 @@
 
 <meta name="dcterms.date" content="2025-04-29">
 
-<title>Take-home_Ex01: Demographic Structures and Distribution of Singapore in 2024 –  ISSS608-VAA</title>
+<title>Take-Home Exercise 1: Demographic Structures and Distribution of Singapore in 2024 – &lt;i class='bi bi-file-bar-graph'&gt;&lt;/i&gt; ISSS608-VAA</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -230,7 +230,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#exploratory-data-analysis-eda" id="toc-exploratory-data-analysis-eda" class="nav-link" data-scroll-target="#exploratory-data-analysis-eda"><span style="color:DarkOrange">2</span> Exploratory Data Analysis (EDA)</a>
   <ul>
   <li><a href="#checking-for-duplicates" id="toc-checking-for-duplicates" class="nav-link" data-scroll-target="#checking-for-duplicates"><span style="color:DarkOrange">2.1</span> Checking for duplicates</a></li>
-  <li><a href="#fixing-age-column-inconsisency" id="toc-fixing-age-column-inconsisency" class="nav-link" data-scroll-target="#fixing-age-column-inconsisency"><span style="color:DarkOrange">2.2</span> Fixing Age Column Inconsisency</a></li>
+  <li><a href="#fixing-age-column-inconsistency" id="toc-fixing-age-column-inconsistency" class="nav-link" data-scroll-target="#fixing-age-column-inconsistency"><span style="color:DarkOrange">2.2</span> Fixing Age Column Inconsistency</a></li>
   <li><a href="#binning-age-column" id="toc-binning-age-column" class="nav-link" data-scroll-target="#binning-age-column"><span style="color:DarkOrange">2.3</span> Binning Age Column</a></li>
   </ul></li>
   <li><a href="#visualisations" id="toc-visualisations" class="nav-link" data-scroll-target="#visualisations"><span style="color:DarkOrange">3</span> Visualisations</a>
@@ -270,7 +270,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../Take-home_Ex/Take-home_Ex01/Take-home_Ex01.html">Take-Home Exercise</a></li><li class="breadcrumb-item"><a href="../../Take-home_Ex/Take-home_Ex01/Take-home_Ex01.html">1: Demographic Structures and Distribution of Singapore in 2024</a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">Take-home_Ex01: Demographic Structures and Distribution of Singapore in 2024</h1>
+<h1 class="title"><span style="color:DarkOrange">Take-Home Exercise 1:</span> Demographic Structures and Distribution of Singapore in 2024</h1>
 </div>
 
 
@@ -318,7 +318,7 @@ Tip
 <p>Creating enlightening and truthful data visualizations involves focusing on accuracy, transparency, and the ability to effectively communicate insights. It is about presenting data in a way that is both informative and aesthetically pleasing, ensuring the audience can grasp the information quickly and accurately.</p>
 </div>
 </div>
-<p>The data should also be processed by using appropriate tidyverse family of packages and the data visualisation must be prepared using ggplot2 and its extensions. In addition, no interactive data visualisation are required.</p>
+<p>The data should also be processed by using appropriate tidyverse family of packages and the data visualisation must be prepared using <em>ggplot2</em> and its extensions. In addition, no interactive data visualisation are required.</p>
 </section>
 <section id="data-source" class="level2">
 <h2 class="anchored" data-anchor-id="data-source"><span style="color:DarkOrange">1.2</span> Data Source</h2>
@@ -355,18 +355,18 @@ Tip
 <section id="categorical-variables" class="level3">
 <h3 class="anchored" data-anchor-id="categorical-variables">Categorical Variables</h3>
 <ul>
-<li>PA: Planning Area</li>
-<li>SZ: Subzone</li>
-<li>Age: Single Year of Age</li>
-<li>Sex</li>
+<li><strong>PA</strong>: Planning Area</li>
+<li><strong>SZ</strong>: Subzone</li>
+<li><strong>Age</strong>: Single Year of Age</li>
+<li><strong>Sex</strong></li>
 </ul>
 </section>
 </div><div class="column" style="width:50%;">
 <section id="continuous-variables" class="level3">
 <h3 class="anchored" data-anchor-id="continuous-variables">Continuous Variables</h3>
 <ul>
-<li>Pop: Resident Count</li>
-<li>Time: Time / Period</li>
+<li><strong>Pop</strong>: Resident Count</li>
+<li><strong>Time</strong>: Time / Period</li>
 </ul>
 </section>
 </div>
@@ -393,7 +393,7 @@ Code
 </div>
 </div>
 </div>
-<p>The first 10 rows of the data are displayed using kable (under knitr) to get a basic understanding of the data.</p>
+<p>The first 10 rows of the data are displayed using <em>kable</em> (under <em>knitr</em>) to get a basic understanding of the data.</p>
 <div class="cell">
 <div class="cell-output-display">
 <table class="caption-top table table-sm table-striped small">
@@ -512,7 +512,7 @@ Code
 </div>
 <section id="checking-for-duplicates" class="level2">
 <h2 class="anchored" data-anchor-id="checking-for-duplicates"><span style="color:DarkOrange">2.1</span> Checking for duplicates</h2>
-<p>Before proceeding further with the EDA, a check for duplicated records was done using group_by_all() and filtering rows with more than 1 count. The results of the code below confirms that there were no duplicated records.</p>
+<p>Before proceeding further with the EDA, a check for duplicated records was done using <em>group_by_all()</em> and filtering rows with more than 1 count. The results of the code below confirms that there were no duplicated records.</p>
 <div class="callout callout-style-simple callout-note no-icon callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
@@ -542,8 +542,8 @@ Code
 </div>
 </div>
 </section>
-<section id="fixing-age-column-inconsisency" class="level2">
-<h2 class="anchored" data-anchor-id="fixing-age-column-inconsisency"><span style="color:DarkOrange">2.2</span> Fixing Age Column Inconsisency</h2>
+<section id="fixing-age-column-inconsistency" class="level2">
+<h2 class="anchored" data-anchor-id="fixing-age-column-inconsistency"><span style="color:DarkOrange">2.2</span> Fixing Age Column Inconsistency</h2>
 <p>Although there are no duplicated records, the earlier EDA of variable types and the data table revealed that the <strong>Age</strong> column, which appears to be a continuous variable, was incorrectly recognised as a categorical variable.</p>
 <p>Upon further analysis of the <strong>Age</strong> column using the code below, it was found to contain 91 unique values. These values range from 0 to 89 and are numeric in nature, but the last value is a string, <em>“90_and_Over”</em>. This string caused the <strong>Age</strong> column to be recognised as a categorical variable instead of a continuous one.</p>
 <div class="callout callout-style-simple callout-note no-icon callout-titled">
@@ -613,9 +613,9 @@ Code
 <h2 class="anchored" data-anchor-id="binning-age-column"><span style="color:DarkOrange">2.3</span> Binning Age Column</h2>
 <p>Even after fixing the inconsistent data type in the <strong>Age</strong> column, there were still 91 unique values, which will be too many for meaningful analysis. Therefore, the <strong>Age</strong> column will be binned into the following categorise using the code below:</p>
 <ul>
-<li>Young: Singapore residents aged 0 to 24</li>
-<li>Economically_Active: Singapore residents aged 25 to 64</li>
-<li>Aged: Singapore residents aged 65 and above</li>
+<li><strong>Young</strong>: Singapore residents aged 0 to 24</li>
+<li><strong>Economically_Active</strong>: Singapore residents aged 25 to 64</li>
+<li><strong>Aged</strong>: Singapore residents aged 65 and above</li>
 </ul>
 <div class="callout callout-style-simple callout-note no-icon callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-7-contents" aria-controls="callout-7" aria-expanded="false" aria-label="Toggle callout">
@@ -771,17 +771,17 @@ Levels: Young Economically_Active Aged</code></pre>
 <h1><span style="color:DarkOrange">3</span> Visualisations</h1>
 <section id="population-across-planning-areas-by-sex" class="level2">
 <h2 class="anchored" data-anchor-id="population-across-planning-areas-by-sex"><span style="color:DarkOrange">3.1</span> Population Across Planning Areas by Sex</h2>
-<p>This section examines the distribution of the <strong>Population</strong> across <strong>Planning Areas</strong>, categorized by <strong>Sex</strong>, to understand demographic patterns in different regions.</p>
+<p>This section examines the distribution of Singapore’s <strong>Population</strong> across <strong>Planning Areas</strong>, categorised by <strong>Sex</strong>, to better understand the demographic patterns of different regions.</p>
 <section id="feature-engineering" class="level3">
 <h3 class="anchored" data-anchor-id="feature-engineering"><span style="color:DarkOrange">3.1.1</span> Feature Engineering</h3>
-<p>In this step, the following features were added to support the visual analysis:</p>
+<p>In this step, the following features were added to support the visual analysis later:</p>
 <ul>
-<li>The dataset sg_data was grouped by <strong>Planning Area (PA)</strong> and <strong>Sex</strong> to calculate the <strong>Population (Pop)</strong> for each subgroup using summarise(Pop = sum(Pop)).</li>
+<li>The dataset <em>sg_data</em> was grouped by <strong>Planning Area (PA)</strong> and <strong>Sex</strong> to calculate the <strong>Population (Pop)</strong> for each subgroup using <em>summarise(Pop = sum(Pop))</em>.</li>
 <li>A second grouping by <strong>PA</strong> was performed to calculate the <strong>Total</strong> population per <strong>PA</strong>, stored in a new column <strong>Total</strong>.</li>
-<li>Rows with a <strong>Total</strong> population of 0 were removed using filter(Total &gt; 0) to eliminate empty <strong>PA</strong> from the analysis.</li>
-<li>The resulting data structure, demography_sex, now contains the <strong>Total</strong> population broken down by <strong>Sex</strong> and <strong>PA</strong>, along with overall population <strong>Total</strong> per <strong>PA</strong>.</li>
+<li>Rows with a <strong>Total</strong> population of 0 were removed using <em>filter(Total &gt; 0)</em> to eliminate empty <strong>PAs</strong> from the analysis.</li>
+<li>The resulting data structure, <em>demography_sex</em>, now contains the <strong>Total</strong> population broken down by <strong>Sex</strong> and <strong>PA</strong>, along with overall population <strong>Total</strong> per <strong>PA</strong>.</li>
 </ul>
-<p>The code below performs the transformation necessary in preparation for analysis and comparing population distribution between <strong>Males</strong> and <strong>Females</strong> across different <strong>PAs</strong>.</p>
+<p>The code below performs the transformation necessary in preparation for visual analysis, enabling the comparison of population distribution between <strong>Males</strong> and <strong>Females</strong> across different <strong>PAs</strong>.</p>
 <div class="callout callout-style-simple callout-note no-icon callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-8-contents" aria-controls="callout-8" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
@@ -888,14 +888,14 @@ Code
 <h3 class="anchored" data-anchor-id="plots-and-analysis"><span style="color:DarkOrange">3.1.1</span> Plots and Analysis</h3>
 <p>The aim is to create a detailed view of <strong>Population</strong> distribution by <strong>Sex</strong> across Singapore’s <strong>Planning Areas</strong>. These were the steps taken to create a stacked horizontal bar chart for visualisation:</p>
 <ul>
-<li>The <strong>PA</strong> was ordered by ascending <strong>Total</strong> population using the pa_order vector. Although the factor levels were in ascending, the use of coord_flip() in the plot reverses the axis orientation, resunting in a horizontal bar chart that appears in the descending order for <strong>Totals</strong>.</li>
-<li>Similar to the reason above, the Sex variable is converted into a factor with levels set as Females first, followed by Males, such that it will appear as Males followed by Females horizontal bar chart.</li>
-<li>ggplot() was used with geom_bar() (with stat = “identity” and position = “stack”) to create a stacked horizontal bar chart (s1), displaying the <strong>Pop</strong> by <strong>Sex</strong> across <strong>PA</strong>.</li>
-<li>theme_minimal() was applied for a clean visual style, and labs()/ggtitle() were used to customize axis labels and the plot title.</li>
-<li>scale_fill_manual() was used to assign distinct colors to <strong>Males and Females</strong> and to control the legend order, explicitly setting it as: Males, Femals instead of the reversed order if left as default.</li>
-<li>scale_y_continuous(labels = scales::comma) was used to show numerical numbers rather than the scientific notation.</li>
-<li>A zoomed-in plot (s2) shows the bottom 10 <strong>PA</strong> and was embedded into the main plot using inset_element() (under patchwork). This method makes it easier to examine less populous <strong>PA</strong> in the same figure.</li>
-<li>Since the zoomed-in plot (s2) was overlaid on top of the main chart (s1), theme_test() was used to provide a contrast with the background plot (s1).</li>
+<li>To create a horizontal bar chart with population <strong>Total</strong> in descending order, the <strong>PA</strong> was initially ordered by ascending <strong>Total</strong> using the <em>pa_order()</em> vector. Although the factor levels were arranged in ascending order, the use of <em>coord_flip()</em> in the plot reverses the axis orientation, resulting in <strong>Total</strong> being displayed in descending order as intended.</li>
+<li>Similar to the reason above, the <strong>Sex</strong> variable was converted into a factor with levels set as <strong>Females</strong> first, followed by <strong>Males</strong>, such that it will appear as <strong>Males</strong> followed by <strong>Females</strong> in the stacked bar chart.</li>
+<li><em>ggplot()</em> was used with <em>geom_bar() (with stat = “identity” and position = “stack”)</em> to create a stacked horizontal bar chart (s1), displaying the <strong>Pop</strong> by <strong>Sex</strong> across <strong>PA</strong>.</li>
+<li><em>theme_minimal()</em> was applied for a clean visual style, and <em>labs()</em> with <em>ggtitle()</em> were used to customise the axis labels and plot title.</li>
+<li><em>scale_fill_manual()</em> was used to assign distinct colours to <strong>Males and Females</strong> and to control the legend order, explicitly setting it as: Males -&gt; Females instead of the reversed order if left as default.</li>
+<li><em>scale_y_continuous(labels = scales::comma)</em> was used to show numerical numbers rather than the scientific notation.</li>
+<li>A zoomed-in plot (s2) shows the bottom 10 <strong>PA</strong> and was embedded into the main plot using <em>inset_element()</em> (under <em>patchwork</em>). This method makes it easier to examine less populous <strong>PAs</strong> in the same figure.</li>
+<li>Since the zoomed-in plot (s2) was overlaid on top of the main chart (s1), <em>theme_test()</em> was used to provide a contrast with the s1 plot in the background.</li>
 </ul>
 <div class="tabset-margin-container"></div><div class="panel-tabset">
 <ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true" aria-current="page">Plot</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false">Code</a></li></ul>
@@ -1008,7 +1008,7 @@ Insights
 <section id="gender-ratio" class="level5">
 <h5 class="anchored" data-anchor-id="gender-ratio">Gender Ratio</h5>
 <ul>
-<li>The gender distribution is generally balanced across all <strong>PAs</strong>.</li>
+<li>The <strong>Sex</strong> distribution is generally balanced across all <strong>PAs</strong>.</li>
 </ul>
 </section>
 <section id="residential-areas" class="level5">
@@ -1021,8 +1021,8 @@ Insights
 <section id="commercial-industrial-military-areas" class="level5">
 <h5 class="anchored" data-anchor-id="commercial-industrial-military-areas">Commercial / Industrial /Military Areas</h5>
 <ul>
-<li>The least populated PAs are primarily non-residential zones</li>
-<li>Commercial: Mueseum, Orchard</li>
+<li>The least populated <strong>PAs</strong> are primarily non-residential zones.</li>
+<li>Commercial: Museum, Orchard</li>
 <li>Industrial: Sungei Kadut</li>
 <li>Military/Nature: Seletar (air base), Western Water Catchment</li>
 </ul>
@@ -1034,18 +1034,18 @@ Insights
 </section>
 <section id="percentage-of-age-groups-across-planning-areas" class="level2">
 <h2 class="anchored" data-anchor-id="percentage-of-age-groups-across-planning-areas"><span style="color:DarkOrange">3.2</span> Percentage of Age Groups Across Planning Areas</h2>
-<p>This visualisation aims to show the percentage distribution of <strong>Age Groups</strong> (Young, Economically_Active and Aged) across <strong>Planning Areas</strong>. This will provide insights into how Singapore residents are demographically distributed across Singapore.</p>
+<p>This visualisation aims to show the percentage distribution of <strong>Age Groups</strong> (Young, Economically_Active and Aged) across <strong>Planning Areas</strong>. This will provide insights into how Singapore residents, in different stages of life, are demographically distributed across Singapore.</p>
 <section id="feature-engineering-1" class="level3">
 <h3 class="anchored" data-anchor-id="feature-engineering-1"><span style="color:DarkOrange">3.2.1</span> Feature Engineering</h3>
-<p>In this step, the following features were created to support the visual analysis:</p>
+<p>The following steps were done in preparation for visual analysis:</p>
 <ul>
-<li>The dataset sg_data was grouped by <strong>PA</strong> and <strong>Age_Group</strong> to calculate the <strong>Population (Pop)</strong> for each subgroup using summarise(Pop = sum(Pop)).</li>
-<li>A second grouping by <strong>PA</strong> was performed to compute the <strong>Total</strong> population per <strong>PA</strong>, stored in a new column <strong>Total</strong> using mutate(Total = sum(Pop)).</li>
-<li>Rows with a <strong>Total</strong> population of 0 were removed using filter(Total &gt; 0) to eliminate empty <strong>PA</strong> from the analysis.</li>
-<li>The data was then transformed to compute percentage composition of each <strong>Age Group</strong> within each <strong>PA</strong> using mutate(Pct_Age_Group = (Pop / Total) * 100).</li>
-<li>Percentages of <strong>Age Group</strong> were rounded to 1 decimal place using mutate(across(Pct_Age_Group, ~ round(.x, 1))).</li>
+<li>The dataset <em>sg_data</em> was grouped by <strong>PA</strong> and <strong>Age_Group</strong> to calculate the <strong>Pop</strong> for each subgroup using <em>summarise(Pop = sum(Pop))</em>.</li>
+<li>A second grouping by <strong>PA</strong> was performed to compute the <strong>Total</strong> population per <strong>PA</strong>, stored in a new column <strong>Total</strong> using <em>mutate(Total = sum(Pop))</em>.</li>
+<li>Rows with a <strong>Total</strong> population of 0 were removed using <em>filter(Total &gt; 0)</em> to eliminate empty <strong>PAs</strong> from the analysis.</li>
+<li>The data was then transformed to compute percentage composition of each <strong>Age Group</strong> within each <strong>PA</strong> using <em>mutate(Pct_Age_Group = (Pop / Total) * 100)</em>.</li>
+<li>Percentages of <strong>Age Group</strong> were rounded to 1 decimal place using <em>mutate(across(Pct_Age_Group, ~ round(.x, 1)))</em>.</li>
 </ul>
-<p>The code below transforms the data and results in the final output pct_demography_age. It contains the percentage of <strong>Age Group</strong> (Young, Economically Active) for each <strong>PA</strong>.</p>
+<p>The code below transforms the data and results in the final output <em>pct_demography_age</em>. It contains the percentage of <strong>Age Group</strong> (Young, Economically Active) for each <strong>PA</strong>.</p>
 <div class="callout callout-style-simple callout-note no-icon callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-10-contents" aria-controls="callout-10" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
@@ -1148,9 +1148,9 @@ Code
 <h3 class="anchored" data-anchor-id="plots-and-analysis-1"><span style="color:DarkOrange">3.2.2</span> Plots and Analysis</h3>
 <p>To visualize the distribution of age groups across planning areas, the following plotting steps were performed:</p>
 <ul>
-<li>The PA follows the same order as the <a href="https://isss608-ay2024-25t3.netlify.app/take-home_ex/take-home_ex01/take-home_ex01#population-across-planning-areas-by-sex">Section 3.1: Population Across Planning Areas by Sex</a> plot above to provide easy comparisons between them.</li>
-<li>The Age_Group variable was explicitly ordered as Aged → Economically Active → Young so that the stacked bars chart will be in the reversed order after coord_flip().</li>
-<li>The rest of the functions have been explained in the <a href="https://isss608-ay2024-25t3.netlify.app/take-home_ex/take-home_ex01/take-home_ex01#population-across-planning-areas-by-sex">Section 3.1: Population Across Planning Areas by Sex</a> plot above.</li>
+<li>The PA order in this plot matches the order used in <a href="https://isss608-ay2024-25t3.netlify.app/take-home_ex/take-home_ex01/take-home_ex01#population-across-planning-areas-by-sex">Section 3.1: Population Across Planning Areas by Sex</a>, allowing for easy comparisons between them.</li>
+<li>The <strong>Age Group</strong> variable was explicitly ordered as <strong>Aged</strong> → <strong>Economically Active</strong> → <strong>Young</strong> so that the stacked bars chart will be in the reversed order after <em>coord_flip()</em>.</li>
+<li>The remainingo functions have been explained in the plot above in <a href="https://isss608-ay2024-25t3.netlify.app/take-home_ex/take-home_ex01/take-home_ex01#population-across-planning-areas-by-sex">Section 3.1: Population Across Planning Areas by Sex</a>.</li>
 </ul>
 <div class="tabset-margin-container"></div><div class="panel-tabset">
 <ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-2-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-1" role="tab" aria-controls="tabset-2-1" aria-selected="true">Plot</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-2" role="tab" aria-controls="tabset-2-2" aria-selected="false">Code</a></li></ul>
@@ -1198,14 +1198,14 @@ Code
 <section id="economically-active-population-working-age-25-to-64" class="level5">
 <h5 class="anchored" data-anchor-id="economically-active-population-working-age-25-to-64">Economically Active Population (Working Age 25 to 64)</h5>
 <ul>
-<li>Extremely high proportions of working-age residents:
+<li>Extremely high proportions of <strong>working-age</strong> residents:
 <ul>
 <li>Museum</li>
 <li>Downtown Core</li>
 <li>Orchard
 <ul>
-<li>Low proportions of Young and Aged population</li>
-<li>Museum and Seletar have no recorded Aged population</li>
+<li>Low proportions of <strong>Young</strong> and <strong>Aged</strong> population</li>
+<li>Museum and Seletar have no recorded <strong>Aged</strong> population</li>
 </ul></li>
 </ul></li>
 </ul>
@@ -1303,13 +1303,13 @@ Code
 <section id="young-population-aged-0-to-24" class="level5">
 <h5 class="anchored" data-anchor-id="young-population-aged-0-to-24">Young Population (Aged 0 to 24)</h5>
 <ul>
-<li>Highest concentrations of Young:
+<li>Highest concentrations of <strong>Young</strong> residents:
 <ul>
 <li>Punggol</li>
 <li>Sembawang</li>
 <li>Sengkang
 <ul>
-<li>Higher concentrations of Economically Active and lower proportions of Aged</li>
+<li>Higher concentrations of <strong>Economically Active</strong> and lower proportions of <strong>Aged</strong></li>
 </ul></li>
 </ul></li>
 </ul>
@@ -1399,7 +1399,7 @@ Code
 </table>
 </div>
 </div>
-<p>These consists of newer non-mature estates (Refer to <a href="https://isss608-ay2024-25t3.netlify.app/take-home_ex/take-home_ex01/take-home_ex01#singapore's-estate-classification">Section 5 Appendix: Singapore’s Estate Classification</a>) such as Punggol, Sengkang, and Sembawang, which are actively being developed by the Singapore government. These are particularly appealing to newly married couples, since many of the new Build-To-Order (BTO) projects in these areas are designed for budget-conscious young families. These households will tend to include Economically Active individuals as well.</p>
+<p>These consists of newer non-mature estates (Refer to <a href="https://isss608-ay2024-25t3.netlify.app/take-home_ex/take-home_ex01/take-home_ex01#singapore's-estate-classification">Section 5 Appendix: Singapore’s Estate Classification</a>) such as Punggol, Sengkang, and Sembawang, which are actively being developed by the Singapore government. These are particularly appealing to newly married couples, since many of the new Build-To-Order (BTO) projects in these areas are designed for budget-conscious young families. These households will tend to include more <strong>Economically Active</strong> individuals as well.</p>
 </div>
 </div>
 </div>
@@ -1407,7 +1407,7 @@ Code
 <section id="aged-population-aged-65-and-above" class="level5">
 <h5 class="anchored" data-anchor-id="aged-population-aged-65-and-above">Aged Population (Aged 65 and above)</h5>
 <ul>
-<li>Highest concentration of Aged:
+<li>Highest concentration of <strong>Aged</strong>:
 <ul>
 <li>Ang Mo Kio</li>
 <li>Bukit Merah</li>
@@ -1500,7 +1500,7 @@ Code
 </table>
 </div>
 </div>
-<p>These are mainly mature estates with a higher proportion of elderly residents, many of whom have lived there since their younger years.</p>
+<p>These are mainly mature estates with a higher proportion of <strong>elderly</strong> residents, many of whom have lived there since their younger years.</p>
 </div>
 </div>
 </div>
@@ -1515,22 +1515,22 @@ Insights
 </div>
 <div class="callout-body-container callout-body">
 <section id="central-districts-e.g.-museum-downtown-core-orchard" class="level5">
-<h5 class="anchored" data-anchor-id="central-districts-e.g.-museum-downtown-core-orchard">Central districts (e.g., Museum, Downtown Core, Orchard):</h5>
+<h5 class="anchored" data-anchor-id="central-districts-e.g.-museum-downtown-core-orchard">Central Districts (e.g., Museum, Downtown Core, Orchard):</h5>
 <ul>
-<li>Have a high proportion of Economically Active residents, with relatively low concentration of Youth and Aged.</li>
+<li>Have a high proportion of <strong>Economically Active</strong> residents, with relatively low concentration of <strong>Youth</strong> and <strong>Aged</strong>.</li>
 <li>These are business or commercial hubs.</li>
 </ul>
 </section>
 <section id="mature-estates-e.g.-ang-mo-kio-bukit-merah-kallang" class="level5">
-<h5 class="anchored" data-anchor-id="mature-estates-e.g.-ang-mo-kio-bukit-merah-kallang">Mature estates (e.g., Ang Mo Kio, Bukit Merah, Kallang):</h5>
+<h5 class="anchored" data-anchor-id="mature-estates-e.g.-ang-mo-kio-bukit-merah-kallang">Mature Estates (e.g., Ang Mo Kio, Bukit Merah, Kallang):</h5>
 <ul>
-<li>Show a more balanced demographic distribution, though with a noticeably ageing population.</li>
+<li>Show a more balanced demographic distribution, though with a noticeably <strong>Ageing</strong> population.</li>
 </ul>
 </section>
 <section id="new-estates-e.g.-punggol-sembawang-sengkang" class="level5">
-<h5 class="anchored" data-anchor-id="new-estates-e.g.-punggol-sembawang-sengkang">New estates (e.g., Punggol, Sembawang, Sengkang):</h5>
+<h5 class="anchored" data-anchor-id="new-estates-e.g.-punggol-sembawang-sengkang">New Estates (e.g., Punggol, Sembawang, Sengkang):</h5>
 <ul>
-<li>Skew heavily toward the Young and Economically Active, with fewer Aged residents.</li>
+<li>Skew heavily toward the <strong>Young</strong> and <strong>Economically Active</strong>, with fewer <strong>Aged</strong> residents.</li>
 <li>This reflects their appeal to new families, likely due to the availability and price of new housing developments.</li>
 </ul>
 </section>
@@ -1550,7 +1550,7 @@ Reflections
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>I initially considered using tabs to view the graphs separately, but later realised that by restructuring the data, all three graphs could be combined into a single stacked bar chart. This thought led to the final plot presented above.</p>
+<p>I initially considered using tabs to compare the graphs separately, but later realised that by restructuring the data, all three graphs could be combined into a single stacked bar chart. This thought led to creating the final plot presented above.</p>
 </div>
 </div>
 <section id="feature-engineering-2" class="level4">
@@ -1660,13 +1660,16 @@ Code
 <h2 class="anchored" data-anchor-id="age-distribution-by-sex"><span style="color:DarkOrange">3.3</span> Age Distribution by Sex</h2>
 <section id="feature-engineering-3" class="level3">
 <h3 class="anchored" data-anchor-id="feature-engineering-3"><span style="color:DarkOrange">3.3.1</span> Feature Engineering</h3>
-<p>The first part of the code aggregates the <strong>Population</strong> dataset by <strong>Sex</strong>, and calculates the percentage of <strong>Males</strong> and <strong>Females</strong> by dividing it by the <strong>Total</strong>. - In preparation for adding labels to the pie chart, their position (ypos) was calculated using cumulative percentages since coord_polar(“y”) will be used to create the pie chart.</p>
-<p>In next part, the dataset was prepared to visualize <strong>Age</strong> distributions by <strong>Sex</strong>:</p>
+<p>The first part of the code aggregates the <strong>Population</strong> dataset by <strong>Sex</strong>, and calculates the percentage of <strong>Males</strong> and <strong>Females</strong> by dividing it by the <strong>Total</strong>.</p>
 <ul>
-<li>The dataset sg_data was grouped by <strong>Age</strong> and <strong>Sex</strong>, then summarized using sum(Pop) to get the population count for each <strong>Age-Sex</strong> group.</li>
-<li>The resulting grouped data demography_sex_age was expanded into individual-level observations using uncount(weights = Pop).
+<li>The next section prepares for adding labels to the pie chart. The label position (<em>ypos</em>) was calculated using cumulative percentages <em>cumsum(Pct_Sex) - Pct_Sex / 2</em> since <em>coord_polar(“y”)</em> will be used to create the pie chart.</li>
+</ul>
+<p>In next part, the dataset was prepared to visualise <strong>Age</strong> distributions by <strong>Sex</strong>:</p>
 <ul>
-<li>This transformation duplicates each row according to the population count, effectively simulating individual records. This is a requirement for plotting accurate violin plots of distributions.</li>
+<li>The dataset <em>sg_data</em> was grouped by <strong>Age</strong> and <strong>Sex</strong>, then summarised using <em>sum(Pop)</em> to get the population count for each <strong>Age-Sex</strong> group.</li>
+<li>The resulting grouped data <em>demography_sex_age</em> was expanded into individual-level observations using <em>uncount(weights = Pop)</em>.
+<ul>
+<li>This transformation duplicates each row according to the <strong>Pop</strong> count, effectively simulating individual records. This is a requirement for plotting accurate violin plots of distributions.</li>
 </ul></li>
 </ul>
 <p>The code below performs the steps above and finally splits the <em>demography_sex_age</em> data into two subsets (<strong>Males</strong> and <strong>Females</strong>) to allow overlaying their respective violin plots for easier visual comparison.</p>
@@ -1811,20 +1814,20 @@ Code
 <h3 class="anchored" data-anchor-id="plots-and-analysis-2"><span style="color:DarkOrange">3.3.2</span> Plots and Analysis</h3>
 <p>To create an overlay violin plot (p1) comparing <strong>Age</strong> distributions between <strong>Males</strong> and <strong>Females</strong>:</p>
 <ul>
-<li>A ggplot() object was initialized to serve as the base plot that the violin plots will be overlaid on.</li>
-<li>geom_violin() was used twice, once for each sex, with shared x-axis “All” to overlay both distributions.</li>
-<li>alpha = 0.5 was set to add transparency, allowing both violins to be visible when they overlap.</li>
-<li>scale = “area” ensures the violins are scaled proportionally to the size of their age groups.</li>
-<li>A custom fill colour was set for each sex using scale_fill_manual(), and breaks = c(“Males”, “Females”) ensures the legend appears with Males being first.</li>
-<li>theme(axis.text.x = element_blank()) hides the x-axis label since both violins are plotted at a shared position “All”.</li>
+<li>A <em>ggplot()</em> object was initialised to serve as the base plot that the violin plots will be overlaid on.</li>
+<li><em>geom_violin()</em> was used twice, once for each <strong>Sex</strong>, with shared x-axis <em>“All”</em> to overlay both distributions.</li>
+<li><em>alpha = 0.5</em> was set to add transparency, allowing both violins to be visible when they overlap.</li>
+<li><em>scale = “area”</em> ensures the violins are scaled proportionally to the size of their age groups.</li>
+<li>A custom fill colour was set for each sex using <em>scale_fill_manual()</em>, and <em>breaks = c(“Males”, “Females”)</em> ensures the legend appears with Males being first.</li>
+<li><em>theme(axis.text.x = element_blank())</em> hides the x-axis label since both violins are plotted at a shared position <em>“All”</em>.</li>
 </ul>
 <p>The pie chart (p2) is created similarly to the bar charts in the previous sections but with the following modifications:</p>
 <ul>
-<li>Using coord_polar(“y”) to convert it into a pie chart by transforming the y-axis into a circular layout.</li>
-<li>Data labels were added using geom_text()</li>
-<li>Axis titles, legend and tick marks were removed using labs() and theme().</li>
+<li>Using <em>coord_polar(“y”)</em> to convert it into a pie chart by transforming the y-axis into a circular layout.</li>
+<li>Data labels were added using <em>geom_text()</em></li>
+<li>Axis titles, legend and tick marks were removed using <em>labs()</em> and <em>theme()</em>.</li>
 </ul>
-<p>Lastly, the pie chart (p2) is overlaied over the violin plot (p2) using inset_element() to provide an easy overview of the necessary data.</p>
+<p>Lastly, the pie chart (p2) is overlaid over the violin plot (p2) using <em>inset_element()</em> to provide an easy overview of both plots.</p>
 <div class="tabset-margin-container"></div><div class="panel-tabset">
 <ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-4-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-4-1" role="tab" aria-controls="tabset-4-1" aria-selected="true">Plot</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-4-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-4-2" role="tab" aria-controls="tabset-4-2" aria-selected="false">Code</a></li></ul>
 <div class="tab-content">
@@ -1906,8 +1909,8 @@ Insights
 <section id="gender-ratio-1" class="level5">
 <h5 class="anchored" data-anchor-id="gender-ratio-1">Gender Ratio</h5>
 <ul>
-<li>The Female population is slightly higher than the Male population overall.</li>
-<li>This aligns with Singapore’s national demographic pattern, where Females outnumber Males slightly due to longer life expectancy.</li>
+<li>The <strong>Female</strong> population is slightly higher than the <strong>Male</strong> population overall.</li>
+<li>This aligns with Singapore’s national demographic pattern, where <strong>Females</strong> outnumber <strong>Males</strong> slightly due to longer life expectancy.</li>
 </ul>
 </section>
 <section id="population-trends-age-0---35" class="level5">
@@ -1915,21 +1918,21 @@ Insights
 <ul>
 <li>Population rises gradual from birth to age 8.</li>
 <li>A plateau is observed from ages 9 to 20, followed by another increase towards a population peak at age 35.</li>
-<li>Males consistently outnumber Females slightly in this range.</li>
+<li><strong>Males</strong> consistently outnumber <strong>Females</strong> slightly in this range.</li>
 </ul>
 </section>
 <section id="population-trends-age-36---60" class="level5">
 <h5 class="anchored" data-anchor-id="population-trends-age-36---60">Population Trends (Age 36 - 60)</h5>
 <ul>
 <li>The segment holds the largest proportion of Singapore’s population.</li>
-<li>Gender distribution is balanced.</li>
+<li><strong>Gender</strong> distribution is balanced.</li>
 </ul>
 </section>
 <section id="population-trends-age-above-60" class="level5">
 <h5 class="anchored" data-anchor-id="population-trends-age-above-60">Population Trends (Age Above 60)</h5>
 <ul>
 <li>A steady decline beings from age 60 onward.</li>
-<li>The Male population decreases at a faster rate, leading to a widening gender gap with increasing age.</li>
+<li>The <strong>Male</strong> population decreases at a faster rate, leading to a widening gender gap with increasing age.</li>
 </ul>
 </section>
 <section id="population-pyramid" class="level5">
@@ -1953,7 +1956,7 @@ Reflections
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>I initially avoided expanding the data into individual-level observations using uncount(weights = Pop), since it is possible to pass weights = Pop in aes(). However, the resulting violin plot look weird. Therefore, I tried the uncount() method and found that the 2 methods produces very different plots. Upon further research, I found that while geom_violin() can estimate the probability density function (PDF) using the weights, density estimation with weights may be less precise or behave unexpectedly depending on implementation. Therefore, I chose to use uncount() above, as working with raw, individual-level distributions seems to produce more accurate and visually realistic results.</p>
+<p>I initially avoided expanding the data into individual-level observations using <em>uncount(weights = Pop)</em>, since it is possible to pass <em>weights = Pop</em> in <em>aes()</em>. However, the resulting violin plot look weird. Therefore, I tried the <em>uncount()</em> method and found that these 2 methods produces very different plots. Upon further research, I found that while <em>geom_violin()</em> can estimate the probability density function (PDF) using the weights, density estimation with weights may be less precise or behave unexpectedly depending on implementation. Therefore, I chose to use <em>uncount()</em> in the final plot above, as working with raw, individual-level distributions seems to produce more accurate and visually realistic results.</p>
 </div>
 </div>
 <p><strong>Feature Engineering</strong></p>

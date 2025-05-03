@@ -1,5 +1,5 @@
 ---
-title: "Take-home_Ex01: Demographic Structures and Distribution of Singapore in 2024"
+title: "[Take-Home Exercise 1:]{style='color:DarkOrange'} Demographic Structures and Distribution of Singapore in 2024"
 date: 2025-04-29
 date-modified: "last-modified"
 format: html

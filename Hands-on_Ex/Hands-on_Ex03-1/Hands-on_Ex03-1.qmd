@@ -1,5 +1,5 @@
 ---
-title: "[Hands-on Exercise 3-1:]{style='color:DarkOrange'} Programming Interactive Data Visualisation with R"
+title: "[Hands-On Exercise 3-1:]{style='color:DarkOrange'} Programming Interactive Data Visualisation with R"
 date: 2025-04-25
 date-modified: "last-modified"
 format: html
@@ -545,6 +545,7 @@ girafe(
 
 ::: callout-note
 ## Interactive
+
 Web document link with a data object will be displayed on the web browser upon mouse click.
 :::
 
@@ -812,8 +813,7 @@ subplot(ggplotly(p1),
 :::
 
 ::: callout-note
-Click on a data point of one of the scatterplot and see how the corresponding point on the other scatterplot is selected.
-- But clicking on any data point results in a permanent selection, with no way to deselect it.
+Click on a data point of one of the scatterplot and see how the corresponding point on the other scatterplot is selected. - But clicking on any data point results in a permanent selection, with no way to deselect it.
 :::
 
 ::: callout-note
@@ -824,8 +824,8 @@ Click on a data point of one of the scatterplot and see how the corresponding po
 :::
 
 ::: callout-note
-- This code is much simpler than the ggiraph method in [Hands-On Exercise 3-1: Section 3-1.6.7](https://isss608-ay2024-25t3.netlify.app/hands-on_ex/hands-on_ex03/hands-on_ex03#coordinated-multiple-views-with-ggiraph),
-- Another difference is that the plotly highlight_key() method shows it's corresponding point **on click** but the ggiraph method shows it's corresponding point **on hover**
+-   This code is much simpler than the ggiraph method in [Hands-On Exercise 3-1: Section 3-1.6.7](https://isss608-ay2024-25t3.netlify.app/hands-on_ex/hands-on_ex03/hands-on_ex03#coordinated-multiple-views-with-ggiraph),
+-   Another difference is that the plotly highlight_key() method shows it's corresponding point **on click** but the ggiraph method shows it's corresponding point **on hover**
 :::
 
 ### [3-1.7.5]{style="color:DarkOrange"} Improving Coordinated Multiple Views with plotly
@@ -834,17 +834,19 @@ There are a few issues with the coordinated multiple view plot [above](https://i
 
 ::: callout-tip
 ## How to fix the annoying permanent selection issue?
+
 Adding selectize = FALSE allows for the user to do a double-click on any blank space to reset selection and shows all points again
 :::
 
 ::: callout-tip
 ## Can the selection method be *on hover* instead of *on click*?
 
-- By default, highlight_key() works on click, not hover but using plotly_hover allows it to mirror the ggiraph method in [Hands-On Exercise 3-1: Section 3-1.6.7](https://isss608-ay2024-25t3.netlify.app/hands-on_ex/hands-on_ex03/hands-on_ex03#coordinated-multiple-views-with-ggiraph)
+-   By default, highlight_key() works on click, not hover but using plotly_hover allows it to mirror the ggiraph method in [Hands-On Exercise 3-1: Section 3-1.6.7](https://isss608-ay2024-25t3.netlify.app/hands-on_ex/hands-on_ex03/hands-on_ex03#coordinated-multiple-views-with-ggiraph)
 :::
 
-::: callout-tip    
+::: callout-tip
 ## Lastly, where are the axis labels?
+
 -   Use labs(), titleX and titleY to add axis labels
 -   Use margin so that the labels will not overlap the graph
 :::
