@@ -37,13 +37,17 @@ In this exercise, besides tidyverse, five R packages will be used. They are:
 2)  **patchwork:** An R package that allows users to easily combine multiple ggplot2 plots into a single composite layout, useful for comparative visual analysis.
 3)  **ggthemes:** This package adds extra themes, scales, and geoms to ggplot2, making it easier to apply distinct themes to plots.
 4)  **knitr:** A reporting package that integrates R code with markdown, enabling dynamic report generation in formats such as HTML, PDF, and Word, often used with R Markdown and Quarto.
-5) **cowplot:** An extension of ggplot2 that simplifies plot arrangement and annotation. It provides functions like *ggdraw()* and *draw_plot()* for overlaying and aligning plots, often used for fine-tuned visual layouts.
+5)  **cowplot:** An extension of ggplot2 that simplifies plot arrangement and annotation. It provides functions like *ggdraw()* and *draw_plot()* for overlaying and aligning plots, often used for fine-tuned visual layouts.
 
 Code chunk below will be used to check if these packages have been installed and also load them onto my working R environment.
+
+::: {.callout-note appearance="minimal" collapse="true"}
+## Code
 
 ```{r}
 pacman::p_load(tidyverse, patchwork, ggthemes, knitr, cowplot)
 ```
+:::
 
 ## [1.4]{style="color:DarkOrange"} Importing Data
 
@@ -51,9 +55,13 @@ For the purpose of this exercise, a data file called *respopagesex2024* will be 
 
 The code chunk below imports *respopagesex2024.csv* into R environment by using read_csv() function of readr package (under tidyverse).
 
+::: {.callout-note appearance="minimal" collapse="true"}
+## Code
+
 ```{r}
 sg_data <- read_csv("data/respopagesex2024.csv")
 ```
+:::
 
 # [2]{style="color:DarkOrange"} Exploratory Data Analysis (EDA)
 
@@ -175,6 +183,15 @@ After completing the data manipulation steps described in earlier, the resulting
 kable(head(sg_data, 10))
 ```
 
+::: {.callout-note appearance="minimal" collapse="true"}
+## Code
+
+```{r}
+#| eval: false
+kable(head(sg_data, 10))
+```
+:::
+
 # [3]{style="color:DarkOrange"} Visualisations
 
 ## [3.1]{style="color:DarkOrange"} Population Across Planning Areas by Sex
@@ -213,23 +230,13 @@ kable(head(demography_sex, 10))
 
 The aim is to create a detailed view of **Population** distribution by **Sex** across Singapore’s **Planning Areas**. These were the steps taken to create a stacked horizontal bar chart for visualisation:
 
-Horizontal Bar Chart s1:
--   To create a horizontal bar chart with population **Total** in descending order, the **PA** was initially ordered by ascending **Total** using the *pa_order()* vector. Although the factor levels were arranged in ascending order, the use of *coord_flip()* in the plot reverses the axis orientation, resulting in **Total** being displayed in descending order as intended.
--   Similar to the reason above, the **Sex** variable was converted into a factor with levels set as **Females** first, followed by **Males**, such that it will appear as **Males** followed by **Females** in the stacked bar chart.
--   *ggplot()* was used with *geom_bar() (with stat = "identity" and position = "stack")* to create a stacked horizontal bar chart (s1), displaying the **Pop** by **Sex** across **PA**.
--   *theme_minimal()* was applied for a clean visual style, and *labs()* with *ggtitle()* were used to customise the axis labels and plot title.
--   *scale_fill_manual()* was used to assign distinct colours to **Males and Females** and to control the legend order, explicitly setting it as: Males -\> Females instead of the reversed order if left as default.
--   *scale_y_continuous(labels = scales::comma)* was used to show numerical numbers rather than the scientific notation.
+Horizontal Bar Chart s1: - To create a horizontal bar chart with population **Total** in descending order, the **PA** was initially ordered by ascending **Total** using the *pa_order()* vector. Although the factor levels were arranged in ascending order, the use of *coord_flip()* in the plot reverses the axis orientation, resulting in **Total** being displayed in descending order as intended. - Similar to the reason above, the **Sex** variable was converted into a factor with levels set as **Females** first, followed by **Males**, such that it will appear as **Males** followed by **Females** in the stacked bar chart. - *ggplot()* was used with *geom_bar() (with stat = "identity" and position = "stack")* to create a stacked horizontal bar chart (s1), displaying the **Pop** by **Sex** across **PA**. - *theme_minimal()* was applied for a clean visual style, and *labs()* with *ggtitle()* were used to customise the axis labels and plot title. - *scale_fill_manual()* was used to assign distinct colours to **Males and Females** and to control the legend order, explicitly setting it as: Males -\> Females instead of the reversed order if left as default. - *scale_y_continuous(labels = scales::comma)* was used to show numerical numbers rather than the scientific notation.
 
-Zoomed-in Plot s2:
--   A zoomed-in plot (s2) shows the bottom 10 **PA** and was embedded into the main plot using *inset_element()* (under *patchwork*). This method makes it easier to examine less populous **PAs** in the same figure.
--   Since the zoomed-in plot (s2) was overlaid on top of the main chart (s1), *theme_test()* was used to provide a contrast with the s1 plot in the background.
+Zoomed-in Plot s2: - A zoomed-in plot (s2) shows the bottom 10 **PA** and was embedded into the main plot using *inset_element()* (under *patchwork*). This method makes it easier to examine less populous **PAs** in the same figure. - Since the zoomed-in plot (s2) was overlaid on top of the main chart (s1), *theme_test()* was used to provide a contrast with the s1 plot in the background.
 
-Zoom Rectangle:
-- Created as a transparent dotted line rectangle to highlight the zoomed-in location using *cowplot()*.
+Zoom Rectangle: - Created as a transparent dotted line rectangle to highlight the zoomed-in location using *cowplot()*.
 
-Overlaid Plots:
-- *ggdraw()* was used to create an empty canvas, and *draw_plot()* was used to overlay s1, s2, and the zoom rectangle. These functions are part of the *cowplot* package.
+Overlaid Plots: - *ggdraw()* was used to create an empty canvas, and *draw_plot()* was used to overlay s1, s2, and the zoom rectangle. These functions are part of the *cowplot* package.
 
 ::: panel-tabset
 ## Plot
@@ -377,21 +384,27 @@ ggdraw() +
 ```
 :::
 
-##### Most Populated
+::::: columns
+::: {.column width="50%"}
+#### Most Populated
 
 -   Tampines
 -   Bedok
 -   Sengkang
 -   Jurong West
 -   Woodlands
+:::
 
-##### Least Populated
+::: {.column width="50%"}
+#### Least Populated
 
 -   Seletar
 -   Museum
 -   Western Water Catchment
 -   Sungei Kadut
 -   Orchard
+:::
+:::::
 
 ::: callout-tip
 ## Insights
@@ -417,6 +430,7 @@ ggdraw() +
 
 ::: callout-important
 ## Reflections
+
 The *ggforce* package includes the *facet_zoom()* function that allows for zooming in on a part of a plot and automatically draws a box to indicate the zoomed region.
 
 However, *facet_zoom()* does not support zooming in on discrete scales like the bottom 10 **PAs** in **Pop**. Therefore, I manually created a separate zoomed-in plot (s2) and a zoom rectangle to highlight the region that will be zoomed-in.
