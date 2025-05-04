@@ -579,13 +579,12 @@ ggplot(data = pct_demography_age,
 ```
 :::
 
-##### Young Population (Aged 0 to 24)
+##### Highest concentrations of **Young** residents (0 to 24)
 
--   Highest concentrations of **Young** residents:
-    -   Punggol
-    -   Sembawang
-    -   Sengkang
-        -   Higher concentrations of **Economically Active** and lower proportions of **Aged**
+-   Punggol
+-   Sembawang
+-   Sengkang
+    -   Higher concentrations of **Economically Active** and lower proportions of **Aged**
 
 ::: {.callout-note appearance="minimal" collapse="true"}
 ## Code
@@ -603,14 +602,13 @@ kable(head(young_data, 10))
 These consists of newer non-mature estates (Refer to [Section 5 Appendix: Singapore's Estate Classification](https://isss608-ay2024-25t3.netlify.app/take-home_ex/take-home_ex01/take-home_ex01#singapores-estate-classification) such as Punggol, Sengkang, and Sembawang, which are actively being developed by the Singapore government. These are particularly appealing to newly married couples, since many of the new Build-To-Order (BTO) projects in these areas are designed for budget-conscious young families. These households will tend to include more **Economically Active** individuals as well.
 :::
 
-##### Economically Active Population (Working Age 25 to 64)
+##### Extremely high proportions of **Economically Active** residents (25 to 64)
 
--   Extremely high proportions of **working-age** residents:
-    -   Museum
-    -   Downtown Core
-    -   Orchard
-        -   Low proportions of **Young** and **Aged** population
-        -   Museum and Seletar have no recorded **Aged** population
+-   Museum
+-   Downtown Core
+-   Orchard
+    -   Low proportions of **Young** and **Aged** population
+    -   Museum and Seletar have no recorded **Aged** population
 
 ::: {.callout-note appearance="minimal" collapse="true"}
 ## Code
@@ -628,12 +626,11 @@ kable(head(economically_active_data, 10))
 These patterns suggests that such areas are primarily dominated by working adults and may serve commercial or business purposes (Museum, Downtown Core, and Orchard), or military functions (Seletar and Tengah air bases).
 :::
 
-##### Aged Population (Aged 65 and above)
+##### Highest concentration of **Aged** residents (65 and above)
 
--   Highest concentration of **Aged**:
-    -   Ang Mo Kio
-    -   Bukit Merah
-    -   Kallang
+-   Ang Mo Kio
+-   Bukit Merah
+-   Kallang
 
 ::: {.callout-note appearance="minimal" collapse="true"}
 ## Code
