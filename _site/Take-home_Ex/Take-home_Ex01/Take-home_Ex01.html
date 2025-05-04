@@ -319,7 +319,7 @@ Tip
 <p>Creating enlightening and truthful data visualizations involves focusing on accuracy, transparency, and the ability to effectively communicate insights. It is about presenting data in a way that is both informative and aesthetically pleasing, ensuring the audience can grasp the information quickly and accurately.</p>
 </div>
 </div>
-<p>The data should also be processed by using appropriate tidyverse family of packages and the data visualisation must be prepared using <em>ggplot2</em> and its extensions. In addition, no interactive data visualisation are required.</p>
+<p>The data should also be processed by using appropriate <em>tidyverse</em> family of packages and the data visualisation must be prepared using <em>ggplot2</em> and its extensions. In addition, no interactive data visualisation are required.</p>
 </section>
 <section id="data-source" class="level2">
 <h2 class="anchored" data-anchor-id="data-source"><span style="color:DarkOrange">1.2</span> Data Source</h2>
@@ -327,15 +327,15 @@ Tip
 </section>
 <section id="install-and-load-the-required-libraries" class="level2">
 <h2 class="anchored" data-anchor-id="install-and-load-the-required-libraries"><span style="color:DarkOrange">1.3</span> Install and Load the Required Libraries</h2>
-<p>In this exercise, besides tidyverse, five R packages will be used. They are:</p>
+<p>These, five R packages will be used for the preparation of this exercise:</p>
 <ol type="1">
 <li><strong>tidyverse:</strong> A collection of R packages designed for data science. It includes packages like <em>dplyr</em>, <em>ggplot2</em>, <em>tidyr</em>, and <em>readr</em> that simplify data wrangling and visualization.</li>
-<li><strong>patchwork:</strong> An R package that allows users to easily combine multiple ggplot2 plots into a single composite layout, useful for comparative visual analysis.</li>
-<li><strong>ggthemes:</strong> This package adds extra themes, scales, and geoms to ggplot2, making it easier to apply distinct themes to plots.</li>
+<li><strong>patchwork:</strong> An R package that allows users to easily combine multiple <em>ggplot2</em> plots into a single composite layout, useful for comparative visual analysis.</li>
+<li><strong>ggthemes:</strong> This package adds extra themes, scales, and geoms to <em>ggplot2</em>, making it easier to apply distinct themes to plots.</li>
 <li><strong>knitr:</strong> A reporting package that integrates R code with markdown, enabling dynamic report generation in formats such as HTML, PDF, and Word, often used with R Markdown and Quarto.</li>
-<li><strong>cowplot:</strong> An extension of ggplot2 that simplifies plot arrangement and annotation. It provides functions like <em>ggdraw()</em> and <em>draw_plot()</em> for overlaying and aligning plots, often used for fine-tuned visual layouts.</li>
+<li><strong>cowplot:</strong> An extension of <em>ggplot2</em> that simplifies plot arrangement and annotation. It provides functions like <em>ggdraw()</em> and <em>draw_plot()</em> for overlaying and aligning plots, often used for fine-tuned visual layouts.</li>
 </ol>
-<p>Code chunk below will be used to check if these packages have been installed and also load them onto my working R environment.</p>
+<p>Code chunk below will be used to check if these packages have been installed and also load them onto the working R environment.</p>
 <div class="callout callout-style-simple callout-note no-icon callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
@@ -358,7 +358,7 @@ Code
 <section id="importing-data" class="level2">
 <h2 class="anchored" data-anchor-id="importing-data"><span style="color:DarkOrange">1.4</span> Importing Data</h2>
 <p>For the purpose of this exercise, a data file called <em>respopagesex2024</em> will be used. It consists of data about Singapore Residents by Planning Area / Subzone, categorised by a Single Year of Age and Sex,for June 2024. It is in a csv file format.</p>
-<p>The code chunk below imports <em>respopagesex2024.csv</em> into R environment by using read_csv() function of readr package (under tidyverse).</p>
+<p>The code chunk below imports <em>respopagesex2024.csv</em> into R environment by using <em>read_csv()</em> function of <em>readr</em> package (under <em>tidyverse</em>).</p>
 <div class="callout callout-style-simple callout-note no-icon callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
@@ -381,7 +381,7 @@ Code
 </section>
 <section id="exploratory-data-analysis-eda" class="level1">
 <h1><span style="color:DarkOrange">2</span> Exploratory Data Analysis (EDA)</h1>
-<p>There are a total of six attributes in the sg_data tibble data frame. Four of them are categorical data type and the other two are in continuous data type.</p>
+<p>There are a total of six attributes in the <em>sg_data</em> tibble data frame. Four of them are categorical data type and the other two are in continuous data type.</p>
 <div class="columns">
 <div class="column" style="width:50%;">
 <section id="categorical-variables" class="level3">
@@ -576,7 +576,7 @@ Code
 </section>
 <section id="fixing-age-column-inconsistency" class="level2">
 <h2 class="anchored" data-anchor-id="fixing-age-column-inconsistency"><span style="color:DarkOrange">2.2</span> Fixing Age Column Inconsistency</h2>
-<p>Although there are no duplicated records, the earlier EDA of variable types and the data table revealed that the <strong>Age</strong> column, which appears to be a continuous variable, was incorrectly recognised as a categorical variable.</p>
+<p>Although there were no duplicated records, the earlier EDA of variable types and the data table revealed that the <strong>Age</strong> column, which appears to be a continuous variable, was incorrectly recognised as a categorical variable.</p>
 <p>Upon further analysis of the <strong>Age</strong> column using the code below, it was found to contain 91 unique values. These values range from 0 to 89 and are numeric in nature, but the last value is a string, <em>“90_and_Over”</em>. This string caused the <strong>Age</strong> column to be recognised as a categorical variable instead of a continuous one.</p>
 <div class="callout callout-style-simple callout-note no-icon callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-7-contents" aria-controls="callout-7" aria-expanded="false" aria-label="Toggle callout">
@@ -824,10 +824,10 @@ Code
 <p>This section examines the distribution of Singapore’s <strong>Population</strong> across <strong>Planning Areas</strong>, categorised by <strong>Sex</strong>, to better understand the demographic patterns of different regions.</p>
 <section id="feature-engineering" class="level3">
 <h3 class="anchored" data-anchor-id="feature-engineering"><span style="color:DarkOrange">3.1.1</span> Feature Engineering</h3>
-<p>In this step, the following features were added to support the visual analysis later:</p>
+<p>In this step, the following features were added to support in the visual analysis later:</p>
 <ul>
-<li>The dataset <em>sg_data</em> was grouped by <strong>Planning Area (PA)</strong> and <strong>Sex</strong> to calculate the <strong>Population (Pop)</strong> for each subgroup using <em>summarise(Pop = sum(Pop))</em>.</li>
-<li>A second grouping by <strong>PA</strong> was performed to calculate the <strong>Total</strong> population per <strong>PA</strong>, stored in a new column <strong>Total</strong>.</li>
+<li>The dataset <em>sg_data</em> was grouped by <strong>PA</strong> and <strong>Sex</strong> to calculate the <strong>Pop</strong> for each subgroup using <em>summarise(Pop = sum(Pop))</em>.</li>
+<li>A second group by <strong>PA</strong> was performed to calculate the <strong>Total</strong> population per <strong>PA</strong>, stored in a new column <strong>Total</strong>.</li>
 <li>Rows with a <strong>Total</strong> population of 0 were removed using <em>filter(Total &gt; 0)</em> to eliminate empty <strong>PAs</strong> from the analysis.</li>
 <li>The resulting data structure, <em>demography_sex</em>, now contains the <strong>Total</strong> population broken down by <strong>Sex</strong> and <strong>PA</strong>, along with overall population <strong>Total</strong> per <strong>PA</strong>.</li>
 </ul>
@@ -937,10 +937,30 @@ Code
 <section id="plots-and-analysis" class="level3">
 <h3 class="anchored" data-anchor-id="plots-and-analysis"><span style="color:DarkOrange">3.1.2</span> Plots and Analysis</h3>
 <p>The aim is to create a detailed view of <strong>Population</strong> distribution by <strong>Sex</strong> across Singapore’s <strong>Planning Areas</strong>. These were the steps taken to create a stacked horizontal bar chart for visualisation:</p>
-<p>Horizontal Bar Chart s1: - To create a horizontal bar chart with population <strong>Total</strong> in descending order, the <strong>PA</strong> was initially ordered by ascending <strong>Total</strong> using the <em>pa_order()</em> vector. Although the factor levels were arranged in ascending order, the use of <em>coord_flip()</em> in the plot reverses the axis orientation, resulting in <strong>Total</strong> being displayed in descending order as intended. - Similar to the reason above, the <strong>Sex</strong> variable was converted into a factor with levels set as <strong>Females</strong> first, followed by <strong>Males</strong>, such that it will appear as <strong>Males</strong> followed by <strong>Females</strong> in the stacked bar chart. - <em>ggplot()</em> was used with <em>geom_bar() (with stat = “identity” and position = “stack”)</em> to create a stacked horizontal bar chart (s1), displaying the <strong>Pop</strong> by <strong>Sex</strong> across <strong>PA</strong>. - <em>theme_minimal()</em> was applied for a clean visual style, and <em>labs()</em> with <em>ggtitle()</em> were used to customise the axis labels and plot title. - <em>scale_fill_manual()</em> was used to assign distinct colours to <strong>Males and Females</strong> and to control the legend order, explicitly setting it as: Males -&gt; Females instead of the reversed order if left as default. - <em>scale_y_continuous(labels = scales::comma)</em> was used to show numerical numbers rather than the scientific notation.</p>
-<p>Zoomed-in Plot s2: - A zoomed-in plot (s2) shows the bottom 10 <strong>PA</strong> and was embedded into the main plot using <em>inset_element()</em> (under <em>patchwork</em>). This method makes it easier to examine less populous <strong>PAs</strong> in the same figure. - Since the zoomed-in plot (s2) was overlaid on top of the main chart (s1), <em>theme_test()</em> was used to provide a contrast with the s1 plot in the background.</p>
-<p>Zoom Rectangle: - Created as a transparent dotted line rectangle to highlight the zoomed-in location using <em>cowplot()</em>.</p>
-<p>Overlaid Plots: - <em>ggdraw()</em> was used to create an empty canvas, and <em>draw_plot()</em> was used to overlay s1, s2, and the zoom rectangle. These functions are part of the <em>cowplot</em> package.</p>
+<p><u>Horizontal Bar Chart s1:</u></p>
+<ul>
+<li>To create a horizontal bar chart with population <strong>Total</strong> in descending order, the <strong>PA</strong> was initially ordered by ascending <strong>Total</strong> using the <em>pa_order()</em> vector. Although the factor levels were arranged in ascending order, the use of <em>coord_flip()</em> in the plot reverses the axis orientation, resulting in <strong>Total</strong> being displayed in descending order as intended.</li>
+<li>Similar to the reason above, the <strong>Sex</strong> variable was converted into a factor with levels set as <strong>Females</strong> first, followed by <strong>Males</strong>, such that it will appear as <strong>Males</strong> followed by <strong>Females</strong> in the stacked bar chart.</li>
+<li><em>ggplot()</em> was used with <em>geom_bar() (with stat = “identity” and position = “stack”)</em> to create a stacked horizontal bar chart (s1), displaying the <strong>Pop</strong> by <strong>Sex</strong> across <strong>PA</strong>.</li>
+<li><em>theme_minimal()</em> was applied for a clean visual style, and <em>labs()</em> with <em>ggtitle()</em> were used to customise the axis labels and plot title.</li>
+<li><em>scale_fill_manual()</em> was used to assign distinct colours to <strong>Males and Females</strong> and to control the legend order, explicitly setting it as: Males → Females instead of the reversed order if left as default.</li>
+<li><em>scale_y_continuous(labels = scales::comma)</em> was used to show numerical numbers rather than the scientific notation.</li>
+<li><em>theme(legend.position = “bottom”)</em> was used to move the legend position from the right to the bottom to allow the plot to be wider.</li>
+</ul>
+<p><u>Zoomed-in Plot s2:</u></p>
+<ul>
+<li>A zoomed-in plot (s2) shows the bottom 10 <strong>PA</strong> and will be embedded into the main plot later. This method makes it easier to examine less populous <strong>PAs</strong> in the same figure.</li>
+<li>Since the zoomed-in plot (s2) will be overlaid on top of the main chart (s1), <em>theme_test()</em> was used to provide a contrast with the main s1 plot in the background.</li>
+<li>The legend and background was removed using <em>theme()</em> and the axis titles were removed using <em>labs()</em> for a cleaner plot.</li>
+</ul>
+<p><u>Zoom Rectangle:</u></p>
+<ul>
+<li>This was created using <em>cowplot()</em> to be a transparent dotted line rectangle to allow highlighting of the zoomed-in location.</li>
+</ul>
+<p><u>Overlaid Plots:</u></p>
+<ul>
+<li><em>ggdraw()</em> was used to create an empty canvas, and <em>draw_plot()</em> was used to overlay s1, s2, and the zoom rectangles. All these functions are a part of the <em>cowplot</em> package.</li>
+</ul>
 <div class="tabset-margin-container"></div><div class="panel-tabset">
 <ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true" aria-current="page">Plot</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false">Code</a></li></ul>
 <div class="tab-content">
@@ -1074,16 +1094,18 @@ Insights
 <h5 class="anchored" data-anchor-id="residential-areas">Residential Areas</h5>
 <ul>
 <li>The most populated <strong>PAs</strong> consists of a mix of mature estates (e.g., Tampines, Bedok) and newer estates (e.g, Sengkang, Jurong West, Woodlands) (Refer to <a href="https://isss608-ay2024-25t3.netlify.app/take-home_ex/take-home_ex01/take-home_ex01#singapores-estate-classification">Section 5 Appendix: Singapore’s Estate Classification</a></li>
-<li>This reflects Singapore’s government direction and success in transforming newer towns or underutilised land into well-developed residential hubs comparable to mature estates.</li>
+<li>This reflects the government of Singapore’s success in transforming newer towns or underutilised land into well-developed residential hubs that are comparable to existing mature estates.</li>
 </ul>
 </section>
 <section id="commercial-industrial-military-areas" class="level5">
 <h5 class="anchored" data-anchor-id="commercial-industrial-military-areas">Commercial / Industrial /Military Areas</h5>
 <ul>
-<li>The least populated <strong>PAs</strong> are primarily non-residential zones.</li>
+<li>The least populated <strong>PAs</strong> are primarily non-residential zones such as:
+<ul>
 <li>Commercial: Museum, Orchard</li>
 <li>Industrial: Sungei Kadut</li>
 <li>Military/Nature: Seletar (air base), Western Water Catchment</li>
+</ul></li>
 </ul>
 </section>
 </div>
@@ -1102,20 +1124,20 @@ Reflections
 </div>
 <div class="callout-body-container callout-body">
 <p>The <em>ggforce</em> package includes the <em>facet_zoom()</em> function that allows for zooming in on a part of a plot and automatically draws a box to indicate the zoomed region.</p>
-<p>However, <em>facet_zoom()</em> does not support zooming in on discrete scales like the bottom 10 <strong>PAs</strong> in <strong>Pop</strong>. Therefore, I manually created a separate zoomed-in plot (s2) and a zoom rectangle to highlight the region that will be zoomed-in.</p>
+<p>However, <em>facet_zoom()</em> does not support zooming in on discrete scales like the bottom 10 <strong>PAs</strong> in <strong>Pop</strong>. Therefore, I had manually created a separate zoomed-in plot (s2) and the zoom rectangles to highlight the region that will be zoomed-in.</p>
 </div>
 </div>
 </section>
 </section>
 <section id="percentage-of-age-groups-across-planning-areas" class="level2">
 <h2 class="anchored" data-anchor-id="percentage-of-age-groups-across-planning-areas"><span style="color:DarkOrange">3.2</span> Percentage of Age Groups Across Planning Areas</h2>
-<p>This visualisation aims to show the percentage distribution of <strong>Age Groups</strong> (Young, Economically_Active and Aged) across <strong>Planning Areas</strong>. This will provide insights into how Singapore residents, in different stages of life, are demographically distributed across Singapore.</p>
+<p>This visualisation aims to show the percentage distribution of <strong>Age Groups</strong> (Young, Economically_Active and Aged) across <strong>Planning Areas</strong>. This will provide insights into how Singapore residents, in different stages of life, were distributed across Singapore.</p>
 <section id="feature-engineering-1" class="level3">
 <h3 class="anchored" data-anchor-id="feature-engineering-1"><span style="color:DarkOrange">3.2.1</span> Feature Engineering</h3>
 <p>The following steps were done in preparation for visual analysis:</p>
 <ul>
 <li>The dataset <em>sg_data</em> was grouped by <strong>PA</strong> and <strong>Age_Group</strong> to calculate the <strong>Pop</strong> for each subgroup using <em>summarise(Pop = sum(Pop))</em>.</li>
-<li>A second grouping by <strong>PA</strong> was performed to compute the <strong>Total</strong> population per <strong>PA</strong>, stored in a new column <strong>Total</strong> using <em>mutate(Total = sum(Pop))</em>.</li>
+<li>A second group by <strong>PA</strong> was performed to compute the <strong>Total</strong> population per <strong>PA</strong>, stored in a new column <strong>Total</strong> using <em>mutate(Total = sum(Pop))</em>.</li>
 <li>Rows with a <strong>Total</strong> population of 0 were removed using <em>filter(Total &gt; 0)</em> to eliminate empty <strong>PAs</strong> from the analysis.</li>
 <li>The data was then transformed to compute percentage composition of each <strong>Age Group</strong> within each <strong>PA</strong> using <em>mutate(Pct_Age_Group = (Pop / Total) * 100)</em>.</li>
 <li>Percentages of <strong>Age Group</strong> were rounded to 1 decimal place using <em>mutate(across(Pct_Age_Group, ~ round(.x, 1)))</em>.</li>
@@ -1221,11 +1243,12 @@ Code
 </section>
 <section id="plots-and-analysis-1" class="level3">
 <h3 class="anchored" data-anchor-id="plots-and-analysis-1"><span style="color:DarkOrange">3.2.2</span> Plots and Analysis</h3>
-<p>To visualize the distribution of age groups across planning areas, the following plotting steps were performed:</p>
+<p>To visualize the percentage distribution of <strong>Age Groups</strong> across <strong>Planning Areas</strong>, the following plotting steps were performed:</p>
 <ul>
-<li>The <strong>PA</strong> order in this plot matches the order used in <a href="https://isss608-ay2024-25t3.netlify.app/take-home_ex/take-home_ex01/take-home_ex01#population-across-planning-areas-by-sex">Section 3.1: Population Across Planning Areas by Sex</a>, allowing for easy comparisons between them.</li>
+<li>The <strong>PA</strong> order in this plot was assigned to match the order used in <a href="https://isss608-ay2024-25t3.netlify.app/take-home_ex/take-home_ex01/take-home_ex01#plots-and-analysis">Section 3.1: Population Across Planning Areas by Sex</a>, allowing for easy comparisons between them.</li>
 <li>The <strong>Age Group</strong> variable was explicitly ordered as <strong>Aged</strong> → <strong>Economically Active</strong> → <strong>Young</strong> so that the stacked bars chart will be in the reversed order after <em>coord_flip()</em>.</li>
-<li>The remaining functions have been explained in the plot above in <a href="https://isss608-ay2024-25t3.netlify.app/take-home_ex/take-home_ex01/take-home_ex01#population-across-planning-areas-by-sex">Section 3.1: Population Across Planning Areas by Sex</a>.</li>
+<li>The legend position was set to be at the bottom using <em>theme(legend.position = “bottom”)</em>.</li>
+<li>The remaining functions have been explained in the plot above in <a href="https://isss608-ay2024-25t3.netlify.app/take-home_ex/take-home_ex01/take-home_ex01#plots-and-analysis">Section 3.1: Population Across Planning Areas by Sex</a>.</li>
 </ul>
 <div class="tabset-margin-container"></div><div class="panel-tabset">
 <ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-2-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-1" role="tab" aria-controls="tabset-2-1" aria-selected="true">Plot</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-2" role="tab" aria-controls="tabset-2-2" aria-selected="false">Code</a></li></ul>
@@ -1273,17 +1296,16 @@ Code
 </div>
 </div>
 </div>
-<section id="economically-active-population-working-age-25-to-64" class="level5">
-<h5 class="anchored" data-anchor-id="economically-active-population-working-age-25-to-64">Economically Active Population (Working Age 25 to 64)</h5>
+<section id="young-population-aged-0-to-24" class="level5">
+<h5 class="anchored" data-anchor-id="young-population-aged-0-to-24">Young Population (Aged 0 to 24)</h5>
 <ul>
-<li>Extremely high proportions of <strong>working-age</strong> residents:
+<li>Highest concentrations of <strong>Young</strong> residents:
 <ul>
-<li>Museum</li>
-<li>Downtown Core</li>
-<li>Orchard
+<li>Punggol</li>
+<li>Sembawang</li>
+<li>Sengkang
 <ul>
-<li>Low proportions of <strong>Young</strong> and <strong>Aged</strong> population</li>
-<li>Museum and Seletar have no recorded <strong>Aged</strong> population</li>
+<li>Higher concentrations of <strong>Economically Active</strong> and lower proportions of <strong>Aged</strong></li>
 </ul></li>
 </ul></li>
 </ul>
@@ -1300,119 +1322,15 @@ Code
 <div id="callout-15" class="callout-15-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>economically_active_data <span class="ot">&lt;-</span> pct_demography_age <span class="sc">%&gt;%</span></span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Age_Group <span class="sc">==</span> <span class="st">"Economically_Active"</span>) <span class="sc">%&gt;%</span></span>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>young_data <span class="ot">&lt;-</span> pct_demography_age <span class="sc">%&gt;%</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Age_Group <span class="sc">==</span> <span class="st">"Young"</span>) <span class="sc">%&gt;%</span></span>
 <span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(Pct_Age_Group))</span>
 <span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(economically_active_data<span class="sc">$</span>Pct_Age_Group)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 60.57619</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(<span class="fu">head</span>(economically_active_data, <span class="dv">10</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<table class="caption-top table table-sm table-striped small">
-<thead>
-<tr class="header">
-<th style="text-align: left;">PA</th>
-<th style="text-align: left;">Age_Group</th>
-<th style="text-align: right;">Pct_Age_Group</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td style="text-align: left;">Museum</td>
-<td style="text-align: left;">Economically_Active</td>
-<td style="text-align: right;">96.2</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">Seletar</td>
-<td style="text-align: left;">Economically_Active</td>
-<td style="text-align: right;">85.7</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">Downtown Core</td>
-<td style="text-align: left;">Economically_Active</td>
-<td style="text-align: right;">80.3</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">Orchard</td>
-<td style="text-align: left;">Economically_Active</td>
-<td style="text-align: right;">73.6</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">Tengah</td>
-<td style="text-align: left;">Economically_Active</td>
-<td style="text-align: right;">68.5</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">Singapore River</td>
-<td style="text-align: left;">Economically_Active</td>
-<td style="text-align: right;">63.3</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">Sungei Kadut</td>
-<td style="text-align: left;">Economically_Active</td>
-<td style="text-align: right;">63.3</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">Southern Islands</td>
-<td style="text-align: left;">Economically_Active</td>
-<td style="text-align: right;">62.0</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">River Valley</td>
-<td style="text-align: left;">Economically_Active</td>
-<td style="text-align: right;">60.7</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">Choa Chu Kang</td>
-<td style="text-align: left;">Economically_Active</td>
-<td style="text-align: right;">60.2</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<p>These patterns suggests that such areas are primarily dominated by working adults and may serve commercial or business purposes (Museum, Downtown Core, and Orchard), or military functions (Seletar and Tengah air bases).</p>
-</div>
-</div>
-</div>
-</section>
-<section id="young-population-aged-0-to-24" class="level5">
-<h5 class="anchored" data-anchor-id="young-population-aged-0-to-24">Young Population (Aged 0 to 24)</h5>
-<ul>
-<li>Highest concentrations of <strong>Young</strong> residents:
-<ul>
-<li>Punggol</li>
-<li>Sembawang</li>
-<li>Sengkang
-<ul>
-<li>Higher concentrations of <strong>Economically Active</strong> and lower proportions of <strong>Aged</strong></li>
-</ul></li>
-</ul></li>
-</ul>
-<div class="callout callout-style-simple callout-note no-icon callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-16-contents" aria-controls="callout-16" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon no-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Code
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-16" class="callout-16-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<div class="cell">
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>young_data <span class="ot">&lt;-</span> pct_demography_age <span class="sc">%&gt;%</span></span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Age_Group <span class="sc">==</span> <span class="st">"Young"</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(Pct_Age_Group))</span>
-<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(young_data<span class="sc">$</span>Pct_Age_Group)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(young_data<span class="sc">$</span>Pct_Age_Group)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 23.15714</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(<span class="fu">head</span>(young_data, <span class="dv">10</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(<span class="fu">head</span>(young_data, <span class="dv">10</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <table class="caption-top table table-sm table-striped small">
 <thead>
@@ -1478,6 +1396,111 @@ Code
 </div>
 </div>
 <p>These consists of newer non-mature estates (Refer to <a href="https://isss608-ay2024-25t3.netlify.app/take-home_ex/take-home_ex01/take-home_ex01#singapores-estate-classification">Section 5 Appendix: Singapore’s Estate Classification</a> such as Punggol, Sengkang, and Sembawang, which are actively being developed by the Singapore government. These are particularly appealing to newly married couples, since many of the new Build-To-Order (BTO) projects in these areas are designed for budget-conscious young families. These households will tend to include more <strong>Economically Active</strong> individuals as well.</p>
+</div>
+</div>
+</div>
+</section>
+<section id="economically-active-population-working-age-25-to-64" class="level5">
+<h5 class="anchored" data-anchor-id="economically-active-population-working-age-25-to-64">Economically Active Population (Working Age 25 to 64)</h5>
+<ul>
+<li>Extremely high proportions of <strong>working-age</strong> residents:
+<ul>
+<li>Museum</li>
+<li>Downtown Core</li>
+<li>Orchard
+<ul>
+<li>Low proportions of <strong>Young</strong> and <strong>Aged</strong> population</li>
+<li>Museum and Seletar have no recorded <strong>Aged</strong> population</li>
+</ul></li>
+</ul></li>
+</ul>
+<div class="callout callout-style-simple callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-16-contents" aria-controls="callout-16" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Code
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-16" class="callout-16-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>economically_active_data <span class="ot">&lt;-</span> pct_demography_age <span class="sc">%&gt;%</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Age_Group <span class="sc">==</span> <span class="st">"Economically_Active"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(Pct_Age_Group))</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(economically_active_data<span class="sc">$</span>Pct_Age_Group)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 60.57619</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(<span class="fu">head</span>(economically_active_data, <span class="dv">10</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: left;">PA</th>
+<th style="text-align: left;">Age_Group</th>
+<th style="text-align: right;">Pct_Age_Group</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Museum</td>
+<td style="text-align: left;">Economically_Active</td>
+<td style="text-align: right;">96.2</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Seletar</td>
+<td style="text-align: left;">Economically_Active</td>
+<td style="text-align: right;">85.7</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Downtown Core</td>
+<td style="text-align: left;">Economically_Active</td>
+<td style="text-align: right;">80.3</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Orchard</td>
+<td style="text-align: left;">Economically_Active</td>
+<td style="text-align: right;">73.6</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Tengah</td>
+<td style="text-align: left;">Economically_Active</td>
+<td style="text-align: right;">68.5</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Singapore River</td>
+<td style="text-align: left;">Economically_Active</td>
+<td style="text-align: right;">63.3</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Sungei Kadut</td>
+<td style="text-align: left;">Economically_Active</td>
+<td style="text-align: right;">63.3</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Southern Islands</td>
+<td style="text-align: left;">Economically_Active</td>
+<td style="text-align: right;">62.0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">River Valley</td>
+<td style="text-align: left;">Economically_Active</td>
+<td style="text-align: right;">60.7</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Choa Chu Kang</td>
+<td style="text-align: left;">Economically_Active</td>
+<td style="text-align: right;">60.2</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>These patterns suggests that such areas are primarily dominated by working adults and may serve commercial or business purposes (Museum, Downtown Core, and Orchard), or military functions (Seletar and Tengah air bases).</p>
 </div>
 </div>
 </div>
@@ -1736,9 +1759,10 @@ Code
 </section>
 <section id="age-distribution-by-sex" class="level2">
 <h2 class="anchored" data-anchor-id="age-distribution-by-sex"><span style="color:DarkOrange">3.3</span> Age Distribution by Sex</h2>
+<p>Singapore, like many developed countries, is facing the issue of declining birth rates and an increasingly <strong>Aging Population</strong>. This visualization aims to provide insight into Singapore’s <strong>Population</strong> pyramid and <strong>Gender</strong> distribution.</p>
 <section id="feature-engineering-3" class="level3">
 <h3 class="anchored" data-anchor-id="feature-engineering-3"><span style="color:DarkOrange">3.3.1</span> Feature Engineering</h3>
-<p>The first part of the code aggregates the <strong>Population</strong> dataset by <strong>Sex</strong>, and calculates the percentage of <strong>Males</strong> and <strong>Females</strong> by dividing it by the <strong>Total</strong>.</p>
+<p>The first part of the code aggregates the <strong>Population</strong> by <strong>Sex</strong>, and calculates the percentage of <strong>Males</strong> and <strong>Females</strong> by dividing it by the <strong>Total</strong>.</p>
 <ul>
 <li>The next section prepares for adding labels to the pie chart. The label position (<em>ypos</em>) was calculated using cumulative percentages <em>cumsum(Pct_Sex) - Pct_Sex / 2</em> since <em>coord_polar(“y”)</em> will be used to create the pie chart.</li>
 </ul>
@@ -1890,7 +1914,7 @@ Code
 </section>
 <section id="plots-and-analysis-2" class="level3">
 <h3 class="anchored" data-anchor-id="plots-and-analysis-2"><span style="color:DarkOrange">3.3.2</span> Plots and Analysis</h3>
-<p>To create an overlay violin plot (p1) comparing <strong>Age</strong> distributions between <strong>Males</strong> and <strong>Females</strong>:</p>
+<p>To create an overlaid violin plot (p1) comparing <strong>Age</strong> distributions between <strong>Males</strong> and <strong>Females</strong>:</p>
 <ul>
 <li>A <em>ggplot()</em> object was initialised to serve as the base plot that the violin plots will be overlaid on.</li>
 <li><em>geom_violin()</em> was used twice, once for each <strong>Sex</strong>, with shared x-axis <em>“All”</em> to overlay both distributions.</li>
@@ -1898,12 +1922,14 @@ Code
 <li><em>scale = “area”</em> ensures the violins are scaled proportionally to the size of their age groups.</li>
 <li>A custom fill colour was set for each sex using <em>scale_fill_manual()</em>, and <em>breaks = c(“Males”, “Females”)</em> ensures the legend appears with Males being first.</li>
 <li><em>theme(axis.text.x = element_blank())</em> hides the x-axis label since both violins are plotted at a shared position <em>“All”</em>.</li>
+<li><em>labs()</em> was used to remove the x-axis text and label the y-axis.</li>
+<li>The legend position was adjusted to the top to provide more space for pie chart (p2) to be inserted.</li>
 </ul>
 <p>The pie chart (p2) is created similarly to the bar charts in the previous sections but with the following modifications:</p>
 <ul>
 <li>Using <em>coord_polar(“y”)</em> to convert it into a pie chart by transforming the y-axis into a circular layout.</li>
-<li>Data labels were added using <em>geom_text()</em></li>
-<li>Axis titles, legend and tick marks were removed using <em>labs()</em> and <em>theme()</em>.</li>
+<li>Data labels were added using <em>geom_text()</em>.</li>
+<li>Axis titles, legend, tick marks, grid lines and plot background were removed using <em>labs()</em> and <em>theme()</em>.</li>
 </ul>
 <p>Lastly, the pie chart (p2) is overlaid over the violin plot (p2) using <em>inset_element()</em> to provide an easy overview of both plots.</p>
 <div class="tabset-margin-container"></div><div class="panel-tabset">
@@ -1931,7 +1957,7 @@ Code
 <span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a>              <span class="at">scale =</span> <span class="st">"area"</span>, <span class="at">alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
 <span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
 <span id="cb32-9"><a href="#cb32-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
-<span id="cb32-10"><a href="#cb32-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Sex"</span>,</span>
+<span id="cb32-10"><a href="#cb32-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="cn">NULL</span>,</span>
 <span id="cb32-11"><a href="#cb32-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Age"</span>,</span>
 <span id="cb32-12"><a href="#cb32-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Age Distribution by Sex"</span></span>
 <span id="cb32-13"><a href="#cb32-13" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
@@ -1967,14 +1993,15 @@ Code
 <span id="cb32-43"><a href="#cb32-43" aria-hidden="true" tabindex="-1"></a>    <span class="at">panel.grid.major =</span> <span class="fu">element_blank</span>(),</span>
 <span id="cb32-44"><a href="#cb32-44" aria-hidden="true" tabindex="-1"></a>    <span class="at">panel.grid.minor=</span> <span class="fu">element_blank</span>(),</span>
 <span id="cb32-45"><a href="#cb32-45" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.text.x =</span> <span class="fu">element_blank</span>(),</span>
-<span id="cb32-46"><a href="#cb32-46" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.ticks =</span> <span class="fu">element_blank</span>()</span>
-<span id="cb32-47"><a href="#cb32-47" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb32-48"><a href="#cb32-48" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-49"><a href="#cb32-49" aria-hidden="true" tabindex="-1"></a>p1 <span class="sc">+</span> <span class="fu">inset_element</span>(p2,</span>
-<span id="cb32-50"><a href="#cb32-50" aria-hidden="true" tabindex="-1"></a>                   <span class="at">left =</span> <span class="fl">0.48</span>,</span>
-<span id="cb32-51"><a href="#cb32-51" aria-hidden="true" tabindex="-1"></a>                   <span class="at">bottom =</span> <span class="fl">0.76</span>,</span>
-<span id="cb32-52"><a href="#cb32-52" aria-hidden="true" tabindex="-1"></a>                   <span class="at">right =</span> <span class="fl">1.3</span>,</span>
-<span id="cb32-53"><a href="#cb32-53" aria-hidden="true" tabindex="-1"></a>                   <span class="at">top =</span> <span class="fl">1.2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb32-46"><a href="#cb32-46" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.ticks =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb32-47"><a href="#cb32-47" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.background =</span> <span class="fu">element_rect</span>(<span class="at">fill =</span> <span class="st">"transparent"</span>, <span class="at">colour =</span> <span class="cn">NA</span>)</span>
+<span id="cb32-48"><a href="#cb32-48" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb32-49"><a href="#cb32-49" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-50"><a href="#cb32-50" aria-hidden="true" tabindex="-1"></a>p1 <span class="sc">+</span> <span class="fu">inset_element</span>(p2,</span>
+<span id="cb32-51"><a href="#cb32-51" aria-hidden="true" tabindex="-1"></a>                   <span class="at">left =</span> <span class="fl">0.48</span>,</span>
+<span id="cb32-52"><a href="#cb32-52" aria-hidden="true" tabindex="-1"></a>                   <span class="at">bottom =</span> <span class="fl">0.76</span>,</span>
+<span id="cb32-53"><a href="#cb32-53" aria-hidden="true" tabindex="-1"></a>                   <span class="at">right =</span> <span class="fl">1.285</span>,</span>
+<span id="cb32-54"><a href="#cb32-54" aria-hidden="true" tabindex="-1"></a>                   <span class="at">top =</span> <span class="fl">1.2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 </div>
@@ -2008,7 +2035,7 @@ Insights
 <h5 class="anchored" data-anchor-id="population-trends-age-36---60">Population Trends (Age 36 - 60)</h5>
 <ul>
 <li>The segment holds the largest proportion of Singapore’s population.</li>
-<li><strong>Gender</strong> distribution is balanced.</li>
+<li><strong>Gender</strong> distribution is balanced here.</li>
 </ul>
 </section>
 <section id="population-trends-age-above-60" class="level5">
@@ -2021,7 +2048,7 @@ Insights
 <section id="population-pyramid" class="level5">
 <h5 class="anchored" data-anchor-id="population-pyramid">Population Pyramid</h5>
 <ul>
-<li>The age distribution resembles that of an ageing population which consistent with other developed countries.</li>
+<li>The age distribution resembles that of an ageing population which is consistent with other developed countries.</li>
 </ul>
 </section>
 </div>
@@ -2039,7 +2066,7 @@ Reflections
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>I initially avoided expanding the data into individual-level observations using <em>uncount(weights = Pop)</em>, since it is possible to pass <em>weights = Pop</em> in <em>aes()</em>. However, the resulting violin plot look weird. Therefore, I tried the <em>uncount()</em> method and found that these 2 methods produces very different plots. Upon further research, I found that while <em>geom_violin()</em> can estimate the probability density function (PDF) using the weights, density estimation with weights may be less precise or behave unexpectedly depending on implementation. Therefore, I chose to use <em>uncount()</em> in the final plot above, as working with raw, individual-level distributions seems to produce more accurate and visually realistic results.</p>
+<p>I initially avoided expanding the data into individual-level observations using <em>uncount(weights = Pop)</em>, since it is possible to pass <em>weights = Pop</em> in <em>aes()</em>. However, the resulting violin plot (below) looked weird. Therefore, I tried the <em>uncount()</em> method and found that these 2 methods produces very different plots. Upon further research, I found that while <em>geom_violin()</em> can estimate the probability density function (PDF) using the weights, density estimation with weights may be less precise or behave unexpectedly depending on implementation. Therefore, I chose to use <em>uncount()</em> in the final plot above, as working with raw, individual-level distributions seems to produce more accurate and visually realistic results.</p>
 </div>
 </div>
 <p><strong>Feature Engineering</strong></p>

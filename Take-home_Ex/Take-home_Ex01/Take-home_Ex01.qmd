@@ -23,7 +23,7 @@ Assuming the role of the graphical editor of the media company, I am tasked to p
 Creating enlightening and truthful data visualizations involves focusing on accuracy, transparency, and the ability to effectively communicate insights. It is about presenting data in a way that is both informative and aesthetically pleasing, ensuring the audience can grasp the information quickly and accurately.
 :::
 
-The data should also be processed by using appropriate tidyverse family of packages and the data visualisation must be prepared using *ggplot2* and its extensions. In addition, no interactive data visualisation are required.
+The data should also be processed by using appropriate *tidyverse* family of packages and the data visualisation must be prepared using *ggplot2* and its extensions. In addition, no interactive data visualisation are required.
 
 ## [1.2]{style="color:DarkOrange"} Data Source
 
@@ -31,15 +31,15 @@ The data for this exercise is the [Singapore Residents by Planning Area / Subzon
 
 ## [1.3]{style="color:DarkOrange"} Install and Load the Required Libraries
 
-In this exercise, besides tidyverse, five R packages will be used. They are:
+These, five R packages will be used for the preparation of this exercise:
 
-1)  **tidyverse:** A collection of R packages designed for data science. It includes packages like *dplyr*, *ggplot2*, *tidyr*, and *readr* that simplify data wrangling and visualization.
-2)  **patchwork:** An R package that allows users to easily combine multiple ggplot2 plots into a single composite layout, useful for comparative visual analysis.
-3)  **ggthemes:** This package adds extra themes, scales, and geoms to ggplot2, making it easier to apply distinct themes to plots.
-4)  **knitr:** A reporting package that integrates R code with markdown, enabling dynamic report generation in formats such as HTML, PDF, and Word, often used with R Markdown and Quarto.
-5)  **cowplot:** An extension of ggplot2 that simplifies plot arrangement and annotation. It provides functions like *ggdraw()* and *draw_plot()* for overlaying and aligning plots, often used for fine-tuned visual layouts.
+1.  **tidyverse:** A collection of R packages designed for data science. It includes packages like *dplyr*, *ggplot2*, *tidyr*, and *readr* that simplify data wrangling and visualization.
+2.  **patchwork:** An R package that allows users to easily combine multiple *ggplot2* plots into a single composite layout, useful for comparative visual analysis.
+3.  **ggthemes:** This package adds extra themes, scales, and geoms to *ggplot2*, making it easier to apply distinct themes to plots.
+4.  **knitr:** A reporting package that integrates R code with markdown, enabling dynamic report generation in formats such as HTML, PDF, and Word, often used with R Markdown and Quarto.
+5.  **cowplot:** An extension of *ggplot2* that simplifies plot arrangement and annotation. It provides functions like *ggdraw()* and *draw_plot()* for overlaying and aligning plots, often used for fine-tuned visual layouts.
 
-Code chunk below will be used to check if these packages have been installed and also load them onto my working R environment.
+Code chunk below will be used to check if these packages have been installed and also load them onto the working R environment.
 
 ::: {.callout-note appearance="minimal" collapse="true"}
 ## Code
@@ -53,7 +53,7 @@ pacman::p_load(tidyverse, patchwork, ggthemes, knitr, cowplot)
 
 For the purpose of this exercise, a data file called *respopagesex2024* will be used. It consists of data about Singapore Residents by Planning Area / Subzone, categorised by a Single Year of Age and Sex,for June 2024. It is in a csv file format.
 
-The code chunk below imports *respopagesex2024.csv* into R environment by using read_csv() function of readr package (under tidyverse).
+The code chunk below imports *respopagesex2024.csv* into R environment by using *read_csv()* function of *readr* package (under *tidyverse*).
 
 ::: {.callout-note appearance="minimal" collapse="true"}
 ## Code
@@ -65,7 +65,7 @@ sg_data <- read_csv("data/respopagesex2024.csv")
 
 # [2]{style="color:DarkOrange"} Exploratory Data Analysis (EDA)
 
-There are a total of six attributes in the sg_data tibble data frame. Four of them are categorical data type and the other two are in continuous data type.
+There are a total of six attributes in the *sg_data* tibble data frame. Four of them are categorical data type and the other two are in continuous data type.
 
 ::::: columns
 ::: {.column width="50%"}
@@ -127,7 +127,7 @@ duplicate
 
 ## [2.2]{style="color:DarkOrange"} Fixing Age Column Inconsistency
 
-Although there are no duplicated records, the earlier EDA of variable types and the data table revealed that the **Age** column, which appears to be a continuous variable, was incorrectly recognised as a categorical variable.
+Although there were no duplicated records, the earlier EDA of variable types and the data table revealed that the **Age** column, which appears to be a continuous variable, was incorrectly recognised as a categorical variable.
 
 Upon further analysis of the **Age** column using the code below, it was found to contain 91 unique values. These values range from 0 to 89 and are numeric in nature, but the last value is a string, *"90_and_Over"*. This string caused the **Age** column to be recognised as a categorical variable instead of a continuous one.
 
@@ -200,10 +200,10 @@ This section examines the distribution of Singapore's **Population** across **Pl
 
 ### [3.1.1]{style="color:DarkOrange"} Feature Engineering
 
-In this step, the following features were added to support the visual analysis later:
+In this step, the following features were added to support in the visual analysis later:
 
--   The dataset *sg_data* was grouped by **Planning Area (PA)** and **Sex** to calculate the **Population (Pop)** for each subgroup using *summarise(Pop = sum(Pop))*.
--   A second grouping by **PA** was performed to calculate the **Total** population per **PA**, stored in a new column **Total**.
+-   The dataset *sg_data* was grouped by **PA** and **Sex** to calculate the **Pop** for each subgroup using *summarise(Pop = sum(Pop))*.
+-   A second group by **PA** was performed to calculate the **Total** population per **PA**, stored in a new column **Total**.
 -   Rows with a **Total** population of 0 were removed using *filter(Total \> 0)* to eliminate empty **PAs** from the analysis.
 -   The resulting data structure, *demography_sex*, now contains the **Total** population broken down by **Sex** and **PA**, along with overall population **Total** per **PA**.
 
@@ -230,29 +230,29 @@ kable(head(demography_sex, 10))
 
 The aim is to create a detailed view of **Population** distribution by **Sex** across Singapore’s **Planning Areas**. These were the steps taken to create a stacked horizontal bar chart for visualisation:
 
-Horizontal Bar Chart s1: 
+[Horizontal Bar Chart s1:]{.underline}
 
-- To create a horizontal bar chart with population **Total** in descending order, the **PA** was initially ordered by ascending **Total** using the *pa_order()* vector. Although the factor levels were arranged in ascending order, the use of *coord_flip()* in the plot reverses the axis orientation, resulting in **Total** being displayed in descending order as intended. 
-- Similar to the reason above, the **Sex** variable was converted into a factor with levels set as **Females** first, followed by **Males**, such that it will appear as **Males** followed by **Females** in the stacked bar chart. 
-- *ggplot()* was used with *geom_bar() (with stat = "identity" and position = "stack")* to create a stacked horizontal bar chart (s1), displaying the **Pop** by **Sex** across **PA**. 
-- *theme_minimal()* was applied for a clean visual style, and *labs()* with *ggtitle()* were used to customise the axis labels and plot title. 
-- *scale_fill_manual()* was used to assign distinct colours to **Males and Females** and to control the legend order, explicitly setting it as: Males -\> Females instead of the reversed order if left as default. 
-- *scale_y_continuous(labels = scales::comma)* was used to show numerical numbers rather than the scientific notation.
-- *theme(legend.position = "bottom")* was used to move the legend position from the right to the bottom to allow the plot to be wider.
+-   To create a horizontal bar chart with population **Total** in descending order, the **PA** was initially ordered by ascending **Total** using the *pa_order()* vector. Although the factor levels were arranged in ascending order, the use of *coord_flip()* in the plot reverses the axis orientation, resulting in **Total** being displayed in descending order as intended.
+-   Similar to the reason above, the **Sex** variable was converted into a factor with levels set as **Females** first, followed by **Males**, such that it will appear as **Males** followed by **Females** in the stacked bar chart.
+-   *ggplot()* was used with *geom_bar() (with stat = "identity" and position = "stack")* to create a stacked horizontal bar chart (s1), displaying the **Pop** by **Sex** across **PA**.
+-   *theme_minimal()* was applied for a clean visual style, and *labs()* with *ggtitle()* were used to customise the axis labels and plot title.
+-   *scale_fill_manual()* was used to assign distinct colours to **Males and Females** and to control the legend order, explicitly setting it as: Males → Females instead of the reversed order if left as default.
+-   *scale_y_continuous(labels = scales::comma)* was used to show numerical numbers rather than the scientific notation.
+-   *theme(legend.position = "bottom")* was used to move the legend position from the right to the bottom to allow the plot to be wider.
 
-Zoomed-in Plot s2: 
+[Zoomed-in Plot s2:]{.underline}
 
-- A zoomed-in plot (s2) shows the bottom 10 **PA** and was embedded into the main plot using *inset_element()* (under *patchwork*). This method makes it easier to examine less populous **PAs** in the same figure. 
-- Since the zoomed-in plot (s2) was overlaid on top of the main chart (s1), *theme_test()* was used to provide a contrast with the s1 plot in the background.
-- The legend was removed and background was removed using *theme()* and the axis titles were removed using *labs()* for a cleaner plot.
+-   A zoomed-in plot (s2) shows the bottom 10 **PA** and will be embedded into the main plot later. This method makes it easier to examine less populous **PAs** in the same figure.
+-   Since the zoomed-in plot (s2) will be overlaid on top of the main chart (s1), *theme_test()* was used to provide a contrast with the main s1 plot in the background.
+-   The legend and background was removed using *theme()* and the axis titles were removed using *labs()* for a cleaner plot.
 
-Zoom Rectangle: 
+[Zoom Rectangle:]{.underline}
 
-- Created as a transparent dotted line rectangle to highlight the zoomed-in location using *cowplot()*.
+-   This was created using *cowplot()* to be a transparent dotted line rectangle to allow highlighting of the zoomed-in location.
 
-Overlaid Plots: 
+[Overlaid Plots:]{.underline}
 
-- *ggdraw()* was used to create an empty canvas, and *draw_plot()* was used to overlay s1, s2, and the zoom rectangles. These functions are part of the *cowplot* package and allows the zoom-in area to be highlighted.
+-   *ggdraw()* was used to create an empty canvas, and *draw_plot()* was used to overlay s1, s2, and the zoom rectangles. All these functions are a part of the *cowplot* package.
 
 ::: panel-tabset
 ## Plot
@@ -440,14 +440,14 @@ ggdraw() +
 ##### Residential Areas
 
 -   The most populated **PAs** consists of a mix of mature estates (e.g., Tampines, Bedok) and newer estates (e.g, Sengkang, Jurong West, Woodlands) (Refer to [Section 5 Appendix: Singapore's Estate Classification](https://isss608-ay2024-25t3.netlify.app/take-home_ex/take-home_ex01/take-home_ex01#singapores-estate-classification)
--   This reflects Singapore's government direction and success in transforming newer towns or underutilised land into well-developed residential hubs comparable to mature estates.
+-   This reflects the government of Singapore's success in transforming newer towns or underutilised land into well-developed residential hubs that are comparable to existing mature estates.
 
 ##### Commercial / Industrial /Military Areas
 
--   The least populated **PAs** are primarily non-residential zones.
--   Commercial: Museum, Orchard
--   Industrial: Sungei Kadut
--   Military/Nature: Seletar (air base), Western Water Catchment
+-   The least populated **PAs** are primarily non-residential zones such as:
+    -   Commercial: Museum, Orchard
+    -   Industrial: Sungei Kadut
+    -   Military/Nature: Seletar (air base), Western Water Catchment
 :::
 
 ### [3.2.3]{style="color:DarkOrange"} Reflections
@@ -457,19 +457,19 @@ ggdraw() +
 
 The *ggforce* package includes the *facet_zoom()* function that allows for zooming in on a part of a plot and automatically draws a box to indicate the zoomed region.
 
-However, *facet_zoom()* does not support zooming in on discrete scales like the bottom 10 **PAs** in **Pop**. Therefore, I manually created a separate zoomed-in plot (s2) and a zoom rectangle to highlight the region that will be zoomed-in.
+However, *facet_zoom()* does not support zooming in on discrete scales like the bottom 10 **PAs** in **Pop**. Therefore, I had manually created a separate zoomed-in plot (s2) and the zoom rectangles to highlight the region that will be zoomed-in.
 :::
 
 ## [3.2]{style="color:DarkOrange"} Percentage of Age Groups Across Planning Areas
 
-This visualisation aims to show the percentage distribution of **Age Groups** (Young, Economically_Active and Aged) across **Planning Areas**. This will provide insights into how Singapore residents, in different stages of life, are demographically distributed across Singapore.
+This visualisation aims to show the percentage distribution of **Age Groups** (Young, Economically_Active and Aged) across **Planning Areas**. This will provide insights into how Singapore residents, in different stages of life, were distributed across Singapore.
 
 ### [3.2.1]{style="color:DarkOrange"} Feature Engineering
 
 The following steps were done in preparation for visual analysis:
 
 -   The dataset *sg_data* was grouped by **PA** and **Age_Group** to calculate the **Pop** for each subgroup using *summarise(Pop = sum(Pop))*.
--   A second grouping by **PA** was performed to compute the **Total** population per **PA**, stored in a new column **Total** using *mutate(Total = sum(Pop))*.
+-   A second group by **PA** was performed to compute the **Total** population per **PA**, stored in a new column **Total** using *mutate(Total = sum(Pop))*.
 -   Rows with a **Total** population of 0 were removed using *filter(Total \> 0)* to eliminate empty **PAs** from the analysis.
 -   The data was then transformed to compute percentage composition of each **Age Group** within each **PA** using *mutate(Pct_Age_Group = (Pop / Total) \* 100)*.
 -   Percentages of **Age Group** were rounded to 1 decimal place using *mutate(across(Pct_Age_Group, \~ round(.x, 1)))*.
@@ -502,12 +502,12 @@ kable(head(pct_demography_age, 10))
 
 ### [3.2.2]{style="color:DarkOrange"} Plots and Analysis
 
-To visualize the distribution of age groups across planning areas, the following plotting steps were performed:
+To visualize the percentage distribution of **Age Groups** across **Planning Areas**, the following plotting steps were performed:
 
--   The **PA** order in this plot matches the order used in [Section 3.1: Population Across Planning Areas by Sex](https://isss608-ay2024-25t3.netlify.app/take-home_ex/take-home_ex01/take-home_ex01#population-across-planning-areas-by-sex), allowing for easy comparisons between them.
+-   The **PA** order in this plot was assigned to match the order used in [Section 3.1: Population Across Planning Areas by Sex](https://isss608-ay2024-25t3.netlify.app/take-home_ex/take-home_ex01/take-home_ex01#plots-and-analysis), allowing for easy comparisons between them.
 -   The **Age Group** variable was explicitly ordered as **Aged** → **Economically Active** → **Young** so that the stacked bars chart will be in the reversed order after *coord_flip()*.
-- The legend position was set to be at the bottom using *theme(legend.position = "bottom")*.
--   The remaining functions have been explained in the plot above in [Section 3.1: Population Across Planning Areas by Sex](https://isss608-ay2024-25t3.netlify.app/take-home_ex/take-home_ex01/take-home_ex01#population-across-planning-areas-by-sex).
+-   The legend position was set to be at the bottom using *theme(legend.position = "bottom")*.
+-   The remaining functions have been explained in the plot above in [Section 3.1: Population Across Planning Areas by Sex](https://isss608-ay2024-25t3.netlify.app/take-home_ex/take-home_ex01/take-home_ex01#plots-and-analysis).
 
 ::: panel-tabset
 ## Plot
@@ -579,6 +579,30 @@ ggplot(data = pct_demography_age,
 ```
 :::
 
+##### Young Population (Aged 0 to 24)
+
+-   Highest concentrations of **Young** residents:
+    -   Punggol
+    -   Sembawang
+    -   Sengkang
+        -   Higher concentrations of **Economically Active** and lower proportions of **Aged**
+
+::: {.callout-note appearance="minimal" collapse="true"}
+## Code
+
+```{r}
+young_data <- pct_demography_age %>%
+  filter(Age_Group == "Young") %>%
+  arrange(desc(Pct_Age_Group))
+
+mean(young_data$Pct_Age_Group)
+
+kable(head(young_data, 10))
+```
+
+These consists of newer non-mature estates (Refer to [Section 5 Appendix: Singapore's Estate Classification](https://isss608-ay2024-25t3.netlify.app/take-home_ex/take-home_ex01/take-home_ex01#singapores-estate-classification) such as Punggol, Sengkang, and Sembawang, which are actively being developed by the Singapore government. These are particularly appealing to newly married couples, since many of the new Build-To-Order (BTO) projects in these areas are designed for budget-conscious young families. These households will tend to include more **Economically Active** individuals as well.
+:::
+
 ##### Economically Active Population (Working Age 25 to 64)
 
 -   Extremely high proportions of **working-age** residents:
@@ -602,30 +626,6 @@ kable(head(economically_active_data, 10))
 ```
 
 These patterns suggests that such areas are primarily dominated by working adults and may serve commercial or business purposes (Museum, Downtown Core, and Orchard), or military functions (Seletar and Tengah air bases).
-:::
-
-##### Young Population (Aged 0 to 24)
-
--   Highest concentrations of **Young** residents:
-    -   Punggol
-    -   Sembawang
-    -   Sengkang
-        -   Higher concentrations of **Economically Active** and lower proportions of **Aged**
-
-::: {.callout-note appearance="minimal" collapse="true"}
-## Code
-
-```{r}
-young_data <- pct_demography_age %>%
-  filter(Age_Group == "Young") %>%
-  arrange(desc(Pct_Age_Group))
-
-mean(young_data$Pct_Age_Group)
-
-kable(head(young_data, 10))
-```
-
-These consists of newer non-mature estates (Refer to [Section 5 Appendix: Singapore's Estate Classification](https://isss608-ay2024-25t3.netlify.app/take-home_ex/take-home_ex01/take-home_ex01#singapores-estate-classification) such as Punggol, Sengkang, and Sembawang, which are actively being developed by the Singapore government. These are particularly appealing to newly married couples, since many of the new Build-To-Order (BTO) projects in these areas are designed for budget-conscious young families. These households will tend to include more **Economically Active** individuals as well.
 :::
 
 ##### Aged Population (Aged 65 and above)
@@ -786,10 +786,11 @@ ggplot(data = pct_demography,
 :::
 
 ## [3.3]{style="color:DarkOrange"} Age Distribution by Sex
+Singapore, like many developed countries, is facing the issue of declining birth rates and an increasingly **Aging Population**. This visualization aims to provide insight into Singapore’s **Population** pyramid and **Gender** distribution.
 
 ### [3.3.1]{style="color:DarkOrange"} Feature Engineering
 
-The first part of the code aggregates the **Population** dataset by **Sex**, and calculates the percentage of **Males** and **Females** by dividing it by the **Total**.
+The first part of the code aggregates the **Population** by **Sex**, and calculates the percentage of **Males** and **Females** by dividing it by the **Total**.
 
 -   The next section prepares for adding labels to the pie chart. The label position (*ypos*) was calculated using cumulative percentages *cumsum(Pct_Sex) - Pct_Sex / 2* since *coord_polar("y")* will be used to create the pie chart.
 
@@ -842,7 +843,7 @@ demography_females <- demography_sex_age %>%
 
 ### [3.3.2]{style="color:DarkOrange"} Plots and Analysis
 
-To create an overlay violin plot (p1) comparing **Age** distributions between **Males** and **Females**:
+To create an overlaid violin plot (p1) comparing **Age** distributions between **Males** and **Females**:
 
 -   A *ggplot()* object was initialised to serve as the base plot that the violin plots will be overlaid on.
 -   *geom_violin()* was used twice, once for each **Sex**, with shared x-axis *"All"* to overlay both distributions.
@@ -850,13 +851,13 @@ To create an overlay violin plot (p1) comparing **Age** distributions between **
 -   *scale = "area"* ensures the violins are scaled proportionally to the size of their age groups.
 -   A custom fill colour was set for each sex using *scale_fill_manual()*, and *breaks = c("Males", "Females")* ensures the legend appears with Males being first.
 -   *theme(axis.text.x = element_blank())* hides the x-axis label since both violins are plotted at a shared position *"All"*.
-- *labs()* was used to remove the x-axis and label the y-axis.
--  The legend position was adjusted to the top to provide more space for pie chart (p2) to be inserted.
+-   *labs()* was used to remove the x-axis text and label the y-axis.
+-   The legend position was adjusted to the top to provide more space for pie chart (p2) to be inserted.
 
 The pie chart (p2) is created similarly to the bar charts in the previous sections but with the following modifications:
 
 -   Using *coord_polar("y")* to convert it into a pie chart by transforming the y-axis into a circular layout.
--   Data labels were added using *geom_text()*
+-   Data labels were added using *geom_text()*.
 -   Axis titles, legend, tick marks, grid lines and plot background were removed using *labs()* and *theme()*.
 
 Lastly, the pie chart (p2) is overlaid over the violin plot (p2) using *inset_element()* to provide an easy overview of both plots.
@@ -1004,7 +1005,7 @@ p1 + inset_element(p2,
 ##### Population Trends (Age 36 - 60)
 
 -   The segment holds the largest proportion of Singapore's population.
--   **Gender** distribution is balanced.
+-   **Gender** distribution is balanced here.
 
 ##### Population Trends (Age Above 60)
 
@@ -1013,7 +1014,7 @@ p1 + inset_element(p2,
 
 ##### Population Pyramid
 
--   The age distribution resembles that of an ageing population which consistent with other developed countries.
+-   The age distribution resembles that of an ageing population which is consistent with other developed countries.
 :::
 
 ### [3.3.3]{style="color:DarkOrange"} Reflections and Initial Workings
@@ -1021,7 +1022,7 @@ p1 + inset_element(p2,
 ::: callout-important
 ## Reflections
 
-I initially avoided expanding the data into individual-level observations using *uncount(weights = Pop)*, since it is possible to pass *weights = Pop* in *aes()*. However, the resulting violin plot look weird. Therefore, I tried the *uncount()* method and found that these 2 methods produces very different plots. Upon further research, I found that while *geom_violin()* can estimate the probability density function (PDF) using the weights, density estimation with weights may be less precise or behave unexpectedly depending on implementation. Therefore, I chose to use *uncount()* in the final plot above, as working with raw, individual-level distributions seems to produce more accurate and visually realistic results.
+I initially avoided expanding the data into individual-level observations using *uncount(weights = Pop)*, since it is possible to pass *weights = Pop* in *aes()*. However, the resulting violin plot (below) looked weird. Therefore, I tried the *uncount()* method and found that these 2 methods produces very different plots. Upon further research, I found that while *geom_violin()* can estimate the probability density function (PDF) using the weights, density estimation with weights may be less precise or behave unexpectedly depending on implementation. Therefore, I chose to use *uncount()* in the final plot above, as working with raw, individual-level distributions seems to produce more accurate and visually realistic results.
 :::
 
 **Feature Engineering**
