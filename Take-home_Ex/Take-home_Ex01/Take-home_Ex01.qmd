@@ -226,7 +226,7 @@ kable(head(demography_sex, 10))
 ```
 :::
 
-### [3.1.2]{style="color:DarkOrange"} Plots and Analysis
+### [3.1.2]{style="color:DarkOrange"} Methods and Explanation
 
 The aim is to create a detailed view of **Population** distribution by **Sex** across Singapore’s **Planning Areas**. These were the steps taken to create a stacked horizontal bar chart for visualisation:
 
@@ -253,6 +253,8 @@ The aim is to create a detailed view of **Population** distribution by **Sex** a
 [Overlaid Plots:]{.underline}
 
 -   *ggdraw()* was used to create an empty canvas, and *draw_plot()* was used to overlay s1, s2, and the zoom rectangles. All these functions are a part of the *cowplot* package.
+
+### [3.1.3]{style="color:DarkOrange"} Plots and Analysis
 
 ::: panel-tabset
 ## Plot
@@ -450,7 +452,7 @@ ggdraw() +
     -   Military/Nature: Seletar (air base), Western Water Catchment
 :::
 
-### [3.2.3]{style="color:DarkOrange"} Reflections
+### [3.2.4]{style="color:DarkOrange"} Reflections
 
 ::: callout-important
 ## Reflections
@@ -500,14 +502,16 @@ kable(head(pct_demography_age, 10))
 ```
 :::
 
-### [3.2.2]{style="color:DarkOrange"} Plots and Analysis
+### [3.2.2]{style="color:DarkOrange"} Methods and Explanation
 
 To visualize the percentage distribution of **Age Groups** across **Planning Areas**, the following plotting steps were performed:
 
--   The **PA** order in this plot was assigned to match the order used in [Section 3.1: Population Across Planning Areas by Sex](https://isss608-ay2024-25t3.netlify.app/take-home_ex/take-home_ex01/take-home_ex01#plots-and-analysis), allowing for easy comparisons between them.
+-   The **PA** order in this plot was assigned to match the order used in [Section 3.1.3: Population Across Planning Areas by Sex](https://isss608-ay2024-25t3.netlify.app/take-home_ex/take-home_ex01/take-home_ex01#plots-and-analysis), allowing for easy comparisons between them.
 -   The **Age Group** variable was explicitly ordered as **Aged** → **Economically Active** → **Young** so that the stacked bars chart will be in the reversed order after *coord_flip()*.
 -   The legend position was set to be at the bottom using *theme(legend.position = "bottom")*.
--   The remaining functions have been explained in the plot above in [Section 3.1: Population Across Planning Areas by Sex](https://isss608-ay2024-25t3.netlify.app/take-home_ex/take-home_ex01/take-home_ex01#plots-and-analysis).
+-   The remaining functions have been explained in the plot above in [Section 3.1.2: Population Across Planning Areas by Sex](https://isss608-ay2024-25t3.netlify.app/take-home_ex/take-home_ex01/take-home_ex01#methods-and-explanation).
+
+### [3.2.3]{style="color:DarkOrange"} Plots and Analysis
 
 ::: panel-tabset
 ## Plot
@@ -666,7 +670,7 @@ These are mainly mature estates with a higher proportion of **elderly** resident
 -   This reflects their appeal to new families, likely due to the availability and price of new housing developments.
 :::
 
-### [3.2.3]{style="color:DarkOrange"} Reflections and Initial Workings
+### [3.2.4]{style="color:DarkOrange"} Reflections and Initial Workings
 
 ::: callout-important
 ## Reflections
@@ -838,7 +842,7 @@ demography_females <- demography_sex_age %>%
 ```
 :::
 
-### [3.3.2]{style="color:DarkOrange"} Plots and Analysis
+### [3.3.2]{style="color:DarkOrange"} Methods and Explanation
 
 To create an overlaid violin plot (p1) comparing **Age** distributions between **Males** and **Females**:
 
@@ -858,6 +862,8 @@ The pie chart (p2) is created similarly to the bar charts in the previous sectio
 -   Axis titles, legend, tick marks, grid lines and plot background were removed using *labs()* and *theme()*.
 
 Lastly, the pie chart (p2) is overlaid over the violin plot (p2) using *inset_element()* to provide an easy overview of both plots.
+
+### [3.3.3]{style="color:DarkOrange"} Plots and Analysis
 
 ::: panel-tabset
 ## Plot
@@ -1014,7 +1020,7 @@ p1 + inset_element(p2,
 -   The age distribution resembles that of an ageing population which is consistent with other developed countries.
 :::
 
-### [3.3.3]{style="color:DarkOrange"} Reflections and Initial Workings
+### [3.3.4]{style="color:DarkOrange"} Reflections and Initial Workings
 
 ::: callout-important
 ## Reflections
