@@ -230,20 +230,36 @@ kable(head(demography_sex, 10))
 
 The aim is to create a detailed view of **Population** distribution by **Sex** across Singapore’s **Planning Areas**. These were the steps taken to create a stacked horizontal bar chart for visualisation:
 
-Horizontal Bar Chart s1: - To create a horizontal bar chart with population **Total** in descending order, the **PA** was initially ordered by ascending **Total** using the *pa_order()* vector. Although the factor levels were arranged in ascending order, the use of *coord_flip()* in the plot reverses the axis orientation, resulting in **Total** being displayed in descending order as intended. - Similar to the reason above, the **Sex** variable was converted into a factor with levels set as **Females** first, followed by **Males**, such that it will appear as **Males** followed by **Females** in the stacked bar chart. - *ggplot()* was used with *geom_bar() (with stat = "identity" and position = "stack")* to create a stacked horizontal bar chart (s1), displaying the **Pop** by **Sex** across **PA**. - *theme_minimal()* was applied for a clean visual style, and *labs()* with *ggtitle()* were used to customise the axis labels and plot title. - *scale_fill_manual()* was used to assign distinct colours to **Males and Females** and to control the legend order, explicitly setting it as: Males -\> Females instead of the reversed order if left as default. - *scale_y_continuous(labels = scales::comma)* was used to show numerical numbers rather than the scientific notation.
+Horizontal Bar Chart s1: 
 
-Zoomed-in Plot s2: - A zoomed-in plot (s2) shows the bottom 10 **PA** and was embedded into the main plot using *inset_element()* (under *patchwork*). This method makes it easier to examine less populous **PAs** in the same figure. - Since the zoomed-in plot (s2) was overlaid on top of the main chart (s1), *theme_test()* was used to provide a contrast with the s1 plot in the background.
+- To create a horizontal bar chart with population **Total** in descending order, the **PA** was initially ordered by ascending **Total** using the *pa_order()* vector. Although the factor levels were arranged in ascending order, the use of *coord_flip()* in the plot reverses the axis orientation, resulting in **Total** being displayed in descending order as intended. 
+- Similar to the reason above, the **Sex** variable was converted into a factor with levels set as **Females** first, followed by **Males**, such that it will appear as **Males** followed by **Females** in the stacked bar chart. 
+- *ggplot()* was used with *geom_bar() (with stat = "identity" and position = "stack")* to create a stacked horizontal bar chart (s1), displaying the **Pop** by **Sex** across **PA**. 
+- *theme_minimal()* was applied for a clean visual style, and *labs()* with *ggtitle()* were used to customise the axis labels and plot title. 
+- *scale_fill_manual()* was used to assign distinct colours to **Males and Females** and to control the legend order, explicitly setting it as: Males -\> Females instead of the reversed order if left as default. 
+- *scale_y_continuous(labels = scales::comma)* was used to show numerical numbers rather than the scientific notation.
+- *theme(legend.position = "bottom")* was used to move the legend position from the right to the bottom to allow the plot to be wider.
 
-Zoom Rectangle: - Created as a transparent dotted line rectangle to highlight the zoomed-in location using *cowplot()*.
+Zoomed-in Plot s2: 
 
-Overlaid Plots: - *ggdraw()* was used to create an empty canvas, and *draw_plot()* was used to overlay s1, s2, and the zoom rectangle. These functions are part of the *cowplot* package.
+- A zoomed-in plot (s2) shows the bottom 10 **PA** and was embedded into the main plot using *inset_element()* (under *patchwork*). This method makes it easier to examine less populous **PAs** in the same figure. 
+- Since the zoomed-in plot (s2) was overlaid on top of the main chart (s1), *theme_test()* was used to provide a contrast with the s1 plot in the background.
+- The legend was removed and background was removed using *theme()* and the axis titles were removed using *labs()* for a cleaner plot.
+
+Zoom Rectangle: 
+
+- Created as a transparent dotted line rectangle to highlight the zoomed-in location using *cowplot()*.
+
+Overlaid Plots: 
+
+- *ggdraw()* was used to create an empty canvas, and *draw_plot()* was used to overlay s1, s2, and the zoom rectangles. These functions are part of the *cowplot* package and allows the zoom-in area to be highlighted.
 
 ::: panel-tabset
 ## Plot
 
 ```{r}
 #| echo: false
-#| fig-width: 9
+#| fig-width: 8
 #| fig-height: 6
 pa_order <- demography_sex %>%
   distinct(PA, Total) %>%
@@ -274,7 +290,10 @@ s1 <- ggplot(data = demography_sex,
     ),
     breaks = c("Males", "Females")
   ) +
-  scale_y_continuous(labels = scales::comma)
+  scale_y_continuous(labels = scales::comma) +
+  theme(
+    legend.position = "bottom"
+  )
 
 demography_sex_bottom10 <- demography_sex %>%
   filter(PA %in% head(pa_order, 10))
@@ -307,15 +326,16 @@ zoom_rect <- ggplot() +
 
 ggdraw() +
   draw_plot(s1, 0, 0, 1, 1) +
-  draw_plot(s2, 0.35, 0.1, 0.5, 0.26) +
-  draw_plot(zoom_rect, 0.005, 0.068, 0.26, 0.225)
+  draw_plot(s2, 0.4, 0.185, 0.56, 0.25) +
+  draw_plot(zoom_rect, 0.005, 0.155, 0.3, 0.206) +
+  draw_plot(zoom_rect, 0.37, 0.18, 0.62, 0.27) # (left , btm, right, top)
 ```
 
 ## Code
 
 ```{r}
 #| eval: false
-#| fig-width: 9
+#| fig-width: 8
 #| fig-height: 6
 pa_order <- demography_sex %>%
   distinct(PA, Total) %>%
@@ -346,7 +366,10 @@ s1 <- ggplot(data = demography_sex,
     ),
     breaks = c("Males", "Females")
   ) +
-  scale_y_continuous(labels = scales::comma)
+  scale_y_continuous(labels = scales::comma) +
+  theme(
+    legend.position = "bottom"
+  )
 
 demography_sex_bottom10 <- demography_sex %>%
   filter(PA %in% head(pa_order, 10))
@@ -379,8 +402,9 @@ zoom_rect <- ggplot() +
 
 ggdraw() +
   draw_plot(s1, 0, 0, 1, 1) +
-  draw_plot(s2, 0.35, 0.1, 0.5, 0.26) +
-  draw_plot(zoom_rect, 0.005, 0.068, 0.26, 0.225)
+  draw_plot(s2, 0.4, 0.185, 0.56, 0.25) +
+  draw_plot(zoom_rect, 0.005, 0.155, 0.3, 0.206) +
+  draw_plot(zoom_rect, 0.37, 0.18, 0.62, 0.27) # (left , btm, right, top)
 ```
 :::
 
@@ -482,6 +506,7 @@ To visualize the distribution of age groups across planning areas, the following
 
 -   The **PA** order in this plot matches the order used in [Section 3.1: Population Across Planning Areas by Sex](https://isss608-ay2024-25t3.netlify.app/take-home_ex/take-home_ex01/take-home_ex01#population-across-planning-areas-by-sex), allowing for easy comparisons between them.
 -   The **Age Group** variable was explicitly ordered as **Aged** → **Economically Active** → **Young** so that the stacked bars chart will be in the reversed order after *coord_flip()*.
+- The legend position was set to be at the bottom using *theme(legend.position = "bottom")*.
 -   The remaining functions have been explained in the plot above in [Section 3.1: Population Across Planning Areas by Sex](https://isss608-ay2024-25t3.netlify.app/take-home_ex/take-home_ex01/take-home_ex01#population-across-planning-areas-by-sex).
 
 ::: panel-tabset
@@ -489,7 +514,7 @@ To visualize the distribution of age groups across planning areas, the following
 
 ```{r}
 #| echo: false
-#| fig-width: 9
+#| fig-width: 8
 #| fig-height: 6
 pct_demography_age <- pct_demography_age %>%
   mutate(PA = factor(PA, levels = pa_order),
@@ -513,6 +538,9 @@ ggplot(data = pct_demography_age,
       "Aged" = "#AA4499"
     ),
     breaks = c("Young", "Economically_Active", "Aged")
+  ) +
+  theme(
+    legend.position = "bottom"
   )
 ```
 
@@ -520,7 +548,7 @@ ggplot(data = pct_demography_age,
 
 ```{r}
 #| eval: false
-#| fig-width: 9
+#| fig-width: 8
 #| fig-height: 6
 pct_demography_age <- pct_demography_age %>%
   mutate(PA = factor(PA, levels = pa_order),
@@ -544,6 +572,9 @@ ggplot(data = pct_demography_age,
       "Aged" = "#AA4499"
     ),
     breaks = c("Young", "Economically_Active", "Aged")
+  ) +
+  theme(
+    legend.position = "bottom"
   )
 ```
 :::
@@ -819,12 +850,14 @@ To create an overlay violin plot (p1) comparing **Age** distributions between **
 -   *scale = "area"* ensures the violins are scaled proportionally to the size of their age groups.
 -   A custom fill colour was set for each sex using *scale_fill_manual()*, and *breaks = c("Males", "Females")* ensures the legend appears with Males being first.
 -   *theme(axis.text.x = element_blank())* hides the x-axis label since both violins are plotted at a shared position *"All"*.
+- *labs()* was used to remove the x-axis and label the y-axis.
+-  The legend position was adjusted to the top to provide more space for pie chart (p2) to be inserted.
 
 The pie chart (p2) is created similarly to the bar charts in the previous sections but with the following modifications:
 
 -   Using *coord_polar("y")* to convert it into a pie chart by transforming the y-axis into a circular layout.
 -   Data labels were added using *geom_text()*
--   Axis titles, legend and tick marks were removed using *labs()* and *theme()*.
+-   Axis titles, legend, tick marks, grid lines and plot background were removed using *labs()* and *theme()*.
 
 Lastly, the pie chart (p2) is overlaid over the violin plot (p2) using *inset_element()* to provide an easy overview of both plots.
 
@@ -833,7 +866,7 @@ Lastly, the pie chart (p2) is overlaid over the violin plot (p2) using *inset_el
 
 ```{r}
 #| echo: false
-#| fig-width: 9
+#| fig-width: 8
 #| fig-height: 6
 p1 <- ggplot() +
   geom_violin(data = demography_females, 
@@ -844,7 +877,7 @@ p1 <- ggplot() +
               scale = "area", alpha = 0.5) +
   theme_minimal() +
   labs(
-    x = "Sex",
+    x = NULL,
     y = "Age",
     title = "Age Distribution by Sex"
   ) +
@@ -855,16 +888,20 @@ p1 <- ggplot() +
       "Females" = "#CC6677"),
     breaks = c("Males", "Females")
   ) +
-  theme(axis.text.x = element_blank()) +
+  theme(
+    axis.text.x = element_blank(),
+    legend.position = "top"
+  ) +
   scale_y_continuous(breaks = seq(0, 90, by = 10))
 
 p2 <- ggplot(pct_total_by_sex, aes(x = "", y = Pct_Sex, fill = Sex)) +
-  geom_bar(stat = "identity", color = "black") +
+  geom_bar(stat = "identity", color = "black", alpha = 0.5) +
   coord_polar("y") +
   theme_test() +
   labs(title = "Population by Sex") +
   scale_fill_manual(
-    values = c("Males" = "#88CCEE", "Females" = "#CC6677")
+    values = c("Males" = "#88CCEE",
+               "Females" = "#CC6677")
   ) +
   labs(
     x = NULL,
@@ -876,21 +913,22 @@ p2 <- ggplot(pct_total_by_sex, aes(x = "", y = Pct_Sex, fill = Sex)) +
     panel.grid.major = element_blank(),
     panel.grid.minor= element_blank(),
     axis.text.x = element_blank(),
-    axis.ticks = element_blank()
+    axis.ticks = element_blank(),
+    plot.background = element_rect(fill = "transparent", colour = NA)
   )
 
 p1 + inset_element(p2,
-                   left = .7,
-                   bottom = 0.6,
-                   right = 1.3,
-                   top = 1.05)
+                   left = 0.48,
+                   bottom = 0.76,
+                   right = 1.285,
+                   top = 1.2)
 ```
 
 ## Code
 
 ```{r}
 #| eval: false
-#| fig-width: 9
+#| fig-width: 8
 #| fig-height: 6
 p1 <- ggplot() +
   geom_violin(data = demography_females, 
@@ -901,7 +939,7 @@ p1 <- ggplot() +
               scale = "area", alpha = 0.5) +
   theme_minimal() +
   labs(
-    x = "Sex",
+    x = NULL,
     y = "Age",
     title = "Age Distribution by Sex"
   ) +
@@ -912,16 +950,20 @@ p1 <- ggplot() +
       "Females" = "#CC6677"),
     breaks = c("Males", "Females")
   ) +
-  theme(axis.text.x = element_blank()) +
+  theme(
+    axis.text.x = element_blank(),
+    legend.position = "top"
+  ) +
   scale_y_continuous(breaks = seq(0, 90, by = 10))
 
 p2 <- ggplot(pct_total_by_sex, aes(x = "", y = Pct_Sex, fill = Sex)) +
-  geom_bar(stat = "identity", color = "black") +
+  geom_bar(stat = "identity", color = "black", alpha = 0.5) +
   coord_polar("y") +
   theme_test() +
   labs(title = "Population by Sex") +
   scale_fill_manual(
-    values = c("Males" = "#88CCEE", "Females" = "#CC6677")
+    values = c("Males" = "#88CCEE",
+               "Females" = "#CC6677")
   ) +
   labs(
     x = NULL,
@@ -933,14 +975,15 @@ p2 <- ggplot(pct_total_by_sex, aes(x = "", y = Pct_Sex, fill = Sex)) +
     panel.grid.major = element_blank(),
     panel.grid.minor= element_blank(),
     axis.text.x = element_blank(),
-    axis.ticks = element_blank()
+    axis.ticks = element_blank(),
+    plot.background = element_rect(fill = "transparent", colour = NA)
   )
 
 p1 + inset_element(p2,
-                   left = .7,
-                   bottom = 0.6,
-                   right = 1.3,
-                   top = 1.05)
+                   left = 0.48,
+                   bottom = 0.76,
+                   right = 1.285,
+                   top = 1.2)
 ```
 :::
 
