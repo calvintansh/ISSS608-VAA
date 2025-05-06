@@ -19,6 +19,10 @@ My chosen classmate's work will be the submission by [RAJESH BABU SANTIGARI](htt
 
 ## [1-2:]{style="color:DarkOrange"} 1 Visualisations
 
+```{r}
+pacman::p_load(tidyverse, patchwork, ggthemes, knitr, cowplot)
+```
+
 ### [1-2:]{style="color:DarkOrange"} 1.1 Singapore's Population Pyramid
 
 ::::: panel-tabset
@@ -313,7 +317,7 @@ r1 <- ggplot(region_pa, aes(x = PA, y = Total_Pop, fill = Region)) +
   )
 
 bottom10 <- region_pa %>%
-  filter(PA %in% head(pa_order, 10))
+  filter(PA %in% head(region_pa_order, 10))
 
 r2 <- ggplot(data = bottom10, 
        aes(x = PA, y = Total_Pop, fill = Region)) +
