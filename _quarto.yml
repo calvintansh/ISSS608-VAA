@@ -55,8 +55,8 @@ website:
       contents:
         - section: "Take-Home Exercise"
           contents:
-            - text: "1: Demographic Structures and Distribution of Singapore in 2024"
-              href: Take-home_Ex/Take-home_Ex01/Take-home_Ex01.qmd
+            - text: "1-1: Demographic Structures and Distribution of Singapore in 2024"
+              href: Take-home_Ex/Take-home_Ex01-1/Take-home_Ex01-1.qmd
 format:
   html:
     theme:
