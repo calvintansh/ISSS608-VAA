@@ -795,7 +795,9 @@ The first part of the code aggregates the **Population** by **Sex**, and calcula
 
 -   The next section prepares for adding labels to the pie chart. The label position (*ypos*) was calculated using cumulative percentages *cumsum(Pct_Sex) - Pct_Sex / 2* since *coord_polar("y")* will be used to create the pie chart.
 
-In next part, the dataset was prepared to visualise **Age** distributions by **Sex**:
+The next part of the code is for calculating the gender ratio. Violin plots are normalised to 1 by default so this ratio is needed to adjust the **Male** plot to be slightly smaller than the **Female** plot.
+
+In the third part, the dataset was prepared to visualise **Age** distributions by **Sex**:
 
 -   The dataset *sg_data* was grouped by **Age** and **Sex**, then summarised using *sum(Pop)* to get the population count for each **Age-Sex** group.
 -   The resulting grouped data *demography_sex_age* was expanded into individual-level observations using *uncount(weights = Pop)*.
@@ -826,6 +828,12 @@ pct_total_by_sex <- pct_total_by_sex %>%
 kable(pct_total_by_sex)
 
 # Second Part
+males_pct <- pct_total_by_sex$Pct_Sex[pct_total_by_sex$Sex == "Males"]
+females_pct <- pct_total_by_sex$Pct_Sex[pct_total_by_sex$Sex == "Females"]
+
+male_female_ratio <- males_pct / females_pct
+
+# Third Part
 demography_sex_age <- sg_data %>%
   group_by(Age, Sex) %>%
   summarise(Pop = sum(Pop))
@@ -839,6 +847,8 @@ demography_males <- demography_sex_age %>%
 
 demography_females <- demography_sex_age %>%
   filter(Sex == "Females")
+
+
 ```
 :::
 
@@ -849,7 +859,7 @@ To create an overlaid violin plot (p1) comparing **Age** distributions between *
 -   A *ggplot()* object was initialised to serve as the base plot that the violin plots will be overlaid on.
 -   *geom_violin()* was used twice, once for each **Sex**, with shared x-axis *"All"* to overlay both distributions.
 -   *alpha = 0.5* was set to add transparency, allowing both violins to be visible when they overlap.
--   *scale = "area"* ensures the violins are scaled proportionally to the size of their age groups.
+-   *scale = "area"* ensures the violins are scaled proportionally to the size of their age groups and *width = * is used to scale the plots according to their population ratios.
 -   A custom fill colour was set for each sex using *scale_fill_manual()*, and *breaks = c("Males", "Females")* ensures the legend appears with Males being first.
 -   *theme(axis.text.x = element_blank())* hides the x-axis label since both violins are plotted at a shared position *"All"*.
 -   *labs()* was used to remove the x-axis text and label the y-axis.
@@ -875,10 +885,10 @@ Lastly, the pie chart (p2) is overlaid over the violin plot (p2) using *inset_el
 p1 <- ggplot() +
   geom_violin(data = demography_females, 
               aes(x = "All", y = Age, fill = "Females"), 
-              scale = "area", alpha = 0.5) +
+              scale = "area", alpha = 0.5, width = 1) +
   geom_violin(data = demography_males, 
               aes(x = "All", y = Age, fill = "Males"), 
-              scale = "area", alpha = 0.5) +
+              scale = "area", alpha = 0.5, width = male_female_ratio) +
   theme_minimal() +
   labs(
     x = NULL,
@@ -937,10 +947,10 @@ p1 + inset_element(p2,
 p1 <- ggplot() +
   geom_violin(data = demography_females, 
               aes(x = "All", y = Age, fill = "Females"), 
-              scale = "area", alpha = 0.5) +
+              scale = "area", alpha = 0.5, width = 1) +
   geom_violin(data = demography_males, 
               aes(x = "All", y = Age, fill = "Males"), 
-              scale = "area", alpha = 0.5) +
+              scale = "area", alpha = 0.5, width = male_female_ratio) +
   theme_minimal() +
   labs(
     x = NULL,
@@ -999,16 +1009,16 @@ p1 + inset_element(p2,
 -   The **Female** population is slightly higher than the **Male** population overall.
 -   This aligns with Singapore’s national demographic pattern, where **Females** outnumber **Males** slightly due to longer life expectancy.
 
-##### Population Trends (Age 0 - 35)
+##### Population Trends (Age 0 - 30)
 
+-   **Males** consistently outnumber **Females** slightly till age 30.
 -   Population rises gradual from birth to age 8.
--   A plateau is observed from ages 9 to 20, followed by another increase towards a population peak at age 35.
--   **Males** consistently outnumber **Females** slightly in this range.
+-   A plateau is observed from ages 9 to 20, followed by another increase towards 30.
 
-##### Population Trends (Age 36 - 60)
+##### Population Trends (Age 30 - 60)
 
 -   The segment holds the largest proportion of Singapore's population.
--   **Gender** distribution is balanced here.
+-   **Females** outnumber **Males** except for a brief period between age 57-65.
 
 ##### Population Trends (Age Above 60)
 
@@ -1103,3 +1113,4 @@ Singapore, being land-scarce, has designated different areas for specific purpos
 ![](/Take-Home_Ex/Take-Home_Ex01/image/estate.png){fig-align="center" width="800"}
 
 [Reference: <https://www.hdb.gov.sg/-/media/doc/SCEG/20082023-Annexes/Annex-A1.ashx>]{style="color: grey; font-size: 12px;"}
+

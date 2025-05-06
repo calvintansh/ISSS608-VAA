@@ -292,7 +292,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Modified</div>
     <div class="quarto-title-meta-contents">
-      <p class="date-modified">May 4, 2025</p>
+      <p class="date-modified">May 6, 2025</p>
     </div>
   </div>
     
@@ -1766,7 +1766,8 @@ Code
 <ul>
 <li>The next section prepares for adding labels to the pie chart. The label position (<em>ypos</em>) was calculated using cumulative percentages <em>cumsum(Pct_Sex) - Pct_Sex / 2</em> since <em>coord_polar(“y”)</em> will be used to create the pie chart.</li>
 </ul>
-<p>In next part, the dataset was prepared to visualise <strong>Age</strong> distributions by <strong>Sex</strong>:</p>
+<p>The next part of the code is for calculating the gender ratio. Violin plots are normalised to 1 by default so this ratio is needed to adjust the <strong>Male</strong> plot to be slightly smaller than the <strong>Female</strong> plot.</p>
+<p>In the third part, the dataset was prepared to visualise <strong>Age</strong> distributions by <strong>Sex</strong>:</p>
 <ul>
 <li>The dataset <em>sg_data</em> was grouped by <strong>Age</strong> and <strong>Sex</strong>, then summarised using <em>sum(Pop)</em> to get the population count for each <strong>Age-Sex</strong> group.</li>
 <li>The resulting grouped data <em>demography_sex_age</em> was expanded into individual-level observations using <em>uncount(weights = Pop)</em>.
@@ -1832,11 +1833,17 @@ Code
 </table>
 </div>
 <div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Second Part</span></span>
-<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>demography_sex_age <span class="ot">&lt;-</span> sg_data <span class="sc">%&gt;%</span></span>
-<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Age, Sex) <span class="sc">%&gt;%</span></span>
-<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">Pop =</span> <span class="fu">sum</span>(Pop))</span>
-<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(<span class="fu">head</span>(demography_sex_age, <span class="dv">10</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>males_pct <span class="ot">&lt;-</span> pct_total_by_sex<span class="sc">$</span>Pct_Sex[pct_total_by_sex<span class="sc">$</span>Sex <span class="sc">==</span> <span class="st">"Males"</span>]</span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>females_pct <span class="ot">&lt;-</span> pct_total_by_sex<span class="sc">$</span>Pct_Sex[pct_total_by_sex<span class="sc">$</span>Sex <span class="sc">==</span> <span class="st">"Females"</span>]</span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>male_female_ratio <span class="ot">&lt;-</span> males_pct <span class="sc">/</span> females_pct</span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Third Part</span></span>
+<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a>demography_sex_age <span class="ot">&lt;-</span> sg_data <span class="sc">%&gt;%</span></span>
+<span id="cb30-9"><a href="#cb30-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Age, Sex) <span class="sc">%&gt;%</span></span>
+<span id="cb30-10"><a href="#cb30-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">Pop =</span> <span class="fu">sum</span>(Pop))</span>
+<span id="cb30-11"><a href="#cb30-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-12"><a href="#cb30-12" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(<span class="fu">head</span>(demography_sex_age, <span class="dv">10</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <table class="caption-top table table-sm table-striped small">
 <thead>
@@ -1919,7 +1926,7 @@ Code
 <li>A <em>ggplot()</em> object was initialised to serve as the base plot that the violin plots will be overlaid on.</li>
 <li><em>geom_violin()</em> was used twice, once for each <strong>Sex</strong>, with shared x-axis <em>“All”</em> to overlay both distributions.</li>
 <li><em>alpha = 0.5</em> was set to add transparency, allowing both violins to be visible when they overlap.</li>
-<li><em>scale = “area”</em> ensures the violins are scaled proportionally to the size of their age groups.</li>
+<li><em>scale = “area”</em> ensures the violins are scaled proportionally to the size of their age groups and <em>width = </em> is used to scale the plots according to their population ratios.</li>
 <li>A custom fill colour was set for each sex using <em>scale_fill_manual()</em>, and <em>breaks = c(“Males”, “Females”)</em> ensures the legend appears with Males being first.</li>
 <li><em>theme(axis.text.x = element_blank())</em> hides the x-axis label since both violins are plotted at a shared position <em>“All”</em>.</li>
 <li><em>labs()</em> was used to remove the x-axis text and label the y-axis.</li>
@@ -1954,10 +1961,10 @@ Code
 <div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>p1 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>() <span class="sc">+</span></span>
 <span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_violin</span>(<span class="at">data =</span> demography_females, </span>
 <span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>              <span class="fu">aes</span>(<span class="at">x =</span> <span class="st">"All"</span>, <span class="at">y =</span> Age, <span class="at">fill =</span> <span class="st">"Females"</span>), </span>
-<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>              <span class="at">scale =</span> <span class="st">"area"</span>, <span class="at">alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>              <span class="at">scale =</span> <span class="st">"area"</span>, <span class="at">alpha =</span> <span class="fl">0.5</span>, <span class="at">width =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
 <span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_violin</span>(<span class="at">data =</span> demography_males, </span>
 <span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a>              <span class="fu">aes</span>(<span class="at">x =</span> <span class="st">"All"</span>, <span class="at">y =</span> Age, <span class="at">fill =</span> <span class="st">"Males"</span>), </span>
-<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a>              <span class="at">scale =</span> <span class="st">"area"</span>, <span class="at">alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
+<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a>              <span class="at">scale =</span> <span class="st">"area"</span>, <span class="at">alpha =</span> <span class="fl">0.5</span>, <span class="at">width =</span> male_female_ratio) <span class="sc">+</span></span>
 <span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
 <span id="cb32-9"><a href="#cb32-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
 <span id="cb32-10"><a href="#cb32-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="cn">NULL</span>,</span>
@@ -2026,19 +2033,19 @@ Insights
 <li>This aligns with Singapore’s national demographic pattern, where <strong>Females</strong> outnumber <strong>Males</strong> slightly due to longer life expectancy.</li>
 </ul>
 </section>
-<section id="population-trends-age-0---35" class="level5">
-<h5 class="anchored" data-anchor-id="population-trends-age-0---35">Population Trends (Age 0 - 35)</h5>
+<section id="population-trends-age-0---30" class="level5">
+<h5 class="anchored" data-anchor-id="population-trends-age-0---30">Population Trends (Age 0 - 30)</h5>
 <ul>
+<li><strong>Males</strong> consistently outnumber <strong>Females</strong> slightly till age 30.</li>
 <li>Population rises gradual from birth to age 8.</li>
-<li>A plateau is observed from ages 9 to 20, followed by another increase towards a population peak at age 35.</li>
-<li><strong>Males</strong> consistently outnumber <strong>Females</strong> slightly in this range.</li>
+<li>A plateau is observed from ages 9 to 20, followed by another increase towards 30.</li>
 </ul>
 </section>
-<section id="population-trends-age-36---60" class="level5">
-<h5 class="anchored" data-anchor-id="population-trends-age-36---60">Population Trends (Age 36 - 60)</h5>
+<section id="population-trends-age-30---60" class="level5">
+<h5 class="anchored" data-anchor-id="population-trends-age-30---60">Population Trends (Age 30 - 60)</h5>
 <ul>
 <li>The segment holds the largest proportion of Singapore’s population.</li>
-<li><strong>Gender</strong> distribution is balanced here.</li>
+<li><strong>Females</strong> outnumber <strong>Males</strong> except for a brief period between age 57-65.</li>
 </ul>
 </section>
 <section id="population-trends-age-above-60" class="level5">
