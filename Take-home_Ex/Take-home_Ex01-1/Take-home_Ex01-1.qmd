@@ -1111,6 +1111,6 @@ Singapore, being land-scarce, has designated different areas for specific purpos
 
 ## [1-1:]{style="color:DarkOrange"} 5.1 Singapore's Estate Classification
 
-![](/Take-Home_Ex/Take-Home_Ex01/image/estate.png){fig-align="center" width="800"}
+![](/Take-Home_Ex/Take-Home_Ex01-1/image/estate.png){fig-align="center" width="800"}
 
 [Reference: <https://www.hdb.gov.sg/-/media/doc/SCEG/20082023-Annexes/Annex-A1.ashx>]{style="color: grey; font-size: 12px;"}
