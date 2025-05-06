@@ -1,5 +1,5 @@
 ---
-title: "[Take-Home Exercise 1:]{style='color:DarkOrange'} Demographic Structures and Distribution of Singapore in 2024"
+title: "[Take-Home Exercise 1-1:]{style='color:DarkOrange'} Demographic Structures and Distribution of Singapore in 2024"
 date: 2025-04-29
 date-modified: "last-modified"
 format: html
@@ -11,10 +11,13 @@ execute:
   freeze: true
 ---
 
-# [1]{style="color:DarkOrange"} Overview
+# [1-1:]{style="color:DarkOrange"} 1 Overview
+This exercise will be composed of two phases:
 
-## [1.1]{style="color:DarkOrange"} Background
+- Phase 1: Designing my own data visualisation (**The focus of this page**)
+- Phase 2: selecting one submission provided by my classmate, critiquing three good design principles and identifying three areas for further improvement. Based on these feedbacks, I will prepare the makeover version of their data visualisation.
 
+## [1-1:]{style="color:DarkOrange"}  1.1 Background
 A local online media company that publishes daily content on digital platforms is planning to release an article on demographic structures and distribution of Singapore in 2024.
 
 Assuming the role of the graphical editor of the media company, I am tasked to prepare at most three data visualisation for this article.
@@ -25,11 +28,11 @@ Creating enlightening and truthful data visualizations involves focusing on accu
 
 The data should also be processed by using appropriate *tidyverse* family of packages and the data visualisation must be prepared using *ggplot2* and its extensions. In addition, no interactive data visualisation are required.
 
-## [1.2]{style="color:DarkOrange"} Data Source
+## [1-1:]{style="color:DarkOrange"}  1.2 Data Source
 
 The data for this exercise is the [Singapore Residents by Planning Area / Subzone, Single Year of Age and Sex, June 2024](https://www.singstat.gov.sg/find-data/search-by-theme/population/geographic-distribution/latest-data) dataset, retrieved by [Department of Statistics, Singapore (DOS)](https://www.singstat.gov.sg/).
 
-## [1.3]{style="color:DarkOrange"} Install and Load the Required Libraries
+## [1-1:]{style="color:DarkOrange"}  1.3 Install and Load the Required Libraries
 
 These, five R packages will be used for the preparation of this exercise:
 
@@ -49,7 +52,7 @@ pacman::p_load(tidyverse, patchwork, ggthemes, knitr, cowplot)
 ```
 :::
 
-## [1.4]{style="color:DarkOrange"} Importing Data
+## [1-1:]{style="color:DarkOrange"} 1.4 Importing Data
 
 For the purpose of this exercise, a data file called *respopagesex2024* will be used. It consists of data about Singapore Residents by Planning Area / Subzone, categorised by a Single Year of Age and Sex,for June 2024. It is in a csv file format.
 
@@ -63,7 +66,7 @@ sg_data <- read_csv("data/respopagesex2024.csv")
 ```
 :::
 
-# [2]{style="color:DarkOrange"} Exploratory Data Analysis (EDA)
+# [1-1:]{style="color:DarkOrange"} 2 Exploratory Data Analysis (EDA)
 
 There are a total of six attributes in the *sg_data* tibble data frame. Four of them are categorical data type and the other two are in continuous data type.
 
@@ -109,7 +112,7 @@ kable(head(sg_data, 10))
 ```
 :::
 
-## [2.1]{style="color:DarkOrange"} Checking for duplicates
+## [1-1:]{style="color:DarkOrange"} 2.1 Checking for duplicates
 
 Before proceeding further with the EDA, a check for duplicated records was done using *group_by_all()* and filtering rows with more than 1 count. The results of the code below confirms that there were no duplicated records.
 
@@ -125,7 +128,7 @@ duplicate
 ```
 :::
 
-## [2.2]{style="color:DarkOrange"} Fixing Age Column Inconsistency
+## [1-1:]{style="color:DarkOrange"} 2.2 Fixing Age Column Inconsistency
 
 Although there were no duplicated records, the earlier EDA of variable types and the data table revealed that the **Age** column, which appears to be a continuous variable, was incorrectly recognised as a categorical variable.
 
@@ -153,7 +156,7 @@ sg_data$Age <- as.numeric(sg_data$Age)
 ```
 :::
 
-## [2.3]{style="color:DarkOrange"} Binning Age Column
+## [1-1:]{style="color:DarkOrange"} 2.3 Binning Age Column
 
 Even after fixing the inconsistent data type in the **Age** column, there were still 91 unique values, which will be too many for meaningful analysis. Therefore, the **Age** column will be binned into the following categorise using the code below:
 
@@ -192,13 +195,13 @@ kable(head(sg_data, 10))
 ```
 :::
 
-# [3]{style="color:DarkOrange"} Visualisations
+# [1-1:]{style="color:DarkOrange"} 3 Visualisations
 
-## [3.1]{style="color:DarkOrange"} Population Across Planning Areas by Sex
+## [1-1:]{style="color:DarkOrange"} 3.1 Population Across Planning Areas by Sex
 
 This section examines the distribution of Singapore's **Population** across **Planning Areas**, categorised by **Sex**, to better understand the demographic patterns of different regions.
 
-### [3.1.1]{style="color:DarkOrange"} Feature Engineering
+### [1-1:]{style="color:DarkOrange"} 3.1.1 Feature Engineering
 
 In this step, the following features were added to support in the visual analysis later:
 
@@ -226,14 +229,13 @@ kable(head(demography_sex, 10))
 ```
 :::
 
-### [3.1.2]{style="color:DarkOrange"} Methods and Explanation
+### [1-1:]{style="color:DarkOrange"} 3.1.2 Methods and Explanation
 
 The aim is to create a detailed view of **Population** distribution by **Sex** across Singapore’s **Planning Areas**. These were the steps taken to create a stacked horizontal bar chart for visualisation:
 
 [Horizontal Bar Chart s1:]{.underline}
 
 -   To create a horizontal bar chart with population **Total** in descending order, the **PA** was initially ordered by ascending **Total** using the *pa_order()* vector. Although the factor levels were arranged in ascending order, the use of *coord_flip()* in the plot reverses the axis orientation, resulting in **Total** being displayed in descending order as intended.
--   Similar to the reason above, the **Sex** variable was converted into a factor with levels set as **Females** first, followed by **Males**, such that it will appear as **Males** followed by **Females** in the stacked bar chart.
 -   *ggplot()* was used with *geom_bar() (with stat = "identity" and position = "stack")* to create a stacked horizontal bar chart (s1), displaying the **Pop** by **Sex** across **PA**.
 -   *theme_minimal()* was applied for a clean visual style, and *labs()* with *ggtitle()* were used to customise the axis labels and plot title.
 -   *scale_fill_manual()* was used to assign distinct colours to **Males and Females** and to control the legend order, explicitly setting it as: Males → Females instead of the reversed order if left as default.
@@ -254,7 +256,7 @@ The aim is to create a detailed view of **Population** distribution by **Sex** a
 
 -   *ggdraw()* was used to create an empty canvas, and *draw_plot()* was used to overlay s1, s2, and the zoom rectangles. All these functions are a part of the *cowplot* package.
 
-### [3.1.3]{style="color:DarkOrange"} Plots and Analysis
+### [1-1:]{style="color:DarkOrange"} 3.1.3 Plots and Analysis
 
 ::: panel-tabset
 ## Plot
@@ -270,8 +272,7 @@ pa_order <- demography_sex %>%
 
 demography_sex <- demography_sex %>%
   mutate(
-    PA = factor(PA, levels = pa_order),
-    Sex = factor(Sex, levels = c("Females", "Males"))
+    PA = factor(PA, levels = pa_order)
   )
 
 s1 <- ggplot(data = demography_sex, 
@@ -346,8 +347,7 @@ pa_order <- demography_sex %>%
 
 demography_sex <- demography_sex %>%
   mutate(
-    PA = factor(PA, levels = pa_order),
-    Sex = factor(Sex, levels = c("Females", "Males"))
+    PA = factor(PA, levels = pa_order)
   )
 
 s1 <- ggplot(data = demography_sex, 
@@ -452,7 +452,7 @@ ggdraw() +
     -   Military/Nature: Seletar (air base), Western Water Catchment
 :::
 
-### [3.2.4]{style="color:DarkOrange"} Reflections
+### [1-1:]{style="color:DarkOrange"} 3.2.4 Reflections
 
 ::: callout-important
 ## Reflections
@@ -462,11 +462,11 @@ The *ggforce* package includes the *facet_zoom()* function that allows for zoomi
 However, *facet_zoom()* does not support zooming in on discrete scales like the bottom 10 **PAs** in **Pop**. Therefore, I had manually created a separate zoomed-in plot (s2) and the zoom rectangles to highlight the region that will be zoomed-in.
 :::
 
-## [3.2]{style="color:DarkOrange"} Percentage of Age Groups Across Planning Areas
+## [1-1:]{style="color:DarkOrange"} 3.2 Percentage of Age Groups Across Planning Areas
 
 This visualisation aims to show the percentage distribution of **Age Groups** (Young, Economically_Active and Aged) across **Planning Areas**. This will provide insights into how Singapore residents, in different stages of life, were distributed across Singapore.
 
-### [3.2.1]{style="color:DarkOrange"} Feature Engineering
+### [1-1:]{style="color:DarkOrange"} 3.2.1 Feature Engineering
 
 The following steps were done in preparation for visual analysis:
 
@@ -502,7 +502,7 @@ kable(head(pct_demography_age, 10))
 ```
 :::
 
-### [3.2.2]{style="color:DarkOrange"} Methods and Explanation
+### [1-1:]{style="color:DarkOrange"} 3.2.2 Methods and Explanation
 
 To visualize the percentage distribution of **Age Groups** across **Planning Areas**, the following plotting steps were performed:
 
@@ -511,7 +511,7 @@ To visualize the percentage distribution of **Age Groups** across **Planning Are
 -   The legend position was set to be at the bottom using *theme(legend.position = "bottom")*.
 -   The remaining functions have been explained in the plot above in [Section 3.1.2: Population Across Planning Areas by Sex](https://isss608-ay2024-25t3.netlify.app/take-home_ex/take-home_ex01/take-home_ex01#methods-and-explanation).
 
-### [3.2.3]{style="color:DarkOrange"} Plots and Analysis
+### [1-1:]{style="color:DarkOrange"} 3.2.3 Plots and Analysis
 
 ::: panel-tabset
 ## Plot
@@ -670,7 +670,7 @@ These are mainly mature estates with a higher proportion of **elderly** resident
 -   This reflects their appeal to new families, likely due to the availability and price of new housing developments.
 :::
 
-### [3.2.4]{style="color:DarkOrange"} Reflections and Initial Workings
+### [1-1:]{style="color:DarkOrange"} 3.2.4 Reflections and Initial Workings
 
 ::: callout-important
 ## Reflections
@@ -786,10 +786,11 @@ ggplot(data = pct_demography,
 ```
 :::
 
-## [3.3]{style="color:DarkOrange"} Age Distribution by Sex
+## [1-1:]{style="color:DarkOrange"} 3.3 Age Distribution by Sex
+
 Singapore, like many developed countries, is facing the issue of declining birth rates and an increasingly **Aging Population**. This visualization aims to provide insight into Singapore’s **Population** pyramid and **Gender** distribution.
 
-### [3.3.1]{style="color:DarkOrange"} Feature Engineering
+### [1-1:]{style="color:DarkOrange"} 3.3.1 Feature Engineering
 
 The first part of the code aggregates the **Population** by **Sex**, and calculates the percentage of **Males** and **Females** by dividing it by the **Total**.
 
@@ -852,14 +853,14 @@ demography_females <- demography_sex_age %>%
 ```
 :::
 
-### [3.3.2]{style="color:DarkOrange"} Methods and Explanation
+### [1-1:]{style="color:DarkOrange"} 3.3.2 Methods and Explanation
 
 To create an overlaid violin plot (p1) comparing **Age** distributions between **Males** and **Females**:
 
 -   A *ggplot()* object was initialised to serve as the base plot that the violin plots will be overlaid on.
 -   *geom_violin()* was used twice, once for each **Sex**, with shared x-axis *"All"* to overlay both distributions.
 -   *alpha = 0.5* was set to add transparency, allowing both violins to be visible when they overlap.
--   *scale = "area"* ensures the violins are scaled proportionally to the size of their age groups and *width = * is used to scale the plots according to their population ratios.
+-   *scale = "area"* ensures the violins are scaled proportionally to the size of their age groups and *width =* is used to scale the plots according to their population ratios.
 -   A custom fill colour was set for each sex using *scale_fill_manual()*, and *breaks = c("Males", "Females")* ensures the legend appears with Males being first.
 -   *theme(axis.text.x = element_blank())* hides the x-axis label since both violins are plotted at a shared position *"All"*.
 -   *labs()* was used to remove the x-axis text and label the y-axis.
@@ -873,7 +874,7 @@ The pie chart (p2) is created similarly to the bar charts in the previous sectio
 
 Lastly, the pie chart (p2) is overlaid over the violin plot (p2) using *inset_element()* to provide an easy overview of both plots.
 
-### [3.3.3]{style="color:DarkOrange"} Plots and Analysis
+### [1-1:]{style="color:DarkOrange"} 3.3.3 Plots and Analysis
 
 ::: panel-tabset
 ## Plot
@@ -1030,7 +1031,7 @@ p1 + inset_element(p2,
 -   The age distribution resembles that of an ageing population which is consistent with other developed countries.
 :::
 
-### [3.3.4]{style="color:DarkOrange"} Reflections and Initial Workings
+### [1-1:]{style="color:DarkOrange"} 3.3.4 Reflections and Initial Workings
 
 ::: callout-important
 ## Reflections
@@ -1102,16 +1103,14 @@ ggplot(data=demography_sex_age_2,
 ```
 :::
 
-# [4]{style="color:DarkOrange"} Summary
+# [1-1:]{style="color:DarkOrange"} 4 Summary
 
 Singapore, being land-scarce, has designated different areas for specific purposes. Least populated zones tend to be industrial, military or commercial, such as central districts which, while less residential, tend to have a higher concentration of working-age adults. In contrast, the most populated areas comprise both mature and newer estates, reflecting the government’s successful urban development. Newer estates are skewed toward younger and economically active residents, since it is attractive to young families, while mature estates have a larger proportion of aged residents. Like most developed countries, Singapore has an ageing demographic, with the population peaking around age 35 and the 35–60 age group forming the largest segment. From this point onward, the population declines, and females begin to outnumber males in the older age groups due to longer life expectancy. As a result, Singapore’s overall population has slightly more females, though the younger age groups maintain a roughly equal gender distribution.
 
-# [5]{style="color:DarkOrange"} Appendix
+# [1-1:]{style="color:DarkOrange"} 5 Appendix
 
-## [5.1]{style="color:DarkOrange"} Singapore's Estate Classification
+## [1-1:]{style="color:DarkOrange"} 5.1 Singapore's Estate Classification
 
 ![](/Take-Home_Ex/Take-Home_Ex01/image/estate.png){fig-align="center" width="800"}
 
 [Reference: <https://www.hdb.gov.sg/-/media/doc/SCEG/20082023-Annexes/Annex-A1.ashx>]{style="color: grey; font-size: 12px;"}
-
-# [6]{style="color:DarkOrange"} Appendix

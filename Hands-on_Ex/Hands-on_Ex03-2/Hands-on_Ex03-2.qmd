@@ -11,17 +11,17 @@ execute:
   freeze: true
 ---
 
-## [3-2.1]{style="color:darkorange"} Overview
+## [3-2:]{style="color:darkorange"} 1 Overview
 
 When telling a visually-driven data story, animated graphics tends to attract the interest of the audience and make deeper impression than static graphics. In this hands-on exercise, animated data visualisation will be created using **gganimate** and **plotly r** packages. At the same time, data (i) reshaped by using **tidyr** package, and (ii) processed, wrangled and transformed with **dplyr** package.
 
-### [3-2.1.1]{style="color:darkorange"} Basic Xoncepts of Animation
+### [3-2:]{style="color:darkorange"} 1.1 Basic Xoncepts of Animation
 
 When creating animations, the plot does not actually move. Instead, many individual plots are built and then stitched together as movie frames, just like an old-school flip book or cartoon. Each frame is a different plot to convey motion, which is built using some relevant subset of the aggregated data.The subset drives the flow of the animation when stitched back together.
 
 ![](image/animation.jpg){fig-align="center" width="800"}
 
-### [3-2.1.2]{style="color:darkorange"} Terminology
+### [3-2:]{style="color:darkorange"} 1.2 Terminology
 
 Before diving into the steps for creating an animated statistical graph, it is important to understand some of the key concepts and terminology related to this type of visualisation.
 
@@ -37,9 +37,9 @@ Before making animated graphs, think of the above question first.
 -   However, in a presentation, a few well-placed animated graphics can help an audience connect with your topic remarkably better than static counterparts.
 :::
 
-## [3-2.2]{style="color:darkorange"} Getting Started
+## [3-2:]{style="color:darkorange"} 2 Getting Started
 
-### [3-2.2.1]{style="color:darkorange"} Loading the R packages
+### [3-2:]{style="color:darkorange"} 2.1 Loading the R packages
 
 First, write a code chunk to check, install and load the following R packages:
 
@@ -54,7 +54,7 @@ pacman::p_load(readxl, gifski, gapminder,
                plotly, gganimate, tidyverse)
 ```
 
-### [3-2.2.2]{style="color:darkorange"} Importing the Data
+### [3-2:]{style="color:darkorange"} 2.2 Importing the Data
 
 In this hands-on exercise, the Data worksheet from *GlobalPopulation* Excel workbook will be used.
 
@@ -107,7 +107,7 @@ globalPop <- read_xls("data/GlobalPopulation.xls",
 Both methods achieve the same results!
 :::
 
-## [3-2.3]{style="color:darkorange"} Animated Data Visualisation: gganimate Methods
+## [3-2:]{style="color:darkorange"} 3 Animated Data Visualisation: gganimate Methods
 
 [gganimate](https://gganimate.com/) extends the grammar of graphics as implemented by ggplot2 to include the description of animation. It does this by providing a range of new grammar classes that can be added to the plot object in order to customise how it should change with time.
 
@@ -117,7 +117,7 @@ Both methods achieve the same results!
 -   `enter_*()/exit_*()`: Defines how new data should appear and how old data should disappear during the course of animation
 -   `ease_aes()`: Defines how different aesthetics should be eased during transitions
 
-### [3-2.3.1]{style="color:darkorange"} Building a Static Population Bubble Plot
+### [3-2:]{style="color:darkorange"} 3.1 Building a Static Population Bubble Plot
 
 In the code chunk below, the basic ggplot2 functions are used to create a static bubble plot.
 
@@ -155,7 +155,7 @@ ggplot(globalPop, aes(x = Old, y = Young,
 ```
 :::
 
-### [3-2.3.2]{style="color:darkorange"} Building the Animated Bubble Plot
+### [3-2:]{style="color:darkorange"} 3.2 Building the Animated Bubble Plot
 
 In the code chunk below,
 
@@ -201,11 +201,11 @@ ggplot(globalPop, aes(x = Old, y = Young,
 ```
 :::
 
-## [3-2.4]{style="color:darkorange"} Animated Data Visualisation: plotly
+## [3-2:]{style="color:darkorange"} 4 Animated Data Visualisation: plotly
 
 In **Plotly R** package, both `ggplotly()` and `plot_ly()` support key frame animations through the `frame` argument/aesthetic. They also support an `ids` argument/aesthetic to ensure smooth transitions between objects with the same ID (which helps facilitate object constancy).
 
-### [3-2.4.1]{style="color:darkorange"} Building an Animated Bubble Plot: `ggplotly()` Method
+### [3-2:]{style="color:darkorange"} 4.1 Building an Animated Bubble Plot: `ggplotly()` Method
 
 In this sub-section, an animated bubble plot will be created by using the `ggplotly()` method.
 
@@ -328,7 +328,7 @@ ggplotly(gg)
 ```
 :::
 
-### [3-2.4.2]{style="color:darkorange"} Building an Animated Bubble Plot: `plot_ly()` Method
+### [3-2:]{style="color:darkorange"} 4.2 Building an Animated Bubble Plot: `plot_ly()` Method
 
 In this sub-section, an animated bubble plot will be created with the `plot_ly()` method.
 
@@ -402,7 +402,7 @@ The plot_ly() method is much simpler and easier to read and code compared to the
 -   The execution time needed for plot_ly() is also lower.
 :::
 
-### [3-2.4.3]{style="color:darkorange"} Improving Animated Bubble Plot: `plot_ly()` Method
+### [3-2:]{style="color:darkorange"} 4.3 Improving Animated Bubble Plot: `plot_ly()` Method
 
 Changes implemented: - Bubble size - Added legend
 
@@ -446,7 +446,7 @@ bp <- globalPop %>%
 bp
 ```
 
-## [3-2.5]{style="color:darkorange"} Reference
+## [3-2:]{style="color:darkorange"} 5 Reference
 
 -   [Getting Started](https://gganimate.com/articles/gganimate.html)
 -   Visit this [link](https://rpubs.com/raymondteo/dataviz8) for a very interesting implementation of gganimate by an SMU senior

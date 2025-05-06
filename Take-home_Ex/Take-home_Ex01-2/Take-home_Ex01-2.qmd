@@ -1,0 +1,625 @@
+---
+title: "[Take-Home Exercise 1:]{style='color:DarkOrange'} Demographic Structures and Distribution of Singapore in 2024"
+date: 2025-04-29
+date-modified: "last-modified"
+format: html
+editor: visual
+execute: 
+  eval: true
+  echo: true
+  warning: false
+  freeze: true
+---
+
+# [1-2:]{style="color:DarkOrange"} Peer Learning
+
+The next phase of the exercise involves selecting one submission provided by my classmate, critiquing three good design principles and identifying three areas for further improvement. Based on these feedbacks, I will prepare the makeover version of their data visualisation.
+
+My chosen classmate's work will be the submission by [RAJESH BABU SANTIGARI](https://isss608vaarajesh01.netlify.app/takehomeexercises/take_homeexercise1/take_homeexercise1).
+
+## [1-2:]{style="color:DarkOrange"} 1 Visualisations
+
+### [1-2:]{style="color:DarkOrange"} 1.1 Singapore's Population Pyramid
+
+::::: panel-tabset
+## Rajesh's
+
+```{r}
+#| echo: false
+raj_data <- read_csv("data/respopagesex2024.csv")
+
+pyramid_data <- raj_data %>%
+  group_by(Age, Sex) %>%
+  summarise(Pop = sum(Pop), .groups = "drop") %>%
+  mutate(Pop = ifelse(Sex == "Males", -Pop, Pop))
+
+ggplot(pyramid_data, aes(x = Age, y = Pop, fill = Sex)) +
+  geom_bar(stat = "identity") +
+  coord_flip() +
+  scale_y_continuous(labels = abs) +
+  labs(title = "Singapore Population Pyramid (2024)",
+       x = "Age", y = "Population",
+       fill = "Sex") +
+  theme_minimal()
+```
+
+::: {.callout-note appearance="minimal" collapse="true"}
+## Code
+
+```{r}
+#| eval: false
+raj_data <- read_csv("data/respopagesex2024.csv")
+
+pyramid_data <- raj_data %>%
+  group_by(Age, Sex) %>%
+  summarise(Pop = sum(Pop), .groups = "drop") %>%
+  mutate(Pop = ifelse(Sex == "Males", -Pop, Pop))
+
+ggplot(pyramid_data, aes(x = Age, y = Pop, fill = Sex)) +
+  geom_bar(stat = "identity") +
+  coord_flip() +
+  scale_y_continuous(labels = abs) +
+  labs(title = "Singapore Population Pyramid (2024)",
+       x = "Age", y = "Population",
+       fill = "Sex") +
+  theme_minimal()
+```
+:::
+
+## My Improvements
+
+```{r}
+#| echo: false
+#| fig-width: 8
+#| fig-height: 6
+makeover_data <- read_csv("data/respopagesex2024.csv")
+
+makeover_data$Age <- as.character(makeover_data$Age)
+
+makeover_data$Age[makeover_data$Age == "90_and_Over"] <- "90"
+
+makeover_data$Age <- as.numeric(makeover_data$Age)
+
+pyramid_data <- makeover_data %>%
+  group_by(Age, Sex) %>%
+  summarise(Pop = sum(Pop), .groups = "drop") %>%
+  mutate(inv_Pop = ifelse(Sex == "Males", -Pop, Pop))
+
+r1 <- ggplot(pyramid_data, aes(x = Age, y = inv_Pop, fill = Sex)) +
+  geom_area(stat = "identity", colour = "grey30") +
+  coord_flip() +
+  scale_y_continuous(labels = abs, limits = c(-40000, 40000)) +
+  scale_x_continuous(breaks = seq(0, 90, by = 10), position = "top") +
+  labs(title = "Singapore's Population Pyramid (2024)",
+       x = NULL, y = "Population",
+       fill = "Sex") +
+  theme_minimal() +
+  theme(
+    legend.position = "bottom",
+    plot.margin = margin(0.2, 0, 0.2, 0.2, "cm")
+  ) +  
+  scale_fill_manual(
+    name = "Sex",
+    values = c(
+      "Males" = "#56BCC2",
+      "Females" = "#E87D72"),
+    breaks = c("Males", "Females")
+  )
+
+r2 <- ggplot(pyramid_data, aes(x = Age, y = Pop, fill = Sex)) +
+  geom_area(stat = "identity", position = "identity", alpha = 0.5, width = 1, colour = "grey30") +
+  coord_flip() +
+  scale_y_continuous(labels = abs, limits = c(0, 40000)) +
+  scale_x_continuous(breaks = seq(0, 90, by = 10)) +
+  labs(x = "Age", y = "Population",
+       fill = "Sex") +
+  theme_minimal() +
+  theme(
+    legend.position = "none",
+    plot.margin = margin(0.2, 0.2, 0.2, 0, "cm")
+  )
+
+r1 + r2 +
+  plot_layout(widths = c(3, 1))
+```
+
+::: {.callout-note appearance="minimal" collapse="true"}
+## Code
+
+```{r}
+#| eval: false
+#| fig-width: 8
+#| fig-height: 6
+
+# Feature Engineering
+makeover_data <- read_csv("data/respopagesex2024.csv")
+
+makeover_data$Age <- as.character(makeover_data$Age)
+
+makeover_data$Age[makeover_data$Age == "90_and_Over"] <- "90"
+
+makeover_data$Age <- as.numeric(makeover_data$Age)
+
+pyramid_data <- makeover_data %>%
+  group_by(Age, Sex) %>%
+  summarise(Pop = sum(Pop), .groups = "drop") %>%
+  mutate(inv_Pop = ifelse(Sex == "Males", -Pop, Pop))
+
+r1 <- ggplot(pyramid_data, aes(x = Age, y = inv_Pop, fill = Sex)) +
+  geom_area(stat = "identity", colour = "grey30") +
+  coord_flip() +
+  scale_y_continuous(labels = abs, limits = c(-40000, 40000)) +
+  scale_x_continuous(breaks = seq(0, 90, by = 10), position = "top") +
+  labs(title = "Singapore's Population Pyramid (2024)",
+       x = NULL, y = "Population",
+       fill = "Sex") +
+  theme_minimal() +
+  theme(
+    legend.position = "bottom",
+    plot.margin = margin(0.2, 0, 0.2, 0.2, "cm")
+  ) +  
+  scale_fill_manual(
+    name = "Sex",
+    values = c(
+      "Males" = "#56BCC2",
+      "Females" = "#E87D72"),
+    breaks = c("Males", "Females")
+  )
+
+r2 <- ggplot(pyramid_data, aes(x = Age, y = Pop, fill = Sex)) +
+  geom_area(stat = "identity", position = "identity", alpha = 0.5, width = 1, colour = "grey30") +
+  coord_flip() +
+  scale_y_continuous(labels = abs, limits = c(0, 40000)) +
+  scale_x_continuous(breaks = seq(0, 90, by = 10)) +
+  labs(x = "Age", y = "Population",
+       fill = "Sex") +
+  theme_minimal() +
+  theme(
+    legend.position = "none",
+    plot.margin = margin(0.2, 0.2, 0.2, 0, "cm")
+  )
+
+r1 + r2 +
+  plot_layout(widths = c(3, 1))
+```
+:::
+:::::
+
+::: callout-tip
+## Good Design Choices
+
+1)  The horizontal bar chart of **Population** across **Age**, with **Males** on the left and **Females** on the right, clearly demonstrates his design intent of creating a population pyramid segmented by **Sex**.
+2)  The use of colours effectively distinguishes the **Genders**, with **Males** in blue and **Females** in red.
+3)  The inclusion of a clear title and legend reinforces the design intent by specifying that the chart represents Singapore's Population Pyramid for the year 2024 and confirms the **Gender** colour association.
+:::
+
+::: callout-warning
+## Poor Design Choices and My Improvements
+
+1.  The y-axis is overly clustered with numbers overlapping, making it difficult to read.
+    -   [Improvements]{.underline}: Converted the string label 90_and_Over to an integer value of 90, and formated the y-axis to display in increments of 10.
+2.  Some sections of the bar chart display a white divider between bars, while others do not, resulting in an inconsistent and a messy appearence. It is also difficult to compare **Gender** populations at specific **Ages**.
+    -   [Improvements]{.underline}: An area chart with black outlines was used instead of a bar chart for a cleaner visual. Additionally, a comparative overlay chart was placed to the right of the plot to facilitate easy comparisons between **Male** and **Female** populations.
+3.  The **Male** and **Female** charts uses different x-axis scales, which misleadingly suggests similar population sizes. Additionally, the legend order (**Females** → **Males**) does not match the chart order (**Males** → **Females**).
+    -   [Improvements]{.underline}: Standardised the x-axis for both **Genders** to 0-40,000. The legend was also reordered to reflect the chart layout (**Males** → **Females**).
+:::
+
+### [1-2:]{style="color:DarkOrange"} 1.2 Population Across Planning Areas
+
+::::: panel-tabset
+## Rajesh's
+
+```{r}
+#| echo: false
+top_pa <- raj_data %>%
+  group_by(PA) %>%
+  summarise(Total_Pop = sum(Pop)) %>%
+  arrange(desc(Total_Pop)) %>%
+  slice_head(n = 10)
+
+ggplot(top_pa, aes(x = reorder(PA, Total_Pop), y = Total_Pop)) +
+  geom_col(fill = "steelblue") +
+  coord_flip() +
+  labs(title = "Top 10 Most Populous Planning Areas (2024)",
+       x = "Planning Area", y = "Total Population") +
+  theme_minimal()
+```
+
+::: {.callout-note appearance="minimal" collapse="true"}
+## Code
+
+```{r}
+#| eval: false
+top_pa <- raj_data %>%
+  group_by(PA) %>%
+  summarise(Total_Pop = sum(Pop)) %>%
+  arrange(desc(Total_Pop)) %>%
+  slice_head(n = 10)
+
+ggplot(top_pa, aes(x = reorder(PA, Total_Pop), y = Total_Pop)) +
+  geom_col(fill = "steelblue") +
+  coord_flip() +
+  labs(title = "Top 10 Most Populous Planning Areas (2024)",
+       x = "Planning Area", y = "Total Population") +
+  theme_minimal()
+```
+:::
+
+## My Improvements
+
+```{r}
+#| echo: false
+#| fig-width: 8
+#| fig-height: 6
+region_mapping <- tibble::tibble(
+  PA = c(
+    # Central
+    "Bishan", "Bukit Merah", "Bukit Timah", "Downtown Core", "Geylang", "Kallang",
+    "Marine Parade", "Museum", "Newton", "Novena", "Orchard", "Outram",
+    "Queenstown", "River Valley", "Rochor", "Singapore River", "Southern Islands",
+    "Tanglin", "Toa Payoh",
+
+    # East
+    "Bedok", "Changi", "Pasir Ris", "Tampines",
+
+    # North-East
+    "Ang Mo Kio", "Hougang", "Punggol", "Sengkang", "Serangoon", "Seletar",
+
+    # North
+    "Mandai", "Sembawang", "Sungei Kadut", "Woodlands", "Yishun",
+
+    # West
+    "Bukit Batok", "Bukit Panjang", "Choa Chu Kang", "Clementi", "Jurong East",
+    "Jurong West", "Tengah", "Western Water Catchment"
+  ),
+  Region = c(
+    rep("Central", 19),
+    rep("East", 4),
+    rep("North-East", 6),
+    rep("North", 5),
+    rep("West", 8)
+  )
+)
+
+# Join with data
+makeover_data <- makeover_data %>%
+  left_join(region_mapping, by = "PA")
+
+region_pa <- makeover_data %>%
+  group_by(PA, Region) %>%
+  summarise(Total_Pop = sum(Pop)) %>%
+  arrange(desc(Total_Pop)) %>%
+  filter(Total_Pop > 0)
+
+region_pa_order <- region_pa %>%
+  distinct(PA, Total_Pop) %>%
+  arrange(Total_Pop) %>%
+  pull(PA)
+
+region_pa <- region_pa %>%
+  mutate(
+    PA = factor(PA, levels = region_pa_order)
+    )
+
+r1 <- ggplot(region_pa, aes(x = PA, y = Total_Pop, fill = Region)) +
+  geom_bar(stat = "identity") +
+  coord_flip() +
+  labs(title = "Most Populous Planning Areas (2024)",
+       x = "Planning Area", y = "Total Population") +
+  theme_minimal() +
+  scale_y_continuous(labels = scales::comma) +
+  theme(
+    legend.position = "bottom"
+  )
+
+bottom10 <- region_pa %>%
+  filter(PA %in% head(pa_order, 10))
+
+r2 <- ggplot(data = bottom10, 
+       aes(x = PA, y = Total_Pop, fill = Region)) +
+  geom_bar(stat = "identity") +
+  coord_flip() +
+  theme_test() +
+  labs(
+    x = NULL,
+    y = NULL
+  ) +
+  theme(
+    legend.position = "none",
+    plot.background = element_rect(fill = "transparent", colour = NA)
+  )
+
+zoom_rect <- ggplot() +
+  geom_rect(aes(xmin = 0, xmax = 1, ymin = 0, ymax = 1),
+            fill = NA, color = "steelblue", linetype = "dashed") +
+  theme_void()
+
+ggdraw() +
+  draw_plot(r1, 0, 0, 1, 1) +
+  draw_plot(r2, 0.4, 0.185, 0.56, 0.25) +
+  draw_plot(zoom_rect, 0.005, 0.155, 0.3, 0.206) +
+  draw_plot(zoom_rect, 0.37, 0.18, 0.62, 0.27) # (left , btm, right, top)
+```
+
+::: {.callout-note appearance="minimal" collapse="true"}
+## Code
+
+```{r}
+#| eval: false
+#| fig-width: 8
+#| fig-height: 6
+region_mapping <- tibble::tibble(
+  PA = c(
+    # Central
+    "Bishan", "Bukit Merah", "Bukit Timah", "Downtown Core", "Geylang", "Kallang",
+    "Marine Parade", "Museum", "Newton", "Novena", "Orchard", "Outram",
+    "Queenstown", "River Valley", "Rochor", "Singapore River", "Southern Islands",
+    "Tanglin", "Toa Payoh",
+
+    # East
+    "Bedok", "Changi", "Pasir Ris", "Tampines",
+
+    # North-East
+    "Ang Mo Kio", "Hougang", "Punggol", "Sengkang", "Serangoon", "Seletar",
+
+    # North
+    "Mandai", "Sembawang", "Sungei Kadut", "Woodlands", "Yishun",
+
+    # West
+    "Bukit Batok", "Bukit Panjang", "Choa Chu Kang", "Clementi", "Jurong East",
+    "Jurong West", "Tengah", "Western Water Catchment"
+  ),
+  Region = c(
+    rep("Central", 19),
+    rep("East", 4),
+    rep("North-East", 6),
+    rep("North", 5),
+    rep("West", 8)
+  )
+)
+
+# Join with data
+makeover_data <- makeover_data %>%
+  left_join(region_mapping, by = "PA")
+
+region_pa <- makeover_data %>%
+  group_by(PA, Region) %>%
+  summarise(Total_Pop = sum(Pop)) %>%
+  arrange(desc(Total_Pop)) %>%
+  filter(Total_Pop > 0)
+
+region_pa_order <- region_pa %>%
+  distinct(PA, Total_Pop) %>%
+  arrange(Total_Pop) %>%
+  pull(PA)
+
+region_pa <- region_pa %>%
+  mutate(
+    PA = factor(PA, levels = region_pa_order)
+    )
+
+r1 <- ggplot(region_pa, aes(x = PA, y = Total_Pop, fill = Region)) +
+  geom_bar(stat = "identity") +
+  coord_flip() +
+  labs(title = "Most Populous Planning Areas (2024)",
+       x = "Planning Area", y = "Total Population") +
+  theme_minimal() +
+  scale_y_continuous(labels = scales::comma) +
+  theme(
+    legend.position = "bottom"
+  )
+
+bottom10 <- region_pa %>%
+  filter(PA %in% head(pa_order, 10))
+
+r2 <- ggplot(data = bottom10, 
+       aes(x = PA, y = Total_Pop, fill = Region)) +
+  geom_bar(stat = "identity") +
+  coord_flip() +
+  theme_test() +
+  labs(
+    x = NULL,
+    y = NULL
+  ) +
+  theme(
+    legend.position = "none",
+    plot.background = element_rect(fill = "transparent", colour = NA)
+  )
+
+zoom_rect <- ggplot() +
+  geom_rect(aes(xmin = 0, xmax = 1, ymin = 0, ymax = 1),
+            fill = NA, color = "steelblue", linetype = "dashed") +
+  theme_void()
+
+ggdraw() +
+  draw_plot(r1, 0, 0, 1, 1) +
+  draw_plot(r2, 0.4, 0.185, 0.56, 0.25) +
+  draw_plot(zoom_rect, 0.005, 0.155, 0.3, 0.206) +
+  draw_plot(zoom_rect, 0.37, 0.18, 0.62, 0.27) # (left , btm, right, top)
+```
+:::
+:::::
+
+::: callout-tip
+## Good Design Choices
+
+1)  The graph displaying the Top 10 Most Populous Planning Areas in Singapore is clean and easy to interpret.
+2)  The title is appropriate for the graph and informative.
+3)  Axis are correctly labelled with **Planning Area** and **Total Population**, aiding interpretation.
+:::
+
+::: callout-warning
+## Bad Design Choices and My Improvements
+
+1.  The x-axis uses scientific notation, which is not reader-friendly.
+    -   [Improvements]{.underline}: Changed the axis formatting to use standard numerical values with comma-separators for thousands.
+2.  The graph is overly simplistic and lacks depth, missing an opportunity to provide broader insights into Singapore's Demographic distribution.
+    -   [Improvements]{.underline}: Added a secondary **Region** field to segment the **Planning Areas**, highlighting, for example, that less populous **Planning Areas** tend to cluster in the **Central** region.
+3.  The graph excludes data on the remaining **Planning Areas** in Singapore.
+    -   [Improvements]{.underline}: Expanded the chart to include all populated **Planning Areas**, and introduced a zoomed-in section for the 10 least populous **Planning Areas** for better clarity on their regional classification.
+:::
+
+### [1-2:]{style="color:DarkOrange"} 1.3 Gender Ratio Across Planning Areas
+
+::::: panel-tabset
+## Rajesh's
+
+```{r}
+#| echo: false
+gender_ratio <- raj_data %>%
+  group_by(PA, Sex) %>%
+  summarise(Pop = sum(Pop), .groups = "drop") %>%
+  pivot_wider(names_from = Sex, values_from = Pop) %>%
+  filter(!is.na(Males) & !is.na(Females) & Females > 0) %>%  
+  mutate(Gender_Ratio = Males / Females)
+
+ggplot(gender_ratio, aes(x = reorder(PA, Gender_Ratio), y = Gender_Ratio)) +
+  geom_col(fill = "purple") +
+  coord_flip() +
+  labs(title = "Gender Ratio (Males/Females) by Planning Area (2024)",
+       x = "Planning Area", y = "Gender Ratio") +
+  theme_minimal()
+```
+
+::: {.callout-note appearance="minimal" collapse="true"}
+## Code
+
+```{r}
+#| eval: false
+gender_ratio <- raj_data %>%
+  group_by(PA, Sex) %>%
+  summarise(Pop = sum(Pop), .groups = "drop") %>%
+  pivot_wider(names_from = Sex, values_from = Pop) %>%
+  filter(!is.na(Males) & !is.na(Females) & Females > 0) %>%  
+  mutate(Gender_Ratio = Males / Females)
+
+ggplot(gender_ratio, aes(x = reorder(PA, Gender_Ratio), y = Gender_Ratio)) +
+  geom_col(fill = "purple") +
+  coord_flip() +
+  labs(title = "Gender Ratio (Males/Females) by Planning Area (2024)",
+       x = "Planning Area", y = "Gender Ratio") +
+  theme_minimal()
+```
+:::
+
+## My Improvements
+
+```{r}
+#| echo: false
+#| fig-width: 8
+#| fig-height: 6
+gender_ratio <- makeover_data %>%
+  group_by(PA, Sex) %>%
+  summarise(Total_Pop = sum(Pop), .groups = "drop") %>%
+  group_by(PA) %>%
+  mutate(
+    TotalInGroup = sum(Total_Pop),
+    Proportion = Total_Pop / TotalInGroup * 100) %>%
+  filter(!is.na(Proportion))
+
+gender_ratio_males <- gender_ratio %>%
+  filter(Sex == "Males")
+
+gender_ratio_order <- gender_ratio_males %>%
+  arrange(Proportion) %>%
+  pull(PA)
+
+gender_ratio <- gender_ratio %>%
+  mutate(
+    PA = factor(PA, levels = gender_ratio_order)
+    )
+
+ggplot(gender_ratio, aes(x = Proportion, y = PA, fill = Sex)) +
+  geom_bar(stat = "identity") +
+  geom_vline(xintercept = 50, color = "purple", linetype = "dashed", linewidth = 1) + 
+  labs(
+    title = "Gender Ratio (Males/Females) by Planning Area (2024)",
+    x = "Percentage",
+    y = "Planning Area"
+  ) +
+  theme_minimal() +
+  theme(
+    axis.text.x = element_text(hjust = 0.5),
+    plot.title = element_text(hjust = 0.5,size = 10, face = "bold"),
+    legend.position = "bottom"
+  ) +  
+  scale_fill_manual(
+    name = "Sex",
+    values = c(
+      "Males" = "#56BCC2",
+      "Females" = "#E87D72"),
+    breaks = c("Males", "Females")
+  )
+```
+
+::: {.callout-note appearance="minimal" collapse="true"}
+## Code
+
+```{r}
+#| eval: false
+#| fig-width: 8
+#| fig-height: 6
+gender_ratio <- makeover_data %>%
+  group_by(PA, Sex) %>%
+  summarise(Total_Pop = sum(Pop), .groups = "drop") %>%
+  group_by(PA) %>%
+  mutate(
+    TotalInGroup = sum(Total_Pop),
+    Proportion = Total_Pop / TotalInGroup * 100) %>%
+  filter(!is.na(Proportion))
+
+gender_ratio_males <- gender_ratio %>%
+  filter(Sex == "Males")
+
+gender_ratio_order <- gender_ratio_males %>%
+  arrange(Proportion) %>%
+  pull(PA)
+
+gender_ratio <- gender_ratio %>%
+  mutate(
+    PA = factor(PA, levels = gender_ratio_order)
+    )
+
+ggplot(gender_ratio, aes(x = Proportion, y = PA, fill = Sex)) +
+  geom_bar(stat = "identity") +
+  geom_vline(xintercept = 50, color = "purple", linetype = "dashed", linewidth = 1) + 
+  labs(
+    title = "Gender Ratio (Males/Females) by Planning Area (2024)",
+    x = "Percentage",
+    y = "Planning Area"
+  ) +
+  theme_minimal() +
+  theme(
+    axis.text.x = element_text(hjust = 0.5),
+    plot.title = element_text(hjust = 0.5,size = 10, face = "bold"),
+    legend.position = "bottom"
+  ) +  
+  scale_fill_manual(
+    name = "Sex",
+    values = c(
+      "Males" = "#56BCC2",
+      "Females" = "#E87D72"),
+    breaks = c("Males", "Females")
+  )
+```
+:::
+:::::
+
+::: callout-tip
+## Good Design Choices
+
+1)  The graph is appropriately ordered, making it easy to identify which **Planning Areas** have higher **Gender Ratios**.
+2)  The title is concise and descriptive.
+3)  The axis are correctly labelled with **Planning Area** and **Gender Ratio** to clarify the data shown.
+:::
+
+::: callout-warning
+## Bad Design Choices and My Improvements
+
+1.  The graph is difficult to understand since the concept of **Gender Ratio** is not intuitive. A value of 1 signifies equal numbers of **Males** and **Females**, while values above 1 indicates more **Males**.
+    -   [Improvements]{.underline}: Replaced the ratio with a percentage distribution. The length of the **Male/Female** bar can then reflect their relative share within each **Planning Area**.
+2.  The y-axis, listing the **Planning Areas**, is crowded and lacks visual separation.
+    -   [Improvements]{.underline}: Increased the plot height using *#\| fig-height: 6* to improve readability and add space between the **Planning Area** labels.
+3.  The x-axis range (0 to \~1.1) does not represent the full spectrum of **Gender Ratio**, which should ideally be 0 to 2, with 1 as the median. This median is also missing from the graph.
+    -   [Improvements]{.underline}: Redefined the x-axis to span 0-100, and included a vertical line at 50 to denote the midpoint. Any bar exceeding this line indicates a **Male**-dominant area while those that do not reflect a **Female**-dominant one.
+:::
