@@ -833,6 +833,8 @@ females_pct <- pct_total_by_sex$Pct_Sex[pct_total_by_sex$Sex == "Females"]
 
 male_female_ratio <- males_pct / females_pct
 
+male_female_ratio
+
 # Third Part
 demography_sex_age <- sg_data %>%
   group_by(Age, Sex) %>%
@@ -847,8 +849,6 @@ demography_males <- demography_sex_age %>%
 
 demography_females <- demography_sex_age %>%
   filter(Sex == "Females")
-
-
 ```
 :::
 
@@ -1114,3 +1114,4 @@ Singapore, being land-scarce, has designated different areas for specific purpos
 
 [Reference: <https://www.hdb.gov.sg/-/media/doc/SCEG/20082023-Annexes/Annex-A1.ashx>]{style="color: grey; font-size: 12px;"}
 
+# [6]{style="color:DarkOrange"} Appendix
