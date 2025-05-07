@@ -11,13 +11,13 @@ execute:
   freeze: true
 ---
 
-## [1:]{style="color:DarkOrange"} 1 Learning Outcome
+# [1:]{style="color:DarkOrange"} 1 Learning Outcome
 
 In this chapter, the basic principles and essential components of ggplot2 will be explored. At the same time, I will develop hands-on experience using these components to plot statistical graphics based on the principle of Layered Grammar of Graphics. By then end of this chapter, I will apply the essential graphical elements provided by ggplot2 to create elegant and yet functional statistical graphics.
 
-## [1:]{style="color:DarkOrange"} 2 Getting Started
+# [1:]{style="color:DarkOrange"} 2 Getting Started
 
-### [1:]{style="color:DarkOrange"} 2.1 Install and Load the Required Libraries
+## [1:]{style="color:DarkOrange"} 2.1 Install and Load the Required Libraries
 
 The code chunk below uses p_load() of pacman package to check if tidyverse these packages are installed in the computer. If they are, then they will be launched into R.
 
@@ -35,7 +35,7 @@ pacman::p_load(tidyverse, patchwork)
 Patchwork is used for easier comparisons between graphs. Further explanation on how to create it can be found in [Hands-On Exercise 2: Section 5.1](https://isss608-ay2024-25t3.netlify.app/hands-on_ex/hands-on_ex02/hands-on_ex02#creating-composite-graphics-patchwork-methods)
 :::
 
-### [1:]{style="color:DarkOrange"} 2.2 Importing the Data
+## [1:]{style="color:DarkOrange"} 2.2 Importing the Data
 
 The code chunk below imports exam_data.csv into R environment by using read_csv() function of readr package since the file is in csv format. The readr part of the tidyverse package.
 
@@ -50,7 +50,7 @@ The data:
     -   **Categorical Attributes:** ID, CLASS, GENDER and RACE.
     -   **Continuous Attributes:** MATHS, ENGLISH and SCIENCE.
 
-## [1:]{style="color:DarkOrange"} 3 Introducing ggplot
+# [1:]{style="color:DarkOrange"} 3 Introducing ggplot
 
 ![](/Hands-on_Ex/Hands-on_Ex01/image/ggplot_logo.jpg){width="60"} is an R package for **declaratively** creating **data-driven** graphics based on **The Grammar of Graphics**.
 
@@ -62,7 +62,7 @@ It is also part of the tidyverse family specially designed for visual exploratio
 
 For more detail, visit [ggplot2](https://ggplot2.tidyverse.org/).
 
-### [1:]{style="color:DarkOrange"} 3.1 R Graphics VS ggplot
+## [1:]{style="color:DarkOrange"} 3.1 R Graphics VS ggplot
 
 Comparing how R Graphics, the core graphical functions of Base R and ggplot plot a simple histogram.
 
@@ -97,7 +97,7 @@ The transferable skills from ggplot2 are not the idiosyncrasies of plotting synt
 ggplot2 gives much more functionalities on how to style the graph
 :::
 
-## [1:]{style="color:DarkOrange"} 4 Grammar of Graphics
+# [1:]{style="color:DarkOrange"} 4 Grammar of Graphics
 
 Before using ggplot2, it is important to understand the principles of Grammer of Graphics.
 
@@ -116,7 +116,7 @@ There are two principles in Grammar of Graphics, they are:
 
 A good grammar of graphics will allow us to gain insight into the composition of complicated graphics, and reveal unexpected connections between seemingly different graphics (Cox 1978). It also provides a strong foundation for understanding a diverse range of graphics. Furthermore, it may also help guide us on what a well-formed or correct graphic looks like, but there will still be many grammatically correct but nonsensical graphics.
 
-### [1:]{style="color:DarkOrange"} 4.1 A Layered Grammar of Graphics
+## [1:]{style="color:DarkOrange"} 4.1 A Layered Grammar of Graphics
 
 ggplot2 is an implementation of Leland Wilkinson’s Grammar of Graphics. Figure below shows the seven grammars of ggplot2.
 
@@ -134,7 +134,7 @@ A short description of each building block are as follows:
 -   **Coordinate systems** define the plane on which data are mapped on the graphic.
 -   **Themes** modify all non-data components of a plot, such as main title, sub-title, y-aixs title, or legend background.
 
-## [1:]{style="color:DarkOrange"} 5 Essential Grammatical Elements in ggplot2: Data
+# [1:]{style="color:DarkOrange"} 5 Essential Grammatical Elements in ggplot2: Data
 
 Let us call the ggplot() function using the code chunk below.
 
@@ -149,7 +149,7 @@ ggplot(data=exam_data)
 -   If the dataset is not already a data.frame, it will be converted to one by `fortify()`
 :::
 
-## [1:]{style="color:DarkOrange"} 6 Essential Grammatical Elements in ggplot2: [Aesthetic Mappings](https://ggplot2.tidyverse.org/articles/ggplot2-specs.html)
+# [1:]{style="color:DarkOrange"} 6 Essential Grammatical Elements in ggplot2: [Aesthetic Mappings](https://ggplot2.tidyverse.org/articles/ggplot2-specs.html)
 
 The aesthetic mappings take attributes of the data and and use them to influence visual characteristics, such as position, colour, size, shape, or transparency. Each visual characteristic can thus encode an aspect of the data and be used to convey information.
 
@@ -167,7 +167,7 @@ ggplot(data=exam_data,
 -   ggplot includes the x-axis and the axis’s label
 :::
 
-## [1:]{style="color:DarkOrange"} 7 Essential Grammatical Elements in ggplot2: geom
+# [1:]{style="color:DarkOrange"} 7 Essential Grammatical Elements in ggplot2: geom
 
 Geometric objects are the actual marks we put on a plot. Examples include:
 
@@ -182,7 +182,7 @@ Geometric objects are the actual marks we put on a plot. Examples include:
 -   A plot must have at least one geom; there is no upper limit. You can add a geom to a plot using the + operator.
 -   For complete list, please refer to [here](https://ggplot2.tidyverse.org/reference/#section-layer-geoms).
 
-### [1:]{style="color:DarkOrange"} 7.1 Geometric Objects: geom_bar()
+## [1:]{style="color:DarkOrange"} 7.1 Geometric Objects: geom_bar()
 
 ```{r}
 ggplot(data=exam_data, 
@@ -194,7 +194,7 @@ ggplot(data=exam_data,
 ## What if I want to show the code only or the graph only?
 :::
 
-#### Use #\| eval: false to show code without plotting graph
+##### Use #\| eval: false to show code without plotting graph
 
 ```{r}
 #| eval: false
@@ -203,7 +203,7 @@ ggplot(data=exam_data,
   geom_bar()
 ```
 
-#### Use #\| echo: false to plot graph without showing code
+##### Use #\| echo: false to plot graph without showing code
 
 ```{r}
 #| echo: false
@@ -216,7 +216,7 @@ ggplot(data=exam_data,
 eval and echo is very useful in patchwork and panel-tabset
 :::
 
-### [1:]{style="color:DarkOrange"} 7.2 Geometric Objects: geom_dotplot()
+## [1:]{style="color:DarkOrange"} 7.2 Geometric Objects: geom_dotplot()
 
 In a dot plot, the width of a dot corresponds to the bin width (or maximum width, depending on the binning algorithm), and dots are stacked, with each dot representing one observation.
 
@@ -279,7 +279,7 @@ The code chunk below performs the following two steps:
 The code uses patchwork for easier comparisons between graphs. Further explanation on how to create it can be found in [Hands-On Exercise 2: Section 5.1](https://r4va.netlify.app/chap02#creating-composite-graphics-pathwork-methods)
 :::
 
-### [1:]{style="color:DarkOrange"} 7.3 Geometric Objects: geom_histogram()
+## [1:]{style="color:DarkOrange"} 7.3 Geometric Objects: geom_histogram()
 
 In the code chunk below, [geom_histogram()](https://ggplot2.tidyverse.org/reference/geom_histogram.html) is used to create a simple histogram by using values in MATHS field of exam_data.
 
@@ -293,7 +293,7 @@ ggplot(data=exam_data,
 -   Note that the default bin is 30
 :::
 
-### [1:]{style="color:DarkOrange"} 7.4 Modifying a geometric object by changing geom()
+## [1:]{style="color:DarkOrange"} 7.4 Modifying a geometric object by changing geom()
 
 In the code chunk below:
 
@@ -345,7 +345,7 @@ h1 + h2
 -   Adjusting bin size fixes the gap and adding colour makes the plot more visually appealing
 :::
 
-### [1:]{style="color:DarkOrange"} 7.5 Modifying a geometric object by changing aes()
+## [1:]{style="color:DarkOrange"} 7.5 Modifying a geometric object by changing aes()
 
 The code chunk below changes the interior colour of the histogram (i.e. fill) by using sub-group of aesthetic().
 
@@ -398,7 +398,7 @@ h3 + h4
 -   This approach can be used to adjust colour, fill and alpha of the geometric elements
 :::
 
-### [1:]{style="color:DarkOrange"} 7.6 Geometric Objects: geom-density()
+## [1:]{style="color:DarkOrange"} 7.6 Geometric Objects: geom-density()
 
 [geom-density()](https://ggplot2.tidyverse.org/reference/geom_density.html) computes and plots [kernel density estimate](https://en.wikipedia.org/wiki/Kernel_density_estimation), which is a smoothed version of the histogram.
 
@@ -445,7 +445,7 @@ k1 + k2
 ```
 :::
 
-### [1:]{style="color:DarkOrange"} 7.7 Geometric Objects: geom_boxplot()
+## [1:]{style="color:DarkOrange"} 7.7 Geometric Objects: geom_boxplot()
 
 [geom_boxplot()](https://ggplot2.tidyverse.org/reference/geom_boxplot.html) displays continuous value list. It visualises five summary statistics (the median, two hinges and two whiskers), and all “outlying” points individually.
 
@@ -495,7 +495,7 @@ b1 + b2
 ```
 :::
 
-### [1:]{style="color:DarkOrange"} 7.8 Geometric Objects: geom_violin
+## [1:]{style="color:DarkOrange"} 7.8 Geometric Objects: geom_violin
 
 [geom_violin](https://ggplot2.tidyverse.org/reference/geom_violin.html) is designed for creating violin plot. Violin plots are a way of comparing multiple data distributions. With ordinary density curves, it is difficult to compare more than just a few distributions because the lines visually interfere with each other. With a violin plot, it is easier to compare several distributions since they are placed side by side.
 
@@ -508,7 +508,7 @@ ggplot(data=exam_data,
   geom_violin()
 ```
 
-### [1:]{style="color:DarkOrange"} 7.9 Geometric Objects: Geometric Objects: geom_point()
+## [1:]{style="color:DarkOrange"} 7.9 Geometric Objects: Geometric Objects: geom_point()
 
 [geom_point()](https://ggplot2.tidyverse.org/reference/geom_point.html) is especially useful for creating scatterplot.
 
@@ -521,7 +521,7 @@ ggplot(data=exam_data,
   geom_point()  
 ```
 
-### [1:]{style="color:DarkOrange"} 7.10 geom objects can be combined
+## [1:]{style="color:DarkOrange"} 7.10 geom objects can be combined
 
 The code chunk below plots the data points on the boxplots by using both `geom_boxplot()` and `geom_point()`.
 
@@ -534,7 +534,7 @@ ggplot(data=exam_data,
              size = 0.5) 
 ```
 
-## [1:]{style="color:DarkOrange"} 8 Essential Grammatical Elements in ggplot2: Stat
+# [1:]{style="color:DarkOrange"} 8 Essential Grammatical Elements in ggplot2: Stat
 
 The [Statistics functions](https://ggplot2.tidyverse.org/reference/index.html#stats) statistically transform data, usually as some form of summary. For example:
 
@@ -545,7 +545,7 @@ The [Statistics functions](https://ggplot2.tidyverse.org/reference/index.html#st
     -   Add a stat\_() function and override the default geom, or
     -   Add a geom\_() function and override the default stat
 
-### [1:]{style="color:DarkOrange"} 8.1 Working with `stat()`
+## [1:]{style="color:DarkOrange"} 8.1 Working with `stat()`
 
 The boxplots below are incomplete because the positions of the means were not shown.
 
@@ -555,11 +555,11 @@ ggplot(data=exam_data,
   geom_boxplot()
 ```
 
-### [1:]{style="color:DarkOrange"} 8.2 Working with stat - the stat_summary() method
+## [1:]{style="color:DarkOrange"} 8.2 Working with stat - the stat_summary() method
 
 The left graph adds mean values by using stat_summary() function and overriding the default geom.
 
-### [1:]{style="color:DarkOrange"} 8.3 Working with stat - the geom() method
+## [1:]{style="color:DarkOrange"} 8.3 Working with stat - the geom() method
 
 The right graph adds mean values by using geom\_() function and overriding the default stat.
 
@@ -619,7 +619,7 @@ s1 + s2
 Both methods achieves the same result by adding a red marker to represent the mean.
 :::
 
-### [1:]{style="color:DarkOrange"} 8.4 Adding a Best-Fit Curve on a Scatterplot?
+## [1:]{style="color:DarkOrange"} 8.4 Adding a Best-Fit Curve on a Scatterplot?
 
 The scatterplot below shows the relationship of Maths and English grades of pupils. The interpretability of this graph can be improved by adding a best-fit curve.
 
@@ -672,11 +672,11 @@ f1 + f2
 ```
 :::
 
-## [1:]{style="color:DarkOrange"} 9 Essential Grammatical Elements in ggplot2: Facets
+# [1:]{style="color:DarkOrange"} 9 Essential Grammatical Elements in ggplot2: Facets
 
 Facetting generates small multiples (sometimes also called trellis plot), each displaying a different subset of the data. They are an alternative to aesthetics for displaying additional discrete variables. ggplot2 supports two types of factes, namely: [facet_wrap()](https://ggplot2.tidyverse.org/reference/facet_wrap.html) and [facet_grid()](https://ggplot2.tidyverse.org/reference/facet_grid.html).
 
-### [1:]{style="color:DarkOrange"} 9.1 Working with `facet_wrap()`
+## [1:]{style="color:DarkOrange"} 9.1 Working with `facet_wrap()`
 
 facet_wrap() wraps a 1d sequence of panels into 2d. This is generally a better use of screen space than facet_grid() because most displays are roughly rectangular.
 
@@ -689,7 +689,7 @@ ggplot(data=exam_data,
     facet_wrap(~ CLASS)
 ```
 
-### [1:]{style="color:DarkOrange"} 9.2 Working with `facet_grid()`
+## [1:]{style="color:DarkOrange"} 9.2 Working with `facet_grid()`
 
 facet_grid() forms a matrix of panels defined by row and column facetting variables. It is most useful when you have two discrete variables, and all combinations of the variables exist in the data.
 
@@ -706,7 +706,7 @@ ggplot(data=exam_data,
 facet_grid() is also ideal for displaying sequential variables like the performance of different classes. For the above example, facet_grid() is better than facet_wrap() since it allows easiy comparisons across all classes.
 :::
 
-## [1:]{style="color:DarkOrange"} 10 Essential Grammatical Elements in ggplot2: Coordinates
+# [1:]{style="color:DarkOrange"} 10 Essential Grammatical Elements in ggplot2: Coordinates
 
 The Coordinates functions map the position of objects onto the plane of the plot. There are a number of different possible coordinate systems to use, they are:
 
@@ -715,7 +715,7 @@ The Coordinates functions map the position of objects onto the plane of the plot
 -   [coord_fixed()](https://ggplot2.tidyverse.org/reference/coord_fixed.html): A cartesian system with a "fixed" aspect ratio (e.g. 1.78 for a "widescreen" plot)
 -   [coord_quickmap()](https://ggplot2.tidyverse.org/reference/coord_map.html): A coordinate system that approximates a good aspect ratio for maps
 
-### [1:]{style="color:DarkOrange"} 10.1 Working with Coordinate
+## [1:]{style="color:DarkOrange"} 10.1 Working with Coordinate
 
 -   Left Graph: By the default, the bar chart of ggplot2 is in vertical form
 -   Right Graph: coord_flip() flips the horizontal bar chart into vertical bar chart
@@ -758,7 +758,7 @@ b3 + b4
 ```
 :::
 
-### [1:]{style="color:DarkOrange"} 10.1 Changing the y- and x-axis Range
+## [1:]{style="color:DarkOrange"} 10.1 Changing the y- and x-axis Range
 
 -   Left Graph: The default scatterplot is slightly misleading because the y-aixs and x-axis range are not equal.
 -   Right Graph: Fixed both the y-axis and x-axis range from 0-100.
@@ -809,7 +809,7 @@ r1 + r2
 ```
 :::
 
-## [1:]{style="color:DarkOrange"} 11 Essential Grammatical Elements in ggplot2: Themes
+# [1:]{style="color:DarkOrange"} 11 Essential Grammatical Elements in ggplot2: Themes
 
 Themes control elements of the graph not related to the data. For example:
 
@@ -945,7 +945,7 @@ ggplot(data=exam_data,
 The Default, Gray and Grey themes are all the same theme! The default is theme_gray() and theme_grey() is an alias to theme_gray().
 :::
 
-## [1:]{style="color:darkorange"} 12 Reference
+# [1:]{style="color:darkorange"} 12 Reference
 
 -   Hadley Wickham (2023) [**ggplot2: Elegant Graphics for Data Analysis**](https://ggplot2-book.org/). Online 3rd edition.
 -   Winston Chang (2013) [**R Graphics Cookbook 2nd edition**](https://r-graphics.org/). Online version.

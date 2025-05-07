@@ -11,11 +11,11 @@ execute:
   freeze: true
 ---
 
-## [3-1:]{style="color:DarkOrange"} 1 Learning Outcome
+# [3-1:]{style="color:DarkOrange"} 1 Learning Outcome
 
 In this hands-on exercise, you will learn how to create interactive data visualisation by using functions provided by **ggiraph** and **plotlyr** packages.
 
-## [3-1:]{style="color:DarkOrange"} 2 Getting Started
+# [3-1:]{style="color:DarkOrange"} 2 Getting Started
 
 First, write a code chunk to check, install and launch the following R packages:
 
@@ -32,7 +32,7 @@ pacman::p_load(ggiraph, plotly,
                patchwork, DT, tidyverse)
 ```
 
-## [3-1:]{style="color:DarkOrange"} 3 Importing Data
+# [3-1:]{style="color:DarkOrange"} 3 Importing Data
 
 In this section, *Exam_data.csv* provided will be used. Using [*read_csv()*](https://readr.tidyverse.org/reference/read_delim.html) of **readr** package, import *Exam_data.csv* into R.
 
@@ -42,7 +42,7 @@ The code chunk below `read_csv()` of **readr** package is used to import *Exam_d
 exam_data <- read_csv("data/Exam_data.csv")
 ```
 
-## [3-1:]{style="color:DarkOrange"} 4 Interactive Data Visualisation - ggiraph Methods
+# [3-1:]{style="color:DarkOrange"} 4 Interactive Data Visualisation - ggiraph Methods
 
 [ggiraph](https://davidgohel.github.io/ggiraph/) ![](/Hands-on_Ex/Hands-on_Ex03-1/image/ggraph.jpg){width="60"} is an htmlwidget and a ggplot2 extension. It allows ggplot graphics to be interactive.
 
@@ -54,7 +54,7 @@ Interactive is made with [ggplot geometries](https://davidgohel.github.io/ggirap
 
 If it is used within a shiny application, elements associated with an id(data_id) can be selected and manipulated on client and server sides. Refer to this [article](https://www.ardata.fr/ggiraph-book/selections.html) for more detail explanation.
 
-### [3-1:]{style="color:DarkOrange"} 4.1 Tooltip Effect with *Tooltip* Aesthetic
+## [3-1:]{style="color:DarkOrange"} 4.1 Tooltip Effect with *Tooltip* Aesthetic
 
 Below shows a typical code chunk to plot an interactive statistical graph by using **ggiraph** package. Notice that the code chunk consists of two parts. First, a ggplot object will be created. Next, [`girafe()`](https://davidgohel.github.io/ggiraph/reference/girafe.html) of **ggiraph** will be used to create an interactive svg object.
 
@@ -81,7 +81,7 @@ Notice that two steps are involved.
 
 First, an interactive version of ggplot2 geom (i.e. [geom_dotplot_interactive()](https://davidgohel.github.io/ggiraph/reference/geom_dotplot_interactive.html)) will be used to create the basic graph. Then, [girafe()](https://davidgohel.github.io/ggiraph/reference/girafe.html) will be used to generate an svg object to be displayed on an html page.
 
-## [3-1:]{style="color:DarkOrange"} 5 Interactivity
+# [3-1:]{style="color:DarkOrange"} 5 Interactivity
 
 By hovering the mouse pointer on an data point of interest, the student's ID will be displayed.
 
@@ -104,7 +104,7 @@ girafe(
 )
 ```
 
-### [3-1:]{style="color:DarkOrange"} 5.1 Displaying Multiple Information on Tooltip
+## [3-1:]{style="color:DarkOrange"} 5.1 Displaying Multiple Information on Tooltip
 
 The content of the tooltip can be customised by including a list object as shown in the code chunk below.
 
@@ -134,7 +134,7 @@ girafe(
 
 The first three lines of codes in the code chunk create a new field called *tooltip*. At the same time, it populates text in ID and CLASS fields into the newly created field. Next, this newly created field is used as tooltip field as shown in the code of line 7.
 
-## [3-1:]{style="color:DarkOrange"} 6 Interactivity
+# [3-1:]{style="color:DarkOrange"} 6 Interactivity
 
 ::: callout-note
 By hovering the mouse pointer on a data point of interest, the student's ID and CLASS are displayed.
@@ -164,7 +164,7 @@ girafe(
 
 ```
 
-### [3-1:]{style="color:DarkOrange"} 6.1 Customising Tooltip Style
+## [3-1:]{style="color:DarkOrange"} 6.1 Customising Tooltip Style
 
 Code chunk below uses [`opts_tooltip()`](https://davidgohel.github.io/ggiraph/reference/opts_tooltip.html) of **ggiraph** to customise tooltip rendering by adding css declarations.
 
@@ -229,7 +229,7 @@ girafe(
 -   Refer to [Customizing girafe objects](https://www.ardata.fr/ggiraph-book/customize.html) to learn more about how to customise ggriaph objects
 :::
 
-### [3-1:]{style="color:DarkOrange"} 6.2 Displaying statistics on tooltip
+## [3-1:]{style="color:DarkOrange"} 6.2 Displaying statistics on tooltip
 
 Code chunk below shows an advanced way to customise tooltip. In this example, a function is used to compute 90% confident interval of the mean. The derived statistics are then displayed in the tooltip.
 
@@ -293,7 +293,7 @@ girafe(ggobj = gg_point,
 ```
 :::
 
-### [3-1:]{style="color:DarkOrange"} 6.3 Hover effect with *data_id* aesthetic
+## [3-1:]{style="color:DarkOrange"} 6.3 Hover effect with *data_id* aesthetic
 
 Code chunk below shows the second interactive feature of ggiraph, namely `data_id`.
 
@@ -353,7 +353,7 @@ Elements associated with a *data_id* (i.e. CLASS) will be highlighted upon mouse
 Note that the default value of the hover css is *hover_css = "fill:orange;"*.
 :::
 
-### [3-1:]{style="color:DarkOrange"} 6.4 Styling Hover Effect
+## [3-1:]{style="color:DarkOrange"} 6.4 Styling Hover Effect
 
 In the code chunk below, css codes are used to change the highlighting effect.
 
@@ -421,7 +421,7 @@ Elements associated with a *data_id (i.e. CLASS)* will be highlighted upon mouse
 Different from previous example, in this example the css customisation request are encoded directly
 :::
 
-### [3-1:]{style="color:DarkOrange"} 6.5 Combining Tooltip and Hover Effect
+## [3-1:]{style="color:DarkOrange"} 6.5 Combining Tooltip and Hover Effect
 
 There are times when we want to combine tooltip and hover effect on the interactive statistical graph as shown in the code chunk below.
 
@@ -485,7 +485,7 @@ girafe(
 Elements associated with a *data_id* (i.e. CLASS) will be highlighted upon mouse over. At the same time, the tooltip will show the CLASS.
 :::
 
-### [3-1:]{style="color:DarkOrange"} 6.6 Click Effect with onclick
+## [3-1:]{style="color:DarkOrange"} 6.6 Click Effect with onclick
 
 `onclick` argument of ggiraph provides hotlink interactivity on the web.
 
@@ -553,7 +553,7 @@ Web document link with a data object will be displayed on the web browser upon m
 Note that click actions must be a string column in the dataset containing valid JavaScript instructions.
 :::
 
-### [3-1:]{style="color:DarkOrange"} 6.7 Coordinated Multiple Views with ggiraph
+## [3-1:]{style="color:DarkOrange"} 6.7 Coordinated Multiple Views with ggiraph
 
 Coordinated multiple views methods has been implemented in the data visualisation below.
 
@@ -644,7 +644,7 @@ girafe(code = print(p1 + p2),
 The *data_id* aesthetic is critical to link observations between plots and the tooltip aesthetic is optional but nice to have when mouse over a point.
 :::
 
-## [3-1.7]{style="color:DarkOrange"} Interactive Data Visualisation - plotly Method
+# [3-1.7]{style="color:DarkOrange"} Interactive Data Visualisation - plotly Method
 
 Plotly's R graphing library create interactive web graphics from **ggplot2** graphs and/or a custom interface to the (MIT-licensed) JavaScript library [plotly.js](https://plotly.com/javascript/) inspired by the grammar of graphics. Different from other plotly platform, plot.R is free and open source.
 
@@ -655,7 +655,7 @@ There are two ways to create interactive graph by using plotly, they are:
 -   by using *plot_ly()*, and
 -   by using *ggplotly()*
 
-### [3-1:]{style="color:DarkOrange"} 7.1 Creating an Interactive Scatter Plot: plot_ly() Method
+## [3-1:]{style="color:DarkOrange"} 7.1 Creating an Interactive Scatter Plot: plot_ly() Method
 
 The tabset below shows an example of a basic interactive plot created by using *plot_ly()*.
 
@@ -688,7 +688,7 @@ plot_ly(
 -   plot_ly() is interactive by default as compared to ggplot2 [Hands-On Exercise 3-1: Section 1.5](https://isss608-ay2024-25t3.netlify.app/hands-on_ex/hands-on_ex03-1/hands-on_ex03-1#interactivity)
 :::
 
-### [3-1:]{style="color:DarkOrange"} 7.2 Working with Visual Variable: `plot_ly()` Method
+## [3-1:]{style="color:DarkOrange"} 7.2 Working with Visual Variable: `plot_ly()` Method
 
 In the code chunk below, *color* argument is mapped to a qualitative visual variable (i.e. RACE).
 
@@ -720,7 +720,7 @@ plot_ly(data=exam_data,
 Click on the colour symbol at the legend
 :::
 
-### [3-1:]{style="color:DarkOrange"} 7.3 Creating an Interactive Scatter Plot: `ggplotly()` Method
+## [3-1:]{style="color:DarkOrange"} 7.3 Creating an Interactive Scatter Plot: `ggplotly()` Method
 
 The code chunk below plots an interactive scatter plot by using *`ggplotly()`*.
 
@@ -758,7 +758,7 @@ ggplotly(p)
 -   This is much simpler as compared to the ggplot2 tooltip method in [Hands-On Exercise 3-1: Section 5.1](https://isss608-ay2024-25t3.netlify.app/hands-on_ex/hands-on_ex03-1/hands-on_ex03-1#displaying-multiple-information-on-tooltip)
 :::
 
-### [3-1:]{style="color:DarkOrange"} 7.4 Coordinated Multiple Views with plotly
+## [3-1:]{style="color:DarkOrange"} 7.4 Coordinated Multiple Views with plotly
 
 The creation of a coordinated linked plot by using plotly involves three steps:
 
@@ -828,7 +828,7 @@ Click on a data point of one of the scatterplot and see how the corresponding po
 -   Another difference is that the plotly highlight_key() method shows it's corresponding point **on click** but the ggiraph method shows it's corresponding point **on hover**
 :::
 
-### [3-1:]{style="color:DarkOrange"} 7.5 Improving Coordinated Multiple Views with plotly
+## [3-1:]{style="color:DarkOrange"} 7.5 Improving Coordinated Multiple Views with plotly
 
 There are a few issues with the coordinated multiple view plot [above](https://isss608-ay2024-25t3.netlify.app/hands-on_ex/hands-on_ex03/hands-on_ex03#coordinated_multiple_views_with_plotly).
 
@@ -909,11 +909,11 @@ subplot(
 ```
 :::
 
-## [3-1:]{style="color:DarkOrange"} 8 Interactive Data Visualisation - crosstalk Method
+# [3-1:]{style="color:DarkOrange"} 8 Interactive Data Visualisation - crosstalk Method
 
 [crosstalk](https://rstudio.github.io/crosstalk/) is an add-on to the htmlwidgets package. It extends htmlwidgets with a set of classes, functions, and conventions for implementing cross-widget interactions (currently, linked brushing and filtering).
 
-### [3-1:]{style="color:DarkOrange"} 8.1 Interactive Data Table: DT Package
+## [3-1:]{style="color:DarkOrange"} 8.1 Interactive Data Table: DT Package
 
 -   A wrapper of the JavaScript Library [DataTables](https://datatables.net/)
 -   Data objects in R can be rendered as HTML tables using the JavaScript library 'DataTables' (typically via R Markdown or Shiny).
@@ -938,7 +938,7 @@ DT::datatable(exam_data, class = "compact")
 ```
 :::
 
-### [3-1:]{style="color:DarkOrange"} 8.2 Linked Brushing: crosstalk Method
+## [3-1:]{style="color:DarkOrange"} 8.2 Linked Brushing: crosstalk Method
 
 ::: panel-tabset
 ## Plot
@@ -989,7 +989,7 @@ crosstalk::bscols(gg,
 -   *bscols()* is a helper function of **crosstalk** package. It makes it easy to put HTML elements side by side. It can be called directly from the console but is especially designed to work in an R Markdown document. **Warning**: This will bring in all of Bootstrap!.
 :::
 
-## [3-1:]{style="color:DarkOrange"} 8.3 Improving DataTable
+# [3-1:]{style="color:DarkOrange"} 8.3 Improving DataTable
 
 The DataTables above have 2 extra columns (tooltip and onclick). This is because they were added in [Hands-On Exercise 3-1: Section 5.1](https://isss608-ay2024-25t3.netlify.app/hands-on_ex/hands-on_ex03-1/hands-on_ex03-1#displaying_multiple_information_on_tooltip) for tooltip and in [Hands-On Exercise 3-1: Section 6.6](https://isss608-ay2024-25t3.netlify.app/hands-on_ex/hands-on_ex03-1/hands-on_ex03-1#click_effect_with_onclick) for onclick.
 
@@ -1027,7 +1027,7 @@ DT::datatable(exam_data_2,
 ```
 :::
 
-## [3-1:]{style="color:DarkOrange"} 8.4 Improving crosstalk Table
+# [3-1:]{style="color:DarkOrange"} 8.4 Improving crosstalk Table
 
 The crosstalk table in [Hands-On Exercise 3-1: Section 8.2](https://isss608-ay2024-25t3.netlify.app/hands-on_ex/hands-on_ex03-1/hands-on_ex03-1#linked_brushing:_crosstalk_method) has a very long DataTable on the right. This requires horizontal scrolling of the DataTable which is not an ideal user interface design. Therefore, the crosstalk layout has been changed from side-by-side to top-and-bottom by setting width to 12.
 
@@ -1099,9 +1099,9 @@ crosstalk::bscols(
 ```
 :::
 
-## [3-1:]{style="color:DarkOrange"} 9 Reference
+# [3-1:]{style="color:DarkOrange"} 9 Reference
 
-### [3-1:]{style="color:DarkOrange"} 9.1 ggiraph
+## [3-1:]{style="color:DarkOrange"} 9.1 ggiraph
 
 This [link](https://davidgohel.github.io/ggiraph/) provides an online version of the reference guide and several useful articles. Use this [link](https://cran.r-project.org/web/packages/ggiraph/ggiraph.pdf) to download the PDF version of the reference guide.
 
@@ -1110,7 +1110,7 @@ This [link](https://davidgohel.github.io/ggiraph/) provides an online version of
 -   [Custom interactive sunbursts with ggplot in R](https://www.pipinghotdata.com/posts/2021-06-01-custom-interactive-sunbursts-with-ggplot-in-r/)
 -   This [link](https://github.com/d-qn/2016_08_02_rioOlympicsAthletes) provides code example on how ggiraph is used to create interactive graphs for [Swiss Olympians - the solo specialists](https://www.swissinfo.ch/eng/rio-2016-_swiss-olympiansthe-solo-specialists-/42349156?utm_content=bufferd148b&utm_medium=social&utm_source=twitter.com&utm_campaign=buffer).
 
-### [3-1:]{style="color:DarkOrange"} 9.2 plotly for R
+## [3-1:]{style="color:DarkOrange"} 9.2 plotly for R
 
 -   [Getting started with Plotly in R](https://plotly.com/r/getting-started/)
 -   A collection of plotly R graphs are available via this [link](https://plotly.com/r/)

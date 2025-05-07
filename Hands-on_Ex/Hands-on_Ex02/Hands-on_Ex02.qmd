@@ -11,7 +11,7 @@ execute:
   freeze: true
 ---
 
-## [2:]{style="color:DarkOrange"} 1 Overview
+# [2:]{style="color:DarkOrange"} 1 Overview
 
 In this chapter, several ggplot2 extensions were used to create a more elegant and effective statistical graphics. By the end of this exercise, the following will be performed:
 
@@ -19,9 +19,9 @@ In this chapter, several ggplot2 extensions were used to create a more elegant a
 -   Create professional publication quality figure by using functions provided in ggthemes and hrbrtheme packages
 -   Plot composite figure by combing ggplot2 graphs by using patchwork package
 
-## [2:]{style="color:DarkOrange"} 2 Getting started
+# [2:]{style="color:DarkOrange"} 2 Getting started
 
-### [2:]{style="color:DarkOrange"} 2.1 Install and Load the Required Libraries
+## [2:]{style="color:DarkOrange"} 2.1 Install and Load the Required Libraries
 
 In this exercise, besides tidyverse (Explored in [Hands-on Exercised 1](https://isss608-ay2024-25t3.netlify.app/hands-on_ex/hands-on_ex01/hands-on_ex01)), four R packages will be used. They are:
 
@@ -38,7 +38,7 @@ pacman::p_load(ggrepel, patchwork,
                tidyverse,stringr)
 ```
 
-### [2:]{style="color:DarkOrange"} 2.2 Importing Data
+## [2:]{style="color:DarkOrange"} 2.2 Importing Data
 
 For the purpose of this exercise, a data file called *`Exam_data`* will be used. It consists of year end examination grades of a cohort of primary 3 students from a local school. It is in csv file format.
 
@@ -53,7 +53,7 @@ There are a total of seven attributes in the exam_data tibble data frame. Four o
 -   **Categorical Attributes:** ID, CLASS, GENDER and RACE.
 -   **Continuous Attributes:** MATHS, ENGLISH and SCIENCE.
 
-## [2:]{style="color:DarkOrange"} 3 Beyond ggplot Annotation: ggrepel
+# [2:]{style="color:DarkOrange"} 3 Beyond ggplot Annotation: ggrepel
 
 One of the challenge in plotting statistical graph is annotation, especially with large number of data points.
 
@@ -101,7 +101,7 @@ ggplot(data=exam_data,
 
 We simply replace `geom_text()` by [`geom_text_repel()`](https://ggrepel.slowkow.com/reference/geom_text_repel.html) and `geom_label()` with [`geom_label_repel()`](https://ggrepel.slowkow.com/reference/geom_text_repel.html).
 
-### [2:]{style="color:DarkOrange"} 3.1 Working with ggrepel
+## [2:]{style="color:DarkOrange"} 3.1 Working with ggrepel
 
 ```{r}
 #| echo: false
@@ -178,7 +178,7 @@ ggplot(data=exam_data,
 ```
 :::
 
-## [2:]{style="color:DarkOrange"} 4 Beyond ggplot2 Themes
+# [2:]{style="color:DarkOrange"} 4 Beyond ggplot2 Themes
 
 ggplot2 comes with eight built-in themes. They are:
 
@@ -327,7 +327,7 @@ The Default, Gray and Grey themes are all the same theme! The default is theme_g
 
 Refer to this [link](https://ggplot2.tidyverse.org/reference/#themes) to learn more about ggplot2 `Themes`
 
-### [2:]{style="color:darkorange"} 4.1 Working with ggtheme Packages
+## [2:]{style="color:darkorange"} 4.1 Working with ggtheme Packages
 
 [**ggthemes**](https://cran.r-project.org/web/packages/ggthemes/) provides [**ggplot2 themes**](https://yutannihilation.github.io/allYourFigureAreBelongToUs/ggthemes/) that replicate the look of plots by Edward Tuffe, Stephen Few, [Fivethirtyeight](https://fivethirtyeight.com/), [The Economist](https://www.economist.com/graphic-detail), 'Stata', 'Excel', and [The Wall Street Journal](https://www.pinterest.com/wsjgraphics/wsj-graphics/), among others.
 
@@ -481,7 +481,7 @@ ggplot(data=exam_data,
 
 It also provides some extra geoms and scales for ggplot2. Consult [this vignette](https://yutannihilation.github.io/allYourFigureAreBelongToUs/ggthemes/) to learn more.
 
-### [2:]{style="color:darkorange"} 4.2 Working with hrbrthemes Package
+## [2:]{style="color:darkorange"} 4.2 Working with hrbrthemes Package
 
 [**hrbrthemes**](https://cran.r-project.org/package=hrbrthemes) package provides a base theme that focuses on typographic elements, including where various labels are placed as well as the fonts that are used.
 
@@ -566,7 +566,7 @@ ggplot(data=exam_data,
 -   `grid` argument is used to remove the x-axis grid lines
 :::
 
-## [2:]{style="color:darkorange"} 5 Beyond Single Graph
+# [2:]{style="color:darkorange"} 5 Beyond Single Graph
 
 It is not unusual that multiple graphs are required to tell a compelling visual story. There are several ggplot2 extensions provide functions to compose figure with multiple graphs. In this section, composite plots will be created by combining multiple graphs. Three statistical graphics will be created using the code chunk below.
 
@@ -671,7 +671,7 @@ p3 <- ggplot(data=exam_data,
 ```
 :::
 
-### [2:]{style="color:darkorange"} 5.1 Creating Composite Graphics: patchwork Methods
+## [2:]{style="color:darkorange"} 5.1 Creating Composite Graphics: patchwork Methods
 
 There are several ggplot2 extension's functions support the needs to prepare composite figure by combining several graphs such as [grid.arrange()](https://cran.r-project.org/web/packages/gridExtra/vignettes/arrangeGrob.html) of **gridExtra** package and [plot_grid()](https://wilkelab.org/cowplot/reference/plot_grid.html) of [**cowplot**](https://wilkelab.org/cowplot/) package. The ggplot2 extension extension called [**patchwork**](https://patchwork.data-imaginist.com/) ![](/Hands-on_Ex/Hands-on_Ex02/image/patchwork.png){width="60"} is specially designed for combining separate ggplot2 graphs into a single figure.
 
@@ -681,7 +681,7 @@ Patchwork package has a very simple syntax for creating layouts super easily. Th
 -   Parenthesis "()" to create a subplot group
 -   Two-Row Layout using the Division design "/"
 
-### [2:]{style="color:darkorange"} 5.2 Combing Two ggplot2 Graphs
+## [2:]{style="color:darkorange"} 5.2 Combing Two ggplot2 Graphs
 
 The figure in the tabset below shows a composite of two histograms created using patchwork. The code and syntax used to create the plot simple!
 
@@ -701,7 +701,7 @@ p1 + p2
 ```
 :::
 
-### [2:]{style="color:darkorange"} 5.3 Combining Three ggplot2 Graphs
+## [2:]{style="color:darkorange"} 5.3 Combining Three ggplot2 Graphs
 
 We can plot more complex composite by using appropriate operators. For example, the composite figure below is plotted by using:
 
@@ -727,7 +727,7 @@ We can plot more complex composite by using appropriate operators. For example, 
 
 To learn more, refer to [Plot Assembly](https://patchwork.data-imaginist.com/articles/guides/assembly.html).
 
-### [2:]{style="color:darkorange"} 5.4 Creating a Composite Figure with Tagging
+## [2:]{style="color:darkorange"} 5.4 Creating a Composite Figure with Tagging
 
 In order to identify subplots in text, **patchwork** also provides auto-tagging capabilities as shown in the figure below.
 
@@ -753,7 +753,7 @@ In order to identify subplots in text, **patchwork** also provides auto-tagging 
 Take note that the tagging goes from top left -\> btm left -\> top right -\> btm right!
 :::
 
-### [2:]{style="color:darkorange"} 5.5 Creating Figure with Insertion
+## [2:]{style="color:darkorange"} 5.5 Creating Figure with Insertion
 
 **Patchwork** allows more than just providing functions to place plots next to each other based on the provided layout. With [`inset_element()`](https://patchwork.data-imaginist.com/reference/inset_element.html), one or several plots or graphic elements can be placed freely on top or below another plot.
 
@@ -781,7 +781,7 @@ p3 + inset_element(p2,
 ```
 :::
 
-### [2:]{style="color:darkorange"} 5.6 Creating a Composite Figure by Using patchwork and ggtheme
+## [2:]{style="color:darkorange"} 5.6 Creating a Composite Figure by Using patchwork and ggtheme
 
 The figure below is created by combining patchwork and theme_economist() of [ggthemes package](https://isss608-ay2024-25t3.netlify.app/hands-on_ex/hands-on_ex02/hands-on_ex02#beyond-ggplot2-themes) discussed earlier.
 
@@ -807,7 +807,7 @@ patchwork & theme_economist()
 ```
 :::
 
-## [2:]{style="color:darkorange"} 6 References
+# [2:]{style="color:darkorange"} 6 References
 
 -   [Patchwork R package goes nerd viral](https://www.littlemissdata.com/blog/patchwork)
 -   [ggrepel](https://ggrepel.slowkow.com/)
