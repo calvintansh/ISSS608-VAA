@@ -10,3 +10,189 @@ execute:
   warning: false
   freeze: true
 ---
+
+# [4-3:]{style="color:DarkOrange"} 1 Learning Outcomes
+
+In this hands-on exercise, the following will be covered:
+
+-   ggstatsplot Package: Create visual graphics with rich statistical information
+-   performance Package: Visualise model diagnostics
+-   parameters Package: Visualise model parameters
+
+# [4-3:]{style="color:DarkOrange"} 2 Visual Statistical Analysis with ggstatsplot
+
+[**ggstatsplot**](https://indrajeetpatil.github.io/ggstatsplot/index.html) ![](image/ggstatplot.jpg){width="60"} is an extension of [**ggplot2**](https://ggplot2.tidyverse.org/) package for creating graphics with details from statistical tests included in the information-rich plots themselves. Such details include:
+-   Providing alternative statistical inference methods by default.
+-   Following best practices for statistical reporting. For all statistical tests reported in the plots, the default template abides by the [APA](https://my.ilstu.edu/~jhkahn/apastats.html) gold standard for statistical reporting.
+
+
+![](image/stats.jpg){fig-align="center" width="800"}
+
+# [4-3:]{style="color:DarkOrange"} 3 Getting Started
+
+## [4-3:]{style="color:DarkOrange"} 3.1 Installing and Launching R Packages
+
+In this exercise, **ggstatsplot** and **tidyverse** will be used.
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show code"
+pacman::p_load(ggstatsplot, tidyverse)
+```
+
+## [4-3:]{style="color:DarkOrange"} 3.2 Importing Data
+
+Importing **Exam-csv** data by using *read_csv()*.
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show code"
+exam <- read_csv("data/Exam_data.csv")
+
+library(knitr)
+kable(head(exam, 10))
+```
+
+## [4-3:]{style="color:DarkOrange"} 3.3 One-Sample Test: *gghistostats()* Method
+
+In the code chunk below, [*gghistostats()*](https://indrajeetpatil.github.io/ggstatsplot/reference/gghistostats.html) is used to build an visual of one-sample test on English scores.
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+set.seed(1234)
+
+gghistostats(
+  data = exam,
+  x = ENGLISH,
+  type = "bayes",
+  test.value = 60,
+  xlab = "English scores"
+)
+```
+
+::: callout-note
+## Default Information
+
+-   Statistical Details
+-   Bayes Factor
+-   Sample Sizes
+-   Distribution Summary
+:::
+
+## [4-3:]{style="color:DarkOrange"} 3.4 Unpacking the Bayes Factor
+
+-   A Bayes factor is the ratio of the likelihood of one particular hypothesis to the likelihood of another. It can be interpreted as a measure of the strength of evidence in favour of one theory among two competing theories.
+
+-   That is because the Bayes factor gives us a way to evaluate the data in favour of a null hypothesis, and to use external information to do so. It tells us what the weight of the evidence is in favour of a given hypothesis.
+
+-   When we are comparing two hypotheses, H1 (the alternate hypothesis) and H0 (the null hypothesis), the Bayes factor is often written as B10. It can be defined mathematically as:
+
+![](image/frac.jpg){fig-align="center" width="400"}
+
+-   The [**Schwarz criterion**](https://www.statisticshowto.com/bayesian-information-criterion/) is one of the easiest ways to calculate rough estimation of the Bayes factor.
+
+## [4-3:]{style="color:DarkOrange"} 3.5 How to Interpret Bayes Factor
+
+A **Bayes Factor** can be any positive number. One of the most common interpretation is this: First proposed by Harold Jeffereys (1961) and slightly modified by [Lee and Wagemakers](https://www-tandfonline-com.libproxy.smu.edu.sg/doi/pdf/10.1080/00031305.1999.10474443?needAccess=true) in 2013.
+
+![](image/table.jpg){fig-align="center" width="400"}
+
+## [4-3:]{style="color:DarkOrange"} 3.6 Two-Sample Mean Test: *ggbetweenstats()*
+
+In the code chunk below, [*ggbetweenstats()*](https://indrajeetpatil.github.io/ggstatsplot/reference/ggbetweenstats.html) is used to build a visual for two-sample mean test of Maths scores by gender.
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+ggbetweenstats(
+  data = exam,
+  x = GENDER,
+  y = MATHS,
+  type = "np",
+  message = FALSE
+)
+```
+
+::: callout-note
+## Default Information
+
+-   Statistical Details
+-   Bayes Factor
+-   Sample Sizes
+-   Distribution Summary
+:::
+
+## [4-3:]{style="color:DarkOrange"} 3.7 Oneway ANOVA Test: *ggbetweentats()* Method
+
+In the code chunk below, [*ggbetweenstats()*](https://indrajeetpatil.github.io/ggstatsplot/reference/ggbetweenstats.html) is used to build a visual for One-way ANOVA test on English scores by Race.
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+ggbetweenstats(
+  data = exam,
+  x = RACE,
+  y = ENGLISH,
+  type = "p",
+  mean.ci = TRUE,
+  pariwise.comparisons = TRUE,
+  pairwise.display = "s",
+  p.adjust.methods = "fdr",
+  message = FALSE
+)
+```
+
+::: callout-note
+## Legend
+
+-   "na" → only non-significant
+-   "s" → only significant
+-   "all" → everything
+:::
+
+### [4-3:]{style="color:DarkOrange"} 3.7.1 ggbetweentats() - Summary of Tests
+
+![](image/test.jpg){fig-align="center" width="800"}
+
+![](image/test2.jpg){fig-align="center" width="800"}
+
+![](image/test3.jpg){fig-align="center" width="800"}
+
+## [4-3:]{style="color:DarkOrange"} 3.8 Significant Test of Correlation: *ggscatterstats()*
+
+In the code chunk below, [*ggscatterstats()*](https://indrajeetpatil.github.io/ggstatsplot/reference/ggscatterstats.html) is used to build a visual for Significant Test of Correlation between Maths scores and English scores. 
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+ggscatterstats(
+  data = exam,
+  x = MATHS,
+  y = ENGLISH,
+  marginal = FALSE
+)
+```
+
+## [4-3:]{style="color:DarkOrange"} 3.9 Significant Test of Association (Dependence): *ggbarstats()* Method
+
+In the code chunk below, the Maths scores are binned into a 4-class variable width by using [*cut()*](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/cut)
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+exam1 <- exam %>%
+  mutate(MATHS_bins = 
+           cut(MATHS,
+               breaks = c(0,60,75,85,100)))
+```
+
+And the code chunt below uses [*ggbarstats()*](https://indrajeetpatil.github.io/ggstatsplot/reference/ggbarstats.html) to build a visual for Significant Test of Association.
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+ggbarstats(exam1, 
+           x = MATHS_bins, 
+           y = GENDER)
+```

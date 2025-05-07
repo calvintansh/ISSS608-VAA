@@ -1551,5 +1551,115 @@
       "Hands-On Exercises",
       "4-2: Visualising Distribution"
     ]
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex04-3/Hands-on_Ex04-3.html",
+    "href": "Hands-on_Ex/Hands-on_Ex04-3/Hands-on_Ex04-3.html",
+    "title": "Hands-On Exercise 4-2: Visual Statistical Analysis",
+    "section": "",
+    "text": "In this hands-on exercise, the following will be covered:\n\nggstatsplot Package: Create visual graphics with rich statistical information\nperformance Package: Visualise model diagnostics\nparameters Package: Visualise model parameters",
+    "crumbs": [
+      "Hands-On Exercises",
+      "4-3: Visual Statistical Analysis"
+    ]
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex04-3/Hands-on_Ex04-3.html#installing-and-launching-r-packages",
+    "href": "Hands-on_Ex/Hands-on_Ex04-3/Hands-on_Ex04-3.html#installing-and-launching-r-packages",
+    "title": "Hands-On Exercise 4-2: Visual Statistical Analysis",
+    "section": "4-3: 3.1 Installing and Launching R Packages",
+    "text": "4-3: 3.1 Installing and Launching R Packages\nIn this exercise, ggstatsplot and tidyverse will be used.\n\n\nShow code\npacman::p_load(ggstatsplot, tidyverse)",
+    "crumbs": [
+      "Hands-On Exercises",
+      "4-3: Visual Statistical Analysis"
+    ]
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex04-3/Hands-on_Ex04-3.html#importing-data",
+    "href": "Hands-on_Ex/Hands-on_Ex04-3/Hands-on_Ex04-3.html#importing-data",
+    "title": "Hands-On Exercise 4-2: Visual Statistical Analysis",
+    "section": "4-3: 3.2 Importing Data",
+    "text": "4-3: 3.2 Importing Data\nImporting Exam-csv data by using read_csv().\n\n\nShow code\nexam &lt;- read_csv(\"data/Exam_data.csv\")\n\nlibrary(knitr)\nkable(head(exam, 10))\n\n\n\n\n\nID\nCLASS\nGENDER\nRACE\nENGLISH\nMATHS\nSCIENCE\n\n\n\n\nStudent321\n3I\nMale\nMalay\n21\n9\n15\n\n\nStudent305\n3I\nFemale\nMalay\n24\n22\n16\n\n\nStudent289\n3H\nMale\nChinese\n26\n16\n16\n\n\nStudent227\n3F\nMale\nChinese\n27\n77\n31\n\n\nStudent318\n3I\nMale\nMalay\n27\n11\n25\n\n\nStudent306\n3I\nFemale\nMalay\n31\n16\n16\n\n\nStudent313\n3I\nMale\nChinese\n31\n21\n25\n\n\nStudent316\n3I\nMale\nMalay\n31\n18\n27\n\n\nStudent312\n3I\nMale\nMalay\n33\n19\n15\n\n\nStudent297\n3H\nMale\nIndian\n34\n49\n37",
+    "crumbs": [
+      "Hands-On Exercises",
+      "4-3: Visual Statistical Analysis"
+    ]
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex04-3/Hands-on_Ex04-3.html#one-sample-test-gghistostats-method",
+    "href": "Hands-on_Ex/Hands-on_Ex04-3/Hands-on_Ex04-3.html#one-sample-test-gghistostats-method",
+    "title": "Hands-On Exercise 4-2: Visual Statistical Analysis",
+    "section": "4-3: 3.3 One-Sample Test: gghistostats() Method",
+    "text": "4-3: 3.3 One-Sample Test: gghistostats() Method\nIn the code chunk below, gghistostats() is used to build an visual of one-sample test on English scores.\n\n\nShow the code\nset.seed(1234)\n\ngghistostats(\n  data = exam,\n  x = ENGLISH,\n  type = \"bayes\",\n  test.value = 60,\n  xlab = \"English scores\"\n)\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nDefault Information\n\n\n\n\nStatistical Details\nBayes Factor\nSample Sizes\nDistribution Summary",
+    "crumbs": [
+      "Hands-On Exercises",
+      "4-3: Visual Statistical Analysis"
+    ]
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex04-3/Hands-on_Ex04-3.html#unpacking-the-bayes-factor",
+    "href": "Hands-on_Ex/Hands-on_Ex04-3/Hands-on_Ex04-3.html#unpacking-the-bayes-factor",
+    "title": "Hands-On Exercise 4-2: Visual Statistical Analysis",
+    "section": "4-3: 3.4 Unpacking the Bayes Factor",
+    "text": "4-3: 3.4 Unpacking the Bayes Factor\n\nA Bayes factor is the ratio of the likelihood of one particular hypothesis to the likelihood of another. It can be interpreted as a measure of the strength of evidence in favour of one theory among two competing theories.\nThat is because the Bayes factor gives us a way to evaluate the data in favour of a null hypothesis, and to use external information to do so. It tells us what the weight of the evidence is in favour of a given hypothesis.\nWhen we are comparing two hypotheses, H1 (the alternate hypothesis) and H0 (the null hypothesis), the Bayes factor is often written as B10. It can be defined mathematically as:\n\n\n\n\n\n\n\nThe Schwarz criterion is one of the easiest ways to calculate rough estimation of the Bayes factor.",
+    "crumbs": [
+      "Hands-On Exercises",
+      "4-3: Visual Statistical Analysis"
+    ]
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex04-3/Hands-on_Ex04-3.html#how-to-interpret-bayes-factor",
+    "href": "Hands-on_Ex/Hands-on_Ex04-3/Hands-on_Ex04-3.html#how-to-interpret-bayes-factor",
+    "title": "Hands-On Exercise 4-2: Visual Statistical Analysis",
+    "section": "4-3: 3.5 How to Interpret Bayes Factor",
+    "text": "4-3: 3.5 How to Interpret Bayes Factor\nA Bayes Factor can be any positive number. One of the most common interpretation is this: First proposed by Harold Jeffereys (1961) and slightly modified by Lee and Wagemakers in 2013.",
+    "crumbs": [
+      "Hands-On Exercises",
+      "4-3: Visual Statistical Analysis"
+    ]
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex04-3/Hands-on_Ex04-3.html#two-sample-mean-test-ggbetweenstats",
+    "href": "Hands-on_Ex/Hands-on_Ex04-3/Hands-on_Ex04-3.html#two-sample-mean-test-ggbetweenstats",
+    "title": "Hands-On Exercise 4-2: Visual Statistical Analysis",
+    "section": "4-3: 3.6 Two-Sample Mean Test: ggbetweenstats()",
+    "text": "4-3: 3.6 Two-Sample Mean Test: ggbetweenstats()\nIn the code chunk below, ggbetweenstats() is used to build a visual for two-sample mean test of Maths scores by gender.\n\n\nShow the code\nggbetweenstats(\n  data = exam,\n  x = GENDER,\n  y = MATHS,\n  type = \"np\",\n  message = FALSE\n)\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nDefault Information\n\n\n\n\nStatistical Details\nBayes Factor\nSample Sizes\nDistribution Summary",
+    "crumbs": [
+      "Hands-On Exercises",
+      "4-3: Visual Statistical Analysis"
+    ]
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex04-3/Hands-on_Ex04-3.html#oneway-anova-test-ggbetweentats-method",
+    "href": "Hands-on_Ex/Hands-on_Ex04-3/Hands-on_Ex04-3.html#oneway-anova-test-ggbetweentats-method",
+    "title": "Hands-On Exercise 4-2: Visual Statistical Analysis",
+    "section": "4-3: 3.7 Oneway ANOVA Test: ggbetweentats() Method",
+    "text": "4-3: 3.7 Oneway ANOVA Test: ggbetweentats() Method\nIn the code chunk below, ggbetweenstats() is used to build a visual for One-way ANOVA test on English scores by Race.\n\n\nShow the code\nggbetweenstats(\n  data = exam,\n  x = RACE,\n  y = ENGLISH,\n  type = \"p\",\n  mean.ci = TRUE,\n  pariwise.comparisons = TRUE,\n  pairwise.display = \"s\",\n  p.adjust.methods = \"fdr\",\n  message = FALSE\n)\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nLegend\n\n\n\n\n“na” → only non-significant\n“s” → only significant\n“all” → everything\n\n\n\n\n4-3: 3.7.1 ggbetweentats() - Summary of Tests",
+    "crumbs": [
+      "Hands-On Exercises",
+      "4-3: Visual Statistical Analysis"
+    ]
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex04-3/Hands-on_Ex04-3.html#significant-test-of-correlation-ggscatterstats",
+    "href": "Hands-on_Ex/Hands-on_Ex04-3/Hands-on_Ex04-3.html#significant-test-of-correlation-ggscatterstats",
+    "title": "Hands-On Exercise 4-2: Visual Statistical Analysis",
+    "section": "4-3: 3.8 Significant Test of Correlation: ggscatterstats()",
+    "text": "4-3: 3.8 Significant Test of Correlation: ggscatterstats()\nIn the code chunk below, ggscatterstats() is used to build a visual for Significant Test of Correlation between Maths scores and English scores.\n\n\nShow the code\nggscatterstats(\n  data = exam,\n  x = MATHS,\n  y = ENGLISH,\n  marginal = FALSE\n)",
+    "crumbs": [
+      "Hands-On Exercises",
+      "4-3: Visual Statistical Analysis"
+    ]
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex04-3/Hands-on_Ex04-3.html#significant-test-of-association-dependence-ggbarstats-method",
+    "href": "Hands-on_Ex/Hands-on_Ex04-3/Hands-on_Ex04-3.html#significant-test-of-association-dependence-ggbarstats-method",
+    "title": "Hands-On Exercise 4-2: Visual Statistical Analysis",
+    "section": "4-3: 3.9 Significant Test of Association (Dependence): ggbarstats() Method",
+    "text": "4-3: 3.9 Significant Test of Association (Dependence): ggbarstats() Method\nIn the code chunk below, the Maths scores are binned into a 4-class variable width by using cut()\n\n\nShow the code\nexam1 &lt;- exam %&gt;%\n  mutate(MATHS_bins = \n           cut(MATHS,\n               breaks = c(0,60,75,85,100)))\n\n\nAnd the code chunt below uses ggbarstats() to build a visual for Significant Test of Association.\n\n\nShow the code\nggbarstats(exam1, \n           x = MATHS_bins, \n           y = GENDER)",
+    "crumbs": [
+      "Hands-On Exercises",
+      "4-3: Visual Statistical Analysis"
+    ]
   }
 ]
