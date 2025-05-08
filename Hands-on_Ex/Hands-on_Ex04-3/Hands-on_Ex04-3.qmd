@@ -1,5 +1,5 @@
 ---
-title: "[Hands-On Exercise 4-2:]{style='color:DarkOrange'}  Visual Statistical Analysis"
+title: "[Hands-On Exercise 4-3:]{style='color:DarkOrange'}  Visual Statistical Analysis"
 date: 2025-05-07
 date-modified: "last-modified"
 format: html
@@ -21,10 +21,7 @@ In this hands-on exercise, the following will be covered:
 
 # [4-3:]{style="color:DarkOrange"} 2 Visual Statistical Analysis with ggstatsplot
 
-[**ggstatsplot**](https://indrajeetpatil.github.io/ggstatsplot/index.html) ![](image/ggstatplot.jpg){width="60"} is an extension of [**ggplot2**](https://ggplot2.tidyverse.org/) package for creating graphics with details from statistical tests included in the information-rich plots themselves. Such details include:
--   Providing alternative statistical inference methods by default.
--   Following best practices for statistical reporting. For all statistical tests reported in the plots, the default template abides by the [APA](https://my.ilstu.edu/~jhkahn/apastats.html) gold standard for statistical reporting.
-
+[**ggstatsplot**](https://indrajeetpatil.github.io/ggstatsplot/index.html) ![](image/ggstatplot.jpg){width="60"} is an extension of [**ggplot2**](https://ggplot2.tidyverse.org/) package for creating graphics with details from statistical tests included in the information-rich plots themselves. Such details include: - Providing alternative statistical inference methods by default. - Following best practices for statistical reporting. For all statistical tests reported in the plots, the default template abides by the [APA](https://my.ilstu.edu/~jhkahn/apastats.html) gold standard for statistical reporting.
 
 ![](image/stats.jpg){fig-align="center" width="800"}
 
@@ -161,7 +158,7 @@ ggbetweenstats(
 
 ## [4-3:]{style="color:DarkOrange"} 3.8 Significant Test of Correlation: *ggscatterstats()*
 
-In the code chunk below, [*ggscatterstats()*](https://indrajeetpatil.github.io/ggstatsplot/reference/ggscatterstats.html) is used to build a visual for Significant Test of Correlation between Maths scores and English scores. 
+In the code chunk below, [*ggscatterstats()*](https://indrajeetpatil.github.io/ggstatsplot/reference/ggscatterstats.html) is used to build a visual for Significant Test of Correlation between Maths scores and English scores.
 
 ```{r}
 #| code-fold: true

@@ -1,5 +1,5 @@
 ---
-title: "[Hands-On Exercise 4-2:]{style='color:DarkOrange'} Visualising Uncertainty"
+title: "[Hands-On Exercise 4-4:]{style='color:DarkOrange'} Visualising Uncertainty"
 date: 2025-05-07
 date-modified: "last-modified"
 format: html
@@ -53,10 +53,11 @@ exam <- read_csv("data/Exam_data.csv")
 
 # [4-4:]{style="color:DarkOrange"} 3 Visualising the Uncertainty of Point Estimates: ggplot2 Methods
 
-A point estimate is a single number, such as a mean. Uncertainty, on the other hand, is expressed as a standard error, confidence interval, or credible interval. 
+A point estimate is a single number, such as a mean. Uncertainty, on the other hand, is expressed as a standard error, confidence interval, or credible interval.
 
 ::: callout-warning
 ## Important
+
 Do not confuse the uncertainty of a point estimate with the variation in the sample!
 :::
 
@@ -88,19 +89,18 @@ my_sum <- exam %>%
 
 ::: callout-note
 # Mathematical Explanation
+
 ![](image/math.png){fig-align="center" width="400"}
 :::
 
 Next, the code chunk below is used to display the *my_sum* tibble data frame in a HTML table format.
 
-
-``` {r}
+```{r}
 #| code-fold: true
 #| code-summary: "Show code"
 knitr:::kable(head(my_sum),
               format = 'html')
 ```
-
 
 ## [4-4:]{style="color:DarkOrange"} 3.1 Plotting Standard Error Bars of Point Estimates
 
@@ -108,6 +108,7 @@ The preparation above enables plotting standard error bars for the mean Maths sc
 
 ::: panel-tabset
 ## Improved Plot
+
 ```{r}
 #| code-fold: true
 #| code-summary: "Show code"
@@ -134,6 +135,7 @@ ggplot(my_sum) +
 ```
 
 ## Original Plot
+
 ```{r}
 #| code-fold: true
 #| code-summary: "Show code"
@@ -236,9 +238,9 @@ The improved plot fixes the wrongly labelled x-axis to the y-axis.
 This section will cover plotting interactive error bars for the 99% confidence interval of the mean Maths score by Race.
 
 ::: panel-tabset
-
 ## Improved Plot
-``` {r}
+
+```{r}
 #| code-fold: true
 #| code-summary: "Show code"
 #| fig-width: 3
@@ -289,6 +291,7 @@ bscols(widths = c(5,7),
 ```
 
 ## Original Plot
+
 ```{r}
 #| code-fold: true
 #| code-summary: "Show code"
@@ -347,9 +350,7 @@ The original plot has a very compressed graph and the title is cut off. This was
 
 [`ggdist`](https://mjskay.github.io/ggdist/index.html) is an R package that provides a flexible set of `ggplot2` geoms and stats designed for visualising distributions and uncertainty. It is designed for both frequentist and Bayesian uncertainty visualisation, taking the view that uncertainty visualization can be unified through the perspective of distribution visualization
 
-Further Details:
--   Frequentist Models: Visualises confidence distribution or bootstrap distributions (see vignette ("[freq-uncertainty-vis](https://mjskay.github.io/ggdist/articles/freq-uncertainty-vis.html)")
-- Bayesian Models: Visualises probability distributions (see the [tidybayes](https://mjskay.github.io/tidybayes/) package, which builds on top of ggdist).
+Further Details: - Frequentist Models: Visualises confidence distribution or bootstrap distributions (see vignette ("[freq-uncertainty-vis](https://mjskay.github.io/ggdist/articles/freq-uncertainty-vis.html)") - Bayesian Models: Visualises probability distributions (see the [tidybayes](https://mjskay.github.io/tidybayes/) package, which builds on top of ggdist).
 
 ![](image/ggdist.png){fig-align="center" width="800"}
 
@@ -357,7 +358,7 @@ Further Details:
 
 In the code chunk below, [stat_pointinterval()](https://mjskay.github.io/ggdist/reference/stat_pointinterval.html) of **ggdist** is used to build a visual for displaying the distribution of Maths score by Race.
 
-:::: panel-tabset
+::: panel-tabset
 ## Default Plot
 
 ```{r}
@@ -374,7 +375,7 @@ exam %>%
 
 ## Modified Plot (95%, Median, QI)
 
-``` {r}
+```{r}
 #| code-fold: true
 #| code-summary: "Show code"
 exam %>%
@@ -386,14 +387,10 @@ exam %>%
     title = "Visualising confidence intervals of median math score",
     subtitle = "Median Point + Multiple-interval plot")
 ```
-
 :::
 
 ::: callout-note
-This function comes with many arguments. The second plot is modified with the following:
--   .width = 0.95
--   .point = median (Options: mean, median, or mode)
--   .interval = qi (Options: quantile interval [qi], highest-density interval [hdi]; or highest-density continuous interval [hdci])
+This function comes with many arguments. The second plot is modified with the following: - .width = 0.95 - .point = median (Options: mean, median, or mode) - .interval = qi (Options: quantile interval \[qi\], highest-density interval \[hdi\]; or highest-density continuous interval \[hdci\])
 :::
 
 ## [4-4:]{style="color:DarkOrange"} 4.2 Visualising the Uncertainty of Point Estimates: `ggdist` Methods (Part 2)
@@ -432,8 +429,8 @@ exam %>%
 In the code chunk below, [`stat_gradientinterval()`](https://mjskay.github.io/ggdist/reference/stat_gradientinterval.html) of **ggdist** is used to build a visual for displaying distribution of Maths score by Race.
 
 ::: panel-tabset
-
 ## Improved Plot
+
 ```{r}
 #| code-fold: true
 #| code-summary: "Show the code"
@@ -460,6 +457,7 @@ exam %>%
 ```
 
 ## Plot
+
 ```{r}
 #| code-fold: true
 #| code-summary: "Show the code"
@@ -480,7 +478,7 @@ exam %>%
 
 ## [4-4:]{style="color:DarkOrange"} 5.1 Installing ungeviz Package
 
-``` {r}
+```{r}
 #| code-fold: true
 #| code-summary: "Show the code"
 devtools::install_github("wilkelab/ungeviz")
@@ -497,7 +495,6 @@ You only need to perform this step once.
 #| code-summary: "Show the code"
 library(ungeviz)
 ```
-
 
 ## [4-4:]{style="color:DarkOrange"} 5.3 Visualising Uncertainty with Hypothetical Outcome Plots (HOPs)
 

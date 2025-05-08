@@ -141,7 +141,7 @@
   {
     "objectID": "Hands-on_Ex/Hands-on_Ex04-4/Hands-on_Ex04-4.html",
     "href": "Hands-on_Ex/Hands-on_Ex04-4/Hands-on_Ex04-4.html",
-    "title": "Hands-On Exercise 4-2: Visualising Uncertainty",
+    "title": "Hands-On Exercise 4-4: Visualising Uncertainty",
     "section": "",
     "text": "Visualising uncertainty is relatively new in statistical graphics. This exercise will cover creating statistical graphics for visualising uncertainty which includes the following:\n\nPlot statistics error bars by using ggplot2\nPlot interactive error bars by combining ggplot2, plotly and DT\nCreate advance visualisations using ggdist\nCreate hypothetical outcome plots (HOPs) with ungeviz package",
     "crumbs": [
@@ -152,7 +152,7 @@
   {
     "objectID": "Hands-on_Ex/Hands-on_Ex04-4/Hands-on_Ex04-4.html#installing-and-loading-packages",
     "href": "Hands-on_Ex/Hands-on_Ex04-4/Hands-on_Ex04-4.html#installing-and-loading-packages",
-    "title": "Hands-On Exercise 4-2: Visualising Uncertainty",
+    "title": "Hands-On Exercise 4-4: Visualising Uncertainty",
     "section": "4-4: 2.1 Installing and Loading Packages",
     "text": "4-4: 2.1 Installing and Loading Packages\nThe following R packages will be used for this exercise:\n\ntidyverse: A family of R packages for data science process\nplotly: Create interactive plots\ngganimate: Create animation plots\nDT: Display interactive HTML tables\ncrosstalk: Implement cross-widget interactions (currently, linked brushing and filtering)\nggdist: Visualise distribution and uncertainty\n\n\n\nShow code\npacman::p_load(plotly, crosstalk, DT, \n               ggdist, ggridges, colorspace,\n               gganimate, tidyverse)",
     "crumbs": [
@@ -163,7 +163,7 @@
   {
     "objectID": "Hands-on_Ex/Hands-on_Ex04-4/Hands-on_Ex04-4.html#importing-data",
     "href": "Hands-on_Ex/Hands-on_Ex04-4/Hands-on_Ex04-4.html#importing-data",
-    "title": "Hands-On Exercise 4-2: Visualising Uncertainty",
+    "title": "Hands-On Exercise 4-4: Visualising Uncertainty",
     "section": "4-4: 2.2 Importing data",
     "text": "4-4: 2.2 Importing data\nThe Exam_data.csv dataset will be used for this exercise.\n\n\nShow code\nexam &lt;- read_csv(\"data/Exam_data.csv\")",
     "crumbs": [
@@ -174,7 +174,7 @@
   {
     "objectID": "Hands-on_Ex/Hands-on_Ex04-4/Hands-on_Ex04-4.html#plotting-standard-error-bars-of-point-estimates",
     "href": "Hands-on_Ex/Hands-on_Ex04-4/Hands-on_Ex04-4.html#plotting-standard-error-bars-of-point-estimates",
-    "title": "Hands-On Exercise 4-2: Visualising Uncertainty",
+    "title": "Hands-On Exercise 4-4: Visualising Uncertainty",
     "section": "4-4: 3.1 Plotting Standard Error Bars of Point Estimates",
     "text": "4-4: 3.1 Plotting Standard Error Bars of Point Estimates\nThe preparation above enables plotting standard error bars for the mean Maths score by Race.\n\nImproved PlotOriginal Plot\n\n\n\n\nShow code\nggplot(my_sum) +\n  geom_errorbar(\n    aes(x=RACE, \n        ymin=mean-se, \n        ymax=mean+se), \n    width=0.2, \n    colour=\"black\", \n    alpha=0.9, \n    linewidth=0.5) +\n  geom_point(aes\n           (x=RACE, \n            y=mean), \n           stat=\"identity\", \n           color=\"red\",\n           size = 1.5,\n           alpha=1) +\n  ggtitle(\"Standard Error of Mean Maths Score by Race\") +\n  labs(\n    x = NULL,\n    y = 'Maths Score')\n\n\n\n\n\n\n\n\n\n\n\n\n\nShow code\nggplot(my_sum) +\n  geom_errorbar(\n    aes(x=RACE, \n        ymin=mean-se, \n        ymax=mean+se), \n    width=0.2, \n    colour=\"black\", \n    alpha=0.9, \n    linewidth=0.5) +\n  geom_point(aes\n           (x=RACE, \n            y=mean), \n           stat=\"identity\", \n           color=\"red\",\n           size = 1.5,\n           alpha=1) +\n  ggtitle(\"Standard error of mean maths score by rac\")\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nNote\n\n\n\nThe improved plot fixes the title, removes the unnecessary x-axis and renames the y-axis.",
     "crumbs": [
@@ -185,7 +185,7 @@
   {
     "objectID": "Hands-on_Ex/Hands-on_Ex04-4/Hands-on_Ex04-4.html#plotting-confidence-interval-of-point-estimates",
     "href": "Hands-on_Ex/Hands-on_Ex04-4/Hands-on_Ex04-4.html#plotting-confidence-interval-of-point-estimates",
-    "title": "Hands-On Exercise 4-2: Visualising Uncertainty",
+    "title": "Hands-On Exercise 4-4: Visualising Uncertainty",
     "section": "4-4: 3.2 Plotting Confidence Interval of Point Estimates",
     "text": "4-4: 3.2 Plotting Confidence Interval of Point Estimates\nInstead of plotting error bars of point estimates, we can also plot confidence intervals of the mean Maths score by Race.\n\nImproved PlotOriginal Plot\n\n\n\n\nShow code\nggplot(my_sum) +\n  geom_errorbar(\n    aes(x=reorder(RACE, -mean), \n        ymin=mean-1.96*se, \n        ymax=mean+1.96*se), \n    width=0.2, \n    colour=\"black\", \n    alpha=0.9, \n    linewidth=0.5) +\n  geom_point(aes\n           (x=RACE, \n            y=mean), \n           stat=\"identity\", \n           color=\"red\",\n           size = 1.5,\n           alpha=1) +\n  ggtitle(\"95% Confidence Interval of Mean Maths Score by Race\") +\n  labs(\n    x = NULL,\n    y = 'Maths Score')\n\n\n\n\n\n\n\n\n\n\n\n\n\nShow code\nggplot(my_sum) +\n  geom_errorbar(\n    aes(x=reorder(RACE, -mean), \n        ymin=mean-1.96*se, \n        ymax=mean+1.96*se), \n    width=0.2, \n    colour=\"black\", \n    alpha=0.9, \n    linewidth=0.5) +\n  geom_point(aes\n           (x=RACE, \n            y=mean), \n           stat=\"identity\", \n           color=\"red\",\n           size = 1.5,\n           alpha=1) +\n  labs(x = \"Maths score\",\n       title = \"95% confidence interval of mean maths score by race\")\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nThings to Learn\n\n\n\n\nThe Confidence Intervals are computed by using the formula mean +/- 1.96*se\nThe error bars are sorted using the average maths scores\nlabs() argument of ggplot2 is used to change the axis labels\n\n\n\n\n\n\n\n\n\n\n\n\nNote\n\n\n\nThe improved plot fixes the wrongly labelled x-axis to the y-axis.",
     "crumbs": [
@@ -196,7 +196,7 @@
   {
     "objectID": "Hands-on_Ex/Hands-on_Ex04-4/Hands-on_Ex04-4.html#visualising-the-uncertainty-of-point-estimates-with-interactive-error-bars",
     "href": "Hands-on_Ex/Hands-on_Ex04-4/Hands-on_Ex04-4.html#visualising-the-uncertainty-of-point-estimates-with-interactive-error-bars",
-    "title": "Hands-On Exercise 4-2: Visualising Uncertainty",
+    "title": "Hands-On Exercise 4-4: Visualising Uncertainty",
     "section": "4-4: 3.3 Visualising the Uncertainty of Point Estimates with Interactive Error Bars",
     "text": "4-4: 3.3 Visualising the Uncertainty of Point Estimates with Interactive Error Bars\nThis section will cover plotting interactive error bars for the 99% confidence interval of the mean Maths score by Race.\n\nImproved PlotOriginal Plot\n\n\n\n\nShow code\nshared_df = SharedData$new(my_sum)\n\nbscols(widths = c(5,7),\n       ggplotly((ggplot(shared_df) +\n                   geom_errorbar(aes(\n                     x=reorder(RACE, -mean),\n                     ymin=mean-2.58*se, \n                     ymax=mean+2.58*se), \n                     width=0.2, \n                     colour=\"black\", \n                     alpha=0.9, \n                     size=0.5) +\n                   geom_point(aes(\n                     x=RACE, \n                     y=mean, \n                     text = paste(\"Race:\", `RACE`, \n                                  \"&lt;br&gt;N:\", `n`,\n                                  \"&lt;br&gt;Avg. Scores:\", round(mean, digits = 2),\n                                  \"&lt;br&gt;95% CI:[\", \n                                  round((mean-2.58*se), digits = 2), \",\",\n                                  round((mean+2.58*se), digits = 2),\"]\")),\n                     stat=\"identity\", \n                     color=\"red\", \n                     size = 1.5, \n                     alpha=1) + \n                   xlab(NULL) + \n                   ylab(\"Average Scores\") + \n                   theme_minimal() + \n                   theme(axis.text.x = element_text(\n                     angle = 45, vjust = 0.5, hjust=1),\n                     plot.title = element_text(size = 12)) +\n                   ggtitle(\"99% CI of Avg Maths &lt;br&gt;Score by Race\")), \n                tooltip = \"text\"),\n       DT::datatable(shared_df, \n                     rownames = FALSE, \n                     class=\"compact\", \n                     width=\"100%\", \n                     colnames = c(\"No. of Pupils\", \n                                  \"Avg Scores\",\n                                  \"Std Dev\",\n                                  \"Std Error\")) %&gt;%\n         formatRound(columns=c('mean', 'sd', 'se'),\n                     digits=2))\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nShow code\nshared_df = SharedData$new(my_sum)\n\nbscols(widths = c(4,8),\n       ggplotly((ggplot(shared_df) +\n                   geom_errorbar(aes(\n                     x=reorder(RACE, -mean),\n                     ymin=mean-2.58*se, \n                     ymax=mean+2.58*se), \n                     width=0.2, \n                     colour=\"black\", \n                     alpha=0.9, \n                     size=0.5) +\n                   geom_point(aes(\n                     x=RACE, \n                     y=mean, \n                     text = paste(\"Race:\", `RACE`, \n                                  \"&lt;br&gt;N:\", `n`,\n                                  \"&lt;br&gt;Avg. Scores:\", round(mean, digits = 2),\n                                  \"&lt;br&gt;95% CI:[\", \n                                  round((mean-2.58*se), digits = 2), \",\",\n                                  round((mean+2.58*se), digits = 2),\"]\")),\n                     stat=\"identity\", \n                     color=\"red\", \n                     size = 1.5, \n                     alpha=1) + \n                   xlab(\"Race\") + \n                   ylab(\"Average Scores\") + \n                   theme_minimal() + \n                   theme(axis.text.x = element_text(\n                     angle = 45, vjust = 0.5, hjust=1)) +\n                   ggtitle(\"99% Confidence interval of average /&lt;br&gt;maths scores by race\")), \n                tooltip = \"text\"), \n       DT::datatable(shared_df, \n                     rownames = FALSE, \n                     class=\"compact\", \n                     width=\"100%\", \n                     options = list(pageLength = 10,\n                                    scrollX=T), \n                     colnames = c(\"No. of pupils\", \n                                  \"Avg Scores\",\n                                  \"Std Dev\",\n                                  \"Std Error\")) %&gt;%\n         formatRound(columns=c('mean', 'sd', 'se'),\n                     digits=2))\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nNote\n\n\n\nThe original plot has a very compressed graph and the title is cut off. This was fixed by adjusting bscols(widths), shortening the title, and adjust the title font size.",
     "crumbs": [
@@ -207,7 +207,7 @@
   {
     "objectID": "Hands-on_Ex/Hands-on_Ex04-4/Hands-on_Ex04-4.html#visualising-the-uncertainty-of-point-estimates-ggdist-methods-part-1",
     "href": "Hands-on_Ex/Hands-on_Ex04-4/Hands-on_Ex04-4.html#visualising-the-uncertainty-of-point-estimates-ggdist-methods-part-1",
-    "title": "Hands-On Exercise 4-2: Visualising Uncertainty",
+    "title": "Hands-On Exercise 4-4: Visualising Uncertainty",
     "section": "4-4: 4.1 Visualising the Uncertainty of Point Estimates: ggdist Methods (Part 1)",
     "text": "4-4: 4.1 Visualising the Uncertainty of Point Estimates: ggdist Methods (Part 1)\nIn the code chunk below, stat_pointinterval() of ggdist is used to build a visual for displaying the distribution of Maths score by Race.\n\nDefault PlotModified Plot (95%, Median, QI)\n\n\n\n\nShow code\nexam %&gt;%\n  ggplot(aes(x = RACE, \n             y = MATHS)) +\n  stat_pointinterval() +\n  labs(\n    title = \"Visualising confidence intervals of mean math score\",\n    subtitle = \"Mean Point + Multiple-interval plot\")\n\n\n\n\n\n\n\n\n\n\n\n\n\nShow code\nexam %&gt;%\n  ggplot(aes(x = RACE, y = MATHS)) +\n  stat_pointinterval(.width = 0.95,\n  .point = median,\n  .interval = qi) +\n  labs(\n    title = \"Visualising confidence intervals of median math score\",\n    subtitle = \"Median Point + Multiple-interval plot\")\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nNote\n\n\n\nThis function comes with many arguments. The second plot is modified with the following: - .width = 0.95 - .point = median (Options: mean, median, or mode) - .interval = qi (Options: quantile interval [qi], highest-density interval [hdi]; or highest-density continuous interval [hdci])",
     "crumbs": [
@@ -218,7 +218,7 @@
   {
     "objectID": "Hands-on_Ex/Hands-on_Ex04-4/Hands-on_Ex04-4.html#visualising-the-uncertainty-of-point-estimates-ggdist-methods-part-2",
     "href": "Hands-on_Ex/Hands-on_Ex04-4/Hands-on_Ex04-4.html#visualising-the-uncertainty-of-point-estimates-ggdist-methods-part-2",
-    "title": "Hands-On Exercise 4-2: Visualising Uncertainty",
+    "title": "Hands-On Exercise 4-4: Visualising Uncertainty",
     "section": "4-4: 4.2 Visualising the Uncertainty of Point Estimates: ggdist Methods (Part 2)",
     "text": "4-4: 4.2 Visualising the Uncertainty of Point Estimates: ggdist Methods (Part 2)\nThe plot below shows the 95% and 99% confidence intervals.\n\n\nShow the code\nexam %&gt;%\n  ggplot(aes(x = RACE, y = MATHS)) +\n  stat_pointinterval(\n    .width = c(0.95, 0.99),\n    .point = mean,\n    aes(\n      interval_color = after_stat(level)\n      ),\n    .interval = qi,\n    show.legend = FALSE\n  ) +   \n  labs(\n    title = \"Visualising Confidence Intervals of Mean Maths Score by Race\",\n    subtitle = \"Mean (Black) Point + 95% (Grey) and 99% (Red) CI\",\n    x = NULL,\n    y = 'Maths Score'\n  ) +\n  scale_color_manual(\n    values = c(\"red\", \"grey50\"),\n    aesthetics = \"interval_color\"\n  ) +\n  theme_minimal()",
     "crumbs": [
@@ -229,7 +229,7 @@
   {
     "objectID": "Hands-on_Ex/Hands-on_Ex04-4/Hands-on_Ex04-4.html#visualising-the-uncertainty-of-point-estimates-ggdist-methods-part-3",
     "href": "Hands-on_Ex/Hands-on_Ex04-4/Hands-on_Ex04-4.html#visualising-the-uncertainty-of-point-estimates-ggdist-methods-part-3",
-    "title": "Hands-On Exercise 4-2: Visualising Uncertainty",
+    "title": "Hands-On Exercise 4-4: Visualising Uncertainty",
     "section": "4-4: 4.3 Visualising the Uncertainty of Point Estimates: ggdist Methods (Part 3)",
     "text": "4-4: 4.3 Visualising the Uncertainty of Point Estimates: ggdist Methods (Part 3)\nIn the code chunk below, stat_gradientinterval() of ggdist is used to build a visual for displaying distribution of Maths score by Race.\n\nImproved PlotPlot\n\n\n\n\nShow the code\nexam %&gt;%\n  ggplot(aes(x = RACE, \n             y = MATHS)) +\n  stat_gradientinterval(   \n    fill = \"skyblue\",      \n    show.legend = TRUE,\n    aes(\n      interval_color = after_stat(level)\n      )\n  ) +                        \n  labs(\n    title = \"Visualising Confidence Intervals of Mean Math Score by Race\",\n    subtitle = \"Gradient + Interval Plot\",\n    x = NULL,\n    y = 'Maths Score') +\n  scale_color_manual(\n    values = c(\"red\", \"grey50\"),\n    aesthetics = \"interval_color\"\n  ) +\n  theme_minimal()\n\n\n\n\n\n\n\n\n\n\n\n\n\nShow the code\nexam %&gt;%\n  ggplot(aes(x = RACE, \n             y = MATHS)) +\n  stat_gradientinterval(   \n    fill = \"skyblue\",      \n    show.legend = TRUE     \n  ) +                        \n  labs(\n    title = \"Visualising confidence intervals of mean math score\",\n    subtitle = \"Gradient + interval plot\")",
     "crumbs": [
@@ -240,7 +240,7 @@
   {
     "objectID": "Hands-on_Ex/Hands-on_Ex04-4/Hands-on_Ex04-4.html#installing-ungeviz-package",
     "href": "Hands-on_Ex/Hands-on_Ex04-4/Hands-on_Ex04-4.html#installing-ungeviz-package",
-    "title": "Hands-On Exercise 4-2: Visualising Uncertainty",
+    "title": "Hands-On Exercise 4-4: Visualising Uncertainty",
     "section": "4-4: 5.1 Installing ungeviz Package",
     "text": "4-4: 5.1 Installing ungeviz Package\n\n\nShow the code\ndevtools::install_github(\"wilkelab/ungeviz\")\n\n\n\n\n\n\n\n\nNote\n\n\n\nYou only need to perform this step once.",
     "crumbs": [
@@ -251,7 +251,7 @@
   {
     "objectID": "Hands-on_Ex/Hands-on_Ex04-4/Hands-on_Ex04-4.html#launch-the-application-in-r",
     "href": "Hands-on_Ex/Hands-on_Ex04-4/Hands-on_Ex04-4.html#launch-the-application-in-r",
-    "title": "Hands-On Exercise 4-2: Visualising Uncertainty",
+    "title": "Hands-On Exercise 4-4: Visualising Uncertainty",
     "section": "4-4: 5.2 Launch the Application in R",
     "text": "4-4: 5.2 Launch the Application in R\n\n\nShow the code\nlibrary(ungeviz)",
     "crumbs": [
@@ -262,7 +262,7 @@
   {
     "objectID": "Hands-on_Ex/Hands-on_Ex04-4/Hands-on_Ex04-4.html#visualising-uncertainty-with-hypothetical-outcome-plots-hops-1",
     "href": "Hands-on_Ex/Hands-on_Ex04-4/Hands-on_Ex04-4.html#visualising-uncertainty-with-hypothetical-outcome-plots-hops-1",
-    "title": "Hands-On Exercise 4-2: Visualising Uncertainty",
+    "title": "Hands-On Exercise 4-4: Visualising Uncertainty",
     "section": "4-4: 5.3 Visualising Uncertainty with Hypothetical Outcome Plots (HOPs)",
     "text": "4-4: 5.3 Visualising Uncertainty with Hypothetical Outcome Plots (HOPs)\nThe code chunk below will be used to build the HOPs.\n\nMaths by Race PlotEnglish by Race PlotScience by Race PlotDefault Plot\n\n\n\n\nShow the code\nggplot(data = exam, \n       (aes(x = factor(RACE), \n            y = MATHS))) +\n  geom_point(position = position_jitter(\n    height = 0.3, \n    width = 0.05), \n    size = 0.4, \n    color = \"#FF0000\", \n    alpha = 1/2) +\n  geom_hpline(data = sampler(25, \n                             group = RACE), \n              height = 0.6, \n              color = \"#D55E00\") +\n  theme_bw() + \n  transition_states(.draw, 1, 3) +\n  labs(\n    x = NULL,\n    y = 'Maths Score',\n    title = 'HOPS of Maths by Race')\n\n\n\n\n\n\n\n\n\n\n\n\n\nShow the code\nggplot(data = exam, \n       (aes(x = factor(RACE), \n            y = MATHS))) +\n  geom_point(position = position_jitter(\n    height = 0.3, \n    width = 0.05), \n    size = 0.4, \n    color = \"#1B00C0\", \n    alpha = 1/2) +\n  geom_hpline(data = sampler(25, \n                             group = RACE), \n              height = 0.6, \n              color = \"#D55E00\") +\n  theme_bw() + \n  transition_states(.draw, 1, 3) +\n  labs(\n    x = NULL,\n    y = 'English Score',\n    title = 'HOPS of English by Race')\n\n\n\n\n\n\n\n\n\n\n\n\n\nShow the code\nggplot(data = exam, \n       (aes(x = factor(RACE), \n            y = MATHS))) +\n  geom_point(position = position_jitter(\n    height = 0.3, \n    width = 0.05), \n    size = 0.4, \n    color = \"#00A834\", \n    alpha = 1/2) +\n  geom_hpline(data = sampler(25, \n                             group = RACE), \n              height = 0.6, \n              color = \"#D55E00\") +\n  theme_bw() + \n  transition_states(.draw, 1, 3) +\n  labs(\n    x = NULL,\n    y = 'Science Score',\n    title = 'HOPS of Science by Race')\n\n\n\n\n\n\n\n\n\n\n\n\n\nShow the code\nggplot(data = exam, \n       (aes(x = factor(RACE), \n            y = MATHS))) +\n  geom_point(position = position_jitter(\n    height = 0.3, \n    width = 0.05), \n    size = 0.4, \n    color = \"#0072B2\", \n    alpha = 1/2) +\n  geom_hpline(data = sampler(25, \n                             group = RACE), \n              height = 0.6, \n              color = \"#D55E00\") +\n  theme_bw() + \n  transition_states(.draw, 1, 3)",
     "crumbs": [
@@ -1171,7 +1171,7 @@
   {
     "objectID": "Hands-on_Ex/Hands-on_Ex04-3/Hands-on_Ex04-3.html",
     "href": "Hands-on_Ex/Hands-on_Ex04-3/Hands-on_Ex04-3.html",
-    "title": "Hands-On Exercise 4-2: Visual Statistical Analysis",
+    "title": "Hands-On Exercise 4-3: Visual Statistical Analysis",
     "section": "",
     "text": "In this hands-on exercise, the following will be covered:\n\nggstatsplot Package: Create visual graphics with rich statistical information\nperformance Package: Visualise model diagnostics\nparameters Package: Visualise model parameters",
     "crumbs": [
@@ -1182,7 +1182,7 @@
   {
     "objectID": "Hands-on_Ex/Hands-on_Ex04-3/Hands-on_Ex04-3.html#installing-and-launching-r-packages",
     "href": "Hands-on_Ex/Hands-on_Ex04-3/Hands-on_Ex04-3.html#installing-and-launching-r-packages",
-    "title": "Hands-On Exercise 4-2: Visual Statistical Analysis",
+    "title": "Hands-On Exercise 4-3: Visual Statistical Analysis",
     "section": "4-3: 3.1 Installing and Launching R Packages",
     "text": "4-3: 3.1 Installing and Launching R Packages\nIn this exercise, ggstatsplot and tidyverse will be used.\n\n\nShow code\npacman::p_load(ggstatsplot, tidyverse)",
     "crumbs": [
@@ -1193,7 +1193,7 @@
   {
     "objectID": "Hands-on_Ex/Hands-on_Ex04-3/Hands-on_Ex04-3.html#importing-data",
     "href": "Hands-on_Ex/Hands-on_Ex04-3/Hands-on_Ex04-3.html#importing-data",
-    "title": "Hands-On Exercise 4-2: Visual Statistical Analysis",
+    "title": "Hands-On Exercise 4-3: Visual Statistical Analysis",
     "section": "4-3: 3.2 Importing Data",
     "text": "4-3: 3.2 Importing Data\nImporting Exam-csv data by using read_csv().\n\n\nShow code\nexam &lt;- read_csv(\"data/Exam_data.csv\")\n\nlibrary(knitr)\nkable(head(exam, 10))\n\n\n\n\n\nID\nCLASS\nGENDER\nRACE\nENGLISH\nMATHS\nSCIENCE\n\n\n\n\nStudent321\n3I\nMale\nMalay\n21\n9\n15\n\n\nStudent305\n3I\nFemale\nMalay\n24\n22\n16\n\n\nStudent289\n3H\nMale\nChinese\n26\n16\n16\n\n\nStudent227\n3F\nMale\nChinese\n27\n77\n31\n\n\nStudent318\n3I\nMale\nMalay\n27\n11\n25\n\n\nStudent306\n3I\nFemale\nMalay\n31\n16\n16\n\n\nStudent313\n3I\nMale\nChinese\n31\n21\n25\n\n\nStudent316\n3I\nMale\nMalay\n31\n18\n27\n\n\nStudent312\n3I\nMale\nMalay\n33\n19\n15\n\n\nStudent297\n3H\nMale\nIndian\n34\n49\n37",
     "crumbs": [
@@ -1204,7 +1204,7 @@
   {
     "objectID": "Hands-on_Ex/Hands-on_Ex04-3/Hands-on_Ex04-3.html#one-sample-test-gghistostats-method",
     "href": "Hands-on_Ex/Hands-on_Ex04-3/Hands-on_Ex04-3.html#one-sample-test-gghistostats-method",
-    "title": "Hands-On Exercise 4-2: Visual Statistical Analysis",
+    "title": "Hands-On Exercise 4-3: Visual Statistical Analysis",
     "section": "4-3: 3.3 One-Sample Test: gghistostats() Method",
     "text": "4-3: 3.3 One-Sample Test: gghistostats() Method\nIn the code chunk below, gghistostats() is used to build an visual of one-sample test on English scores.\n\n\nShow the code\nset.seed(1234)\n\ngghistostats(\n  data = exam,\n  x = ENGLISH,\n  type = \"bayes\",\n  test.value = 60,\n  xlab = \"English scores\"\n)\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nDefault Information\n\n\n\n\nStatistical Details\nBayes Factor\nSample Sizes\nDistribution Summary",
     "crumbs": [
@@ -1215,7 +1215,7 @@
   {
     "objectID": "Hands-on_Ex/Hands-on_Ex04-3/Hands-on_Ex04-3.html#unpacking-the-bayes-factor",
     "href": "Hands-on_Ex/Hands-on_Ex04-3/Hands-on_Ex04-3.html#unpacking-the-bayes-factor",
-    "title": "Hands-On Exercise 4-2: Visual Statistical Analysis",
+    "title": "Hands-On Exercise 4-3: Visual Statistical Analysis",
     "section": "4-3: 3.4 Unpacking the Bayes Factor",
     "text": "4-3: 3.4 Unpacking the Bayes Factor\n\nA Bayes factor is the ratio of the likelihood of one particular hypothesis to the likelihood of another. It can be interpreted as a measure of the strength of evidence in favour of one theory among two competing theories.\nThat is because the Bayes factor gives us a way to evaluate the data in favour of a null hypothesis, and to use external information to do so. It tells us what the weight of the evidence is in favour of a given hypothesis.\nWhen we are comparing two hypotheses, H1 (the alternate hypothesis) and H0 (the null hypothesis), the Bayes factor is often written as B10. It can be defined mathematically as:\n\n\n\n\n\n\n\nThe Schwarz criterion is one of the easiest ways to calculate rough estimation of the Bayes factor.",
     "crumbs": [
@@ -1226,7 +1226,7 @@
   {
     "objectID": "Hands-on_Ex/Hands-on_Ex04-3/Hands-on_Ex04-3.html#how-to-interpret-bayes-factor",
     "href": "Hands-on_Ex/Hands-on_Ex04-3/Hands-on_Ex04-3.html#how-to-interpret-bayes-factor",
-    "title": "Hands-On Exercise 4-2: Visual Statistical Analysis",
+    "title": "Hands-On Exercise 4-3: Visual Statistical Analysis",
     "section": "4-3: 3.5 How to Interpret Bayes Factor",
     "text": "4-3: 3.5 How to Interpret Bayes Factor\nA Bayes Factor can be any positive number. One of the most common interpretation is this: First proposed by Harold Jeffereys (1961) and slightly modified by Lee and Wagemakers in 2013.",
     "crumbs": [
@@ -1237,7 +1237,7 @@
   {
     "objectID": "Hands-on_Ex/Hands-on_Ex04-3/Hands-on_Ex04-3.html#two-sample-mean-test-ggbetweenstats",
     "href": "Hands-on_Ex/Hands-on_Ex04-3/Hands-on_Ex04-3.html#two-sample-mean-test-ggbetweenstats",
-    "title": "Hands-On Exercise 4-2: Visual Statistical Analysis",
+    "title": "Hands-On Exercise 4-3: Visual Statistical Analysis",
     "section": "4-3: 3.6 Two-Sample Mean Test: ggbetweenstats()",
     "text": "4-3: 3.6 Two-Sample Mean Test: ggbetweenstats()\nIn the code chunk below, ggbetweenstats() is used to build a visual for two-sample mean test of Maths scores by gender.\n\n\nShow the code\nggbetweenstats(\n  data = exam,\n  x = GENDER,\n  y = MATHS,\n  type = \"np\",\n  message = FALSE\n)\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nDefault Information\n\n\n\n\nStatistical Details\nBayes Factor\nSample Sizes\nDistribution Summary",
     "crumbs": [
@@ -1248,7 +1248,7 @@
   {
     "objectID": "Hands-on_Ex/Hands-on_Ex04-3/Hands-on_Ex04-3.html#oneway-anova-test-ggbetweentats-method",
     "href": "Hands-on_Ex/Hands-on_Ex04-3/Hands-on_Ex04-3.html#oneway-anova-test-ggbetweentats-method",
-    "title": "Hands-On Exercise 4-2: Visual Statistical Analysis",
+    "title": "Hands-On Exercise 4-3: Visual Statistical Analysis",
     "section": "4-3: 3.7 Oneway ANOVA Test: ggbetweentats() Method",
     "text": "4-3: 3.7 Oneway ANOVA Test: ggbetweentats() Method\nIn the code chunk below, ggbetweenstats() is used to build a visual for One-way ANOVA test on English scores by Race.\n\n\nShow the code\nggbetweenstats(\n  data = exam,\n  x = RACE,\n  y = ENGLISH,\n  type = \"p\",\n  mean.ci = TRUE,\n  pariwise.comparisons = TRUE,\n  pairwise.display = \"s\",\n  p.adjust.methods = \"fdr\",\n  message = FALSE\n)\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nLegend\n\n\n\n\n“na” → only non-significant\n“s” → only significant\n“all” → everything\n\n\n\n\n4-3: 3.7.1 ggbetweentats() - Summary of Tests",
     "crumbs": [
@@ -1259,7 +1259,7 @@
   {
     "objectID": "Hands-on_Ex/Hands-on_Ex04-3/Hands-on_Ex04-3.html#significant-test-of-correlation-ggscatterstats",
     "href": "Hands-on_Ex/Hands-on_Ex04-3/Hands-on_Ex04-3.html#significant-test-of-correlation-ggscatterstats",
-    "title": "Hands-On Exercise 4-2: Visual Statistical Analysis",
+    "title": "Hands-On Exercise 4-3: Visual Statistical Analysis",
     "section": "4-3: 3.8 Significant Test of Correlation: ggscatterstats()",
     "text": "4-3: 3.8 Significant Test of Correlation: ggscatterstats()\nIn the code chunk below, ggscatterstats() is used to build a visual for Significant Test of Correlation between Maths scores and English scores.\n\n\nShow the code\nggscatterstats(\n  data = exam,\n  x = MATHS,\n  y = ENGLISH,\n  marginal = FALSE\n)",
     "crumbs": [
@@ -1270,7 +1270,7 @@
   {
     "objectID": "Hands-on_Ex/Hands-on_Ex04-3/Hands-on_Ex04-3.html#significant-test-of-association-dependence-ggbarstats-method",
     "href": "Hands-on_Ex/Hands-on_Ex04-3/Hands-on_Ex04-3.html#significant-test-of-association-dependence-ggbarstats-method",
-    "title": "Hands-On Exercise 4-2: Visual Statistical Analysis",
+    "title": "Hands-On Exercise 4-3: Visual Statistical Analysis",
     "section": "4-3: 3.9 Significant Test of Association (Dependence): ggbarstats() Method",
     "text": "4-3: 3.9 Significant Test of Association (Dependence): ggbarstats() Method\nIn the code chunk below, the Maths scores are binned into a 4-class variable width by using cut()\n\n\nShow the code\nexam1 &lt;- exam %&gt;%\n  mutate(MATHS_bins = \n           cut(MATHS,\n               breaks = c(0,60,75,85,100)))\n\n\nAnd the code chunt below uses ggbarstats() to build a visual for Significant Test of Association.\n\n\nShow the code\nggbarstats(exam1, \n           x = MATHS_bins, \n           y = GENDER)",
     "crumbs": [
