@@ -10,34 +10,135 @@ execute:
 ---
 
 ```{r}
-pacman::p_load(readxl, gifski, gapminder,
-               plotly, gganimate, tidyverse)
+pacman::p_load(plotly, crosstalk, DT, 
+               ggdist, ggridges, colorspace,
+               gganimate, tidyverse)
 ```
 
-
-col <- c("Country", "Continent")
-globalPop <- read_xls("C:/calvintansh/ISSS608-VAA/Hands-on_Ex/Hands-on_Ex03-2/data/respopagesex2024.csv",
-                      sheet = "Data") %>%
-  mutate(across(col, as.factor)) %>% # mutate(across())
-  mutate(Year = as.integer(Year))
+col \<- c("Country", "Continent") globalPop \<- read_xls("C:/calvintansh/ISSS608-VAA/Hands-on_Ex/Hands-on_Ex03-2/data/respopagesex2024.csv", sheet = "Data") %\>% mutate(across(col, as.factor)) %\>% \# mutate(across()) mutate(Year = as.integer(Year))
 
 ```{r}
-raj_data <- read_csv("C:/calvintansh/ISSS608-VAA/Take-home_Ex/Take-home_Ex01/data/respopagesex2024.csv")
+exam <- read_csv("C:/calvintansh/ISSS608-VAA/Hands-on_Ex/Hands-on_Ex04-4/data/Exam_data.csv")
 ```
 
 ```{r}
-pyramid_data <- raj_data %>%
-  group_by(Age, Sex) %>%
-  summarise(Pop = sum(Pop), .groups = "drop") %>%
-  mutate(Pop = ifelse(Sex == "Males", -Pop, Pop))
+my_sum <- exam %>%
+  group_by(RACE) %>%
+  summarise(
+    n=n(),
+    mean=mean(MATHS),
+    sd=sd(MATHS)
+    ) %>%
+  mutate(se=sd/sqrt(n-1))
+```
 
-ggplot(pyramid_data, aes(x = Age, y = Pop, fill = Sex)) +
-  geom_bar(stat = "identity") +
-  coord_flip() +
-  scale_y_continuous(labels = abs) +
-  labs(title = "Singapore Population Pyramid (2024)",
-       x = "Age", y = "Population",
-       fill = "Sex") +
-  theme_minimal()
+```{r}
+knitr:::kable(head(my_sum),
+              format = 'html')
+
+knitr:::kable(head(my_sum),
+              format = 'html')
 ```
+
+::: panel-tabset
+## Improved Plot
+``` {r}
+#| code-fold: true
+#| code-summary: "Show code"
+#| fig-width: 4
+#| fig-height: 6
+shared_df = SharedData$new(my_sum)
+
+bscols(widths = c(5,7),
+       ggplotly((ggplot(shared_df) +
+                   geom_errorbar(aes(
+                     x=reorder(RACE, -mean),
+                     ymin=mean-2.58*se, 
+                     ymax=mean+2.58*se), 
+                     width=0.2, 
+                     colour="black", 
+                     alpha=0.9, 
+                     size=0.5) +
+                   geom_point(aes(
+                     x=RACE, 
+                     y=mean, 
+                     text = paste("Race:", `RACE`, 
+                                  "<br>N:", `n`,
+                                  "<br>Avg. Scores:", round(mean, digits = 2),
+                                  "<br>95% CI:[", 
+                                  round((mean-2.58*se), digits = 2), ",",
+                                  round((mean+2.58*se), digits = 2),"]")),
+                     stat="identity", 
+                     color="red", 
+                     size = 1.5, 
+                     alpha=1) + 
+                   xlab(NULL) + 
+                   ylab("Average Scores") + 
+                   theme_minimal() + 
+                   theme(axis.text.x = element_text(
+                     angle = 45, vjust = 0.5, hjust=1),
+                     plot.title = element_text(size = 12)) +
+                   ggtitle("99% CI of Average <br>Maths Scores by Race")), 
+                tooltip = "text"),
+       DT::datatable(shared_df, 
+                     rownames = FALSE, 
+                     class="compact", 
+                     width="100%",
+                     colnames = c("No. of Pupils", 
+                                  "Avg Scores",
+                                  "Std Dev",
+                                  "Std Error")) %>%
+         formatRound(columns=c('mean', 'sd', 'se'),
+                     digits=2))
 ```
+
+## Original Plot
+```{r}
+#| code-fold: true
+#| code-summary: "Show code"
+shared_df = SharedData$new(my_sum)
+
+bscols(widths = c(4,8),
+       ggplotly((ggplot(shared_df) +
+                   geom_errorbar(aes(
+                     x=reorder(RACE, -mean),
+                     ymin=mean-2.58*se, 
+                     ymax=mean+2.58*se), 
+                     width=0.2, 
+                     colour="black", 
+                     alpha=0.9, 
+                     size=0.5) +
+                   geom_point(aes(
+                     x=RACE, 
+                     y=mean, 
+                     text = paste("Race:", `RACE`, 
+                                  "<br>N:", `n`,
+                                  "<br>Avg. Scores:", round(mean, digits = 2),
+                                  "<br>95% CI:[", 
+                                  round((mean-2.58*se), digits = 2), ",",
+                                  round((mean+2.58*se), digits = 2),"]")),
+                     stat="identity", 
+                     color="red", 
+                     size = 1.5, 
+                     alpha=1) + 
+                   xlab("Race") + 
+                   ylab("Average Scores") + 
+                   theme_minimal() + 
+                   theme(axis.text.x = element_text(
+                     angle = 45, vjust = 0.5, hjust=1)) +
+                   ggtitle("99% Confidence interval of average /<br>maths scores by race")), 
+                tooltip = "text"), 
+       DT::datatable(shared_df, 
+                     rownames = FALSE, 
+                     class="compact", 
+                     width="100%", 
+                     options = list(pageLength = 10,
+                                    scrollX=T), 
+                     colnames = c("No. of pupils", 
+                                  "Avg Scores",
+                                  "Std Dev",
+                                  "Std Error")) %>%
+         formatRound(columns=c('mean', 'sd', 'se'),
+                     digits=2))
+```
+:::

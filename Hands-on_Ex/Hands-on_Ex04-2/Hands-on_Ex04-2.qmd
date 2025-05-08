@@ -392,20 +392,6 @@ First, a Half-Eye graph will be plotted by using [`stat_halfeye()`](https://mjsk
 This produces a Half Eye visualisation, which contains a half-density and a slab-interval.
 
 ::: panel-tabset
-
-## Plot (without slab interval)
-
-```{r}
-#| code-fold: true
-#| code-summary: "Show the code"
-ggplot(exam,
-       aes(x = RACE,
-           y = ENGLISH)) +
-  stat_halfeye(adjust = 0.5,
-               justification = -0.2,
-               .width = 0,
-               point_colour = NA)
-```
 ## Plot (with slab interval)
 
 ```{r}
@@ -416,6 +402,19 @@ ggplot(exam,
            y = ENGLISH)) +
   stat_halfeye(adjust = 0.5,
                justification = -0.2)
+```
+
+## Plot (without slab interval)
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+ggplot(exam,
+       aes(x = RACE,
+           y = ENGLISH)) +
+  stat_halfeye(adjust = 0.5,
+               justification = -0.2,
+               .width = 0,
+               point_colour = NA)
 ```
 :::
 
@@ -474,28 +473,6 @@ ggplot(exam,
 Lastly, [`coord_flit()`](https://ggplot2.tidyverse.org/reference/coord_flip.html) of ggplot2 package will be used to flip the raincloud chart horizontally to give it the raincloud appearance. At the same time, `theme_economist()` of ggthemes package is used to give the raincloud chart a professional publishing standard look.
 
 ::: panel-tabset
-## Plot
-
-```{r}
-#| code-fold: true
-#| code-summary: "Show the code"
-ggplot(exam,
-       aes(x = RACE,
-           y = ENGLISH)) +
-  stat_halfeye(adjust = 0.5,
-               justification = -0.2,
-               .width = 0,
-               point_colour = NA) +
-  geom_boxplot(width = 0.2,
-               outlier.shape = NA) +
-  stat_dots(side = "left",
-            justification = 1.2,
-            binwidth = .5,
-            dotsize = 1.5) +
-  coord_flip() +
-  theme_economist()
-```
-
 ## Improved Plot
 
 ```{r}
@@ -512,6 +489,27 @@ ggplot(exam,
                outlier.shape = NA) +
   stat_dots(side = "left",
             justification = 1.2,
+            dotsize = 1.5) +
+  coord_flip() +
+  theme_economist()
+```
+
+## Original Plot
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+ggplot(exam,
+       aes(x = RACE,
+           y = ENGLISH)) +
+  stat_halfeye(adjust = 0.5,
+               justification = -0.2,
+               .width = 0,
+               point_colour = NA) +
+  geom_boxplot(width = 0.2,
+               outlier.shape = NA) +
+  stat_dots(side = "left",
+            justification = 1.2,
+            binwidth = .5,
             dotsize = 1.5) +
   coord_flip() +
   theme_economist()
