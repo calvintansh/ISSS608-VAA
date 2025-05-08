@@ -268,7 +268,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#plots-and-analysis" id="toc-plots-and-analysis" class="nav-link" data-scroll-target="#plots-and-analysis"><span style="color:DarkOrange">1-1:</span> 3.1.3 Plots and Analysis</a></li>
   <li><a href="#reflections" id="toc-reflections" class="nav-link" data-scroll-target="#reflections"><span style="color:DarkOrange">1-1:</span> 3.2.4 Reflections</a></li>
   </ul></li>
-  <li><a href="#percentage-of-age-groups-across-planning-areas" id="toc-percentage-of-age-groups-across-planning-areas" class="nav-link" data-scroll-target="#percentage-of-age-groups-across-planning-areas"><span style="color:DarkOrange">1-1:</span> 3.2 Percentage of Age Groups Across Planning Areas</a>
+  <li><a href="#percentage-of-age-groups-by-planning-areas" id="toc-percentage-of-age-groups-by-planning-areas" class="nav-link" data-scroll-target="#percentage-of-age-groups-by-planning-areas"><span style="color:DarkOrange">1-1:</span> 3.2 Percentage of Age Groups by Planning Areas</a>
   <ul class="collapse">
   <li><a href="#feature-engineering-1" id="toc-feature-engineering-1" class="nav-link" data-scroll-target="#feature-engineering-1"><span style="color:DarkOrange">1-1:</span> 3.2.1 Feature Engineering</a></li>
   <li><a href="#methods-and-explanation-1" id="toc-methods-and-explanation-1" class="nav-link" data-scroll-target="#methods-and-explanation-1"><span style="color:DarkOrange">1-1:</span> 3.2.2 Methods and Explanation</a></li>
@@ -318,7 +318,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Modified</div>
     <div class="quarto-title-meta-contents">
-      <p class="date-modified">May 6, 2025</p>
+      <p class="date-modified">May 8, 2025</p>
     </div>
   </div>
     
@@ -333,9 +333,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h1><span style="color:DarkOrange">1-1:</span> 1 Overview</h1>
 <p>This exercise will be composed of two phases:</p>
 <ul>
-<li>Phase 1: Designing my own data visualisation (<strong>The focus of this page</strong>)</li>
-<li>Phase 2: selecting one submission provided by my classmate, critiquing three good design principles and identifying three areas for further improvement. Based on these feedbacks, I will prepare the makeover version of their data visualisation.</li>
+<li><strong>Phase 1</strong>: Designing my own data visualisation.</li>
+<li><strong>Phase 2</strong>: Selecting one submission provided by my classmate, identifying three good design principles and critiquing three areas for further improvement. Based on these feedbacks, I will prepare the makeover version of their data visualisation.</li>
 </ul>
+<p>This page will focus on <strong>Phase 1</strong> of this exercise and <a href="https://isss608-ay2024-25t3.netlify.app/take-home_ex/take-home_ex01-2/take-home_ex01-2">Take-Home Exercise 1-2</a> will cover <strong>Phase 2</strong>.</p>
 <section id="background" class="level2">
 <h2 class="anchored" data-anchor-id="background"><span style="color:DarkOrange">1-1:</span> 1.1 Background</h2>
 <p>A local online media company that publishes daily content on digital platforms is planning to release an article on demographic structures and distribution of Singapore in 2024.</p>
@@ -1164,8 +1165,8 @@ Reflections
 </div>
 </section>
 </section>
-<section id="percentage-of-age-groups-across-planning-areas" class="level2">
-<h2 class="anchored" data-anchor-id="percentage-of-age-groups-across-planning-areas"><span style="color:DarkOrange">1-1:</span> 3.2 Percentage of Age Groups Across Planning Areas</h2>
+<section id="percentage-of-age-groups-by-planning-areas" class="level2">
+<h2 class="anchored" data-anchor-id="percentage-of-age-groups-by-planning-areas"><span style="color:DarkOrange">1-1:</span> 3.2 Percentage of Age Groups by Planning Areas</h2>
 <p>This visualisation aims to show the percentage distribution of <strong>Age Groups</strong> (Young, Economically_Active and Aged) across <strong>Planning Areas</strong>. This will provide insights into how Singapore residents, in different stages of life, were distributed across Singapore.</p>
 <section id="feature-engineering-1" class="level3">
 <h3 class="anchored" data-anchor-id="feature-engineering-1"><span style="color:DarkOrange">1-1:</span> 3.2.1 Feature Engineering</h3>
@@ -1318,7 +1319,7 @@ Code
 <span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Percentage"</span>,</span>
 <span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">fill =</span> <span class="st">"Age Group"</span></span>
 <span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
-<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"Percentage of Age Groups across Planning Area"</span>) <span class="sc">+</span></span>
+<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"Percentage of Age Groups by Planning Area"</span>) <span class="sc">+</span></span>
 <span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(</span>
 <span id="cb17-17"><a href="#cb17-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">values =</span> <span class="fu">c</span>(</span>
 <span id="cb17-18"><a href="#cb17-18" aria-hidden="true" tabindex="-1"></a>      <span class="st">"Young"</span> <span class="ot">=</span> <span class="st">"#DDCC77"</span>,</span>
