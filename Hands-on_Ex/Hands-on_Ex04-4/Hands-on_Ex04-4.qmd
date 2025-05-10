@@ -601,3 +601,7 @@ ggplot(data = exam,
   transition_states(.draw, 1, 3)
 ```
 :::
+
+::: callout-note
+- This graph demonstrates visually that with a bigger dataset, there is more certainty since the variability is smaller.
+:::
