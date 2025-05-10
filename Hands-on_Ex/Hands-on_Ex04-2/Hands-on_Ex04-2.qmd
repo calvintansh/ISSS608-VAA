@@ -26,7 +26,7 @@ The following R packages will be used for this exercise:
 -   **tidyverse**: A family of R packages to meet the modern data science and visual communication needs
 -   **ggthemes**: A ggplot extension that provides the user additional themes, scales, and geoms for the ggplots package
 -   **colorspace**: An R package providing a broad toolbox for selecting individual colours or colour palettes, manipulating these colours, and employing them in various kinds of visualisations.
-- **patchwork**: an R package for preparing composite figure created using ggplot2
+-   **patchwork**: an R package for preparing composite figure created using ggplot2
 
 The code chunk below will be used to load these R packages into the RStudio environment.
 
@@ -107,7 +107,7 @@ ggplot(exam,
     name = "English grades",
     expand = c(0, 0)
     ) +
-  scale_y_discrete(name = NULL, expand = expansion(add = c(0.2, 2.6))) +
+  scale_y_discrete(name = "CLASS", expand = expansion(add = c(0.2, 2.6))) +
   theme_ridges()
 ```
 
@@ -122,8 +122,8 @@ The available [colours](https://sjmgarnier.github.io/viridis/reference/scale_vir
 :::
 
 ::: panel-tabset
-
 ## Plasma
+
 ```{r}
 #| code-fold: true
 #| code-summary: "Show the code"
@@ -139,7 +139,7 @@ ggplot(exam,
   scale_x_continuous(name = "English grades",
                      expand = c(0,0)
   ) +
-  scale_y_discrete(name = NULL, expand = expansion(add = c(0.2, 2.6))) +
+  scale_y_discrete(name = "CLASS", expand = expansion(add = c(0.2, 2.6))) +
     theme_ridges() +
   ggtitle('Plasma')
 ```
@@ -326,10 +326,9 @@ ggplot(exam,
 :::
 
 ::: callout-tip
-- scale_fill_viridis_b / c controls how granular the colours are mixed
-- scale_fill_viridis_d is for discrete variables
+-   scale_fill_viridis_b / c controls how granular the colours are mixed
+-   scale_fill_viridis_d is for discrete variables
 :::
-
 
 ## [4-2:]{style="color:DarkOrange"} 3.4 Ridgeline Plots with Quantile Lines
 
@@ -358,6 +357,7 @@ ggplot(exam,
 ```
 
 ## Manual Quantiles
+
 ```{r}
 #| code-fold: true
 #| code-summary: "Show Code"
@@ -405,6 +405,7 @@ ggplot(exam,
 ```
 
 ## Plot (without slab interval)
+
 ```{r}
 #| code-fold: true
 #| code-summary: "Show the code"
@@ -495,6 +496,7 @@ ggplot(exam,
 ```
 
 ## Original Plot
+
 ```{r}
 #| code-fold: true
 #| code-summary: "Show the code"
