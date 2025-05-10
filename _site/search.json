@@ -1239,7 +1239,7 @@
     "href": "Hands-on_Ex/Hands-on_Ex04-3/Hands-on_Ex04-3.html#two-sample-mean-test-ggbetweenstats",
     "title": "Hands-On Exercise 4-3: Visual Statistical Analysis",
     "section": "4-3: 3.6 Two-Sample Mean Test: ggbetweenstats()",
-    "text": "4-3: 3.6 Two-Sample Mean Test: ggbetweenstats()\nIn the code chunk below, ggbetweenstats() is used to build a visual for two-sample mean test of Maths scores by gender.\n\n\nShow the code\nggbetweenstats(\n  data = exam,\n  x = GENDER,\n  y = MATHS,\n  type = \"np\",\n  message = FALSE\n)\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nDefault Information\n\n\n\n\nStatistical Details\nBayes Factor\nSample Sizes\nDistribution Summary\n\n\n\n\n\n\n\n\n\nType Options\n\n\n\nThe type (of test) argument also accepts the following abbreviations:\n\n“p” (for parametric - for normally distributed data)\n“np” (for nonparametric)\n“r” (for robust - for outliers)\n“bf” (for Bayes Factor).",
+    "text": "4-3: 3.6 Two-Sample Mean Test: ggbetweenstats()\nIn the code chunk below, ggbetweenstats() is used to build a visual for two-sample mean test of Maths scores by gender.\n\n\nShow the code\nggbetweenstats(\n  data = exam,\n  x = GENDER,\n  y = MATHS,\n  type = \"np\",\n  message = FALSE\n)\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nDefault Information\n\n\n\n\nStatistical Details\nBayes Factor\nSample Sizes\nDistribution Summary\n\n\n\n\n\n\n\n\n\nType Options\n\n\n\nThe type (of test) argument also accepts the following abbreviations:\n\n“p” (Parametric - for normally distributed data)\n“np” (Non-parametric)\n“r” (Robust - for removing outliers)\n“bf” (Bayes Factor)",
     "crumbs": [
       "Hands-On Exercises",
       "4-3: Visual Statistical Analysis"
@@ -1250,7 +1250,7 @@
     "href": "Hands-on_Ex/Hands-on_Ex04-3/Hands-on_Ex04-3.html#oneway-anova-test-ggbetweentats-method",
     "title": "Hands-On Exercise 4-3: Visual Statistical Analysis",
     "section": "4-3: 3.7 Oneway ANOVA Test: ggbetweentats() Method",
-    "text": "4-3: 3.7 Oneway ANOVA Test: ggbetweentats() Method\nIn the code chunk below, ggbetweenstats() is used to build a visual for One-way ANOVA test on English scores by Race.\n\n\nShow the code\nggbetweenstats(\n  data = exam,\n  x = RACE,\n  y = ENGLISH,\n  type = \"p\",\n  mean.ci = TRUE,\n  pariwise.comparisons = TRUE,\n  pairwise.display = \"s\",\n  p.adjust.methods = \"fdr\",\n  message = FALSE\n)\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nLegend\n\n\n\n\n“na” → only non-significant\n“s” → only significant\n“all” → everything\n\n\n\n\n4-3: 3.7.1 ggbetweentats() - Summary of Tests",
+    "text": "4-3: 3.7 Oneway ANOVA Test: ggbetweentats() Method\nIn the code chunk below, ggbetweenstats() is used to build a visual for One-way ANOVA test on English scores by Race.\n\n\nShow the code\nggbetweenstats(\n  data = exam,\n  x = RACE,\n  y = ENGLISH,\n  type = \"p\",\n  mean.ci = TRUE,\n  pariwise.comparisons = TRUE,\n  pairwise.display = \"s\",\n  p.adjust.methods = \"fdr\",\n  message = FALSE\n)\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nPairwise Display Options\n\n\n\n\n“na” → only non-significant\n“s” → only significant\n“all” → everything\n\n\n\n\n4-3: 3.7.1 ggbetweentats() - Summary of Tests",
     "crumbs": [
       "Hands-On Exercises",
       "4-3: Visual Statistical Analysis"
