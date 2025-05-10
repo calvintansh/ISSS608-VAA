@@ -242,7 +242,7 @@
     "href": "Hands-on_Ex/Hands-on_Ex04-4/Hands-on_Ex04-4.html#installing-ungeviz-package",
     "title": "Hands-On Exercise 4-4: Visualising Uncertainty",
     "section": "4-4: 5.1 Installing ungeviz Package",
-    "text": "4-4: 5.1 Installing ungeviz Package\n\n\nShow the code\ndevtools::install_github(\"wilkelab/ungeviz\")\n\n\n\n\n\n\n\n\nNote\n\n\n\nYou only need to perform this step once.",
+    "text": "4-4: 5.1 Installing ungeviz Package\n\ndevtools::install_github(\"wilkelab/ungeviz\")\n\n\n\n\n\n\n\nNote\n\n\n\nYou only need to perform this step once.",
     "crumbs": [
       "Hands-On Exercises",
       "4-4: Visualising Uncertainty"

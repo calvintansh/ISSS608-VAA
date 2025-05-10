@@ -478,9 +478,7 @@ exam %>%
 
 ## [4-4:]{style="color:DarkOrange"} 5.1 Installing ungeviz Package
 
-```{r}
-#| code-fold: true
-#| code-summary: "Show the code"
+```{r eval = FALSE}
 devtools::install_github("wilkelab/ungeviz")
 ```
 
