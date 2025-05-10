@@ -399,7 +399,7 @@ The plot below shows the 95% and 99% confidence intervals.
 
 ```{r}
 #| code-fold: true
-#| code-summary: "Show the code"
+#| code-summary: "Show Code"
 exam %>%
   ggplot(aes(x = RACE, y = MATHS)) +
   stat_pointinterval(
@@ -433,7 +433,7 @@ In the code chunk below, [`stat_gradientinterval()`](https://mjskay.github.io/gg
 
 ```{r}
 #| code-fold: true
-#| code-summary: "Show the code"
+#| code-summary: "Show Code"
 exam %>%
   ggplot(aes(x = RACE, 
              y = MATHS)) +
@@ -460,7 +460,7 @@ exam %>%
 
 ```{r}
 #| code-fold: true
-#| code-summary: "Show the code"
+#| code-summary: "Show Code"
 exam %>%
   ggplot(aes(x = RACE, 
              y = MATHS)) +
@@ -479,6 +479,8 @@ exam %>%
 ## [4-4:]{style="color:DarkOrange"} 5.1 Installing ungeviz Package
 
 ```{r eval = FALSE}
+#| code-fold: true
+#| code-summary: "Show Code"
 devtools::install_github("wilkelab/ungeviz")
 ```
 
@@ -490,7 +492,7 @@ You only need to perform this step once.
 
 ```{r}
 #| code-fold: true
-#| code-summary: "Show the code"
+#| code-summary: "Show Code"
 library(ungeviz)
 ```
 
@@ -503,7 +505,7 @@ The code chunk below will be used to build the HOPs.
 
 ```{r}
 #| code-fold: true
-#| code-summary: "Show the code"
+#| code-summary: "Show Code"
 ggplot(data = exam, 
        (aes(x = factor(RACE), 
             y = MATHS))) +
@@ -529,7 +531,7 @@ ggplot(data = exam,
 
 ```{r}
 #| code-fold: true
-#| code-summary: "Show the code"
+#| code-summary: "Show Code"
 ggplot(data = exam, 
        (aes(x = factor(RACE), 
             y = MATHS))) +
@@ -555,7 +557,7 @@ ggplot(data = exam,
 
 ```{r}
 #| code-fold: true
-#| code-summary: "Show the code"
+#| code-summary: "Show Code"
 ggplot(data = exam, 
        (aes(x = factor(RACE), 
             y = MATHS))) +
@@ -581,7 +583,7 @@ ggplot(data = exam,
 
 ```{r}
 #| code-fold: true
-#| code-summary: "Show the code"
+#| code-summary: "Show Code"
 ggplot(data = exam, 
        (aes(x = factor(RACE), 
             y = MATHS))) +
