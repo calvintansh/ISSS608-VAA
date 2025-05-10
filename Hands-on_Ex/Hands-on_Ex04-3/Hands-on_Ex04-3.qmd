@@ -120,6 +120,16 @@ ggbetweenstats(
 -   Distribution Summary
 :::
 
+::: callout-note
+## Type Options
+The type (of test) argument also accepts the following abbreviations: 
+
+- "p" (for parametric - for normally distributed data)
+- "np" (for nonparametric)
+- "r" (for robust - for outliers)
+- "bf" (for Bayes Factor).
+:::
+
 ## [4-3:]{style="color:DarkOrange"} 3.7 Oneway ANOVA Test: *ggbetweentats()* Method
 
 In the code chunk below, [*ggbetweenstats()*](https://indrajeetpatil.github.io/ggstatsplot/reference/ggbetweenstats.html) is used to build a visual for One-way ANOVA test on English scores by Race.

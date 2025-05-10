@@ -1239,7 +1239,7 @@
     "href": "Hands-on_Ex/Hands-on_Ex04-3/Hands-on_Ex04-3.html#two-sample-mean-test-ggbetweenstats",
     "title": "Hands-On Exercise 4-3: Visual Statistical Analysis",
     "section": "4-3: 3.6 Two-Sample Mean Test: ggbetweenstats()",
-    "text": "4-3: 3.6 Two-Sample Mean Test: ggbetweenstats()\nIn the code chunk below, ggbetweenstats() is used to build a visual for two-sample mean test of Maths scores by gender.\n\n\nShow the code\nggbetweenstats(\n  data = exam,\n  x = GENDER,\n  y = MATHS,\n  type = \"np\",\n  message = FALSE\n)\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nDefault Information\n\n\n\n\nStatistical Details\nBayes Factor\nSample Sizes\nDistribution Summary",
+    "text": "4-3: 3.6 Two-Sample Mean Test: ggbetweenstats()\nIn the code chunk below, ggbetweenstats() is used to build a visual for two-sample mean test of Maths scores by gender.\n\n\nShow the code\nggbetweenstats(\n  data = exam,\n  x = GENDER,\n  y = MATHS,\n  type = \"np\",\n  message = FALSE\n)\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nDefault Information\n\n\n\n\nStatistical Details\nBayes Factor\nSample Sizes\nDistribution Summary\n\n\n\n\n\n\n\n\n\nType Options\n\n\n\nThe type (of test) argument also accepts the following abbreviations:\n\n“p” (for parametric - for normally distributed data)\n“np” (for nonparametric)\n“r” (for robust - for outliers)\n“bf” (for Bayes Factor).",
     "crumbs": [
       "Hands-On Exercises",
       "4-3: Visual Statistical Analysis"
