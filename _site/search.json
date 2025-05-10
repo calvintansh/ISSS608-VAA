@@ -1261,7 +1261,7 @@
     "href": "Hands-on_Ex/Hands-on_Ex04-3/Hands-on_Ex04-3.html#significant-test-of-correlation-ggscatterstats",
     "title": "Hands-On Exercise 4-3: Visual Statistical Analysis",
     "section": "4-3: 3.8 Significant Test of Correlation: ggscatterstats()",
-    "text": "4-3: 3.8 Significant Test of Correlation: ggscatterstats()\nIn the code chunk below, ggscatterstats() is used to build a visual for Significant Test of Correlation between Maths scores and English scores.\n\n\nShow the code\nggscatterstats(\n  data = exam,\n  x = MATHS,\n  y = ENGLISH,\n  marginal = FALSE\n)",
+    "text": "4-3: 3.8 Significant Test of Correlation: ggscatterstats()\nIn the code chunk below, ggscatterstats() is used to build a visual for Significant Test of Correlation between Maths scores and English scores.\n\nWithout MarginalWith Marginal Plot\n\n\n\n\nShow the code\nggscatterstats(\n  data = exam,\n  x = MATHS,\n  y = ENGLISH,\n  marginal = FALSE\n)\n\n\n\n\n\n\n\n\n\n\n\n\n\nShow the code\nggscatterstats(\n  data = exam,\n  x = MATHS,\n  y = ENGLISH,\n  marginal = TRUE\n)",
     "crumbs": [
       "Hands-On Exercises",
       "4-3: Visual Statistical Analysis"

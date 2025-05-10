@@ -170,6 +170,8 @@ ggbetweenstats(
 
 In the code chunk below, [*ggscatterstats()*](https://indrajeetpatil.github.io/ggstatsplot/reference/ggscatterstats.html) is used to build a visual for Significant Test of Correlation between Maths scores and English scores.
 
+::: panel-tabset
+## Without Marginal
 ```{r}
 #| code-fold: true
 #| code-summary: "Show the code"
@@ -180,6 +182,19 @@ ggscatterstats(
   marginal = FALSE
 )
 ```
+
+## With Marginal Plot
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+ggscatterstats(
+  data = exam,
+  x = MATHS,
+  y = ENGLISH,
+  marginal = TRUE
+)
+```
+:::
 
 ## [4-3:]{style="color:DarkOrange"} 3.9 Significant Test of Association (Dependence): *ggbarstats()* Method
 
