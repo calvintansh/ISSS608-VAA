@@ -143,252 +143,396 @@
     "href": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05.html",
     "title": "Hands-On Exercise 5: Modelling, Visualising and Analysing Network Data with R",
     "section": "",
-    "text": "This exercise will cover modelling, analysing and visualising network data using R and includes the following:\n\nCreate graph object data frames and manipulate them using appropriate functions of dplyr, lubridate, and tidygraph\nBuild network graph visualisation using appropriate functions of ggraph\nCompute network geometrics using tidygraph\nBuild advanced graph visualisation by incorporating the network geometrics\nBuild interactive network visualisation using visNetwork package"
+    "text": "This exercise will cover modelling, analysing and visualising network data using R and includes the following:\n\nCreate graph object data frames and manipulate them using appropriate functions of dplyr, lubridate, and tidygraph\nBuild network graph visualisation using appropriate functions of ggraph\nCompute network geometrics using tidygraph\nBuild advanced graph visualisation by incorporating the network geometrics\nBuild interactive network visualisation using visNetwork package",
+    "crumbs": [
+      "Hands-On Exercises",
+      "5: Modelling, Visualising and Analysing Network Data with R"
+    ]
   },
   {
     "objectID": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05.html#instal-and-launch-r-packages",
     "href": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05.html#instal-and-launch-r-packages",
     "title": "Hands-On Exercise 5: Modelling, Visualising and Analysing Network Data with R",
     "section": "5: 2.1 Instal and Launch R Packages",
-    "text": "5: 2.1 Instal and Launch R Packages\nFour network data modelling and visualisation packages will be installed and launched for this exercise:\n\nigraph\ntidygraph\nggraph\nvisNetwork\n\nBeside these four packages, tidyverse and lubridate, an R package specially designed to handle and wrangling time data will be installed and launched too.\n\n\nShow code\npacman::p_load(igraph, tidygraph, ggraph, \n               visNetwork, lubridate, clock,\n               tidyverse, graphlayouts, \n               concaveman, ggforce)"
+    "text": "5: 2.1 Instal and Launch R Packages\nFour network data modelling and visualisation packages will be installed and launched for this exercise:\n\nigraph\ntidygraph\nggraph\nvisNetwork\n\nBeside these four packages, tidyverse and lubridate, an R package specially designed to handle and wrangling time data will be installed and launched too.\n\n\nShow code\npacman::p_load(igraph, tidygraph, ggraph, \n               visNetwork, lubridate, clock,\n               tidyverse, graphlayouts, \n               concaveman, ggforce)",
+    "crumbs": [
+      "Hands-On Exercises",
+      "5: Modelling, Visualising and Analysing Network Data with R"
+    ]
   },
   {
     "objectID": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05.html#the-edges-data",
     "href": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05.html#the-edges-data",
     "title": "Hands-On Exercise 5: Modelling, Visualising and Analysing Network Data with R",
     "section": "5: 3.1 The Edges Data",
-    "text": "5: 3.1 The Edges Data\nGAStech-email_edges.csv consists of two weeks of 9063 emails correspondences between 55 employees."
+    "text": "5: 3.1 The Edges Data\nGAStech-email_edges.csv consists of two weeks of 9063 emails correspondences between 55 employees.",
+    "crumbs": [
+      "Hands-On Exercises",
+      "5: Modelling, Visualising and Analysing Network Data with R"
+    ]
   },
   {
     "objectID": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05.html#the-nodes-data",
     "href": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05.html#the-nodes-data",
     "title": "Hands-On Exercise 5: Modelling, Visualising and Analysing Network Data with R",
     "section": "5: 3.2 The Nodes Data",
-    "text": "5: 3.2 The Nodes Data\nGAStech_email_nodes.csv which consist of the names, department and title of the 55 employees."
+    "text": "5: 3.2 The Nodes Data\nGAStech_email_nodes.csv which consist of the names, department and title of the 55 employees.",
+    "crumbs": [
+      "Hands-On Exercises",
+      "5: Modelling, Visualising and Analysing Network Data with R"
+    ]
   },
   {
     "objectID": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05.html#importing-network-data-from-files",
     "href": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05.html#importing-network-data-from-files",
     "title": "Hands-On Exercise 5: Modelling, Visualising and Analysing Network Data with R",
     "section": "5: 3.3 Importing Network Data from Files",
-    "text": "5: 3.3 Importing Network Data from Files\nThe two data sets, GAStech_email_node.csv and GAStech_email_edges.csv, are imported into the RStudio environment using read_csv() of readr package.\n\n\nShow code\nGAStech_nodes &lt;- read_csv(\"data/GAStech_email_node.csv\")\nGAStech_edges &lt;- read_csv(\"data/GAStech_email_edge-v2.csv\")"
+    "text": "5: 3.3 Importing Network Data from Files\nThe two data sets, GAStech_email_node.csv and GAStech_email_edges.csv, are imported into the RStudio environment using read_csv() of readr package.\n\n\nShow code\nGAStech_nodes &lt;- read_csv(\"data/GAStech_email_node.csv\")\nGAStech_edges &lt;- read_csv(\"data/GAStech_email_edge-v2.csv\")",
+    "crumbs": [
+      "Hands-On Exercises",
+      "5: Modelling, Visualising and Analysing Network Data with R"
+    ]
   },
   {
     "objectID": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05.html#reviewing-the-imported-data",
     "href": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05.html#reviewing-the-imported-data",
     "title": "Hands-On Exercise 5: Modelling, Visualising and Analysing Network Data with R",
     "section": "5: 3.4 Reviewing the Imported Data",
-    "text": "5: 3.4 Reviewing the Imported Data\nThe structure of the data frames can be examined using glimpse() of dplyr.\n\n\nShow code\nglimpse(GAStech_edges)\n\n\nRows: 9,063\nColumns: 8\n$ source      &lt;dbl&gt; 43, 43, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 26, 26, 26…\n$ target      &lt;dbl&gt; 41, 40, 51, 52, 53, 45, 44, 46, 48, 49, 47, 54, 27, 28, 29…\n$ SentDate    &lt;chr&gt; \"6/1/2014\", \"6/1/2014\", \"6/1/2014\", \"6/1/2014\", \"6/1/2014\"…\n$ SentTime    &lt;time&gt; 08:39:00, 08:39:00, 08:58:00, 08:58:00, 08:58:00, 08:58:0…\n$ Subject     &lt;chr&gt; \"GT-SeismicProcessorPro Bug Report\", \"GT-SeismicProcessorP…\n$ MainSubject &lt;chr&gt; \"Work related\", \"Work related\", \"Work related\", \"Work rela…\n$ sourceLabel &lt;chr&gt; \"Sven.Flecha\", \"Sven.Flecha\", \"Kanon.Herrero\", \"Kanon.Herr…\n$ targetLabel &lt;chr&gt; \"Isak.Baza\", \"Lucas.Alcazar\", \"Felix.Resumir\", \"Hideki.Coc…\n\n\n\n\n\n\n\n\nWarning\n\n\n\nThe output report of GAStech_edges above reveals that the SentDate is treated as “Character”” data type instead of date data type. This is an error! It is important to change the data type of SentDate field back to the “Date”” data type."
+    "text": "5: 3.4 Reviewing the Imported Data\nThe structure of the data frames can be examined using glimpse() of dplyr.\n\n\nShow code\nglimpse(GAStech_edges)\n\n\nRows: 9,063\nColumns: 8\n$ source      &lt;dbl&gt; 43, 43, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 26, 26, 26…\n$ target      &lt;dbl&gt; 41, 40, 51, 52, 53, 45, 44, 46, 48, 49, 47, 54, 27, 28, 29…\n$ SentDate    &lt;chr&gt; \"6/1/2014\", \"6/1/2014\", \"6/1/2014\", \"6/1/2014\", \"6/1/2014\"…\n$ SentTime    &lt;time&gt; 08:39:00, 08:39:00, 08:58:00, 08:58:00, 08:58:00, 08:58:0…\n$ Subject     &lt;chr&gt; \"GT-SeismicProcessorPro Bug Report\", \"GT-SeismicProcessorP…\n$ MainSubject &lt;chr&gt; \"Work related\", \"Work related\", \"Work related\", \"Work rela…\n$ sourceLabel &lt;chr&gt; \"Sven.Flecha\", \"Sven.Flecha\", \"Kanon.Herrero\", \"Kanon.Herr…\n$ targetLabel &lt;chr&gt; \"Isak.Baza\", \"Lucas.Alcazar\", \"Felix.Resumir\", \"Hideki.Coc…\n\n\n\n\n\n\n\n\nWarning\n\n\n\nThe output report of GAStech_edges above reveals that the SentDate is treated as “Character”” data type instead of date data type. This is an error! It is important to change the data type of SentDate field back to the “Date”” data type.",
+    "crumbs": [
+      "Hands-On Exercises",
+      "5: Modelling, Visualising and Analysing Network Data with R"
+    ]
   },
   {
     "objectID": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05.html#data-wrangling",
     "href": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05.html#data-wrangling",
     "title": "Hands-On Exercise 5: Modelling, Visualising and Analysing Network Data with R",
     "section": "5: 3.5 Data Wrangling",
-    "text": "5: 3.5 Data Wrangling\nThe code chunk below will be used to perform the data type changes.\n\n\nShow code\nGAStech_edges$SentDate  = dmy(GAStech_edges$SentDate)\nGAStech_edges$Weekday = wday(GAStech_edges$SentDate, \n                             label = TRUE, \n                             abbr = FALSE)\n\n\n\n\n\n\n\n\nThings to Learn\n\n\n\n\nBoth dmy() and wday() are functions of lubridate lubridate package. It is an R package that makes it easier to work with dates and times.\n\ndmy(): Transforms the SentDate to Date data type.\nwday() : Returns the day of the week as a decimal number or an ordered factor if label is TRUE.\n\nThe argument abbr is FALSE to keep the daya spelled in full, i.e. Monday. The function will create a new column in the dataframe i.e. Weekday and the output of wday() will be saved in this newly created field.\nThe values in the Weekday field are in ordinal scale."
+    "text": "5: 3.5 Data Wrangling\nThe code chunk below will be used to perform the data type changes.\n\n\nShow code\nGAStech_edges$SentDate  = dmy(GAStech_edges$SentDate)\nGAStech_edges$Weekday = wday(GAStech_edges$SentDate, \n                             label = TRUE, \n                             abbr = FALSE)\n\n\n\n\n\n\n\n\nThings to Learn\n\n\n\n\nBoth dmy() and wday() are functions of lubridate lubridate package. It is an R package that makes it easier to work with dates and times.\n\ndmy(): Transforms the SentDate to Date data type.\nwday() : Returns the day of the week as a decimal number or an ordered factor if label is TRUE.\n\nThe argument abbr is FALSE to keep the daya spelled in full, i.e. Monday. The function will create a new column in the dataframe i.e. Weekday and the output of wday() will be saved in this newly created field.\nThe values in the Weekday field are in ordinal scale.",
+    "crumbs": [
+      "Hands-On Exercises",
+      "5: Modelling, Visualising and Analysing Network Data with R"
+    ]
   },
   {
     "objectID": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05.html#reviewing-the-revised-date-fields",
     "href": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05.html#reviewing-the-revised-date-fields",
     "title": "Hands-On Exercise 5: Modelling, Visualising and Analysing Network Data with R",
     "section": "5: 3.6 Reviewing the Revised Date Fields",
-    "text": "5: 3.6 Reviewing the Revised Date Fields\nThe table below shows the data structure of the reformatted GAStech_edges data frame.\n\n\nShow code\nglimpse(GAStech_edges)\n\n\nRows: 9,063\nColumns: 9\n$ source      &lt;dbl&gt; 43, 43, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 26, 26, 26…\n$ target      &lt;dbl&gt; 41, 40, 51, 52, 53, 45, 44, 46, 48, 49, 47, 54, 27, 28, 29…\n$ SentDate    &lt;date&gt; 2014-01-06, 2014-01-06, 2014-01-06, 2014-01-06, 2014-01-0…\n$ SentTime    &lt;time&gt; 08:39:00, 08:39:00, 08:58:00, 08:58:00, 08:58:00, 08:58:0…\n$ Subject     &lt;chr&gt; \"GT-SeismicProcessorPro Bug Report\", \"GT-SeismicProcessorP…\n$ MainSubject &lt;chr&gt; \"Work related\", \"Work related\", \"Work related\", \"Work rela…\n$ sourceLabel &lt;chr&gt; \"Sven.Flecha\", \"Sven.Flecha\", \"Kanon.Herrero\", \"Kanon.Herr…\n$ targetLabel &lt;chr&gt; \"Isak.Baza\", \"Lucas.Alcazar\", \"Felix.Resumir\", \"Hideki.Coc…\n$ Weekday     &lt;ord&gt; Monday, Monday, Monday, Monday, Monday, Monday, Monday, Mo…"
+    "text": "5: 3.6 Reviewing the Revised Date Fields\nThe table below shows the data structure of the reformatted GAStech_edges data frame.\n\n\nShow code\nglimpse(GAStech_edges)\n\n\nRows: 9,063\nColumns: 9\n$ source      &lt;dbl&gt; 43, 43, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 26, 26, 26…\n$ target      &lt;dbl&gt; 41, 40, 51, 52, 53, 45, 44, 46, 48, 49, 47, 54, 27, 28, 29…\n$ SentDate    &lt;date&gt; 2014-01-06, 2014-01-06, 2014-01-06, 2014-01-06, 2014-01-0…\n$ SentTime    &lt;time&gt; 08:39:00, 08:39:00, 08:58:00, 08:58:00, 08:58:00, 08:58:0…\n$ Subject     &lt;chr&gt; \"GT-SeismicProcessorPro Bug Report\", \"GT-SeismicProcessorP…\n$ MainSubject &lt;chr&gt; \"Work related\", \"Work related\", \"Work related\", \"Work rela…\n$ sourceLabel &lt;chr&gt; \"Sven.Flecha\", \"Sven.Flecha\", \"Kanon.Herrero\", \"Kanon.Herr…\n$ targetLabel &lt;chr&gt; \"Isak.Baza\", \"Lucas.Alcazar\", \"Felix.Resumir\", \"Hideki.Coc…\n$ Weekday     &lt;ord&gt; Monday, Monday, Monday, Monday, Monday, Monday, Monday, Mo…",
+    "crumbs": [
+      "Hands-On Exercises",
+      "5: Modelling, Visualising and Analysing Network Data with R"
+    ]
   },
   {
     "objectID": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05.html#wrangling-attributes",
     "href": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05.html#wrangling-attributes",
     "title": "Hands-On Exercise 5: Modelling, Visualising and Analysing Network Data with R",
     "section": "5: 3.7 Wrangling attributes",
-    "text": "5: 3.7 Wrangling attributes\nA close examination of GAStech_edges data frame reveals that it consists of individual e-mail flow records. This is not very useful for visualisation.\nIn view of this, aggregation will be conducted on the individual records by date, senders, receivers, main subject and day of the week.\n\n\nShow code\nGAStech_edges_aggregated &lt;- GAStech_edges %&gt;%\n  filter(MainSubject == \"Work related\") %&gt;%\n  group_by(source, target, Weekday) %&gt;%\n    summarise(Weight = n()) %&gt;%\n  filter(source!=target) %&gt;%\n  filter(Weight &gt; 1) %&gt;%\n  ungroup()\n\n\n\n\n\n\n\n\nThings to Learn\n\n\n\n\nFour functions from dplyr package were used (filter(), group(), summarise(), and ungroup())\nThe output data frame is called GAStech_edges_aggregated\nA new field called Weight was added in GAStech_edges_aggregated"
+    "text": "5: 3.7 Wrangling attributes\nA close examination of GAStech_edges data frame reveals that it consists of individual e-mail flow records. This is not very useful for visualisation.\nIn view of this, aggregation will be conducted on the individual records by date, senders, receivers, main subject and day of the week.\n\n\nShow code\nGAStech_edges_aggregated &lt;- GAStech_edges %&gt;%\n  filter(MainSubject == \"Work related\") %&gt;%\n  group_by(source, target, Weekday) %&gt;%\n    summarise(Weight = n()) %&gt;%\n  filter(source!=target) %&gt;%\n  filter(Weight &gt; 1) %&gt;%\n  ungroup()\n\n\n\n\n\n\n\n\nThings to Learn\n\n\n\n\nFour functions from dplyr package were used (filter(), group(), summarise(), and ungroup())\nThe output data frame is called GAStech_edges_aggregated\nA new field called Weight was added in GAStech_edges_aggregated",
+    "crumbs": [
+      "Hands-On Exercises",
+      "5: Modelling, Visualising and Analysing Network Data with R"
+    ]
   },
   {
     "objectID": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05.html#reviewing-the-revised-edges-file",
     "href": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05.html#reviewing-the-revised-edges-file",
     "title": "Hands-On Exercise 5: Modelling, Visualising and Analysing Network Data with R",
     "section": "5: 3.8 Reviewing the Revised Edges File",
-    "text": "5: 3.8 Reviewing the Revised Edges File\nTable below shows the data structure of the reformatted GAStech_edges data frame.\n\n\nShow code\nglimpse(GAStech_edges_aggregated)\n\n\nRows: 1,456\nColumns: 4\n$ source  &lt;dbl&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,…\n$ target  &lt;dbl&gt; 2, 2, 2, 2, 3, 3, 3, 3, 4, 4, 4, 4, 5, 5, 5, 5, 6, 6, 6, 6, 7,…\n$ Weekday &lt;ord&gt; Monday, Tuesday, Wednesday, Friday, Monday, Tuesday, Wednesday…\n$ Weight  &lt;int&gt; 4, 3, 5, 8, 4, 3, 5, 8, 4, 3, 5, 8, 4, 3, 5, 8, 4, 3, 5, 8, 4,…"
+    "text": "5: 3.8 Reviewing the Revised Edges File\nTable below shows the data structure of the reformatted GAStech_edges data frame.\n\n\nShow code\nglimpse(GAStech_edges_aggregated)\n\n\nRows: 1,456\nColumns: 4\n$ source  &lt;dbl&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,…\n$ target  &lt;dbl&gt; 2, 2, 2, 2, 3, 3, 3, 3, 4, 4, 4, 4, 5, 5, 5, 5, 6, 6, 6, 6, 7,…\n$ Weekday &lt;ord&gt; Monday, Tuesday, Wednesday, Friday, Monday, Tuesday, Wednesday…\n$ Weight  &lt;int&gt; 4, 3, 5, 8, 4, 3, 5, 8, 4, 3, 5, 8, 4, 3, 5, 8, 4, 3, 5, 8, 4,…",
+    "crumbs": [
+      "Hands-On Exercises",
+      "5: Modelling, Visualising and Analysing Network Data with R"
+    ]
   },
   {
     "objectID": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05.html#the-tbl_graph-object",
     "href": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05.html#the-tbl_graph-object",
     "title": "Hands-On Exercise 5: Modelling, Visualising and Analysing Network Data with R",
     "section": "5: 4.1 The tbl_graph object",
-    "text": "5: 4.1 The tbl_graph object\nTwo functions of tidygraph package can be used to create network objects:\n\ntbl_graph() creates a tbl_graph network object from nodes and edges data\nas_tbl_graph() converts network data and objects to a tbl_graph network. The network data and objects supported are:\n\nA node data.frame and an edge data.frame\ndata.frame, list, matrix from base\nigraph from igraph\nnetwork from network\ndendrogram and hclust from stats\nNode from data.tree\nphylo and evonet from ape\ngraphNEL, graphAM, graphBAM from graph (in Bioconductor)"
+    "text": "5: 4.1 The tbl_graph object\nTwo functions of tidygraph package can be used to create network objects:\n\ntbl_graph() creates a tbl_graph network object from nodes and edges data\nas_tbl_graph() converts network data and objects to a tbl_graph network. The network data and objects supported are:\n\nA node data.frame and an edge data.frame\ndata.frame, list, matrix from base\nigraph from igraph\nnetwork from network\ndendrogram and hclust from stats\nNode from data.tree\nphylo and evonet from ape\ngraphNEL, graphAM, graphBAM from graph (in Bioconductor)",
+    "crumbs": [
+      "Hands-On Exercises",
+      "5: Modelling, Visualising and Analysing Network Data with R"
+    ]
   },
   {
     "objectID": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05.html#the-dplyr-verbs-in-tidygraph",
     "href": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05.html#the-dplyr-verbs-in-tidygraph",
     "title": "Hands-On Exercise 5: Modelling, Visualising and Analysing Network Data with R",
     "section": "5: 4.2 The dplyr verbs in tidygraph",
-    "text": "5: 4.2 The dplyr verbs in tidygraph\n\n\n\n\n\nA sample code is given above:\n\nactivate() verb from tidygraph serves as a switch between tibbles for nodes and edges. All dplyr verbs applied to tbl_graph object are applied to the active tibble.\nThe .N() function is used to gain access to the node data while manipulating the edge data. Similarly .E() will access the edge data and .G() will access the tbl_graph object itself."
+    "text": "5: 4.2 The dplyr verbs in tidygraph\n\n\n\n\n\nA sample code is given above:\n\nactivate() verb from tidygraph serves as a switch between tibbles for nodes and edges. All dplyr verbs applied to tbl_graph object are applied to the active tibble.\nThe .N() function is used to gain access to the node data while manipulating the edge data. Similarly .E() will access the edge data and .G() will access the tbl_graph object itself.",
+    "crumbs": [
+      "Hands-On Exercises",
+      "5: Modelling, Visualising and Analysing Network Data with R"
+    ]
   },
   {
     "objectID": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05.html#using-tbl_graph-to-build-tidygraph-data-model",
     "href": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05.html#using-tbl_graph-to-build-tidygraph-data-model",
     "title": "Hands-On Exercise 5: Modelling, Visualising and Analysing Network Data with R",
     "section": "5: 4.3 Using tbl_graph() to Build tidygraph Data Model",
-    "text": "5: 4.3 Using tbl_graph() to Build tidygraph Data Model\nIn this section, tbl_graph() of tinygraph package will be used to build a tidygraph’s network graph data.frame.\nVisit the reference guide of tbl_graph() to find out more about the function.\n\n\nShow code\nGAStech_graph &lt;- tbl_graph(nodes = GAStech_nodes,\n                           edges = GAStech_edges_aggregated, \n                           directed = TRUE)"
+    "text": "5: 4.3 Using tbl_graph() to Build tidygraph Data Model\nIn this section, tbl_graph() of tinygraph package will be used to build a tidygraph’s network graph data.frame.\nVisit the reference guide of tbl_graph() to find out more about the function.\n\n\nShow code\nGAStech_graph &lt;- tbl_graph(nodes = GAStech_nodes,\n                           edges = GAStech_edges_aggregated, \n                           directed = TRUE)",
+    "crumbs": [
+      "Hands-On Exercises",
+      "5: Modelling, Visualising and Analysing Network Data with R"
+    ]
   },
   {
     "objectID": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05.html#reviewing-the-output-tidygraphs-graph-object",
     "href": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05.html#reviewing-the-output-tidygraphs-graph-object",
     "title": "Hands-On Exercise 5: Modelling, Visualising and Analysing Network Data with R",
     "section": "5: 4.4 Reviewing the Output tidygraph’s Graph Object",
-    "text": "5: 4.4 Reviewing the Output tidygraph’s Graph Object\n\n\nShow code\nGAStech_graph\n\n\n# A tbl_graph: 54 nodes and 1456 edges\n#\n# A directed multigraph with 1 component\n#\n# Node Data: 54 × 4 (active)\n      id label               Department     Title                               \n   &lt;dbl&gt; &lt;chr&gt;               &lt;chr&gt;          &lt;chr&gt;                               \n 1     1 Mat.Bramar          Administration Assistant to CEO                    \n 2     2 Anda.Ribera         Administration Assistant to CFO                    \n 3     3 Rachel.Pantanal     Administration Assistant to CIO                    \n 4     4 Linda.Lagos         Administration Assistant to COO                    \n 5     5 Ruscella.Mies.Haber Administration Assistant to Engineering Group Mana…\n 6     6 Carla.Forluniau     Administration Assistant to IT Group Manager       \n 7     7 Cornelia.Lais       Administration Assistant to Security Group Manager \n 8    44 Kanon.Herrero       Security       Badging Office                      \n 9    45 Varja.Lagos         Security       Badging Office                      \n10    46 Stenig.Fusil        Security       Building Control                    \n# ℹ 44 more rows\n#\n# Edge Data: 1,456 × 4\n   from    to Weekday   Weight\n  &lt;int&gt; &lt;int&gt; &lt;ord&gt;      &lt;int&gt;\n1     1     2 Monday         4\n2     1     2 Tuesday        3\n3     1     2 Wednesday      5\n# ℹ 1,453 more rows"
+    "text": "5: 4.4 Reviewing the Output tidygraph’s Graph Object\n\n\nShow code\nGAStech_graph\n\n\n# A tbl_graph: 54 nodes and 1456 edges\n#\n# A directed multigraph with 1 component\n#\n# Node Data: 54 × 4 (active)\n      id label               Department     Title                               \n   &lt;dbl&gt; &lt;chr&gt;               &lt;chr&gt;          &lt;chr&gt;                               \n 1     1 Mat.Bramar          Administration Assistant to CEO                    \n 2     2 Anda.Ribera         Administration Assistant to CFO                    \n 3     3 Rachel.Pantanal     Administration Assistant to CIO                    \n 4     4 Linda.Lagos         Administration Assistant to COO                    \n 5     5 Ruscella.Mies.Haber Administration Assistant to Engineering Group Mana…\n 6     6 Carla.Forluniau     Administration Assistant to IT Group Manager       \n 7     7 Cornelia.Lais       Administration Assistant to Security Group Manager \n 8    44 Kanon.Herrero       Security       Badging Office                      \n 9    45 Varja.Lagos         Security       Badging Office                      \n10    46 Stenig.Fusil        Security       Building Control                    \n# ℹ 44 more rows\n#\n# Edge Data: 1,456 × 4\n   from    to Weekday   Weight\n  &lt;int&gt; &lt;int&gt; &lt;ord&gt;      &lt;int&gt;\n1     1     2 Monday         4\n2     1     2 Tuesday        3\n3     1     2 Wednesday      5\n# ℹ 1,453 more rows",
+    "crumbs": [
+      "Hands-On Exercises",
+      "5: Modelling, Visualising and Analysing Network Data with R"
+    ]
   },
   {
     "objectID": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05.html#analysing-the-output-tidygraphs-graph-object",
     "href": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05.html#analysing-the-output-tidygraphs-graph-object",
     "title": "Hands-On Exercise 5: Modelling, Visualising and Analysing Network Data with R",
     "section": "5: 4.5 Analysing the Output tidygraph’s Graph Object",
-    "text": "5: 4.5 Analysing the Output tidygraph’s Graph Object\n\nThe output above reveals that GAStech_graph is a tbl_graph object with 54 nodes and 4541 edges\nThe command also prints the first six rows of “Node Data” and the first three of “Edge Data”\nIt states that the Node Data is active. The notion of an active tibble within a tbl_graph object makes it possible to manipulate the data in one tibble at a time."
+    "text": "5: 4.5 Analysing the Output tidygraph’s Graph Object\n\nThe output above reveals that GAStech_graph is a tbl_graph object with 54 nodes and 4541 edges\nThe command also prints the first six rows of “Node Data” and the first three of “Edge Data”\nIt states that the Node Data is active. The notion of an active tibble within a tbl_graph object makes it possible to manipulate the data in one tibble at a time.",
+    "crumbs": [
+      "Hands-On Exercises",
+      "5: Modelling, Visualising and Analysing Network Data with R"
+    ]
   },
   {
     "objectID": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05.html#changing-the-active-object",
     "href": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05.html#changing-the-active-object",
     "title": "Hands-On Exercise 5: Modelling, Visualising and Analysing Network Data with R",
     "section": "5: 4.6 Changing the active object",
-    "text": "5: 4.6 Changing the active object\nThe nodes tibble data frame is activated by default, but you can change which tibble data frame is active with the activate() function. Thus, in order to rearrange the rows in the edges tibble to list those with the highest “weight” first, activate() can be used first and then arrange().\nThe code chunk below provides an example of this.\n\n\nShow code\nGAStech_graph %&gt;%\n  activate(edges) %&gt;%\n  arrange(desc(Weight))\n\n\n# A tbl_graph: 54 nodes and 1456 edges\n#\n# A directed multigraph with 1 component\n#\n# Edge Data: 1,456 × 4 (active)\n    from    to Weekday   Weight\n   &lt;int&gt; &lt;int&gt; &lt;ord&gt;      &lt;int&gt;\n 1    40    41 Tuesday       23\n 2    40    43 Tuesday       19\n 3    41    43 Tuesday       15\n 4    41    40 Tuesday       14\n 5    42    41 Tuesday       13\n 6    42    40 Tuesday       12\n 7    42    43 Tuesday       11\n 8    43    42 Wednesday     11\n 9    36    32 Wednesday      9\n10    40    41 Monday         9\n# ℹ 1,446 more rows\n#\n# Node Data: 54 × 4\n     id label           Department     Title           \n  &lt;dbl&gt; &lt;chr&gt;           &lt;chr&gt;          &lt;chr&gt;           \n1     1 Mat.Bramar      Administration Assistant to CEO\n2     2 Anda.Ribera     Administration Assistant to CFO\n3     3 Rachel.Pantanal Administration Assistant to CIO\n# ℹ 51 more rows\n\n\nVisit the reference guide of activate() to find out more about the function."
+    "text": "5: 4.6 Changing the active object\nThe nodes tibble data frame is activated by default, but you can change which tibble data frame is active with the activate() function. Thus, in order to rearrange the rows in the edges tibble to list those with the highest “weight” first, activate() can be used first and then arrange().\nThe code chunk below provides an example of this.\n\n\nShow code\nGAStech_graph %&gt;%\n  activate(edges) %&gt;%\n  arrange(desc(Weight))\n\n\n# A tbl_graph: 54 nodes and 1456 edges\n#\n# A directed multigraph with 1 component\n#\n# Edge Data: 1,456 × 4 (active)\n    from    to Weekday   Weight\n   &lt;int&gt; &lt;int&gt; &lt;ord&gt;      &lt;int&gt;\n 1    40    41 Tuesday       23\n 2    40    43 Tuesday       19\n 3    41    43 Tuesday       15\n 4    41    40 Tuesday       14\n 5    42    41 Tuesday       13\n 6    42    40 Tuesday       12\n 7    42    43 Tuesday       11\n 8    43    42 Wednesday     11\n 9    36    32 Wednesday      9\n10    40    41 Monday         9\n# ℹ 1,446 more rows\n#\n# Node Data: 54 × 4\n     id label           Department     Title           \n  &lt;dbl&gt; &lt;chr&gt;           &lt;chr&gt;          &lt;chr&gt;           \n1     1 Mat.Bramar      Administration Assistant to CEO\n2     2 Anda.Ribera     Administration Assistant to CFO\n3     3 Rachel.Pantanal Administration Assistant to CIO\n# ℹ 51 more rows\n\n\nVisit the reference guide of activate() to find out more about the function.",
+    "crumbs": [
+      "Hands-On Exercises",
+      "5: Modelling, Visualising and Analysing Network Data with R"
+    ]
   },
   {
     "objectID": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05.html#plotting-a-basic-network-graph",
     "href": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05.html#plotting-a-basic-network-graph",
     "title": "Hands-On Exercise 5: Modelling, Visualising and Analysing Network Data with R",
     "section": "5: 5.1 Plotting a Basic Network Graph",
-    "text": "5: 5.1 Plotting a Basic Network Graph\nThe code chunk below uses ggraph(), geom-edge_link() and geom_node_point() to plot a network graph by using GAStech_graph.\nPlease refer to the respective reference guides provided for more information.\n\n\nShow code\nggraph(GAStech_graph) +\n  geom_edge_link() +\n  geom_node_point()\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nThings to Learn\n\n\n\n\nThe basic plotting function is ggraph(), which takes the data to be used for the graph and the type of layout desired\nBoth of the arguments for ggraph() are built around igraph.\nTherefore, ggraph() can use either an igraph object or a tbl_graph object"
+    "text": "5: 5.1 Plotting a Basic Network Graph\nThe code chunk below uses ggraph(), geom-edge_link() and geom_node_point() to plot a network graph by using GAStech_graph.\nPlease refer to the respective reference guides provided for more information.\n\n\nShow code\nggraph(GAStech_graph) +\n  geom_edge_link() +\n  geom_node_point()\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nThings to Learn\n\n\n\n\nThe basic plotting function is ggraph(), which takes the data to be used for the graph and the type of layout desired\nBoth of the arguments for ggraph() are built around igraph.\nTherefore, ggraph() can use either an igraph object or a tbl_graph object",
+    "crumbs": [
+      "Hands-On Exercises",
+      "5: Modelling, Visualising and Analysing Network Data with R"
+    ]
   },
   {
     "objectID": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05.html#changing-the-default-network-graph-theme",
     "href": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05.html#changing-the-default-network-graph-theme",
     "title": "Hands-On Exercise 5: Modelling, Visualising and Analysing Network Data with R",
     "section": "5: 5.2 Changing the default network graph theme",
-    "text": "5: 5.2 Changing the default network graph theme\nIn this section, theme_graph() will be used to remove the x- and y-axes. Please refer to the reference guide provided for more information.\n\n\nShow code\ng &lt;- ggraph(GAStech_graph) + \n  geom_edge_link(aes()) +\n  geom_node_point(aes())\ng + theme_graph()\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nThings to Learn\n\n\n\n\nggraph introduces a special ggplot theme (theme_graph()) that provides better defaults for network graphs than the normal ggplot defaults\ntheme_graph() allows for the removal of axis, grids, border, and changing the font to Arial Narrow (this can be overridden)\n\nThe ggraph theme can be set for a series of plots with the set_graph_style() command when it is run before the graphs are plotted or by using theme_graph() in the individual plots"
+    "text": "5: 5.2 Changing the default network graph theme\nIn this section, theme_graph() will be used to remove the x- and y-axes. Please refer to the reference guide provided for more information.\n\n\nShow code\ng &lt;- ggraph(GAStech_graph) + \n  geom_edge_link(aes()) +\n  geom_node_point(aes())\ng + theme_graph()\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nThings to Learn\n\n\n\n\nggraph introduces a special ggplot theme (theme_graph()) that provides better defaults for network graphs than the normal ggplot defaults\ntheme_graph() allows for the removal of axis, grids, border, and changing the font to Arial Narrow (this can be overridden)\n\nThe ggraph theme can be set for a series of plots with the set_graph_style() command when it is run before the graphs are plotted or by using theme_graph() in the individual plots",
+    "crumbs": [
+      "Hands-On Exercises",
+      "5: Modelling, Visualising and Analysing Network Data with R"
+    ]
   },
   {
     "objectID": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05.html#changing-the-coloring-of-the-plot",
     "href": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05.html#changing-the-coloring-of-the-plot",
     "title": "Hands-On Exercise 5: Modelling, Visualising and Analysing Network Data with R",
     "section": "5: 5.3 Changing the Coloring of the Plot",
-    "text": "5: 5.3 Changing the Coloring of the Plot\nFurthermore, theme_graph() makes it easy to change the colouring of the plot.\n\n\nShow code\ng &lt;- ggraph(GAStech_graph) + \n  geom_edge_link(aes(colour = 'grey50')) +\n  geom_node_point(aes(colour = 'grey40'))\n\ng + theme_graph(background = 'grey10',\n                text_colour = 'white')"
+    "text": "5: 5.3 Changing the Coloring of the Plot\nFurthermore, theme_graph() makes it easy to change the colouring of the plot.\n\n\nShow code\ng &lt;- ggraph(GAStech_graph) + \n  geom_edge_link(aes(colour = 'grey50')) +\n  geom_node_point(aes(colour = 'grey40'))\n\ng + theme_graph(background = 'grey10',\n                text_colour = 'white')",
+    "crumbs": [
+      "Hands-On Exercises",
+      "5: Modelling, Visualising and Analysing Network Data with R"
+    ]
   },
   {
     "objectID": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05.html#working-with-ggraphs-layouts",
     "href": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05.html#working-with-ggraphs-layouts",
     "title": "Hands-On Exercise 5: Modelling, Visualising and Analysing Network Data with R",
     "section": "5: 5.4 Working with ggraph’s Layouts",
-    "text": "5: 5.4 Working with ggraph’s Layouts\nggraph() supports many layout for standard used:\n\nstar\ncircle\nnicely (default)\ndh\ngem\ngraphopt\ngrid\nmds\nspahere\nrandomly\nfr\nkk\ndrl\nlgl.\n\nThe figures shows the layouts supported by ggraph()."
+    "text": "5: 5.4 Working with ggraph’s Layouts\nggraph() supports many layout for standard used:\n\nstar\ncircle\nnicely (default)\ndh\ngem\ngraphopt\ngrid\nmds\nspahere\nrandomly\nfr\nkk\ndrl\nlgl.\n\nThe figures shows the layouts supported by ggraph().",
+    "crumbs": [
+      "Hands-On Exercises",
+      "5: Modelling, Visualising and Analysing Network Data with R"
+    ]
   },
   {
     "objectID": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05.html#fruchterman-and-reingold-layout",
     "href": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05.html#fruchterman-and-reingold-layout",
     "title": "Hands-On Exercise 5: Modelling, Visualising and Analysing Network Data with R",
     "section": "5: 5.5 Fruchterman and Reingold Layout",
-    "text": "5: 5.5 Fruchterman and Reingold Layout\nThe code chunk below will be used to plot the network graph using the Fruchterman and Reingold layout.\n\n\nShow code\ng &lt;- ggraph(GAStech_graph, \n            layout = \"fr\") +\n  geom_edge_link(aes()) +\n  geom_node_point(aes())\n\ng + theme_graph()\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nThing to Learn\n\n\n\nlayout argument is used to define the layout to be used"
+    "text": "5: 5.5 Fruchterman and Reingold Layout\nThe code chunk below will be used to plot the network graph using the Fruchterman and Reingold layout.\n\n\nShow code\ng &lt;- ggraph(GAStech_graph, \n            layout = \"fr\") +\n  geom_edge_link(aes()) +\n  geom_node_point(aes())\n\ng + theme_graph()\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nThing to Learn\n\n\n\nlayout argument is used to define the layout to be used",
+    "crumbs": [
+      "Hands-On Exercises",
+      "5: Modelling, Visualising and Analysing Network Data with R"
+    ]
   },
   {
     "objectID": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05.html#modifying-network-nodes",
     "href": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05.html#modifying-network-nodes",
     "title": "Hands-On Exercise 5: Modelling, Visualising and Analysing Network Data with R",
     "section": "5: 5.6 Modifying Network Nodes",
-    "text": "5: 5.6 Modifying Network Nodes\nIn this section, each node will be coloured according to their respective department.\n\n\nShow code\ng &lt;- ggraph(GAStech_graph, \n            layout = \"nicely\") + \n  geom_edge_link(aes()) +\n  geom_node_point(aes(colour = Department, \n                      size = 3))\n\ng + theme_graph()\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nThings to Learn\n\n\n\n\ngeom_node_point is equivalent in functionality to geo_point of ggplot2\nIt allows for simple plotting of nodes in different shapes, colours and sizes. In the code chunk above, colour and size were used."
+    "text": "5: 5.6 Modifying Network Nodes\nIn this section, each node will be coloured according to their respective department.\n\n\nShow code\ng &lt;- ggraph(GAStech_graph, \n            layout = \"nicely\") + \n  geom_edge_link(aes()) +\n  geom_node_point(aes(colour = Department, \n                      size = 3))\n\ng + theme_graph()\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nThings to Learn\n\n\n\n\ngeom_node_point is equivalent in functionality to geo_point of ggplot2\nIt allows for simple plotting of nodes in different shapes, colours and sizes. In the code chunk above, colour and size were used.",
+    "crumbs": [
+      "Hands-On Exercises",
+      "5: Modelling, Visualising and Analysing Network Data with R"
+    ]
   },
   {
     "objectID": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05.html#modifying-edges",
     "href": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05.html#modifying-edges",
     "title": "Hands-On Exercise 5: Modelling, Visualising and Analysing Network Data with R",
     "section": "5: 5.7 Modifying Edges",
-    "text": "5: 5.7 Modifying Edges\nIn the code chunk below, the thickness of the edges will be mapped with the Weight variable.\n\n\nShow code\ng &lt;- ggraph(GAStech_graph, \n            layout = \"nicely\") +\n  geom_edge_link(aes(width=Weight), \n                 alpha=0.2) +\n  scale_edge_width(range = c(0.1, 5)) +\n  geom_node_point(aes(colour = Department), \n                  size = 3)\ng + theme_graph()\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nThings to Learn\n\n\n\n\ngeom_edge_link draws edges in the simplest way - as straight lines between the start and end nodes. But, it can do more that that.\nIn the example above, argument width is used to map the width of the line in proportional to the Weight attribute and argument alpha is used to introduce opacity on the line."
+    "text": "5: 5.7 Modifying Edges\nIn the code chunk below, the thickness of the edges will be mapped with the Weight variable.\n\n\nShow code\ng &lt;- ggraph(GAStech_graph, \n            layout = \"nicely\") +\n  geom_edge_link(aes(width=Weight), \n                 alpha=0.2) +\n  scale_edge_width(range = c(0.1, 5)) +\n  geom_node_point(aes(colour = Department), \n                  size = 3)\ng + theme_graph()\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nThings to Learn\n\n\n\n\ngeom_edge_link draws edges in the simplest way - as straight lines between the start and end nodes. But, it can do more that that.\nIn the example above, argument width is used to map the width of the line in proportional to the Weight attribute and argument alpha is used to introduce opacity on the line.",
+    "crumbs": [
+      "Hands-On Exercises",
+      "5: Modelling, Visualising and Analysing Network Data with R"
+    ]
   },
   {
     "objectID": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05.html#working-with-facet_edges-part-1",
     "href": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05.html#working-with-facet_edges-part-1",
     "title": "Hands-On Exercise 5: Modelling, Visualising and Analysing Network Data with R",
     "section": "5: 6.1 Working with facet_edges() (Part 1)",
-    "text": "5: 6.1 Working with facet_edges() (Part 1)\nIn the code chunk below, facet_edges() is used. Please refer to the reference guide provided for more information.\n\n\nShow code\nset_graph_style()\n\ng &lt;- ggraph(GAStech_graph, \n            layout = \"nicely\") + \n  geom_edge_link(aes(width=Weight), \n                 alpha=0.2) +\n  scale_edge_width(range = c(0.1, 5)) +\n  geom_node_point(aes(colour = Department), \n                  size = 2)\ng + facet_edges(~Weekday)\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nTip\n\n\n\nfacet_edges() is used to segment the plot by weekdays"
+    "text": "5: 6.1 Working with facet_edges() (Part 1)\nIn the code chunk below, facet_edges() is used. Please refer to the reference guide provided for more information.\n\n\nShow code\nset_graph_style()\n\ng &lt;- ggraph(GAStech_graph, \n            layout = \"nicely\") + \n  geom_edge_link(aes(width=Weight), \n                 alpha=0.2) +\n  scale_edge_width(range = c(0.1, 5)) +\n  geom_node_point(aes(colour = Department), \n                  size = 2)\ng + facet_edges(~Weekday)\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nTip\n\n\n\nfacet_edges() is used to segment the plot by weekdays",
+    "crumbs": [
+      "Hands-On Exercises",
+      "5: Modelling, Visualising and Analysing Network Data with R"
+    ]
   },
   {
     "objectID": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05.html#working-with-facet_edges-part-2",
     "href": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05.html#working-with-facet_edges-part-2",
     "title": "Hands-On Exercise 5: Modelling, Visualising and Analysing Network Data with R",
     "section": "5: 6.2 Working with facet_edges() (Part 2)",
-    "text": "5: 6.2 Working with facet_edges() (Part 2)\nThe code chunk below uses theme() to change the position of the legend from the right to the bottom.\n\n\nShow code\nset_graph_style()\n\ng &lt;- ggraph(GAStech_graph, \n            layout = \"nicely\") + \n  geom_edge_link(aes(width=Weight), \n                 alpha=0.2) +\n  scale_edge_width(range = c(0.1, 5)) +\n  geom_node_point(aes(colour = Department), \n                  size = 2) +\n  theme(legend.position = 'bottom')\n  \ng + facet_edges(~Weekday)"
+    "text": "5: 6.2 Working with facet_edges() (Part 2)\nThe code chunk below uses theme() to change the position of the legend from the right to the bottom.\n\n\nShow code\nset_graph_style()\n\ng &lt;- ggraph(GAStech_graph, \n            layout = \"nicely\") + \n  geom_edge_link(aes(width=Weight), \n                 alpha=0.2) +\n  scale_edge_width(range = c(0.1, 5)) +\n  geom_node_point(aes(colour = Department), \n                  size = 2) +\n  theme(legend.position = 'bottom')\n  \ng + facet_edges(~Weekday)",
+    "crumbs": [
+      "Hands-On Exercises",
+      "5: Modelling, Visualising and Analysing Network Data with R"
+    ]
   },
   {
     "objectID": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05.html#a-framed-facet-graph",
     "href": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05.html#a-framed-facet-graph",
     "title": "Hands-On Exercise 5: Modelling, Visualising and Analysing Network Data with R",
     "section": "5: 6.3 A framed facet graph",
-    "text": "5: 6.3 A framed facet graph\nThe code chunk below adds frame to each graph.\n\n\nShow code\nset_graph_style() \n\ng &lt;- ggraph(GAStech_graph, \n            layout = \"nicely\") + \n  geom_edge_link(aes(width=Weight), \n                 alpha=0.2) +\n  scale_edge_width(range = c(0.1, 5)) +\n  geom_node_point(aes(colour = Department), \n                  size = 2)\n  \ng + facet_edges(~Weekday) +\n  th_foreground(foreground = \"grey80\",  \n                border = TRUE) +\n  theme(legend.position = 'bottom')"
+    "text": "5: 6.3 A framed facet graph\nThe code chunk below adds frame to each graph.\n\n\nShow code\nset_graph_style() \n\ng &lt;- ggraph(GAStech_graph, \n            layout = \"nicely\") + \n  geom_edge_link(aes(width=Weight), \n                 alpha=0.2) +\n  scale_edge_width(range = c(0.1, 5)) +\n  geom_node_point(aes(colour = Department), \n                  size = 2)\n  \ng + facet_edges(~Weekday) +\n  th_foreground(foreground = \"grey80\",  \n                border = TRUE) +\n  theme(legend.position = 'bottom')",
+    "crumbs": [
+      "Hands-On Exercises",
+      "5: Modelling, Visualising and Analysing Network Data with R"
+    ]
   },
   {
     "objectID": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05.html#working-with-facet_nodes",
     "href": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05.html#working-with-facet_nodes",
     "title": "Hands-On Exercise 5: Modelling, Visualising and Analysing Network Data with R",
     "section": "5: 6.4 Working with facet_nodes()",
-    "text": "5: 6.4 Working with facet_nodes()\nIn the code chunk below, facet_nodes() is used. Please refer to the reference guide provided for more information.\n\n\nShow code\nset_graph_style()\n\ng &lt;- ggraph(GAStech_graph, \n            layout = \"nicely\") + \n  geom_edge_link(aes(width=Weight), \n                 alpha=0.2) +\n  scale_edge_width(range = c(0.1, 5)) +\n  geom_node_point(aes(colour = Department), \n                  size = 2)\n  \ng + facet_nodes(~Department)+\n  th_foreground(foreground = \"grey80\",  \n                border = TRUE) +\n  theme(legend.position = 'bottom')\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nTip\n\n\n\nfacet_nodes() is used to segment the plot by departments"
+    "text": "5: 6.4 Working with facet_nodes()\nIn the code chunk below, facet_nodes() is used. Please refer to the reference guide provided for more information.\n\n\nShow code\nset_graph_style()\n\ng &lt;- ggraph(GAStech_graph, \n            layout = \"nicely\") + \n  geom_edge_link(aes(width=Weight), \n                 alpha=0.2) +\n  scale_edge_width(range = c(0.1, 5)) +\n  geom_node_point(aes(colour = Department), \n                  size = 2)\n  \ng + facet_nodes(~Department)+\n  th_foreground(foreground = \"grey80\",  \n                border = TRUE) +\n  theme(legend.position = 'bottom')\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nTip\n\n\n\nfacet_nodes() is used to segment the plot by departments",
+    "crumbs": [
+      "Hands-On Exercises",
+      "5: Modelling, Visualising and Analysing Network Data with R"
+    ]
   },
   {
     "objectID": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05.html#computing-centrality-indices",
     "href": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05.html#computing-centrality-indices",
     "title": "Hands-On Exercise 5: Modelling, Visualising and Analysing Network Data with R",
     "section": "5: 7.1 Computing Centrality Indices",
-    "text": "5: 7.1 Computing Centrality Indices\nCentrality measures are a collection of statistical indices use to describe the relative important of actors in a network. There are four well-known centrality measures, namely: degree, betweenness, closeness and eigenvector.\nIt is beyond the scope of this hands-on exercise to cover the principles and mathematics of these measure here. Please refer to Chapter 7: Actor Prominence of A User’s Guide to Network Analysis in R to gain better understanding of theses network measures.\n\n\nShow code\ng &lt;- GAStech_graph %&gt;%\n  mutate(betweenness_centrality = centrality_betweenness()) %&gt;%\n  ggraph(layout = \"fr\") + \n  geom_edge_link(aes(width=Weight), \n                 alpha=0.2) +\n  scale_edge_width(range = c(0.1, 5)) +\n  geom_node_point(aes(colour = Department,\n            size=betweenness_centrality))\ng + theme_graph()\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nThings to Learn\n\n\n\n\nmutate() of dplyr is used to perform the computation\nThe algorithm used, on the other hand, is the centrality_betweenness() of tidygraph"
+    "text": "5: 7.1 Computing Centrality Indices\nCentrality measures are a collection of statistical indices use to describe the relative important of actors in a network. There are four well-known centrality measures, namely: degree, betweenness, closeness and eigenvector.\nIt is beyond the scope of this hands-on exercise to cover the principles and mathematics of these measure here. Please refer to Chapter 7: Actor Prominence of A User’s Guide to Network Analysis in R to gain better understanding of theses network measures.\n\n\nShow code\ng &lt;- GAStech_graph %&gt;%\n  mutate(betweenness_centrality = centrality_betweenness()) %&gt;%\n  ggraph(layout = \"fr\") + \n  geom_edge_link(aes(width=Weight), \n                 alpha=0.2) +\n  scale_edge_width(range = c(0.1, 5)) +\n  geom_node_point(aes(colour = Department,\n            size=betweenness_centrality))\ng + theme_graph()\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nThings to Learn\n\n\n\n\nmutate() of dplyr is used to perform the computation\nThe algorithm used, on the other hand, is the centrality_betweenness() of tidygraph",
+    "crumbs": [
+      "Hands-On Exercises",
+      "5: Modelling, Visualising and Analysing Network Data with R"
+    ]
   },
   {
     "objectID": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05.html#visualising-network-metrics",
     "href": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05.html#visualising-network-metrics",
     "title": "Hands-On Exercise 5: Modelling, Visualising and Analysing Network Data with R",
     "section": "5: 7.2 Visualising network metrics",
-    "text": "5: 7.2 Visualising network metrics\nIt is important to note that from ggraph v2.0 onwards, tidygraph algorithms such as centrality measures can be accessed directly in ggraph calls. This means that it is no longer necessary to precompute and store derived node and edge centrality measures on the graph in order to use them in a plot.\n\n\nShow code\ng &lt;- GAStech_graph %&gt;%\n  ggraph(layout = \"fr\") + \n  geom_edge_link(aes(width=Weight), \n                 alpha=0.2) +\n  scale_edge_width(range = c(0.1, 5)) +\n  geom_node_point(aes(colour = Department, \n                      size = centrality_betweenness()))\ng + theme_graph()\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nThings to Learn\n\n\n\n\nThe mutate(betweenness_centrality = centrality_betweenness()) %&gt;% step in the previous section is no longer needed\nInstead, centrality_betweenness() can be added directly to the size attribute"
+    "text": "5: 7.2 Visualising network metrics\nIt is important to note that from ggraph v2.0 onwards, tidygraph algorithms such as centrality measures can be accessed directly in ggraph calls. This means that it is no longer necessary to precompute and store derived node and edge centrality measures on the graph in order to use them in a plot.\n\n\nShow code\ng &lt;- GAStech_graph %&gt;%\n  ggraph(layout = \"fr\") + \n  geom_edge_link(aes(width=Weight), \n                 alpha=0.2) +\n  scale_edge_width(range = c(0.1, 5)) +\n  geom_node_point(aes(colour = Department, \n                      size = centrality_betweenness()))\ng + theme_graph()\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nThings to Learn\n\n\n\n\nThe mutate(betweenness_centrality = centrality_betweenness()) %&gt;% step in the previous section is no longer needed\nInstead, centrality_betweenness() can be added directly to the size attribute",
+    "crumbs": [
+      "Hands-On Exercises",
+      "5: Modelling, Visualising and Analysing Network Data with R"
+    ]
   },
   {
     "objectID": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05.html#visualising-community",
     "href": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05.html#visualising-community",
     "title": "Hands-On Exercise 5: Modelling, Visualising and Analysing Network Data with R",
     "section": "5: 7.3 Visualising Community",
-    "text": "5: 7.3 Visualising Community\ntidygraph package inherits many of the community detection algorithms embedded into igraph and makes them available for use such as :\n\nEdge-betweenness (group_edge_betweenness)\nLeading eigenvector (group_leading_eigen)\nFast-greedy (group_fast_greedy)\nLouvain (group_louvain)\nWalktrap (group_walktrap)\nLabel propagation (group_label_prop)\nInfoMAP (group_infomap)\nSpinglass (group_spinglass)\nOptimal (group_optimal)\n\nSome community algorithms are designed to take into account direction or weight, while others ignore it. Please refer to this link to find out more about community detection functions provided by tidygraph.\nIn the code chunk below, group_edge_betweenness() is used.\n\n\nShow code\ng &lt;- GAStech_graph %&gt;%\n  mutate(community = as.factor(group_edge_betweenness(weights = Weight, directed = TRUE))) %&gt;%\n  ggraph(layout = \"fr\") + \n  geom_edge_link(aes(width=Weight), \n                 alpha=0.2) +\n  scale_edge_width(range = c(0.1, 5)) +\n  geom_node_point(aes(colour = community))  \n\ng + theme_graph()\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nTip\n\n\n\n\nThe output network graph is coloured according to community instead of departments\ngroup_edge_betweenness() groups densely connected nodes together\n\n\n\nIn order to support effective visual investigation, the community network above has been revised by using geom_mark_hull() of ggforce package.\n\n\nShow code\ng &lt;- GAStech_graph %&gt;%\n  activate(nodes) %&gt;%\n  mutate(community = as.factor(\n    group_optimal(weights = Weight)),\n         betweenness_measure = centrality_betweenness()) %&gt;%\n  ggraph(layout = \"fr\") +\n  geom_mark_hull(\n    aes(x, y, \n        group = community, \n        fill = community),  \n    alpha = 0.2,  \n    expand = unit(0.3, \"cm\"),  # Expand\n    radius = unit(0.3, \"cm\")  # Smoothness\n  ) + \n  geom_edge_link(aes(width=Weight), \n                 alpha=0.2) +\n  scale_edge_width(range = c(0.1, 5)) +\n  geom_node_point(aes(fill = Department,\n                      size = betweenness_measure),\n                      color = \"black\",\n                      shape = 21)\n  \ng + theme_graph()\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nTip\n\n\n\n\nThe similar communities have been grouped together by overlaying highlighted regions.\nThe number of communities have dropped from 30 to 4.\nPlease be reminded that you must to install and include ggforce and concaveman packages before running the code chunk above"
+    "text": "5: 7.3 Visualising Community\ntidygraph package inherits many of the community detection algorithms embedded into igraph and makes them available for use such as :\n\nEdge-betweenness (group_edge_betweenness)\nLeading eigenvector (group_leading_eigen)\nFast-greedy (group_fast_greedy)\nLouvain (group_louvain)\nWalktrap (group_walktrap)\nLabel propagation (group_label_prop)\nInfoMAP (group_infomap)\nSpinglass (group_spinglass)\nOptimal (group_optimal)\n\nSome community algorithms are designed to take into account direction or weight, while others ignore it. Please refer to this link to find out more about community detection functions provided by tidygraph.\nIn the code chunk below, group_edge_betweenness() is used.\n\n\nShow code\ng &lt;- GAStech_graph %&gt;%\n  mutate(community = as.factor(group_edge_betweenness(weights = Weight, directed = TRUE))) %&gt;%\n  ggraph(layout = \"fr\") + \n  geom_edge_link(aes(width=Weight), \n                 alpha=0.2) +\n  scale_edge_width(range = c(0.1, 5)) +\n  geom_node_point(aes(colour = community))  \n\ng + theme_graph()\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nTip\n\n\n\n\nThe output network graph is coloured according to community instead of departments\ngroup_edge_betweenness() groups densely connected nodes together\n\n\n\nIn order to support effective visual investigation, the community network above has been revised by using geom_mark_hull() of ggforce package.\n\n\nShow code\ng &lt;- GAStech_graph %&gt;%\n  activate(nodes) %&gt;%\n  mutate(community = as.factor(\n    group_optimal(weights = Weight)),\n         betweenness_measure = centrality_betweenness()) %&gt;%\n  ggraph(layout = \"fr\") +\n  geom_mark_hull(\n    aes(x, y, \n        group = community, \n        fill = community),  \n    alpha = 0.2,  \n    expand = unit(0.3, \"cm\"),  # Expand\n    radius = unit(0.3, \"cm\")  # Smoothness\n  ) + \n  geom_edge_link(aes(width=Weight), \n                 alpha=0.2) +\n  scale_edge_width(range = c(0.1, 5)) +\n  geom_node_point(aes(fill = Department,\n                      size = betweenness_measure),\n                      color = \"black\",\n                      shape = 21)\n  \ng + theme_graph()\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nTip\n\n\n\n\nThe similar communities have been grouped together by overlaying highlighted regions.\nThe number of communities have dropped from 30 to 4.\nPlease be reminded that you must to install and include ggforce and concaveman packages before running the code chunk above",
+    "crumbs": [
+      "Hands-On Exercises",
+      "5: Modelling, Visualising and Analysing Network Data with R"
+    ]
   },
   {
     "objectID": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05.html#data-preparation",
     "href": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05.html#data-preparation",
     "title": "Hands-On Exercise 5: Modelling, Visualising and Analysing Network Data with R",
     "section": "5: 8.1 Data Preparation",
-    "text": "5: 8.1 Data Preparation\nThe data model for the interactive network graph is prepared by using the code chunk below.\n\n\nShow code\nGAStech_edges_aggregated &lt;- GAStech_edges %&gt;%\n  left_join(GAStech_nodes, by = c(\"sourceLabel\" = \"label\")) %&gt;%\n  rename(from = id) %&gt;%\n  left_join(GAStech_nodes, by = c(\"targetLabel\" = \"label\")) %&gt;%\n  rename(to = id) %&gt;%\n  filter(MainSubject == \"Work related\") %&gt;%\n  group_by(from, to) %&gt;%\n    summarise(weight = n()) %&gt;%\n  filter(from!=to) %&gt;%\n  filter(weight &gt; 1) %&gt;%\n  ungroup()"
+    "text": "5: 8.1 Data Preparation\nThe data model for the interactive network graph is prepared by using the code chunk below.\n\n\nShow code\nGAStech_edges_aggregated &lt;- GAStech_edges %&gt;%\n  left_join(GAStech_nodes, by = c(\"sourceLabel\" = \"label\")) %&gt;%\n  rename(from = id) %&gt;%\n  left_join(GAStech_nodes, by = c(\"targetLabel\" = \"label\")) %&gt;%\n  rename(to = id) %&gt;%\n  filter(MainSubject == \"Work related\") %&gt;%\n  group_by(from, to) %&gt;%\n    summarise(weight = n()) %&gt;%\n  filter(from!=to) %&gt;%\n  filter(weight &gt; 1) %&gt;%\n  ungroup()",
+    "crumbs": [
+      "Hands-On Exercises",
+      "5: Modelling, Visualising and Analysing Network Data with R"
+    ]
   },
   {
     "objectID": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05.html#plotting-the-first-interactive-network-graph",
     "href": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05.html#plotting-the-first-interactive-network-graph",
     "title": "Hands-On Exercise 5: Modelling, Visualising and Analysing Network Data with R",
     "section": "5: 8.2 Plotting the First Interactive Network Graph",
-    "text": "5: 8.2 Plotting the First Interactive Network Graph\nThe code chunk will be used to plot an interactive network graph using the data prepared in the previous step.\n\n\nShow code\nvisNetwork(GAStech_nodes, \n           GAStech_edges_aggregated)"
+    "text": "5: 8.2 Plotting the First Interactive Network Graph\nThe code chunk will be used to plot an interactive network graph using the data prepared in the previous step.\n\n\nShow code\nvisNetwork(GAStech_nodes, \n           GAStech_edges_aggregated)",
+    "crumbs": [
+      "Hands-On Exercises",
+      "5: Modelling, Visualising and Analysing Network Data with R"
+    ]
   },
   {
     "objectID": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05.html#working-with-layout",
     "href": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05.html#working-with-layout",
     "title": "Hands-On Exercise 5: Modelling, Visualising and Analysing Network Data with R",
     "section": "5: 8.3 Working with layout",
-    "text": "5: 8.3 Working with layout\nIn the code chunk below, Fruchterman and Reingold layout is applied using visIgraphLayout. Please refer to the reference guide provided for more information.\n\n\nShow code\nvisNetwork(GAStech_nodes,\n           GAStech_edges_aggregated) %&gt;%\n  visIgraphLayout(layout = \"layout_with_fr\") \n\n\n\n\n\n\n\n\n\n\n\n\nTip\n\n\n\nAdding the Fruchterman and Reingold layout freezes the nodes and edges."
+    "text": "5: 8.3 Working with layout\nIn the code chunk below, Fruchterman and Reingold layout is applied using visIgraphLayout. Please refer to the reference guide provided for more information.\n\n\nShow code\nvisNetwork(GAStech_nodes,\n           GAStech_edges_aggregated) %&gt;%\n  visIgraphLayout(layout = \"layout_with_fr\") \n\n\n\n\n\n\n\n\n\n\n\n\nTip\n\n\n\nAdding the Fruchterman and Reingold layout freezes the nodes and edges.",
+    "crumbs": [
+      "Hands-On Exercises",
+      "5: Modelling, Visualising and Analysing Network Data with R"
+    ]
   },
   {
     "objectID": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05.html#working-with-visual-attributes---nodes",
     "href": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05.html#working-with-visual-attributes---nodes",
     "title": "Hands-On Exercise 5: Modelling, Visualising and Analysing Network Data with R",
     "section": "5: 8.4 Working with Visual Attributes - Nodes",
-    "text": "5: 8.4 Working with Visual Attributes - Nodes\nvisNetwork() looks for a field called “group” in the nodes object and colours the nodes according to the values of the group field.\nThe code chunk below renames Department field to group.\n\n\nShow code\nGAStech_nodes &lt;- GAStech_nodes %&gt;%\n  rename(group = Department) \n\n\nAdding visLegend() to the code chunk above allows visNetwork to shade the nodes by assigning unique colours to each category in the group field.\n\n\nShow code\nvisNetwork(GAStech_nodes,\n           GAStech_edges_aggregated) %&gt;%\n  visIgraphLayout(layout = \"layout_with_fr\") %&gt;%\n  visLegend() %&gt;%\n  visLayout(randomSeed = 123)"
+    "text": "5: 8.4 Working with Visual Attributes - Nodes\nvisNetwork() looks for a field called “group” in the nodes object and colours the nodes according to the values of the group field.\nThe code chunk below renames Department field to group.\n\n\nShow code\nGAStech_nodes &lt;- GAStech_nodes %&gt;%\n  rename(group = Department) \n\n\nAdding visLegend() to the code chunk above allows visNetwork to shade the nodes by assigning unique colours to each category in the group field.\n\n\nShow code\nvisNetwork(GAStech_nodes,\n           GAStech_edges_aggregated) %&gt;%\n  visIgraphLayout(layout = \"layout_with_fr\") %&gt;%\n  visLegend() %&gt;%\n  visLayout(randomSeed = 123)",
+    "crumbs": [
+      "Hands-On Exercises",
+      "5: Modelling, Visualising and Analysing Network Data with R"
+    ]
   },
   {
     "objectID": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05.html#working-with-visual-attributes---edges",
     "href": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05.html#working-with-visual-attributes---edges",
     "title": "Hands-On Exercise 5: Modelling, Visualising and Analysing Network Data with R",
     "section": "5: 8.5 Working with Visual Attributes - Edges",
-    "text": "5: 8.5 Working with Visual Attributes - Edges\nIn the code below visEdges() is used to symbolise the edges.\n\nThe argument arrows is used to define where to place the arrow.\n\nThe smooth argument is used to plot the edges using a smooth curve.\n\nPlease refer to the reference guide provided for more information.\n\n\nShow code\nvisNetwork(GAStech_nodes,\n           GAStech_edges_aggregated) %&gt;%\n  visIgraphLayout(layout = \"layout_with_fr\") %&gt;%\n  visEdges(arrows = \"to\", \n           smooth = list(enabled = TRUE, \n                         type = \"curvedCW\")) %&gt;%\n  visLegend() %&gt;%\n  visLayout(randomSeed = 123)"
+    "text": "5: 8.5 Working with Visual Attributes - Edges\nIn the code below visEdges() is used to symbolise the edges.\n\nThe argument arrows is used to define where to place the arrow.\n\nThe smooth argument is used to plot the edges using a smooth curve.\n\nPlease refer to the reference guide provided for more information.\n\n\nShow code\nvisNetwork(GAStech_nodes,\n           GAStech_edges_aggregated) %&gt;%\n  visIgraphLayout(layout = \"layout_with_fr\") %&gt;%\n  visEdges(arrows = \"to\", \n           smooth = list(enabled = TRUE, \n                         type = \"curvedCW\")) %&gt;%\n  visLegend() %&gt;%\n  visLayout(randomSeed = 123)",
+    "crumbs": [
+      "Hands-On Exercises",
+      "5: Modelling, Visualising and Analysing Network Data with R"
+    ]
   },
   {
     "objectID": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05.html#interactivity",
     "href": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05.html#interactivity",
     "title": "Hands-On Exercise 5: Modelling, Visualising and Analysing Network Data with R",
     "section": "5: 8.6 Interactivity",
-    "text": "5: 8.6 Interactivity\nIn the code chunk below, visOptions() is used to incorporate interactivity features in the data visualisation.\n\nThe argument highlightNearest highlights nearest when clicking a node.\n\nThe argument nodesIdSelection adds an id node selection creating a HTML select element.\n\nPlease refer to the reference guide provided for more information.\n\n\nShow code\nvisNetwork(GAStech_nodes,\n           GAStech_edges_aggregated) %&gt;%\n  visIgraphLayout(layout = \"layout_with_fr\") %&gt;%\n  visOptions(highlightNearest = TRUE,\n             nodesIdSelection = TRUE) %&gt;%\n  visLegend() %&gt;%\n  visLayout(randomSeed = 123)"
+    "text": "5: 8.6 Interactivity\nIn the code chunk below, visOptions() is used to incorporate interactivity features in the data visualisation.\n\nThe argument highlightNearest highlights nearest when clicking a node.\n\nThe argument nodesIdSelection adds an id node selection creating a HTML select element.\n\nPlease refer to the reference guide provided for more information.\n\n\nShow code\nvisNetwork(GAStech_nodes,\n           GAStech_edges_aggregated) %&gt;%\n  visIgraphLayout(layout = \"layout_with_fr\") %&gt;%\n  visOptions(highlightNearest = TRUE,\n             nodesIdSelection = TRUE) %&gt;%\n  visLegend() %&gt;%\n  visLayout(randomSeed = 123)",
+    "crumbs": [
+      "Hands-On Exercises",
+      "5: Modelling, Visualising and Analysing Network Data with R"
+    ]
   },
   {
     "objectID": "Hands-on_Ex/Hands-on_Ex04-3/Hands-on_Ex04-3.html",
