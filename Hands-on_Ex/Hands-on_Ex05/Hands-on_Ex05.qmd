@@ -15,21 +15,22 @@ execute:
 
 This exercise will cover modelling, analysing and visualising network data using R and includes the following:
 
-- Create graph object data frames and manipulate them using appropriate functions of *dplyr*, *lubridate*, and *tidygraph*
-- Build network graph visualisation using appropriate functions of *ggraph*
-- Compute network geometrics using *tidygraph*
-- Build advanced graph visualisation by incorporating the network geometrics
-- Build interactive network visualisation using *visNetwork* package
+-   Create graph object data frames and manipulate them using appropriate functions of *dplyr*, *lubridate*, and *tidygraph*
+-   Build network graph visualisation using appropriate functions of *ggraph*
+-   Compute network geometrics using *tidygraph*
+-   Build advanced graph visualisation by incorporating the network geometrics
+-   Build interactive network visualisation using *visNetwork* package
 
 # [5:]{style="color:DarkOrange"} 2 Getting Started
+
 ## [5:]{style="color:DarkOrange"} 2.1 Instal and Launch R Packages
 
 Four network data modelling and visualisation packages will be installed and launched for this exercise:
 
-- *igraph*
-- *tidygraph*
-- *ggraph*
-- *visNetwork*
+-   *igraph*
+-   *tidygraph*
+-   *ggraph*
+-   *visNetwork*
 
 Beside these four packages, *tidyverse* and [*lubridate*](https://lubridate.tidyverse.org/), an R package specially designed to handle and wrangling time data will be installed and launched too.
 
@@ -42,12 +43,12 @@ pacman::p_load(igraph, tidygraph, ggraph,
                concaveman, ggforce)
 ```
 
-# [5:]{style="color:DarkOrange"} 3  The Data
+# [5:]{style="color:DarkOrange"} 3 The Data
 
-The data sets used in this hands-on exercise is from an oil exploration and extraction company.  There are two data sets:
+The data sets used in this hands-on exercise is from an oil exploration and extraction company. There are two data sets:
 
-- Nodes data
-- Edges (also know as link) data
+-   Nodes data
+-   Edges (also know as link) data
 
 ## [5:]{style="color:DarkOrange"} 3.1 The Edges Data
 
@@ -57,7 +58,7 @@ The data sets used in this hands-on exercise is from an oil exploration and extr
 
 ## [5:]{style="color:DarkOrange"} 3.2 The Nodes Data
 
-*GAStech_email_nodes.csv* which consist of the names, department and title of the 55 employees. 
+*GAStech_email_nodes.csv* which consist of the names, department and title of the 55 employees.
 
 ![](image/image2.jpg){fig-align="center" width="800"}
 
@@ -86,6 +87,13 @@ glimpse(GAStech_edges)
 The output report of GAStech_edges above reveals that the *SentDate* is treated as "Character"" data type instead of *date* data type. This is an error! It is important to change the data type of *SentDate* field back to the "Date"" data type.
 :::
 
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show code"
+glimpse(GAStech_nodes)
+```
+
 ## [5:]{style="color:DarkOrange"} 3.5 Data Wrangling
 
 The code chunk below will be used to perform the data type changes.
@@ -102,14 +110,14 @@ GAStech_edges$Weekday = wday(GAStech_edges$SentDate,
 ::: callout-tip
 ## Things to Learn
 
-- Both *dmy()* and *wday()* are functions of **lubridate** [lubridate](https://cran.r-project.org/web/packages/lubridate/vignettes/lubridate.html) package. It is an R package that makes it easier to work with dates and times.  
-- *dmy()*: Transforms the SentDate to Date data type.
-- *wday()* : Returns the day of the week as a decimal number or an ordered factor if label is TRUE.  
-    - The argument abbr is FALSE to keep the daya spelled in full, i.e. Monday. The function will create a new column in the dataframe i.e. Weekday and the output of *wday()* will be saved in this newly created field.
-    - The values in the *Weekday* field are in ordinal scale.
+-   Both *dmy()* and *wday()* are functions of **lubridate** [lubridate](https://cran.r-project.org/web/packages/lubridate/vignettes/lubridate.html) package. It is an R package that makes it easier to work with dates and times.\
+-   *dmy()*: Transforms the SentDate to Date data type.
+-   *wday()* : Returns the day of the week as a decimal number or an ordered factor if label is TRUE.
+    -   The argument abbr is FALSE to keep the daya spelled in full, i.e. Monday. The function will create a new column in the dataframe i.e. Weekday and the output of *wday()* will be saved in this newly created field.
+    -   The values in the *Weekday* field are in ordinal scale.
 :::
 
-## [5:]{style="color:DarkOrange"} 3.6 Reviewing the Revised Date Fields 
+## [5:]{style="color:DarkOrange"} 3.6 Reviewing the Revised Date Fields
 
 The table below shows the data structure of the reformatted *GAStech_edges* data frame.
 
@@ -121,9 +129,9 @@ glimpse(GAStech_edges)
 
 ## [5:]{style="color:DarkOrange"} 3.7 Wrangling attributes
 
-A close examination of *GAStech_edges* data frame reveals that it consists of individual e-mail flow records.  This is not very useful for visualisation.  
+A close examination of *GAStech_edges* data frame reveals that it consists of individual e-mail flow records. This is not very useful for visualisation.
 
-In view of this, aggregation will be conducted on the individual records by date, senders, receivers, main subject and day of the week.
+In view of this, aggregation will be conducted on the individual records by senders, receivers and day of the week.
 
 ```{r}
 #| code-fold: true
@@ -137,13 +145,12 @@ GAStech_edges_aggregated <- GAStech_edges %>%
   ungroup()
 ```
 
-
 ::: callout-tip
 ## Things to Learn
 
-- Four functions from **dplyr** package were used (*filter()*, *group()*, *summarise()*, and *ungroup()*)
-- The output data frame is called **GAStech_edges_aggregated** 
-- A new field called *Weight* was added in GAStech_edges_aggregated
+-   Four functions from **dplyr** package were used (*filter()*, *group()*, *summarise()*, and *ungroup()*)
+-   The output data frame is called **GAStech_edges_aggregated**
+-   A new field called *Weight* was added in GAStech_edges_aggregated
 :::
 
 ## [5:]{style="color:DarkOrange"} 3.8 Reviewing the Revised Edges File
@@ -162,23 +169,23 @@ In this section, the **tidygraph** package will be used to create a graph data m
 
 These two articles provides more information:
 
-- [Introducing tidygraph](https://www.data-imaginist.com/2017/introducing-tidygraph/)
-- [tidygraph 1.1 – A tidy hope](https://www.data-imaginist.com/2018/tidygraph-1-1-a-tidy-hope/)
+-   [Introducing tidygraph](https://www.data-imaginist.com/2017/introducing-tidygraph/)
+-   [tidygraph 1.1 – A tidy hope](https://www.data-imaginist.com/2018/tidygraph-1-1-a-tidy-hope/)
 
 ## [5:]{style="color:DarkOrange"} 4.1 The tbl_graph object
 
 Two functions of **tidygraph** package can be used to create network objects:
 
-- [`tbl_graph()`](https://tidygraph.data-imaginist.com/reference/tbl_graph.html) creates a **tbl_graph** network object from nodes and edges data
-- [`as_tbl_graph()`](https://tidygraph.data-imaginist.com/reference/tbl_graph.html) converts network data and objects to a **tbl_graph** network. The network data and objects supported are:
-    - A node data.frame and an edge data.frame
-    - data.frame, list, matrix from base
-    - igraph from igraph
-    - network from network
-    - dendrogram and hclust from stats
-    - Node from data.tree
-    - phylo and evonet from ape
-    - graphNEL, graphAM, graphBAM from graph (in Bioconductor)
+-   [`tbl_graph()`](https://tidygraph.data-imaginist.com/reference/tbl_graph.html) creates a **tbl_graph** network object from nodes and edges data
+-   [`as_tbl_graph()`](https://tidygraph.data-imaginist.com/reference/tbl_graph.html) converts network data and objects to a **tbl_graph** network. The network data and objects supported are:
+    -   A node data.frame and an edge data.frame
+    -   data.frame, list, matrix from base
+    -   igraph from igraph
+    -   network from network
+    -   dendrogram and hclust from stats
+    -   Node from data.tree
+    -   phylo and evonet from ape
+    -   graphNEL, graphAM, graphBAM from graph (in Bioconductor)
 
 ## [5:]{style="color:DarkOrange"} 4.2 The **dplyr** verbs in **tidygraph**
 
@@ -186,9 +193,8 @@ Two functions of **tidygraph** package can be used to create network objects:
 
 A sample code is given above:
 
-- *activate()* verb from **tidygraph** serves as a switch between tibbles for nodes and edges. All dplyr verbs applied to **tbl_graph** object are applied to the active tibble.
-- The *.N()* function is used to gain access to the node data while manipulating the edge data. Similarly *.E()* will access the edge data and *.G()* will access the **tbl_graph** object itself.
-
+-   *activate()* verb from **tidygraph** serves as a switch between tibbles for nodes and edges. All dplyr verbs applied to **tbl_graph** object are applied to the active tibble.
+-   The *.N()* function is used to gain access to the node data while manipulating the edge data. Similarly *.E()* will access the edge data and *.G()* will access the **tbl_graph** object itself.
 
 ## [5:]{style="color:DarkOrange"} 4.3 Using tbl_graph() to Build tidygraph Data Model
 
@@ -204,7 +210,8 @@ GAStech_graph <- tbl_graph(nodes = GAStech_nodes,
                            directed = TRUE)
 ```
 
-## [5:]{style="color:DarkOrange"} 4.4 Reviewing the Output tidygraph's Graph Object 
+## [5:]{style="color:DarkOrange"} 4.4 Reviewing the Output tidygraph's Graph Object
+
 ```{r}
 #| code-fold: true
 #| code-summary: "Show code"
@@ -213,13 +220,13 @@ GAStech_graph
 
 ## [5:]{style="color:DarkOrange"} 4.5 Analysing the Output tidygraph's Graph Object
 
-- The output above reveals that *GAStech_graph* is a tbl_graph object with 54 nodes and 4541 edges
-- The command also prints the first six rows of "Node Data" and the first three of "Edge Data"
-- It states that the Node Data is **active**. The notion of an active tibble within a tbl_graph object makes it possible to manipulate the data in one tibble at a time. 
+-   The output above reveals that *GAStech_graph* is a tbl_graph object with 54 nodes and 4541 edges
+-   The command also prints the first six rows of "Node Data" and the first three of "Edge Data"
+-   It states that the Node Data is **active**. The notion of an active tibble within a tbl_graph object makes it possible to manipulate the data in one tibble at a time.
 
 ## [5:]{style="color:DarkOrange"} 4.6 Changing the active object
 
-The nodes tibble data frame is activated by default, but you can change which tibble data frame is active with the *activate()* function. Thus, in order to rearrange the rows in the edges tibble to list those with the highest "weight" first, *activate()* can be used first and then *arrange()*.  
+The nodes tibble data frame is activated by default, but you can change which tibble data frame is active with the *activate()* function. Thus, in order to rearrange the rows in the edges tibble to list those with the highest "weight" first, *activate()* can be used first and then *arrange()*.
 
 The code chunk below provides an example of this.
 
@@ -233,15 +240,15 @@ GAStech_graph %>%
 
 Visit the reference guide of [*activate()*](https://tidygraph.data-imaginist.com/reference/activate.html) to find out more about the function.
 
-# [5:]{style="color:DarkOrange"} 5 Plotting Network Data with ggraph Package 
+# [5:]{style="color:DarkOrange"} 5 Plotting Network Data with ggraph Package
 
-[**ggraph**](https://ggraph.data-imaginist.com/index.html) is an extension of **ggplot2**, making it easier to carry over basic ggplot skills to the design of network graphs.  
+[**ggraph**](https://ggraph.data-imaginist.com/index.html) is an extension of **ggplot2**, making it easier to carry over basic ggplot skills to the design of network graphs.
 
-As in all network graph, there are three main aspects to a **ggraph**'s network graph: 
+As in all network graph, there are three main aspects to a **ggraph**'s network graph:
 
-- [Nodes](https://cran.r-project.org/web/packages/ggraph/vignettes/Nodes.html)
-- [Edges](https://cran.r-project.org/web/packages/ggraph/vignettes/Edges.html)
-- [Layouts](https://cran.r-project.org/web/packages/ggraph/vignettes/Layouts.html)
+-   [Nodes](https://cran.r-project.org/web/packages/ggraph/vignettes/Nodes.html)
+-   [Edges](https://cran.r-project.org/web/packages/ggraph/vignettes/Edges.html)
+-   [Layouts](https://cran.r-project.org/web/packages/ggraph/vignettes/Layouts.html)
 
 Please refer to the respective vignettes provided for a comprehensive discussion of each aspect of **ggraph**.
 
@@ -264,9 +271,9 @@ ggraph(GAStech_graph) +
 ::: callout-tip
 ## Things to Learn
 
-- The basic plotting function is *ggraph()*, which takes the data to be used for the graph and the type of layout desired
-- Both of the arguments for *ggraph()* are built around igraph.
-- Therefore, *ggraph()* can use either an igraph object or a tbl_graph object
+-   The basic plotting function is *ggraph()*, which takes the data to be used for the graph and the type of layout desired
+-   Both of the arguments for *ggraph()* are built around igraph.
+-   Therefore, *ggraph()* can use either an igraph object or a tbl_graph object
 :::
 
 ## [5:]{style="color:DarkOrange"} 5.2 Changing the default network graph theme
@@ -287,9 +294,9 @@ g + theme_graph()
 ::: callout-tip
 ## Things to Learn
 
-- **ggraph** introduces a special ggplot theme (*theme_graph()*) that provides better defaults for network graphs than the normal ggplot defaults
-- *theme_graph()* allows for the removal of axis, grids, border, and changing the font to Arial Narrow (this can be overridden)  
-- The ggraph theme can be set for a series of plots with the *set_graph_style()* command when it is run before the graphs are plotted or by using *theme_graph()* in the individual plots
+-   **ggraph** introduces a special ggplot theme (*theme_graph()*) that provides better defaults for network graphs than the normal ggplot defaults
+-   *theme_graph()* allows for the removal of axis, grids, border, and changing the font to Arial Narrow (this can be overridden)\
+-   The ggraph theme can be set for a series of plots with the *set_graph_style()* command when it is run before the graphs are plotted or by using *theme_graph()* in the individual plots
 :::
 
 ## [5:]{style="color:DarkOrange"} 5.3 Changing the Coloring of the Plot
@@ -313,20 +320,20 @@ g + theme_graph(background = 'grey10',
 
 **ggraph()** supports many layout for standard used:
 
-- star
-- circle
-- nicely (default)
-- dh
-- gem
-- graphopt
-- grid
-- mds
-- spahere
-- randomly
-- fr
-- kk
-- drl
-- lgl.  
+-   star
+-   circle
+-   nicely (default)
+-   dh
+-   gem
+-   graphopt
+-   grid
+-   mds
+-   spahere
+-   randomly
+-   fr
+-   kk
+-   drl
+-   lgl.
 
 The figures shows the layouts supported by **ggraph()**.
 
@@ -378,8 +385,8 @@ g + theme_graph()
 ::: callout-tip
 ## Things to Learn
 
-- *geom_node_point* is equivalent in functionality to *geo_point* of **ggplot2**
-- It allows for simple plotting of nodes in different shapes, colours and sizes. In the code chunk above, colour and size were used.  
+-   *geom_node_point* is equivalent in functionality to *geo_point* of **ggplot2**
+-   It allows for simple plotting of nodes in different shapes, colours and sizes. In the code chunk above, colour and size were used.\
 :::
 
 ## [5:]{style="color:DarkOrange"} 5.7 Modifying Edges
@@ -402,19 +409,19 @@ g + theme_graph()
 ::: callout-tip
 ## Things to Learn
 
-- *geom_edge_link* draws edges in the simplest way - as straight lines between the start and end nodes. But, it can do more that that.
-- In the example above, argument *width* is used to map the width of the line in proportional to the Weight attribute and argument alpha is used to introduce opacity on the line.     
+-   *geom_edge_link* draws edges in the simplest way - as straight lines between the start and end nodes. But, it can do more that that.
+-   In the example above, argument *width* is used to map the width of the line in proportional to the Weight attribute and argument alpha is used to introduce opacity on the line.\
 :::
 
 # [5:]{style="color:DarkOrange"} 6 Creating facet Graphs
 
-Another very useful feature of **ggraph** is faceting.  In visualising network data, this technique can be used to reduce edge over-plotting in a very meaning way by spreading nodes and edges out based on their attributes.  This section will cover the use of faceting technique to visualise network data.    
+Another very useful feature of **ggraph** is faceting. In visualising network data, this technique can be used to reduce edge over-plotting in a very meaning way by spreading nodes and edges out based on their attributes. This section will cover the use of faceting technique to visualise network data.
 
-There are three functions in ggraph to implement faceting: 
+There are three functions in ggraph to implement faceting:
 
-- [*facet_nodes()*](https://ggraph.data-imaginist.com/reference/facet_nodes.html): Edges are only draw in a panel if both terminal nodes are present
-- [*facet_edges()*](https://ggraph.data-imaginist.com/reference/facet_edges.html): Nodes are drawn in all panels even if the node data contains an attribute with the same name as the one used for the edge facetting
-- [*facet_graph()*](https://ggraph.data-imaginist.com/reference/facet_graph.html): faceting on two variables simultaneously
+-   [*facet_nodes()*](https://ggraph.data-imaginist.com/reference/facet_nodes.html): Edges are only draw in a panel if both terminal nodes are present
+-   [*facet_edges()*](https://ggraph.data-imaginist.com/reference/facet_edges.html): Nodes are drawn in all panels even if the node data contains an attribute with the same name as the one used for the edge facetting
+-   [*facet_graph()*](https://ggraph.data-imaginist.com/reference/facet_graph.html): faceting on two variables simultaneously
 
 Please refer to the respective reference guides provided for more information.
 
@@ -521,11 +528,12 @@ g + facet_nodes(~Department)+
 :::
 
 # [5:]{style="color:DarkOrange"} 7 Network Metrics Analysis
+
 ## [5:]{style="color:DarkOrange"} 7.1 Computing Centrality Indices
 
-Centrality measures are a collection of statistical indices use to describe the relative important of actors in a network.  There are four well-known centrality measures, namely: degree, betweenness, closeness and eigenvector.
+Centrality measures are a collection of statistical indices use to describe the relative important of actors in a network. There are four well-known centrality measures, namely: degree, betweenness, closeness and eigenvector.
 
-It is beyond the scope of this hands-on exercise to cover the principles and mathematics of these measure here.  Please refer to *Chapter 7: Actor Prominence* of **A User's Guide to Network Analysis in R** to gain better understanding of theses network measures.
+It is beyond the scope of this hands-on exercise to cover the principles and mathematics of these measure here. Please refer to *Chapter 7: Actor Prominence* of **A User's Guide to Network Analysis in R** to gain better understanding of theses network measures.
 
 ```{r}
 #| code-fold: true
@@ -543,12 +551,11 @@ g <- GAStech_graph %>%
 g + theme_graph()
 ```
 
-
 ::: callout-tip
 ## Things to Learn
 
-- *mutate()* of **dplyr** is used to perform the computation
-- The algorithm used, on the other hand, is the *centrality_betweenness()* of **tidygraph**
+-   *mutate()* of **dplyr** is used to perform the computation
+-   The algorithm used, on the other hand, is the *centrality_betweenness()* of **tidygraph**
 :::
 
 ## [5:]{style="color:DarkOrange"} 7.2 Visualising network metrics
@@ -573,23 +580,23 @@ g + theme_graph()
 ::: callout-tip
 ## Things to Learn
 
-- The *mutate(betweenness_centrality = centrality_betweenness()) %>%* step in the previous [section](https://isss608-ay2024-25t3.netlify.app/hands-on_ex/hands-on_ex05/hands-on_ex05#computing-centrality-cndices) is no longer needed
-- Instead, *centrality_betweenness()* can be added directly to the size attribute
+-   The *mutate(betweenness_centrality = centrality_betweenness()) %\>%* step in the previous [section](https://isss608-ay2024-25t3.netlify.app/hands-on_ex/hands-on_ex05/hands-on_ex05#computing-centrality-cndices) is no longer needed
+-   Instead, *centrality_betweenness()* can be added directly to the size attribute
 :::
 
 ## [5:]{style="color:DarkOrange"} 7.3 Visualising Community
 
 tidygraph package inherits many of the community detection algorithms embedded into igraph and makes them available for use such as :
 
-- *Edge-betweenness (group_edge_betweenness)*
-- *Leading eigenvector (group_leading_eigen)*
-- *Fast-greedy (group_fast_greedy)*
-- *Louvain (group_louvain)*
-- *Walktrap (group_walktrap)*
-- *Label propagation (group_label_prop)*
-- *InfoMAP (group_infomap)*
-- *Spinglass (group_spinglass)*
-- *Optimal (group_optimal)*
+-   *Edge-betweenness (group_edge_betweenness)*
+-   *Leading eigenvector (group_leading_eigen)*
+-   *Fast-greedy (group_fast_greedy)*
+-   *Louvain (group_louvain)*
+-   *Walktrap (group_walktrap)*
+-   *Label propagation (group_label_prop)*
+-   *InfoMAP (group_infomap)*
+-   *Spinglass (group_spinglass)*
+-   *Optimal (group_optimal)*
 
 Some community algorithms are designed to take into account direction or weight, while others ignore it. Please refer to this [link](https://tidygraph.data-imaginist.com/reference/group_graph.html) to find out more about community detection functions provided by tidygraph.
 
@@ -610,9 +617,10 @@ g <- GAStech_graph %>%
 
 g + theme_graph()
 ```
+
 ::: callout-tip
-- The output network graph is coloured according to community instead of departments
-- *group_edge_betweenness()* groups densely connected nodes together
+-   The output network graph is coloured according to community instead of departments
+-   *group_edge_betweenness()* groups densely connected nodes together
 :::
 
 In order to support effective visual investigation, the community network above has been revised by using [geom_mark_hull()](https://ggforce.data-imaginist.com/reference/geom_mark_hull.html) of [ggforce](https://ggforce.data-imaginist.com/) package.
@@ -648,20 +656,20 @@ g + theme_graph()
 ```
 
 ::: callout-tip
-- The similar communities have been grouped together by overlaying highlighted regions.
-- The number of communities have dropped from 30 to 4.
-- Please be reminded that you must to install and include **ggforce** and **concaveman** packages before running the code chunk above
+-   The similar communities have been grouped together by overlaying highlighted regions.
+-   The number of communities have dropped from 30 to 4.
+-   Please be reminded that you must to install and include **ggforce** and **concaveman** packages before running the code chunk above
 :::
 
 # [5:]{style="color:DarkOrange"} 8 Building Interactive Network Graph with visNetwork
 
-- [visNetwork()](http://datastorm-open.github.io/visNetwork/) is a R package for network visualization, using [vis.js](http://visjs.org) javascript library
-- It function uses a node list and an edge list to create an interactive graph. 
-    - The nodes list must include an "id" column, and the edge list must have a "from" and "to" column. 
-    - The function also plots the labels for the nodes, using the names of the actors from the "label" column in the node list. 
-- The resulting graph is interactive and fun.
-    - The nodes can be moved around and the graph will use an algorithm to keep the nodes appropriately spaced.
-    - It allows for both zooming in / out and moving it around.
+-   [visNetwork()](http://datastorm-open.github.io/visNetwork/) is a R package for network visualization, using [vis.js](http://visjs.org) javascript library
+-   It function uses a node list and an edge list to create an interactive graph.
+    -   The nodes list must include an "id" column, and the edge list must have a "from" and "to" column.
+    -   The function also plots the labels for the nodes, using the names of the actors from the "label" column in the node list.
+-   The resulting graph is interactive and fun.
+    -   The nodes can be moved around and the graph will use an algorithm to keep the nodes appropriately spaced.
+    -   It allows for both zooming in / out and moving it around.
 
 ## [5:]{style="color:DarkOrange"} 8.1 Data Preparation
 
@@ -683,7 +691,7 @@ GAStech_edges_aggregated <- GAStech_edges %>%
   ungroup()
 ```
 
-## [5:]{style="color:DarkOrange"} 8.2 Plotting the First Interactive Network Graph 
+## [5:]{style="color:DarkOrange"} 8.2 Plotting the First Interactive Network Graph
 
 The code chunk will be used to plot an interactive network graph using the data prepared in the previous step.
 
@@ -693,7 +701,6 @@ The code chunk will be used to plot an interactive network graph using the data 
 visNetwork(GAStech_nodes, 
            GAStech_edges_aggregated)
 ```
-
 
 ## [5:]{style="color:DarkOrange"} 8.3 Working with layout
 
@@ -711,10 +718,9 @@ visNetwork(GAStech_nodes,
 Adding the Fruchterman and Reingold layout freezes the nodes and edges.
 :::
 
+## [5:]{style="color:DarkOrange"} 8.4 Working with Visual Attributes - Nodes
 
-## [5:]{style="color:DarkOrange"} 8.4 Working with Visual Attributes - Nodes 
-
-visNetwork() looks for a field called "group" in the nodes object and colours the nodes according to the values of the group field.  
+visNetwork() looks for a field called "group" in the nodes object and colours the nodes according to the values of the group field.
 
 The code chunk below renames Department field to group.
 
@@ -741,8 +747,8 @@ visNetwork(GAStech_nodes,
 
 In the code below [*visEdges()*](http://datastorm-open.github.io/visNetwork/edges.html) is used to symbolise the edges.
 
-- The argument *arrows* is used to define where to place the arrow.  
-- The *smooth* argument is used to plot the edges using a smooth curve.
+-   The argument *arrows* is used to define where to place the arrow.\
+-   The *smooth* argument is used to plot the edges using a smooth curve.
 
 Please refer to the reference guide provided for more information.
 
@@ -763,8 +769,8 @@ visNetwork(GAStech_nodes,
 
 In the code chunk below, [*visOptions()*](http://datastorm-open.github.io/visNetwork/options.html) is used to incorporate interactivity features in the data visualisation.
 
-- The argument *highlightNearest* highlights nearest when clicking a node.  
-- The argument *nodesIdSelection* adds an id node selection creating a HTML select element. 
+-   The argument *highlightNearest* highlights nearest when clicking a node.\
+-   The argument *nodesIdSelection* adds an id node selection creating a HTML select element.
 
 Please refer to the reference guide provided for more information.
 
@@ -779,4 +785,3 @@ visNetwork(GAStech_nodes,
   visLegend() %>%
   visLayout(randomSeed = 123)
 ```
-
