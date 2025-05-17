@@ -87,7 +87,6 @@ glimpse(GAStech_edges)
 The output report of GAStech_edges above reveals that the *SentDate* is treated as "Character"" data type instead of *date* data type. This is an error! It is important to change the data type of *SentDate* field back to the "Date"" data type.
 :::
 
-
 ```{r}
 #| code-fold: true
 #| code-summary: "Show code"
@@ -689,6 +688,14 @@ GAStech_edges_aggregated <- GAStech_edges %>%
   filter(from!=to) %>%
   filter(weight > 1) %>%
   ungroup()
+
+kable(head(GAStech_edges_aggregated,5))
+```
+
+```{r}
+kable(head(GAStech_edges,5))
+
+kable(head(GAStech_nodes,5))
 ```
 
 ## [5:]{style="color:DarkOrange"} 8.2 Plotting the First Interactive Network Graph
