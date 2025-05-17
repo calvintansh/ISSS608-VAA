@@ -534,7 +534,7 @@ ig <- as.igraph(music)
 # Get index for 'Sailor Shift'
 sailor_idx <- which(V(ig)$name == "Sailor Shift")
 
-# Get 3-degree ego from Sailor Shift (as integer indices)
+# Get 1-degree ego from Sailor Shift (as integer indices)
 sailor_ego <- ego(ig, order = 1, nodes = sailor_idx, mode = "out")[[1]]
 
 sailor_ego_idx <- as.integer(sailor_ego)
@@ -574,87 +574,6 @@ dep_score <- sapply(node_names, function(n) {
 })
 
 # Add sailor_dependency to tbl_graph
-sub_music <- sub_music %>%
-  mutate(sailor_dependency = dep_score)
-```
-
-```{r}
-g <- sub_music %>%
-  ggraph(layout = "nicely") + 
-  geom_edge_fan(
-    aes(
-      colour = `Edge Type`,
-      start_cap = circle(1, 'mm'),
-      end_cap = circle(1, 'mm')
-      ),
-    arrow = arrow(length = unit(2, 'mm')),
-    alpha = 0.4
-    ) +
-  geom_point_interactive(
-    aes(
-      x = x,
-      y = y,
-      data_id = name,
-      tooltip = sprintf("%s<br/>(%s)", name, released_year),
-      colour = genre,
-      size = sailor_dependency,
-      shape = `Node Type`
-      ),
-    show.legend = c(size = FALSE)
-    )+ 
-  geom_node_text(
-    aes(
-      label = ifelse(`name` == "Sailor Shift", "Sailor Shift", NA)
-    ),
-    size = 4,
-    colour = 'red',
-    show.legend = FALSE
-    ) +
-  theme_graph() +
-  theme(legend.text = element_text(size = 6),
-        legend.title = element_text(size = 9)) +
-  scale_shape_discrete(name = "Node Type")
-
-girafe(ggobj = g, width_svg = 11, height_svg = 8)
-```
-
-### Oceanus folk centric
-
-```{r}
-# Convert to igraph
-ig <- as.igraph(music)
-
-# Identify Oceanus Folk node indices
-oceanus_idx <- which(V(ig)$genre == "Oceanus Folk")
-
-# Build subgraph using ego network around Oceanus Folk members
-neighbourhood_nodes <- ego(ig, order = 1, nodes = oceanus_idx, mode = "in") %>%
-  unlist() %>%
-  unique()
-
-# Induce subgraph and convert to tbl_graph
-sub_music <- induced_subgraph(ig, vids = neighbourhood_nodes) %>%
-  as_tbl_graph()
-
-# Convert subgraph to igraph again for shortest path computation
-ig_sub <- as.igraph(sub_music)
-
-# Re-identify 'Sailor Shift' in the new graph
-sailor_idx_sub <- which(V(ig_sub)$name == "Sailor Shift")
-
-# Compute shortest paths TO Sailor Shift (mode = "in")
-sp <- shortest_paths(ig_sub, from = sailor_idx_sub, mode = "in", output = "vpath")$vpath
-
-# Compute dependency: how often each node appears along paths to Sailor Shift
-node_names <- V(ig_sub)$name
-dep_score <- sapply(node_names, function(n) {
-  sum(sapply(sp, function(path) {
-    if (length(path) == 0) return(FALSE)
-    n %in% names(path)
-  }))
-})
-
-# Attach to tbl_graph
 sub_music <- sub_music %>%
   mutate(sailor_dependency = dep_score)
 ```
