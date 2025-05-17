@@ -93,6 +93,8 @@ glimpse(kg)
 ### Inspect Structure
 
 ```{r}
+#| code-fold: true
+#| code-summary: "Show code"
 str(kg, max.level = 1)
 ```
 
@@ -120,7 +122,7 @@ ggplot(data = edges_tbl,
 
 ## Creating knowledge graph
 
-### Step 1: Mapping from node it to row index
+### Step 1: Mapping from node id to row index
 
 ```{r}
 id_map <- tibble(id = nodes_tbl$id,

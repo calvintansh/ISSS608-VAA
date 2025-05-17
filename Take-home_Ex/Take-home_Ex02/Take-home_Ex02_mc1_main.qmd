@@ -49,44 +49,37 @@ Now, as Sailor returns to Oceanus in 2040, a local journalist – Silas Reed –
 
     -   Visualize the careers of three artists. Compare and contrast their rise in popularity and influence.
     -   Using this characterization, give three predictions of who the next Oceanus Folk stars with be over the next five years.
-    
+
 ## [2:]{style="color:DarkOrange"} 1.3 Data Source
 
-The data for this exercise is from [VAST 2025 MC1](https://github.com/vast-challenge/2025-data/blob/main/MC1_release.zip). 
+The data for this exercise is from [VAST 2025 MC1](https://github.com/vast-challenge/2025-data/blob/main/MC1_release.zip).
 
 ## [2:]{style="color:DarkOrange"} 1.4 Data Description
 
-Graph Description
--	Directed Multigraph
--	# nodes: 17,412
--	# edges: 37, 857
--	18 connected components
--	Possible node types are: {Person, Song, RecordLabel, Album, MusicalGroup}
--	Possible edge types are: {MemberOf, PerformerOf, ComposerOf, ProducerOf, LyricistOf, InStyleOf, InterpolatesFrom, CoverOf, LyricalReferenceTo, DirectlySamples, RecordedBy, DistributedBy}
--	The graph format is a JSON file. The root-level JSON object consists of graph-level properties specifying that it is directed and a multigraph, a “nodes” key which holds the list of nodes, and a “links” key which holds the list of edges.
+Graph Description - Directed Multigraph - \# nodes: 17,412 - \# edges: 37, 857 - 18 connected components - Possible node types are: {Person, Song, RecordLabel, Album, MusicalGroup} - Possible edge types are: {MemberOf, PerformerOf, ComposerOf, ProducerOf, LyricistOf, InStyleOf, InterpolatesFrom, CoverOf, LyricalReferenceTo, DirectlySamples, RecordedBy, DistributedBy} - The graph format is a JSON file. The root-level JSON object consists of graph-level properties specifying that it is directed and a multigraph, a “nodes” key which holds the list of nodes, and a “links” key which holds the list of edges.
 
 The data for this challenge comes from two different sources:
 
--	an online, crowdsourced repository of musical influence, where contributors have  manually notated instances in which songs or albums have sampled, covered, or otherwise drawn inspiration from previous work. 
--	aggregate-level descriptions of song popularity, as labeled by our journalist, Silas Reed. These notations (notable and notoriety_date) are directly based on both the number of sales and streams that the song/album has achieved as well as the whether or not the work landed on a top record chart.
+-   an online, crowdsourced repository of musical influence, where contributors have manually notated instances in which songs or albums have sampled, covered, or otherwise drawn inspiration from previous work.
+-   aggregate-level descriptions of song popularity, as labeled by our journalist, Silas Reed. These notations (notable and notoriety_date) are directly based on both the number of sales and streams that the song/album has achieved as well as the whether or not the work landed on a top record chart.
 
 ## [1-1:]{style="color:DarkOrange"} 1.5 Install and Load the Required Libraries
 
 Utility Tools
 
-- jsonlite: To parse JSON
-- tidyverse - Data science tools
-- ggtext - Tools for text formatting
-- knitr - For better table displays
-- lubridate - For processing date and time
+-   jsonlite: To parse JSON
+-   tidyverse - Data science tools
+-   ggtext - Tools for text formatting
+-   knitr - For better table displays
+-   lubridate - For processing date and time
 
 Graphing Tools
 
-- patchwork - For combining ggplot plots
-- ggraph - For plotting network data
-- tidygraph - For graph manipulations
-- igraph - Contains functions for network analysis
-- ggiraph - Interactive plots
+-   patchwork - For combining ggplot plots
+-   ggraph - For plotting network data
+-   tidygraph - For graph manipulations
+-   igraph - Contains functions for network analysis
+-   ggiraph - Interactive plots
 
 ::: {.callout-note appearance="minimal" collapse="true"}
 ## Code
@@ -116,7 +109,7 @@ glimpse(mc1_data)
 ```
 :::
 
-# [2:]{style="color:DarkOrange"} 2 Exploratory Data Analysis (EDA)
+### Separating into node and edge data
 
 ```{r}
 mc1_nodes_raw <- as_tibble(mc1_data$nodes)
@@ -127,25 +120,6 @@ kable(head(mc1_nodes_raw, 5))
 ```
 
 ```{r}
-mc1_nodes_raw$release_date %>% unique()
-
-mc1_nodes_raw %>%
-  filter(grepl("Sailor Shift", name))
-```
-
-
-```{r}
-mc1_nodes_clean <- mc1_nodes_raw %>%
-  mutate(
-    released_year = as.integer(release_date),
-    name = gsub("'", "", name)) %>%
-  select(`Node Type`, name, released_year, genre, notable)
-  
-kable(head(mc1_nodes_clean))
-```
-
-
-```{r}
 mc1_edges_raw <- as_tibble(mc1_data$links)
 
 glimpse(mc1_edges_raw)
@@ -153,57 +127,109 @@ glimpse(mc1_edges_raw)
 kable(head(mc1_edges_raw, 10))
 ```
 
+# [2:]{style="color:DarkOrange"} 2 Exploratory Data Analysis (EDA)
+
+### Exploring Node
+
+```{r}
+mc1_nodes_raw$release_date %>% unique()
+
+mc1_nodes_raw %>%
+  filter(grepl("Sailor Shift", name)) #Sailor Shift is in name column and not in stage_name column
+```
+
+```{r}
+mc1_nodes_clean <- mc1_nodes_raw %>%
+  mutate(
+    released_year = as.integer(release_date),
+    name = gsub("'", "", name)) %>% # igraph interactive cannot have ' inside name
+  select(`Node Type`, name, released_year, genre, notable, id)
+  
+kable(head(mc1_nodes_clean))
+```
+
+### Exploring Edges
+
 ```{r}
 range(mc1_edges_raw$source)
 
-range(mc1_edges_raw$target)
+range(mc1_edges_raw$target) #Similar range as nodes
 ```
 
+### Mapping from node name to edges indexes
+
+igraph uses the from and to columns in the edges and matches them with the name column in nodes. Will replace the numerical from and to columns in edges with the names used in the nodes.
 
 ```{r}
-mc1_edges_format <- merge(mc1_edges_raw, mc1_nodes_raw, by.x = "source", by.y = "id", all.x = TRUE) %>%
+id_map <- mc1_nodes_clean %>%
+  select(name, id)
+
+id_map
+```
+
+#### Map source and target to node name
+
+```{r}
+mc1_edges_clean <- mc1_edges_raw %>%
+  left_join(id_map, by = c("source" = "id")) %>%
   rename(from = name) %>%
-  select(from, target, `Edge Type`)
-  
-mc1_edges_format <- merge(mc1_edges_format, mc1_nodes_raw, by.x = "target", by.y = "id", all.x = TRUE) %>%
-  rename(to = name) %>%
+  left_join(id_map, by = c("target" = "id")) %>%
+  rename(to = name)
+
+mc1_edges_clean
+```
+
+```{r}
+mc1_edges_clean <- mc1_edges_clean %>%
   select(from, to, `Edge Type`)
+
+mc1_edges_clean
+```
+
+### Filter out any unmatched (invalid) edges
+
+```{r}
+mc1_edges_clean <- mc1_edges_clean %>%
+  filter(!is.na(from), !is.na(to))
+```
+
+### Checking for any missing nodes
+
+```{r}
+missing_nodes <- setdiff(
+  unique(c(mc1_edges_clean$from, mc1_edges_clean$to)),
+  mc1_nodes_clean$name
+)
+
+missing_nodes
+```
+
+### Adding Weight to Edges
+
+```{r}
+mc1_edges_format <- mc1_edges_clean %>%
+  group_by(`Edge Type`, from, to) %>%
+  summarize(weight = n())
+
+glimpse(mc1_edges_format)
 
 kable(head(mc1_edges_format))
 ```
 
-
 ```{r}
-mc1_edges_clean <- mc1_edges_format %>%
-  group_by(`Edge Type`, from, to) %>%
-  summarize(weight = n())
-
-glimpse(mc1_edges_clean)
-
-kable(head(mc1_edges_clean))
+range(mc1_edges_format$weight) #the max weight is only 2 so this grouping by is not useful. Will use mc1_edges_clean instead
 ```
 
-```{r}
-range(mc1_edges_clean$weight)
-```
+### Visualising Edge Type
 
 ```{r}
-mc1_edges_clean <- mc1_edges_raw %>%
-  rename(from = source, to = target) %>%
-  mutate(from = from + 1,
-         to = to + 1) %>%
-  select(`Edge Type`, from, to)
-
-glimpse(mc1_edges_clean)
-
-kable(head(mc1_edges_clean))
+ggplot(data = edges_tbl,
+       aes(y = `Edge Type`)) +
+  geom_bar()
 ```
 
-```{r}
-mc1_nodes_clean %>%
-  filter(!is.na(released_year))
-```
-
+## Creating the global knowledge graph
+`tbl_graph()` is used to create tidygraph's graph object by using the code chunk below
 
 ```{r}
 music = tbl_graph(edges = mc1_edges_clean,
@@ -211,7 +237,13 @@ music = tbl_graph(edges = mc1_edges_clean,
                              directed = TRUE)
 ```
 
-## 1.1
+```{r}
+set.seed(1234)
+```
+
+## Question 1a Who has she been most influenced by over time?
+
+How do I find who is she influenced by?
 
 ```{r}
 # Convert tbl_graph to igraph
@@ -221,10 +253,20 @@ ig <- as.igraph(music)
 sailor_idx <- which(V(ig)$name == "Sailor Shift")
 
 # Get 2-degree ego neighbourhood
-neighbourhood_nodes <- ego(ig, order = 3, nodes = sailor_idx, mode = "all")[[1]]
+neighbourhood_nodes <- ego(ig, order = 2, nodes = sailor_idx, mode = "out")[[1]]
+
+# Step 2: Get 2-degree in-neighbours to those filtered out-neighbours
+in_to_out_neighbours <- unique(unlist(
+  lapply(neighbourhood_nodes, function(n) {
+    ego(ig, order = 1, nodes = n, mode = "in")[[1]]
+  })
+))
+
+# Step 3: Combine all relevant nodes (Sailor Shift + out-neighbours + their 2-degree in-neighbours)
+all_nodes <- unique(c(sailor_idx, neighbourhood_nodes, in_to_out_neighbours))
 
 # Induce subgraph and convert to tbl_graph
-sub_music <- induced_subgraph(ig, vids = neighbourhood_nodes) %>% 
+sub_music <- induced_subgraph(ig, vids = all_nodes) %>% 
   as_tbl_graph()
 
 # Convert to igraph for path computation
@@ -252,7 +294,7 @@ sub_music <- sub_music %>%
 
 ```{r}
 g <- sub_music %>%
-  ggraph(layout = "nicely") + 
+  ggraph(layout = "fr") + 
   geom_edge_fan(
     aes(
       colour = `Edge Type`,
@@ -302,7 +344,11 @@ node_data %>%
   kable()
 ```
 
-## 1.2  Direct
+## 1.b Who has she collaborated with and directly or indirectly influenced?
+
+### Directly
+
+Find all immediate people and musical groups Sailor Shift directly influenced
 
 ```{r}
 # Convert tbl_graph to igraph
@@ -311,44 +357,22 @@ ig <- as.igraph(music)
 # Get index for 'Sailor Shift'
 sailor_idx <- which(V(ig)$name == "Sailor Shift")
 
-# Get 2-degree ego neighbourhood
-neighbourhood_nodes <- ego(ig, order = 1, nodes = sailor_idx, mode = "all")[[1]]
+# Get 1-degree in ego neighbourhood
+neighbourhood_nodes <- ego(ig, order = 1, nodes = sailor_idx, mode = "in")[[1]]
 
 # Induce subgraph and convert to tbl_graph
 sub_music <- induced_subgraph(ig, vids = neighbourhood_nodes) %>% 
   as_tbl_graph()
-
-# Convert to igraph for path computation
-ig_sub <- as.igraph(sub_music)
-
-# Re-identify 'Sailor Shift' in the new graph
-sailor_idx_sub <- which(V(ig_sub)$name == "Sailor Shift")
-
-# Compute shortest paths from Sailor Shift
-sp <- shortest_paths(ig_sub, from = sailor_idx_sub, mode = "out", output = "vpath")$vpath
-
-# Count path dependencies (with safety for unreachable nodes)
-node_names <- V(ig_sub)$name
-dep_score <- sapply(node_names, function(n) {
-  sum(sapply(sp, function(path) {
-    if (length(path) == 0) return(FALSE)
-    n %in% names(path)
-  }))
-})
-
-# Attach to tbl_graph
-sub_music <- sub_music %>%
-  mutate(sailor_dependency = dep_score)
 ```
 
 ```{r}
 g <- sub_music %>%
-  ggraph(layout = "nicely") + 
+  ggraph(layout = "fr") + 
   geom_edge_fan(
     aes(
       colour = `Edge Type`,
       start_cap = circle(2, 'mm'),
-      end_cap = circle(3, 'mm')
+      end_cap = circle(2, 'mm')
       ),
     arrow = arrow(length = unit(2, 'mm')),
     alpha = 0.4
@@ -360,7 +384,6 @@ g <- sub_music %>%
       data_id = name,
       tooltip = sprintf("%s<br/>(%s)", name, released_year),
       colour = genre,
-      size = sailor_dependency,
       shape = `Node Type`
       ),
     show.legend = c(size = FALSE)
@@ -387,27 +410,32 @@ node_data <- as_tibble(sub_music)
 
 node_data %>%
   filter(`Node Type` %in% c("Person", "MusicalGroup")) %>%
-  arrange(desc(sailor_dependency)) %>%
-  select(`Node Type`, name, sailor_dependency) %>%
+  select(`Node Type`, name) %>%
   kable()
 ```
 
-## 1.2  inDirect
+## 1.2 Indirect
+
+Find all the songs and albums that Sailor Shift produced, then get 2 degree in neighbours from the songs / albums to see who has been influenced by her songs or made songs influenced by her songs or have direct collaboration with her
 
 ```{r}
-# Convert tbl_graph to igraph
-ig <- as.igraph(music)
-
-# Step 1: Get Sailor Shift's 1-degree out-neighbours that are Songs or Albums
+# Step 1: Get Sailor Shift's 1-degree out-neighbours
 sailor_idx <- which(V(ig)$name == "Sailor Shift")
-out_neighbours_all <- neighbors(ig, sailor_idx, mode = "all")
+out_edges <- incident(ig, sailor_idx, mode = "out")
 
-# Filter to keep only nodes of type Song or Album
-out_neighbours <- out_neighbours_all[
-  V(ig)[out_neighbours_all]$`Node Type` %in% c("Song", "Album")
+# Filter edges by desired Edge Type
+valid_edge_types <- c("PerformerOf", "ComposerOf", "ProducerOf", "LyricistOf", "MemberOf")
+valid_edges <- out_edges[E(ig)[out_edges]$`Edge Type` %in% valid_edge_types]
+
+# Get target nodes from valid edges
+out_neighbours <- as.integer(ends(ig, valid_edges, names = FALSE)[, 2])  # target vertex of each edge
+
+# Filter to only songs or albums
+out_neighbours <- out_neighbours[
+  V(ig)[out_neighbours]$`Node Type` %in% c("Song", "Album")
 ]
 
-# Step 2: Get 2-degree in-neighbours to those filtered out-neighbours
+# Step 2: Get 1-degree in-neighbours to those filtered out-neighbours
 in_to_out_neighbours <- unique(unlist(
   lapply(out_neighbours, function(n) {
     ego(ig, order = 1, nodes = n, mode = "in")[[1]]
@@ -446,12 +474,12 @@ sub_music <- sub_music %>%
 
 ```{r}
 g <- sub_music %>%
-  ggraph(layout = "nicely") + 
+  ggraph(layout = "fr") + 
   geom_edge_fan(
     aes(
       colour = `Edge Type`,
       start_cap = circle(2, 'mm'),
-      end_cap = circle(3, 'mm')
+      end_cap = circle(2, 'mm')
       ),
     arrow = arrow(length = unit(2, 'mm')),
     alpha = 0.4
@@ -494,6 +522,10 @@ node_data %>%
   select(`Node Type`, name) %>%
   kable()
 ```
+
+## 1.c How has she influenced collaborators of the broader Oceanus Folk community?
+
+### Sailor centric
 
 ```{r}
 # Convert tbl_graph to igraph
@@ -586,6 +618,8 @@ g <- sub_music %>%
 girafe(ggobj = g, width_svg = 11, height_svg = 8)
 ```
 
+### Oceanus folk centric
+
 ```{r}
 # Convert to igraph
 ig <- as.igraph(music)
@@ -656,108 +690,6 @@ g <- sub_music %>%
     size = 4,
     colour = 'red',
     show.legend = FALSE
-    ) +
-  theme_graph() +
-  theme(legend.text = element_text(size = 6),
-        legend.title = element_text(size = 9)) +
-  scale_shape_discrete(name = "Node Type")
-
-girafe(ggobj = g, width_svg = 11, height_svg = 8)
-```
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-```{r}
-# Convert to igraph
-ig <- as.igraph(music)
-
-# Identify Oceanus Folk node indices
-oceanus_idx <- which(V(ig)$genre == "Oceanus Folk")
-
-# Build subgraph using ego network around Oceanus Folk members
-neighbourhood_nodes <- ego(ig, order = 2, nodes = oceanus_idx, mode = "in") %>%
-  unlist() %>%
-  unique()
-
-# Induce subgraph and convert to tbl_graph
-sub_music <- induced_subgraph(ig, vids = neighbourhood_nodes) %>%
-  as_tbl_graph()
-
-# Convert subgraph to igraph again for shortest path computation
-ig_sub <- as.igraph(sub_music)
-
-# Re-identify Oceanus Folk node indices in subgraph
-oceanus_idx_sub <- which(V(ig_sub)$genre == "Oceanus Folk")
-
-# Compute shortest paths TO Oceanus Folk members (mode = "in")
-sp <- shortest_paths(ig_sub, from = oceanus_idx_sub, mode = "in", output = "vpath")$vpath
-
-# Compute dependency: how often each node appears along paths to Oceanus Folk
-node_names <- V(ig_sub)$name
-dep_score <- sapply(node_names, function(n) {
-  sum(sapply(sp, function(path) {
-    if (length(path) == 0) return(FALSE)
-    n %in% names(path)
-  }))
-})
-
-# Attach to tbl_graph
-sub_music <- sub_music %>%
-  mutate(oceanus_dependency = dep_score)
-```
-
-```{r}
-g <- sub_music %>%
-  ggraph(layout = "nicely") + 
-  geom_edge_fan(
-    aes(
-      colour = `Edge Type`,
-      start_cap = circle(1, 'mm'),
-      end_cap = circle(1, 'mm')
-      ),
-    arrow = arrow(length = unit(2, 'mm')),
-    alpha = 0.4
-    ) +
-  geom_point_interactive(
-    aes(
-      x = x,
-      y = y,
-      data_id = name,
-      tooltip = sprintf("%s<br/>(%s)", name, released_year),
-      colour = genre,
-      shape = `Node Type`
-      ),
-    show.legend = c(size = FALSE)
     ) +
   theme_graph() +
   theme(legend.text = element_text(size = 6),
