@@ -145,4 +145,4 @@ kable(head(mc1_edges_clean))
 any(mc1_edges_clean < 0) 
 ```
 
-\`\`{r} supernetwork = tbl_graph(edges = mc1_edges_clean, nodes = mc1_nodes_raw, directed = TRUE) \`\`\`
+supernetwork = tbl_graph(edges = mc1_edges_clean, nodes = mc1_nodes_raw, directed = TRUE) 

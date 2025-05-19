@@ -223,7 +223,7 @@ range(mc1_edges_format$weight) #the max weight is only 2 so this grouping by is 
 ### Visualising Edge Type
 
 ```{r}
-ggplot(data = edges_tbl,
+ggplot(data = mc1_edges_clean,
        aes(y = `Edge Type`)) +
   geom_bar()
 ```
