@@ -88,7 +88,7 @@ There are 3 columns: *timestamp*, *source_country*, and *tz*.
 
 ## [6:]{style="color:DarkOrange"} 3.4 Data Preparation
 
-### [6:]{style="color:DarkOrange"} 3.4.1 Step 1: Deriving *weekday* and *hour of day* fields
+### [6:]{style="color:DarkOrange"} 3.4.1 Step 1: Deriving *weekday* and *hour of day* Fields
 
 Two new fields namely *wkday* and *hour* needs to be derived before plotting the calendar heatmap. The code chunk below contains the function to perform this task.
 
@@ -111,7 +111,7 @@ make_hr_wkday <- function(ts, sc, tz) {
 -   [`weekdays()`](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/weekdays) is a **base** R function.
 :::
 
-### [6:]{style="color:DarkOrange"} 3.4.2 Step 2: Deriving the attacks tibble data frame
+### [6:]{style="color:DarkOrange"} 3.4.2 Step 2: Deriving the attacks Tibble Data Frame
 
 ```{r}
 #| code-fold: true
@@ -230,7 +230,7 @@ theme(axis.ticks = element_blank(),
 
 
 
-### [6:]{style="color:DarkOrange"} 3.6.1 Step 1: Derive number of attacks by country object
+### [6:]{style="color:DarkOrange"} 3.6.1 Step 1: Derive Number of Attacks by Country Object
 
 To identify the top 4 countries with the highest attack numbers, the code below will achieve the following:
 
@@ -247,7 +247,7 @@ attacks_by_country <- count(
   arrange(desc(n))
 ```
 
-### [6:]{style="color:DarkOrange"} 3.6.2 Step 2: Prepare the tidy data frame
+### [6:]{style="color:DarkOrange"} 3.6.2 Step 2: Prepare the Tidy Data Frame
 
 The code below extracts the top 4 countries from *attacks* data frame and saves the data in a new tibble data frame *top4_attacks*.
 
@@ -264,7 +264,7 @@ top4_attacks <- attacks %>%
   na.omit()
 ```
 
-### [6:]{style="color:DarkOrange"} 3.6.3 Step 3: Plot the multiple calendar heatmap using the ggplot2 package
+### [6:]{style="color:DarkOrange"} 3.6.3 Step 3: Plot Multiple Calendar Heatmap using ggplot2 Package
 
 ```{r}
 #| fig-width: 10
@@ -335,9 +335,9 @@ Vietnam <- air %>%
   filter(year >= 2010)
 ```
 
-## [6:]{style="color:DarkOrange"} 4.4 Step 4: Compute year avg arrival by month**
+## [6:]{style="color:DarkOrange"} 4.4 Step 4: Compute Average Arrival by Month across all Years
 
-The average arrival by month across the years will be computed using `group_by()` and `summarise()` from **dplyr**.
+The average arrival by month across all years will be computed using `group_by()` and `summarise()` from **dplyr**.
 
 ```{r}
 #| code-fold: true
@@ -347,7 +347,7 @@ hline.data <- Vietnam %>%
   summarise(avgvalue = mean(`Vietnam`))
 ```
 
-## [6:]{style="color:DarkOrange"} 4.5 Plotting the cycle plot
+## [6:]{style="color:DarkOrange"} 4.5 Plotting the Cycle Plot
 
 The code chunk below plots the cycle plot.
 
@@ -398,7 +398,7 @@ rice <- read_csv("data/rice.csv")
 kable(head(rice))
 ```
 
-## [6:]{style="color:DarkOrange"} 5.2 Step 2: Plotting the slopegraph
+## [6:]{style="color:DarkOrange"} 5.2 Step 2: Plotting the Slopegraph
 
 The code chunk below will be used to plot a basic slopegraph.
 
