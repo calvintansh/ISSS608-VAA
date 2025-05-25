@@ -124,7 +124,7 @@ mc1_edges_raw <- as_tibble(mc1_data$links)
 
 glimpse(mc1_edges_raw)
 
-kable(head(mc1_edges_raw, 10))
+kable(head(mc1_edges_raw, 5))
 ```
 
 # [2:]{style="color:DarkOrange"} 2 Exploratory Data Analysis (EDA)
@@ -236,6 +236,11 @@ ggplot(data = mc1_nodes_clean,
   geom_bar()
 ```
 
+```{r}
+mc1_edges_clean %>%
+  filter(to == "Tidal Pop Waves")
+```
+
 ## Creating the global knowledge graph
 
 `tbl_graph()` is used to create tidygraph's graph object by using the code chunk below
@@ -247,10 +252,33 @@ music = tbl_graph(edges = mc1_edges_clean,
 
 class(music)
 ```
+
 Several of the ggraph layouts involve randomisation. In order to ensure reproducibility, it is necessary to set the seed value before plotting by using the code chunk below.
 
 ```{r}
 set.seed(1234)
+```
+
+```{r}
+# Convert tbl_graph to igraph
+ig <- as.igraph(music)
+
+# Get index for 'Sailor Shift'
+sailor_idx <- which(V(ig)$name == "Sailor Shift")
+
+# Step 1: Get songs/albums Sailor Shift contributed to via outgoing edges
+sailor_out_edges <- incident(ig, v = sailor_idx, mode = "out")
+sailor_out_nodes <- ends(ig, sailor_out_edges, names = FALSE)[, 2]
+
+# Combine relevant nodes
+sailor_all_nodes <- unique(c(
+  sailor_idx,
+  sailor_out_nodes
+))
+
+# Create subgraph
+sub_music <- induced_subgraph(ig, vids = sailor_all_nodes) %>% 
+  as_tbl_graph()
 ```
 
 ## Question 1a Who has she been most influenced by over time?
@@ -275,7 +303,7 @@ sailor_songs_all <- sailor_out_nodes[
   V(ig)[sailor_out_nodes]$`Node Type` %in% c("Song", "Album")
 ]
 
-# Retain only those with at least one outgoing edge
+# Retain only those with at least one edge
 sailor_songs <- Filter(function(n) {
   degree(ig, v = n, mode = "out") > 0
 }, sailor_songs_all)
@@ -302,17 +330,217 @@ creator_edges <- unlist(
 )
 
 # Step 4: Get source nodes of those edges
-people_group_neighbourhood_nodes <- unique(as.numeric(
+sailor_people_group_neighbourhood_nodes <- unique(as.numeric(
   ends(ig, creator_edges, names = FALSE)[, 1]
 ))
 
+# Combine relevant nodes
+sailor_all_nodes <- unique(c(
+  sailor_idx,
+  sailor_person_group,
+  sailor_songs,
+  sailor_songs_out_nodes,
+  sailor_people_group_neighbourhood_nodes
+))
+
+# Create subgraph
+sub_music <- induced_subgraph(ig, vids = sailor_all_nodes) %>% 
+  as_tbl_graph()
+
+# Filter edges in subgraph to exclude "MemberOf" and keep only meaningful creator/influence links
+sub_music <- sub_music %>%
+  activate(edges) %>%
+  filter(`Edge Type` != "MemberOf")
+
+# Add the degree as a node attribute using tidygraph's mutate
+sub_music <- sub_music %>%
+  activate(nodes) %>%
+  mutate(influence = ifelse(
+    `Node Type` %in% c("Person", "MusicalGroup"),
+    centrality_betweenness(),
+    1
+  ))
+```
+
+```{r}
+g <- sub_music %>%
+  ggraph(layout = "nicely") + 
+  geom_edge_fan(
+    aes(
+      colour = `Edge Type`,
+      start_cap = circle(1, 'mm'),
+      end_cap = circle(1, 'mm')
+      ),
+    arrow = arrow(length = unit(2, 'mm')),
+    alpha = 0.4
+    ) +
+  geom_point_interactive(
+    aes(
+      x = x,
+      y = y,
+      data_id = name,
+      tooltip = sprintf("%s<br/>(%s)<br/>(%s)", name, released_year, notable),
+      colour = genre,
+      shape = `Node Type`
+      ),
+    show.legend = c(size = FALSE)
+    )+ 
+  geom_node_text(
+    aes(
+      label = ifelse(`name` == "Sailor Shift", "Sailor Shift", NA)
+    ),
+    size = 4,
+    colour = 'red',
+    show.legend = FALSE
+    ) +
+  theme_graph() +
+  theme(legend.text = element_text(size = 6),
+        legend.title = element_text(size = 9)) +
+  scale_shape_discrete(name = "Node Type")
+
+girafe(ggobj = g, width_svg = 10, height_svg = 9)
+```
+
+```{r}
+# Extract node data
+node_data <- as_tibble(sub_music)
+
+# View top 5 nodes with highest sailor_dependency
+node_data %>%
+  filter(name != "Sailor Shift") %>%
+  arrange(desc(influence)) %>%
+  head(5) %>%
+  select(`Node Type`, name, influence) %>%
+  kable()
+```
+
+```{r}
+
+# Get index for 'Sailor Shift'
+ivy_idx <- which(V(ig)$name == "Ivy Echos")
+
+# Step 1: Get songs/albums Sailor Shift contributed to via outgoing edges
+ivy_out_edges <- incident(ig, v = ivy_idx, mode = "out")
+ivy_out_nodes <- ends(ig, ivy_out_edges, names = FALSE)[, 2]
+
+# Split into people/groups
+ivy_person_group <- ivy_out_nodes[
+  V(ig)[ivy_out_nodes]$`Node Type` %in% c("Person", "MusicalGroup")
+]
+# Identify songs/albums Sailor Shift contributed to
+ivy_songs_all <- ivy_out_nodes[
+  V(ig)[ivy_out_nodes]$`Node Type` %in% c("Song", "Album")
+]
+
+# Retain only those with at least one edge
+ivy_songs <- Filter(function(n) {
+  degree(ig, v = n, mode = "out") > 0
+}, ivy_songs_all)
+
+# Find songs/albums' outgoing neighbours (what influenced them)
+ivy_songs_out_edges <- unlist(
+  lapply(ivy_songs, function(n) incident(ig, v = n, mode = "out"))
+)
+ivy_songs_out_nodes <- ends(ig, ivy_songs_out_edges, names = FALSE)[, 2]
+
+# Step 2: Get incoming edges *only into those songs/albums*
+incoming_edges_to_ivy_songs_out_nodes <- incident_edges(ig, v = ivy_songs_out_nodes, mode = "in")
+
+# Step 3: Filter edges by creator edge types only
+creator_edges <- unlist(
+  lapply(incoming_edges_to_ivy_songs_out_nodes, function(edge_set) {
+    Filter(function(e) {
+      E(ig)[e]$`Edge Type` %in% creater_edge_types
+    }, edge_set)
+  })
+)
+
+# Step 4: Get source nodes of those edges
+ivy_people_group_neighbourhood_nodes <- unique(as.numeric(
+  ends(ig, creator_edges, names = FALSE)[, 1]
+))
+
+# Combine relevant nodes
+ivy_all_nodes <- unique(c(
+  ivy_idx,
+  ivy_person_group,
+  ivy_songs,
+  ivy_songs_out_nodes,
+  ivy_people_group_neighbourhood_nodes
+))
+
+# Create subgraph
+sub_music <- induced_subgraph(ig, vids = ivy_all_nodes) %>% 
+  as_tbl_graph()
+
+# Filter edges in subgraph to exclude "MemberOf" and keep only meaningful creator/influence links
+sub_music <- sub_music %>%
+  activate(edges) %>%
+  filter(`Edge Type` != "MemberOf")
+
+# Add the degree as a node attribute using tidygraph's mutate
+sub_music <- sub_music %>%
+  activate(nodes) %>%
+  mutate(influence = ifelse(
+    `Node Type` %in% c("Person", "MusicalGroup"),
+    centrality_betweenness(),
+    1
+  ))
+```
+
+```{r}
+g <- sub_music %>%
+  ggraph(layout = "nicely") + 
+  geom_edge_fan(
+    aes(
+      colour = `Edge Type`,
+      start_cap = circle(1, 'mm'),
+      end_cap = circle(1, 'mm')
+      ),
+    arrow = arrow(length = unit(2, 'mm')),
+    alpha = 0.4
+    ) +
+  geom_point_interactive(
+    aes(
+      x = x,
+      y = y,
+      data_id = name,
+      tooltip = sprintf("%s<br/>(%s)", name, released_year),
+      colour = genre,
+      shape = `Node Type`,
+      size = influence
+      ),
+    show.legend = c(size = FALSE)
+    )+ 
+  geom_node_text(
+    aes(
+      label = ifelse(`name` == "Sailor Shift", "Sailor Shift", NA)
+    ),
+    size = 4,
+    colour = 'red',
+    show.legend = FALSE
+    ) +
+  theme_graph() +
+  theme(legend.text = element_text(size = 6),
+        legend.title = element_text(size = 9)) +
+  scale_shape_discrete(name = "Node Type")
+
+girafe(ggobj = g, width_svg = 10, height_svg = 9)
+```
+
+```{r}
 # Combine relevant nodes
 all_nodes <- unique(c(
   sailor_idx,
   sailor_person_group,
   sailor_songs,
   sailor_songs_out_nodes,
-  people_group_neighbourhood_nodes
+  sailor_people_group_neighbourhood_nodes,
+  ivy_idx,
+  ivy_person_group,
+  ivy_songs,
+  ivy_songs_out_nodes,
+  ivy_people_group_neighbourhood_nodes
 ))
 
 # Create subgraph
@@ -324,19 +552,20 @@ sub_music <- sub_music %>%
   activate(edges) %>%
   filter(`Edge Type` != "MemberOf")
 
-# Compute node degree (number of edges per node) in the subgraph
-node_degrees <- degree(as.igraph(sub_music), mode = "all")
-
 # Add the degree as a node attribute using tidygraph's mutate
 sub_music <- sub_music %>%
   activate(nodes) %>%
-  mutate(influence = centrality_degree(mode = "all"))
+  mutate(influence = ifelse(
+    `Node Type` %in% c("Person", "MusicalGroup"),
+    centrality_betweenness(),
+    1
+  ))
 ```
 
 ```{r}
 g <- sub_music %>%
-  ggraph(layout = "fr") + 
-  geom_edge_link(
+  ggraph(layout = "nicely") + 
+  geom_edge_fan(
     aes(
       colour = `Edge Type`,
       start_cap = circle(1, 'mm'),
@@ -379,6 +608,7 @@ node_data <- as_tibble(sub_music)
 
 # View top 5 nodes with highest sailor_dependency
 node_data %>%
+  filter(name != "Sailor Shift") %>%
   arrange(desc(influence)) %>%
   head(5) %>%
   select(`Node Type`, name, influence) %>%
@@ -387,10 +617,6 @@ node_data %>%
 
 ## 1.b Who has she collaborated with and directly or indirectly influenced?
 
-### Directly
-
-Find all immediate people and musical groups Sailor Shift directly influenced
-
 ```{r}
 # Convert tbl_graph to igraph
 ig <- as.igraph(music)
@@ -398,25 +624,96 @@ ig <- as.igraph(music)
 # Get index for 'Sailor Shift'
 sailor_idx <- which(V(ig)$name == "Sailor Shift")
 
-# Get 1-degree in ego neighbourhood
-neighbourhood_nodes <- ego(ig, order = 1, nodes = sailor_idx, mode = "in")[[1]]
+# Step 1: Get songs/albums Sailor Shift contributed to via outgoing edges
+sailor_out_edges <- incident(ig, v = sailor_idx, mode = "out")
+sailor_out_nodes <- ends(ig, sailor_out_edges, names = FALSE)[, 2]
 
-# Induce subgraph and convert to tbl_graph
-sub_music <- induced_subgraph(ig, vids = neighbourhood_nodes) %>% 
+# Filter songs/albums with at least 2 incoming edges
+sailor_songs_all_filtered <- Filter(function(n) {
+  degree(ig, v = n, mode = "in") >= 2
+}, sailor_out_nodes)
+
+# Define relevant edge types
+influenced_edge_types <- c("InStyleOf", "InterpolatesFrom", "CoverOf", "LyricalReferenceTo", "DirectlySamples")
+
+# Step 3: Filter edges by infuenced edge types only
+influenced_edges <- unlist(
+  lapply(sailor_songs_all_filtered, function(n) {
+    edges <- incident(ig, v = n, mode = "in")
+    edges[which(E(ig)[edges]$`Edge Type` %in% influenced_edge_types)]
+  })
+)
+
+# Step 4: Get source nodes of those edges
+sailor_neighbourhood_in_nodes <- unique(as.numeric(
+  ends(ig, influenced_edges, names = FALSE)[, 1]
+))
+
+# Step 2: Get incoming edges *only into those songs/albums*
+incoming_edges_to_sailor_songs_in_nodes <- incident_edges(ig, v = sailor_neighbourhood_in_nodes, mode = "in")
+
+# Define relevant edge types
+creater_edge_types <- c("PerformerOf", "ComposerOf", "ProducerOf", "LyricistOf")
+
+# Step 3: Filter edges by creator edge types only
+creator_edges <- unlist(
+  lapply(incoming_edges_to_sailor_songs_in_nodes, function(edge_set) {
+    Filter(function(e) {
+      E(ig)[e]$`Edge Type` %in% creater_edge_types
+    }, edge_set)
+  })
+)
+
+# Step 4: Get source nodes of those edges
+sailor_people_group_neighbourhood_nodes <- unique(as.numeric(
+  ends(ig, creator_edges, names = FALSE)[, 1]
+))
+
+# Combine relevant nodes
+sailor_all_nodes <- unique(c(
+  sailor_idx,
+  sailor_songs_all_filtered,
+  sailor_neighbourhood_in_nodes,
+  sailor_people_group_neighbourhood_nodes
+))
+
+# Create subgraph
+sub_music <- induced_subgraph(ig, vids = sailor_all_nodes) %>% 
   as_tbl_graph()
 ```
 
+### Directly
 
-::: callout-note
-##  how to make the above code into tidygraph?????
-sailor_idx <- which(V(music)$name == "Sailor Shift")
+Find all immediate people and musical groups Sailor Shift directly influenced
 
-sub_music <- to_local_neighborhood(music, node = sailor_idx, order = 1, mode = "in")
+```{r}
+# Step 1: Get everything that influenced Sailor via incoming edges
+sailor_in_edges <- incident(ig, v = sailor_idx, mode = "in")
 
-class(sub_music)
-:::
+# Define relevant edge types
+influenced_edge_types <- c("InStyleOf", "InterpolatesFrom", "CoverOf", "LyricalReferenceTo", "DirectlySamples")
 
+# Step 2: Filter only edges with relevant influence types
+influenced_edges <- Filter(function(e) {
+  E(ig)[e]$`Edge Type` %in% influenced_edge_types
+}, sailor_in_edges)
 
+# Step 3: Get source nodes of those edges
+sailor_neighbourhood_in_nodes <- unique(as.numeric(
+  ends(ig, influenced_edges, names = FALSE)[, 1]
+))
+
+# Step 4: Combine relevant nodes (Sailor + those who influenced Sailor)
+sailor_all_nodes <- unique(c(
+  sailor_idx,
+  sailor_neighbourhood_in_nodes
+))
+
+# Step 5: Create subgraph
+sub_music <- induced_subgraph(ig, vids = sailor_all_nodes) %>% 
+  as_tbl_graph()
+
+```
 
 ```{r}
 g <- sub_music %>%
@@ -467,9 +764,46 @@ node_data %>%
   kable()
 ```
 
-## 1.2 Indirect
+## 1.2 Indirect and collaborate
 
 Find all the songs and albums that Sailor Shift produced, then get 2 degree in neighbours from the songs / albums to see who has been influenced by her songs or made songs influenced by her songs or have direct collaboration with her
+
+```{r}
+# Step 1: Get Sailor Shift's 1-degree out-neighbours
+sailor_idx <- which(V(ig)$name == "Ivy Echos")
+out_edges <- incident(ig, sailor_idx, mode = "out")
+
+# Filter edges by desired Edge Type
+valid_edge_types <- c("PerformerOf", "ComposerOf", "ProducerOf", "LyricistOf", "MemberOf")
+valid_edges <- out_edges[E(ig)[out_edges]$`Edge Type` %in% valid_edge_types]
+
+# Get target nodes from valid edges
+out_neighbours <- as.integer(ends(ig, valid_edges, names = FALSE)[, 2])  # target vertex of each edge
+
+# Filter to only songs or albums
+out_neighbours <- out_neighbours[
+  V(ig)[out_neighbours]$`Node Type` %in% c("Song", "Album")
+]
+
+# Step 2: Get 1-degree in-neighbours to those filtered out-neighbours
+in_to_out_neighbours <- unique(unlist(
+  lapply(out_neighbours, function(n) {
+    ego(ig, order = 1, nodes = n, mode = "in")[[1]]
+  })
+))
+
+# Filter to only songs or albums
+in_to_out_neighbours <- in_to_out_neighbours[
+  V(ig)[in_to_out_neighbours]$`Node Type` %in% c("Song", "Album")
+]
+
+# Step 3: Combine all relevant nodes (Sailor Shift + out-neighbours + their 2-degree in-neighbours)
+all_nodes <- unique(c(sailor_idx, out_neighbours, in_to_out_neighbours))
+
+# Step 4: Induce subgraph over combined nodes
+subgraph <- induced_subgraph(ig, vids = all_nodes)
+sub_music <- as_tbl_graph(subgraph)
+```
 
 ```{r}
 # Step 1: Get Sailor Shift's 1-degree out-neighbours
@@ -544,7 +878,6 @@ g <- sub_music %>%
       data_id = name,
       tooltip = sprintf("%s<br/>(%s)", name, released_year),
       colour = genre,
-      size = sailor_dependency,
       shape = `Node Type`
       ),
     show.legend = c(size = FALSE)
@@ -670,5 +1003,3 @@ g <- sub_music %>%
 
 girafe(ggobj = g, width_svg = 11, height_svg = 8)
 ```
-
-
