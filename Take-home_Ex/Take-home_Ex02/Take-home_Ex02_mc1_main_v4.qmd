@@ -1,0 +1,1141 @@
+---
+title: "[Take-Home Exercise 2:]{style='color:DarkOrange'} VAST Mini-Challenge 1 2025 (Sailor Shift and Oceanus Folk)"
+date: 2025-05-15
+date-modified: "last-modified"
+format: html
+editor: visual
+execute: 
+  eval: true
+  echo: true
+  warning: false
+  freeze: true
+---
+
+# [2:]{style="color:DarkOrange"} 1 Overview
+
+This exercise will target to answer one of the three challenges from [VAST 2025](https://vast-challenge.github.io/2025/index.html) which features a fictitious island nation, Oceanus, famous for fishing and quiet seaside communities.
+
+The chosen challenge is [Mini-Challenge 1](https://vast-challenge.github.io/2025/MC1.html).
+
+## [2:]{style="color:DarkOrange"} 1.1 Background
+
+One of music’s biggest superstars is Oceanus native Sailor Shift. From humble beginnings, Sailor has grown in popularity and now enjoys fans around the world. Sailor started her career on the island nation of Oceanus which can be clearly seen in her early work, she started in the genre of “Oceanus Folk”. While Sailor has moved away from the traditional Oceanus style, the Oceanus Folk has made a name for itself in the musical world. The popularity of this music is one of the factors driving an increase in tourism to a quiet island nation that used to be known for fishing.
+
+In 2023, Sailor Shift joined the Ivy Echoes – an all-female Oceanus Folk band consisting of Sailor (vocalist), Maya Jensen (vocalist), Lila “Lilly” Hartman (guitarist), Jade Thompson (drummer), and Sophie Ramirez (bassist). They played together at venues throughout Oceanus but had broken up to pursue their individual careers by 2026. Sailor’s breakthrough came in 2028 when one of her singles went viral, launched to the top of the global charts (something no other Oceanus Folk song had ever done). Since then, she has only continued to grow in popularity worldwide.
+
+Sailor has released a new album almost every year since her big break, and each has done better than the last. Although she has remained primarily a solo artist, she has also frequently collaborated with other established artists, especially in the Indie Pop and Indie Folk genres. She herself has branched out musically over the years but regularly returns to the Oceanus Folk genre — even as the genre’s influence on the rest of the music world has spread even more.
+
+Sailor has always been passionate about two things: (1) spreading Oceanus Folk, and (2) helping lesser-known artists break into music. Because of those goals, she’s particularly famous for her frequent collaborations.
+
+Additionally, because of Sailor’s success, more attention began to be paid over the years to her previous bandmates. All 4 have continued in the music industry—Maya as an independent vocalist, Lilly and Jade as instrumentalists in other bands, and Sophie as a music producer for a major record label. In various ways, all of them have contributed to the increased influence of Oceanus folk, resulting in a new generation of up-and-coming Oceanus Folk artists seeking to make a name for themselves in the music industry.
+
+Now, as Sailor returns to Oceanus in 2040, a local journalist – Silas Reed – is writing a piece titled Oceanus Folk: Then-and-Now that aims to trace the rise of Sailor and the influence of Oceanus Folk on the rest of the music world. He has collected a large dataset of musical artists, producers, albums, songs, and influences and organized it into a knowledge graph. Your task is to help Silas create beautiful and informative visualizations of this data and uncover new and interesting information about Sailor’s past, her rise to stardom, and her influence.
+
+## [2:]{style="color:DarkOrange"} 1.2 Tasks and Questions
+
+1.  Design and develop visualizations and visual analytic tools that will allow Silas to explore and understand the profile of Sailor Shift’s career
+
+    -   Who has she been most influenced by over time?
+    -   Who has she collaborated with and directly or indirectly influenced?
+    -   How has she influenced collaborators of the broader Oceanus Folk community?
+
+2.  Develop visualizations that illustrate how the influence of Oceanus Folk has spread through the musical world.
+
+    -   Was this influence intermittent or did it have a gradual rise?
+    -   What genres and top artists have been most influenced by Oceanus Folk?
+    -   On the converse, how has Oceanus Folk changed with the rise of Sailor Shift? From which genres does it draw most of its contemporary inspiration?
+
+3.  Use your visualizations to develop a profile of what it means to be a rising star in the music industry.
+
+    -   Visualize the careers of three artists. Compare and contrast their rise in popularity and influence.
+    -   Using this characterization, give three predictions of who the next Oceanus Folk stars with be over the next five years.
+
+## [2:]{style="color:DarkOrange"} 1.3 Data Source
+
+The data for this exercise is from [VAST 2025 MC1](https://github.com/vast-challenge/2025-data/blob/main/MC1_release.zip).
+
+## [2:]{style="color:DarkOrange"} 1.4 Data Description
+
+Graph Description - Directed Multigraph - \# nodes: 17,412 - \# edges: 37, 857 - 18 connected components - Possible node types are: {Person, Song, RecordLabel, Album, MusicalGroup} - Possible edge types are: {MemberOf, PerformerOf, ComposerOf, ProducerOf, LyricistOf, InStyleOf, InterpolatesFrom, CoverOf, LyricalReferenceTo, DirectlySamples, RecordedBy, DistributedBy} - The graph format is a JSON file. The root-level JSON object consists of graph-level properties specifying that it is directed and a multigraph, a “nodes” key which holds the list of nodes, and a “links” key which holds the list of edges.
+
+The data for this challenge comes from two different sources:
+
+-   an online, crowdsourced repository of musical influence, where contributors have manually notated instances in which songs or albums have sampled, covered, or otherwise drawn inspiration from previous work.
+-   aggregate-level descriptions of song popularity, as labeled by our journalist, Silas Reed. These notations (notable and notoriety_date) are directly based on both the number of sales and streams that the song/album has achieved as well as the whether or not the work landed on a top record chart.
+
+## [1-1:]{style="color:DarkOrange"} 1.5 Install and Load the Required Libraries
+
+Utility Tools
+
+-   jsonlite: To parse JSON
+-   tidyverse - Data science tools
+-   ggtext - Tools for text formatting
+-   knitr - For better table displays
+-   lubridate - For processing date and time
+
+Graphing Tools
+
+-   patchwork - For combining ggplot plots
+-   ggraph - For plotting network data
+-   tidygraph - For graph manipulations
+-   igraph - Contains functions for network analysis
+-   ggiraph - Interactive plots
+
+::: {.callout-note appearance="minimal" collapse="true"}
+## Code
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show code"
+pacman::p_load(jsonlite, tidyverse, ggtext,
+                knitr, lubridate, patchwork,
+                ggraph, tidygraph, igraph,
+                ggiraph)
+```
+:::
+
+## [1-1:]{style="color:DarkOrange"} 1.6 Importing Data
+
+For the purpose of this exercise, a data file called *MC1_graph* will be used. The code chunk below imports *MC1_graph.json* into R environment by using *fromJSON()* function of *jsonlite* package.
+
+## Code
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show code"
+mc1_data <- fromJSON("data/MC1_graph.json")
+glimpse(mc1_data)
+```
+
+# [1-1:]{style="color:DarkOrange"} 2 Data Pre-Processing
+
+## [1-1:]{style="color:DarkOrange"} 2.1 Split into Nodes and Edges
+
+```{r}
+mc1_nodes_raw <- as_tibble(mc1_data$nodes)
+
+glimpse(mc1_nodes_raw)
+
+kable(head(mc1_nodes_raw, 5))
+```
+
+```{r}
+mc1_edges_raw <- as_tibble(mc1_data$links)
+
+glimpse(mc1_edges_raw)
+
+kable(head(mc1_edges_raw, 5))
+```
+
+## [1-1:]{style="color:DarkOrange"} 2.2 Adding Identifying Columns
+
+Aids identification and filtering of "Sailor" and "Oceanus_folk" related works for analysis
+
+```{r}
+mc1_nodes_raw <- mc1_nodes_raw %>%
+  mutate(
+    is_sailor = (
+      str_detect(name, regex("sailor shift", ignore_case = TRUE))
+    ) %>% replace_na(FALSE),
+    
+    is_oceanus_folk = str_detect(genre, regex("oceanus folk", ignore_case = TRUE)) %>% #na/not oceanus folk = false
+      replace_na(FALSE)
+  )
+```
+
+## [1-1:]{style="color:DarkOrange"} 2.3 Convert Date Fields
+
+Convert date fields from "chr" to "int"
+
+Note: Dates only appears in Songs and Albums.
+
+```{r}
+mc1_nodes_raw <- mc1_nodes_raw %>%
+  mutate(across(c(release_date, notoriety_date, written_date),
+                ~as.integer(if_else(`Node Type` %in% c("Song", "Album"), ., NA_character_))))
+```
+
+## [1-1:]{style="color:DarkOrange"} 2.4 Check for Duplicates
+
+### [1-1:]{style="color:DarkOrange"} 2.4.1 Duplicates in Nodes
+
+For Nodes, there are no duplicated *id*.
+
+```{r}
+mc1_nodes_raw %>%
+  count(id) %>%
+  filter(n > 1)
+```
+
+But, there are many duplicated records in the *name* column.
+
+```{r}
+duplicated_name <- mc1_nodes_raw %>%
+  count(name) %>%
+  filter(n > 1)
+
+duplicated_name
+```
+
+There are 4,953 records with duplicated names.
+
+```{r}
+mc1_nodes_raw %>%
+  filter(name %in% duplicated_name$name) %>%
+  arrange(name)
+```
+
+#### [1-1:]{style="color:DarkOrange"} 2.4.1 Fixing Duplicates in Nodes
+
+```{r}
+# Step 1: Mark all node rows with a hash key for grouping
+mc1_nodes_tagged <- mc1_nodes_raw %>%
+  mutate(group_key = paste(`Node Type`, name, single, release_date, genre,
+                           notable, written_date, notoriety_date, is_sailor,
+                           is_oceanus_folk, sep = "|"))
+
+mc1_nodes_tagged
+```
+
+This step reduced the number of duplicated names from 4,953 to 14 records.
+
+```{r}
+# Step 2: Deduplicate and keep the preferred (with stage_name if available)
+mc1_nodes_dedup <- mc1_nodes_tagged %>%
+  group_by(group_key) %>%
+  arrange(desc(!is.na(stage_name))) %>%
+  slice(1) %>%
+  ungroup()
+
+duplicated_name <- mc1_nodes_dedup %>%
+  count(name) %>%
+  filter(n > 1)
+
+mc1_nodes_raw %>%
+  filter(name %in% duplicated_name$name) %>%
+  arrange(name)
+```
+
+### [1-1:]{style="color:DarkOrange"} 2.4.2 Duplicates in Edges
+
+For Edges, there are duplicates as seen below. Only their Keys are different. However, Keys are not used for subsequent data analysis. Hence, these duplicated edges are removed.
+
+```{r}
+# Step 1: Identify duplicate combinations
+duplicate_summary <- mc1_edges_raw %>%
+  count(source, target, `Edge Type`) %>%
+  filter(n > 1)
+
+# Step 2: Join back to get all original duplicate rows
+mc1_edges_raw %>%
+  inner_join(duplicate_summary, by = c("source", "target", "Edge Type"))
+```
+
+All duplicates were removed:
+
+```{r}
+mc1_edges_raw <- mc1_edges_raw %>%
+  distinct(source, target, `Edge Type`, .keep_all = TRUE) %>%
+  select(!key)
+
+mc1_edges_raw %>%
+  count(source, target, `Edge Type`) %>%
+  filter(n > 1)
+```
+
+# [2:]{style="color:DarkOrange"} 3 Exploratory Data Analysis (EDA)
+
+## [2:]{style="color:DarkOrange"} 3.1 Explore and Inspect Nodes
+
+```{r}
+mc1_nodes_raw$release_date %>% unique()
+
+mc1_nodes_raw %>%
+  filter(grepl("Sailor Shift", name)) #Sailor Shift is in name column and not in stage_name column
+```
+
+```{r}
+mc1_nodes_clean <- mc1_nodes_raw %>%
+  mutate(
+    name = gsub("'", "", name)) # the character ' creates issues in the tidygraph tooltip so it will be removed
+  
+kable(head(mc1_nodes_clean))
+```
+
+## [2:]{style="color:DarkOrange"} 3.2 Explore and Inspect Edges
+
+Confirm that the IDs used in edges match the range of IDs in nodes
+
+```{r}
+range(mc1_nodes_clean$id)
+
+range(mc1_edges_raw$source)
+
+range(mc1_edges_raw$target)
+```
+
+## [2:]{style="color:DarkOrange"} 3.3 Mapping Node name to Edges id
+
+tidygraph uses the *from* and *to* columns in the edges and matches them with the *name* column in nodes. Currently, the *source* and *target* columns in edges contains the *id* matches to the *id* column in nodes. This is the wrong syntax for tidygraph because edges need to match the *name* column in nodes.
+
+Therefore, the *name* column in nodes needs to contain the *id* values in the *id* column. This can be done by renaming the *name* column to *node_name* and then rename *id* column to *name* to match the *source* and *target* columns in the edges. And then rename the *source* and *target* columns to *from* and *to* respectively.
+
+```{r}
+mc1_nodes_clean <- mc1_nodes_dedup %>%
+  rename(node_name = name, name = id) %>%
+  mutate(name = as.character(name)) %>%
+  select(`Node Type`, node_name, release_date, genre, notable, name, single, written_date, stage_name, notoriety_date, is_sailor, is_oceanus_folk)
+
+mc1_nodes_clean
+```
+
+### [2:]{style="color:DarkOrange"} 3.3.1 Create Edge Mapping from Old id to Kept id
+
+However, this is not enough because in Section 2.4, duplicated Nodes and their respective *id* (now called *name*) were removed. Therefore, without treating edges, there will be edges that do not have a match to nodes since they are matching removed *name*.
+
+```{r}
+# Step 1: Create mapping of all group_key → kept id
+key_to_id_map <- mc1_nodes_dedup %>%
+  select(group_key, kept_id = id)
+
+# Step 2: Map all original rows to the retained ID
+id_remap <- mc1_nodes_tagged %>%
+  left_join(key_to_id_map, by = "group_key") %>%
+  select(original_id = id, kept_id)
+
+id_remap
+```
+
+```{r}
+# Step 3: Replace edges' source and target with mapped kept_id
+mc1_edges_mapped <- mc1_edges_raw %>%
+  left_join(id_remap, by = c("source" = "original_id"))
+
+mc1_edges_mapped
+```
+
+```{r}
+mc1_edges_mapped <- mc1_edges_mapped %>%
+  mutate(source = kept_id) %>%
+  select(-kept_id) %>%
+  left_join(id_remap, by = c("target" = "original_id")) %>%
+  mutate(target = kept_id) %>%
+  select(-kept_id) %>%
+  rename(from = source, to = target) %>%
+  mutate(from = as.character(from), to = as.character(to))
+
+mc1_edges_mapped
+```
+
+## [2:]{style="color:DarkOrange"} 3.5 Filter out any unmatched (invalid) edges
+
+```{r}
+mc1_edges_clean <- mc1_edges_mapped %>%
+  filter(!is.na(from), !is.na(to))
+```
+
+## [2:]{style="color:DarkOrange"} 3.6 Check for any missing nodes
+
+```{r}
+setdiff(
+  unique(c(mc1_edges_clean$from, mc1_edges_clean$to)),
+  mc1_nodes_clean$name
+)
+```
+
+## [2:]{style="color:DarkOrange"} 3.7 Checking Edges Schema
+
+The code below defines valid source and destination types for each edge type as per the VAST 2025 MC1 Data Description file provided.
+
+```{r}
+# Define valid source and destination types for each edge type
+edge_rules <- list(
+  PerformerOf = list(source = c("Person", "MusicalGroup"), target = c("Song", "Album")),
+  ComposerOf = list(source = c("Person"), target = c("Song", "Album")),
+  ProducerOf = list(source = c("Person", "RecordLabel"), target = c("Song", "Album", "Person", "MusicalGroup")),
+  LyricistOf = list(source = c("Person"), target = c("Song", "Album")),
+  RecordedBy = list(source = c("Song", "Album"), target = c("RecordLabel")),
+  DistributedBy = list(source = c("Song", "Album"), target = c("RecordLabel")),
+  InStyleOf = list(source = c("Song", "Album"), target = c("Song", "Album", "Person", "MusicalGroup")),
+  InterpolatesFrom = list(source = c("Song", "Album"), target = c("Song", "Album")),
+  CoverOf = list(source = c("Song", "Album"), target = c("Song", "Album")),
+  LyricalReferenceTo = list(source = c("Song", "Album"), target = c("Song", "Album")),
+  DirectlySamples = list(source = c("Song", "Album"), target = c("Song", "Album")),
+  MemberOf = list(source = c("Person"), target = c("MusicalGroup"))
+)
+```
+
+This check for erroneous edge and node relationships:
+
+```{r}
+# Create a lookup for node types
+node_type_lookup <- mc1_nodes_clean %>%
+  select(name, `Node Type`) %>%
+  deframe()
+
+# Add source and target node types to the edge table
+mc1_edges_checked <- mc1_edges_clean %>%
+  mutate(
+    source_type = node_type_lookup[from],
+    target_type = node_type_lookup[to]
+  )
+
+mc1_edges_tagged <- mc1_edges_checked %>%
+  rowwise() %>%
+  mutate(
+    valid = {
+      rule <- edge_rules[[`Edge Type`]]
+      if (is.null(rule)) TRUE
+      else {
+        source_type %in% rule$source && target_type %in% rule$target
+      }
+    }
+  ) %>%
+  ungroup()
+
+# Count and display invalid edge combinations
+invalid_edge_summary <- mc1_edges_tagged %>%
+  filter(!valid) %>%
+  count(`Edge Type`, source_type, target_type, sort = TRUE)
+
+print(invalid_edge_summary)
+```
+
+```{r}
+# Check total invalid edge count
+cat("Total invalid edges:", sum(!mc1_edges_tagged$valid), "\n")
+```
+
+```{r}
+# Keep only valid edges
+mc1_edges_clean <- mc1_edges_tagged %>%
+  filter(valid) %>%
+  select(from, to, `Edge Type`)  # drop helper columns
+```
+
+## [2:]{style="color:DarkOrange"} 3.8 Visualising Edge Types
+
+```{r}
+ggplot(data = mc1_edges_clean,
+       aes(y = `Edge Type`)) +
+  geom_bar()
+```
+
+## [2:]{style="color:DarkOrange"} 3.9 Visualising Node Types
+
+```{r}
+ggplot(data = mc1_nodes_clean,
+       aes(y = `Node Type`)) +
+  geom_bar()
+```
+
+## [2:]{style="color:DarkOrange"} 3.10 Creating the Global Knowledge Graph
+
+`tbl_graph()` is used to create tidygraph's graph object by using the code chunk below
+
+```{r}
+music = tbl_graph(edges = mc1_edges_clean,
+                             nodes = mc1_nodes_clean,
+                             directed = TRUE)
+
+class(music)
+```
+
+Several of the ggraph layouts involve randomisation. In order to ensure reproducibility, it is necessary to set the seed value before plotting by using the code chunk below.
+
+```{r}
+set.seed(1234)
+```
+
+# [2:]{style="color:DarkOrange"} 4 VAST 2025 MC1 Question 1
+
+Design and develop visualizations and visual analytic tools that will allow Silas to explore and understand the profile of Sailor Shift’s career
+
+Sailor Shift is a unique value in *node_name* so it can be used for identification instead of the *name* column.
+
+```{r}
+# Find Sailor Shift by name
+mc1_nodes_clean %>%
+  filter(node_name == "Sailor Shift")
+```
+
+```{r}
+# Step 0: Get name of 'Sailor Shift'
+sailor_vertex_name <- mc1_nodes_clean %>%
+  filter(node_name == "Sailor Shift") %>%
+  pull(name)
+
+# Step 1: Find outgoing edges from Sailor Shift
+sailor_out_edges <- mc1_edges_clean %>%
+  filter(from == sailor_vertex_name)
+
+# Step 2: Identify neighbour node names
+sailor_out_node_names <- sailor_out_edges$to
+
+# Step 3: Identify songs/albums
+sailor_songs <- mc1_nodes_clean %>%
+  filter(name %in% sailor_out_node_names, `Node Type` %in% c("Song", "Album")) %>%
+  pull(name)
+
+# Build subgraph using names
+sub_nodes <- unique(c(sailor_vertex_name, sailor_songs))
+
+sub_music <- music %>%
+  activate(nodes) %>%
+  filter(name %in% sub_nodes)
+```
+
+```{r}
+g <- sub_music %>%
+  ggraph(layout = "nicely") + 
+  geom_edge_fan(
+    aes(
+      colour = `Edge Type`,
+      start_cap = circle(1, 'mm'),
+      end_cap = circle(1, 'mm')
+      ),
+    arrow = arrow(length = unit(2, 'mm')),
+    alpha = 0.4
+    ) +
+  geom_point_interactive(
+    aes(
+      x = x,
+      y = y,
+      data_id = name,
+      tooltip = sprintf("%s<br/>(%s)<br/>(%s)<br/>(%s)", node_name, release_date, notable, name),
+      colour = genre,
+      shape = `Node Type`
+      ),
+    show.legend = c(size = FALSE)
+    )+ 
+  geom_node_text(
+    aes(
+      label = ifelse(`node_name` == "Sailor Shift", "Sailor Shift", NA)
+    ),
+    size = 4,
+    colour = 'red',
+    show.legend = FALSE
+    ) +
+  theme_graph() +
+  theme(legend.text = element_text(size = 6),
+        legend.title = element_text(size = 9)) +
+  scale_shape_discrete(name = "Node Type")
+
+girafe(ggobj = g, width_svg = 10, height_svg = 9)
+```
+
+```{r}
+mc1_nodes_clean %>%
+  filter(name %in% sailor_songs) %>%
+  arrange(release_date) %>%
+  select(`Node Type`, node_name, release_date, genre, notable, single, notoriety_date)
+```
+
+::: callout-tip
+## Insights
+
+- In total, Sailor Shift released 38 songs and albums from 2024 to 2040
+-   Sailor Shift released 4 songs in 2028
+    -   Among those, only 1 is a single
+    -   Therefore, the viral song that spark her breakthrough is High Tide Heartbeat
+:::
+
+## [2:]{style="color:DarkOrange"} 4.1 Question 1a) Who has she been most influenced by over time?
+
+```{r}
+# Step 1: Find outgoing edges from Sailor Shift
+sailor_out_edges <- mc1_edges_clean %>%
+  filter(from == sailor_vertex_name)
+
+# Step 2: Identify neighbour node names
+sailor_out_node_names <- sailor_out_edges$to
+
+# Step 3: Split into people/groups
+sailor_person_group <- mc1_nodes_clean %>%
+  filter(name %in% sailor_out_node_names, `Node Type` %in% c("Person", "MusicalGroup")) %>%
+  pull(name)
+
+# Step 4: Identify songs/albums
+sailor_songs_all <- mc1_nodes_clean %>%
+  filter(name %in% sailor_out_node_names, `Node Type` %in% c("Song", "Album")) %>%
+  pull(name)
+
+# Step 5: Retain songs with at least one outgoing edge
+sailor_songs <- mc1_edges_clean %>%
+  filter(from %in% sailor_songs_all) %>%
+  pull(from) %>%
+  unique()
+
+# Step 6: Get neighbours of the songs (targets of song edges)
+sailor_songs_out_nodes <- mc1_edges_clean %>%
+  filter(from %in% sailor_songs) %>%
+  pull(to)
+
+# Step 7: Define relevant edge types
+creator_edge_types <- c("PerformerOf", "ComposerOf", "ProducerOf", "LyricistOf")
+
+# Step 8: Identify source nodes of creator edges pointing to those neighbours
+creator_edges <- mc1_edges_clean %>%
+  filter(to %in% sailor_songs_out_nodes, `Edge Type` %in% creator_edge_types)
+
+sailor_people_group_neighbourhood_nodes <- creator_edges %>%
+  pull(from) %>%
+  unique()
+
+# Step 9: Combine all relevant node names
+sailor_all_node_names <- unique(c(
+  sailor_vertex_name,
+  sailor_person_group,
+  sailor_songs,
+  sailor_songs_out_nodes,
+  sailor_people_group_neighbourhood_nodes
+))
+
+# Step 10: Filter graph to relevant nodes only
+sub_music <- music %>%
+  filter(name %in% sailor_all_node_names)
+```
+
+```{r}
+g <- sub_music %>%
+  ggraph(layout = "nicely") + 
+  geom_edge_fan(
+    aes(
+      colour = `Edge Type`,
+      start_cap = circle(1, 'mm'),
+      end_cap = circle(1, 'mm')
+      ),
+    arrow = arrow(length = unit(2, 'mm')),
+    alpha = 0.4
+    ) +
+  geom_point_interactive(
+    aes(
+      x = x,
+      y = y,
+      data_id = name,
+      tooltip = sprintf("%s<br/>(%s)", node_name, release_date),
+      colour = genre,
+      shape = `Node Type`
+      ),
+    show.legend = c(size = FALSE)
+    )+ 
+  geom_node_text(
+    aes(
+      label = ifelse(`node_name` == "Sailor Shift", "Sailor Shift", NA)
+    ),
+    size = 4,
+    colour = 'red',
+    show.legend = FALSE
+    ) +
+  theme_graph() +
+  theme(legend.text = element_text(size = 6),
+        legend.title = element_text(size = 9)) +
+  scale_shape_discrete(name = "Node Type")
+
+girafe(ggobj = g, width_svg = 10, height_svg = 9)
+```
+
+Ivy Echos is a unique value in *node_name* so it can be used for identification instead of the *name* column.
+
+```{r}
+mc1_nodes_clean %>%
+  filter(node_name == "Ivy Echos")
+```
+
+```{r}
+# Step 0: Get name of 'Ivy Echos'
+ivy_vertex_name <- mc1_nodes_clean %>%
+  filter(node_name == "Ivy Echos") %>%
+  pull(name)
+
+# Step 1: Find outgoing edges from Ivy Echos
+ivy_out_edges <- mc1_edges_clean %>%
+  filter(from == ivy_vertex_name)
+
+# Step 2: Identify neighbour node names
+ivy_out_node_names <- ivy_out_edges$to
+
+# Step 3: Split into people/groups
+ivy_person_group <- mc1_nodes_clean %>%
+  filter(name %in% ivy_out_node_names, `Node Type` %in% c("Person", "MusicalGroup")) %>%
+  pull(name)
+
+# Step 4: Identify songs/albums
+ivy_songs_all <- mc1_nodes_clean %>%
+  filter(name %in% ivy_out_node_names, `Node Type` %in% c("Song", "Album")) %>%
+  pull(name)
+
+# Step 5: Retain songs with at least one outgoing edge
+ivy_songs <- mc1_edges_clean %>%
+  filter(from %in% ivy_songs_all) %>%
+  pull(from) %>%
+  unique()
+
+# Step 6: Get neighbours of the songs (targets of song edges)
+ivy_songs_out_nodes <- mc1_edges_clean %>%
+  filter(from %in% ivy_songs) %>%
+  pull(to)
+
+# Step 7: Define relevant edge types
+creator_edge_types <- c("PerformerOf", "ComposerOf", "ProducerOf", "LyricistOf")
+
+# Step 8: Identify source nodes of creator edges pointing to those neighbours
+creator_edges <- mc1_edges_clean %>%
+  filter(to %in% ivy_songs_out_nodes, `Edge Type` %in% creator_edge_types)
+
+ivy_people_group_neighbourhood_nodes <- creator_edges %>%
+  pull(from) %>%
+  unique()
+
+# Step 9: Combine all relevant node names
+ivy_all_node_names <- unique(c(
+  ivy_vertex_name,
+  ivy_person_group,
+  ivy_songs,
+  ivy_songs_out_nodes,
+  ivy_people_group_neighbourhood_nodes
+))
+
+# Step 10: Filter graph to relevant nodes only
+sub_music <- music %>%
+  filter(name %in% ivy_all_node_names)
+```
+
+```{r}
+g <- sub_music %>%
+  ggraph(layout = "nicely") + 
+  geom_edge_fan(
+    aes(
+      colour = `Edge Type`,
+      start_cap = circle(1, 'mm'),
+      end_cap = circle(1, 'mm')
+      ),
+    arrow = arrow(length = unit(2, 'mm')),
+    alpha = 0.4
+    ) +
+  geom_point_interactive(
+    aes(
+      x = x,
+      y = y,
+      data_id = name,
+      tooltip = sprintf("%s<br/>(%s)", node_name, release_date),
+      colour = genre,
+      shape = `Node Type`
+      ),
+    show.legend = c(size = FALSE)
+    )+ 
+  geom_node_text(
+    aes(
+      label = ifelse(`node_name` == "Sailor Shift", "Sailor Shift", NA)
+    ),
+    size = 4,
+    colour = 'red',
+    show.legend = FALSE
+    ) +
+  theme_graph() +
+  theme(legend.text = element_text(size = 6),
+        legend.title = element_text(size = 9)) +
+  scale_shape_discrete(name = "Node Type")
+
+girafe(ggobj = g, width_svg = 10, height_svg = 9)
+```
+
+```{r}
+# Combine relevant nodes
+influenced_all_nodes <- unique(c(
+  sailor_all_node_names,
+  ivy_all_node_names
+))
+
+# Step 10: Filter graph to relevant nodes only
+sub_music <- music %>%
+  filter(name %in% influenced_all_nodes)
+
+# Add the degree as a node attribute using tidygraph's mutate
+sub_music <- sub_music %>%
+  activate(nodes) %>%
+  mutate(influence = ifelse(
+    `Node Type` %in% c("Person", "MusicalGroup"),
+    centrality_betweenness(),
+    0
+  ))
+```
+
+```{r}
+g <- sub_music %>%
+  ggraph(layout = "fr") + 
+  geom_edge_fan(
+    aes(
+      colour = `Edge Type`,
+      start_cap = circle(1, 'mm'),
+      end_cap = circle(1, 'mm')
+      ),
+    arrow = arrow(length = unit(2, 'mm')),
+    alpha = 0.4
+    ) +
+  geom_point_interactive(
+    aes(
+      x = x,
+      y = y,
+      data_id = name,
+      tooltip = sprintf("%s<br/>(%s)", node_name, release_date),
+      colour = genre,
+      shape = `Node Type`,
+      size = influence
+      ),
+    show.legend = c(size = FALSE)
+    )+ 
+  geom_node_text(
+    aes(
+      label = ifelse(`node_name` == "Sailor Shift", "Sailor Shift", NA)
+    ),
+    size = 4,
+    colour = 'red',
+    show.legend = FALSE
+    ) +
+  theme_graph() +
+  theme(legend.text = element_text(size = 6),
+        legend.title = element_text(size = 9)) +
+  scale_shape_discrete(name = "Node Type")
+
+girafe(ggobj = g, width_svg = 10, height_svg = 9)
+```
+
+```{r}
+# Extract node data
+node_data <- as_tibble(sub_music)
+
+# View top 5 nodes with highest sailor_dependency
+node_data %>%
+  filter(name != "Sailor Shift") %>%
+  arrange(desc(influence)) %>%
+  select(`Node Type`, node_name, influence) %>%
+  filter(influence > 0) %>%
+  kable()
+```
+
+## 1.b Who has she collaborated with and directly or indirectly influenced?
+
+```{r}
+# Step 1: Get Sailor Shift’s 1-degree out-neighbours with relevant edge types
+valid_edge_types <- c("PerformerOf", "ComposerOf", "ProducerOf", "LyricistOf", "MemberOf")
+
+sailor_out_edges <- mc1_edges_clean %>%
+  filter(from == sailor_vertex_name, `Edge Type` %in% valid_edge_types)
+
+sailor_out_neighbours_all <- sailor_out_edges$to
+
+# Step 2: Exclude specific node names
+excluded_names <- c("The Current & The Chord", "Salty Dreams") # these 2 songs have 2 inward edges and are from Sailor herself
+
+excluded_ids <- mc1_nodes_clean %>%
+  filter(node_name %in% excluded_names) %>%
+  pull(name)
+
+sailor_out_neighbours <- setdiff(sailor_out_neighbours_all, excluded_ids)
+
+# Step 3: Filter out-neighbours with in-degree ≥ 2
+in_degree_counts <- mc1_edges_clean %>%
+  filter(to %in% sailor_out_neighbours) %>%
+  count(to, name = "in_degree")
+
+sailor_out_neighbours_filtered <- in_degree_counts %>%
+  filter(in_degree >= 2) %>%
+  pull(to)
+
+# Step 4: Find in-neighbours of the filtered out-neighbours
+in_edges_to_out_neighbours <- mc1_edges_clean %>%
+  filter(to %in% sailor_out_neighbours_filtered)
+
+sailor_in_to_out_neighbours <- unique(in_edges_to_out_neighbours$from)
+
+# Step 5: Get non RecordLabel
+sailor_in_to_out_neighbours <- mc1_nodes_clean %>%
+  filter(name %in% sailor_in_to_out_neighbours, `Node Type` %in% c("Person", "MusicalGroup", "Song", "Album")) %>%
+  pull(name)
+
+# Step 6: Combine all relevant node names
+sailor_all_node_names <- unique(c(
+  sailor_vertex_name,
+  sailor_out_neighbours_filtered,
+  sailor_in_to_out_neighbours
+))
+
+# Step 7: Create tbl_graph subgraph using only those nodes and relevant edges
+sub_music <- music %>%
+  filter(name %in% sailor_all_node_names)
+```
+
+```{r}
+g <- sub_music %>%
+  ggraph(layout = "fr") + 
+  geom_edge_fan(
+    aes(
+      colour = `Edge Type`,
+      start_cap = circle(2, 'mm'),
+      end_cap = circle(2, 'mm')
+      ),
+    arrow = arrow(length = unit(2, 'mm')),
+    alpha = 0.4
+    ) +
+  geom_point_interactive(
+    aes(
+      x = x,
+      y = y,
+      data_id = name,
+      tooltip = sprintf("%s<br/>(%s)", node_name, release_date),
+      colour = genre,
+      shape = `Node Type`
+      ),
+    show.legend = c(size = FALSE)
+    )+ 
+  geom_node_text(
+    aes(
+      label = ifelse(`node_name` == "Sailor Shift", "Sailor Shift", NA)
+    ),
+    size = 4,
+    colour = 'red',
+    show.legend = FALSE
+    ) +
+  theme_graph() +
+  theme(legend.text = element_text(size = 6),
+        legend.title = element_text(size = 9)) +
+  scale_shape_discrete(name = "Node Type")
+
+girafe(ggobj = g, width_svg = 8, height_svg = 6)
+```
+
+```{r}
+# Step 1: Get Ivy Echo’s 1-degree out-neighbours with relevant edge types
+valid_edge_types <- c("PerformerOf", "ComposerOf", "ProducerOf", "LyricistOf", "MemberOf")
+
+ivy_out_edges <- mc1_edges_clean %>%
+  filter(from == ivy_vertex_name, `Edge Type` %in% valid_edge_types)
+
+out_neighbours <- ivy_out_edges$to
+
+# Step 3: Filter out-neighbours with in-degree ≥ 2
+in_degree_counts <- mc1_edges_clean %>%
+  filter(to %in% out_neighbours) %>%
+  count(to, name = "in_degree")
+
+ivy_out_neighbours_filtered <- in_degree_counts %>%
+  filter(in_degree >= 2) %>%
+  pull(to)
+
+# Step 4: Find in-neighbours of the filtered out-neighbours
+in_edges_to_out_neighbours <- mc1_edges_clean %>%
+  filter(to %in% ivy_out_neighbours_filtered)
+
+ivy_in_to_out_neighbours <- unique(in_edges_to_out_neighbours$from)
+
+# Step 5: Identify songs/albums
+ivy_in_to_out_neighbours_songs <- mc1_nodes_clean %>%
+  filter(name %in% ivy_in_to_out_neighbours, `Node Type` %in% c("Song", "Album")) %>%
+  pull(name)
+
+# Step 6: Find in-neighbours of the filtered out-neighbours songs
+in_edges_to_out_neighbours_songs_neighbours <- mc1_edges_clean %>%
+  filter(to %in% ivy_in_to_out_neighbours_songs)
+
+ivy_in_to_out_neighbours_songs_neighbours <- unique(in_edges_to_out_neighbours_songs_neighbours$from)
+
+# Step 7: Combine all relevant node names
+ivy_all_node_names <- unique(c(
+  ivy_vertex_name,
+  ivy_out_neighbours_filtered,
+  ivy_in_to_out_neighbours,
+  ivy_in_to_out_neighbours_songs_neighbours
+))
+
+# Step 8: Create tbl_graph subgraph using only those nodes and relevant edges
+sub_music <- music %>%
+  filter(name %in% ivy_all_node_names)
+```
+
+```{r}
+g <- sub_music %>%
+  ggraph(layout = "fr") + 
+  geom_edge_fan(
+    aes(
+      colour = `Edge Type`,
+      start_cap = circle(2, 'mm'),
+      end_cap = circle(2, 'mm')
+      ),
+    arrow = arrow(length = unit(2, 'mm')),
+    alpha = 0.4
+    ) +
+  geom_point_interactive(
+    aes(
+      x = x,
+      y = y,
+      data_id = name,
+      tooltip = sprintf("%s<br/>(%s)", node_name, release_date),
+      colour = genre,
+      shape = `Node Type`
+      ),
+    show.legend = c(size = FALSE)
+    )+ 
+  geom_node_text(
+    aes(
+      label = ifelse(`node_name` == "Sailor Shift", "Sailor Shift", NA)
+    ),
+    size = 4,
+    colour = 'red',
+    show.legend = FALSE
+    ) +
+  theme_graph() +
+  theme(legend.text = element_text(size = 6),
+        legend.title = element_text(size = 9)) +
+  scale_shape_discrete(name = "Node Type")
+
+girafe(ggobj = g, width_svg = 8, height_svg = 6)
+```
+
+```{r}
+# Combine relevant nodes
+collaborate_all_nodes <- unique(c(sailor_all_node_names, 
+                      ivy_all_node_names))
+
+# Create subgraph
+sub_music <- music %>%
+  filter(name %in% collaborate_all_nodes)
+
+# Add the degree as a node attribute using tidygraph's mutate
+sub_music <- sub_music %>%
+  activate(nodes) %>%
+  mutate(influence = ifelse(
+    `Node Type` %in% c("Person", "MusicalGroup"),
+    centrality_betweenness(),
+    0
+  ))
+```
+
+```{r}
+g <- sub_music %>%
+  ggraph(layout = "fr") + 
+  geom_edge_fan(
+    aes(
+      colour = `Edge Type`,
+      start_cap = circle(2, 'mm'),
+      end_cap = circle(2, 'mm')
+      ),
+    arrow = arrow(length = unit(2, 'mm')),
+    alpha = 0.4
+    ) +
+  geom_point_interactive(
+    aes(
+      x = x,
+      y = y,
+      data_id = name,
+      tooltip = sprintf("%s<br/>(%s)", node_name, release_date),
+      colour = genre,
+      shape = `Node Type`
+      ),
+    show.legend = c(size = FALSE)
+    )+ 
+  geom_node_text(
+    aes(
+      label = ifelse(`node_name` == "Sailor Shift", "Sailor Shift", NA)
+    ),
+    size = 4,
+    colour = 'red',
+    show.legend = FALSE
+    ) +
+  theme_graph() +
+  theme(legend.text = element_text(size = 6),
+        legend.title = element_text(size = 9)) +
+  scale_shape_discrete(name = "Node Type")
+
+girafe(ggobj = g, width_svg = 8, height_svg = 6)
+```
+
+```{r}
+# Extract node data
+node_data <- as_tibble(sub_music)
+
+node_data %>%
+  filter(`Node Type` %in% c("Person", "MusicalGroup")) %>%
+  select(`Node Type`, node_name) %>%
+  kable()
+```
+
+## 1.c How has she influenced collaborators of the broader Oceanus Folk community?
+
+```{r}
+mc1_edges_no_member <- mc1_edges_clean %>%
+  filter(`Edge Type` != "MemberOf")
+
+music_no_member = tbl_graph(edges = mc1_edges_no_member,
+                             nodes = mc1_nodes_clean,
+                             directed = TRUE)
+
+# Convert tbl_graph to igraph
+ig <- as.igraph(music_no_member)
+```
+
+```{r}
+# Step 1: Get all node names in Oceanus Folk genre
+oceanus_nodes <- mc1_nodes_clean %>%
+  filter(genre == "Oceanus Folk") %>%
+  pull(name)
+
+# Step 2: Get all incoming edges to Oceanus Folk nodes
+in_edges <- mc1_edges_no_member %>%
+  filter(to %in% oceanus_nodes)
+
+# Step 3: Get unique source (from) nodes of those edges
+in_neighbours <- unique(in_edges$from)
+
+# Step 4: Keep only Person or MusicalGroup type nodes
+in_neighbours_people <- mc1_nodes_clean %>%
+  filter(name %in% in_neighbours, `Node Type` %in% c("Person", "MusicalGroup")) %>%
+  pull(name)
+
+# Step 5: Create subgraph using these nodes
+all_nodes <- unique(c(oceanus_nodes,
+                    in_neighbours_people,
+                    collaborate_all_nodes))
+
+sub_music <- music_no_member %>%
+  filter(name %in% all_nodes)
+```
+
+```{r}
+g <- sub_music %>%
+  ggraph(layout = "kk") + 
+  geom_edge_link(
+    aes(
+      colour = `Edge Type`,
+      start_cap = circle(1, 'mm'),
+      end_cap = circle(1, 'mm')
+      ),
+    arrow = arrow(length = unit(2, 'mm')),
+    alpha = 0.4
+    ) +
+  geom_point_interactive(
+    aes(
+      x = x,
+      y = y,
+      data_id = name,
+      tooltip = sprintf("%s<br/>(%s)", node_name, release_date),
+      colour = genre,
+      shape = `Node Type`
+      ),
+    show.legend = c(size = FALSE)
+    )+ 
+  geom_node_text(
+    aes(
+      label = ifelse(`node_name` == "Sailor Shift", "Sailor Shift", NA)
+    ),
+    size = 4,
+    colour = 'red',
+    show.legend = FALSE
+    ) +
+  theme_graph() +
+  theme(legend.text = element_text(size = 6),
+        legend.title = element_text(size = 9)) +
+  scale_shape_discrete(name = "Node Type")
+
+girafe(ggobj = g, width_svg = 11, height_svg = 8)
+```
