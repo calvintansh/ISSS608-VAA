@@ -106,6 +106,7 @@ For the purpose of this exercise, a data file called *MC1_graph* will be used. T
 mc1_data <- fromJSON("data/MC1_graph.json")
 glimpse(mc1_data)
 ```
+
 # [1-1:]{style="color:DarkOrange"} 2 Data Pre-Processing
 
 ## [1-1:]{style="color:DarkOrange"} 2.1 Split into Nodes and Edges
@@ -367,6 +368,7 @@ set.seed(1234)
 ```
 
 # [2:]{style="color:DarkOrange"} 4 VAST 2025 MC1 Question 1
+
 Design and develop visualizations and visual analytic tools that will allow Silas to explore and understand the profile of Sailor Shift’s career
 
 Sailor Shift is a unique value in *person_name* so it can be used for identification instead of the *name* column.
@@ -451,9 +453,10 @@ mc1_nodes_clean %>%
 
 ::: callout-tip
 ## Insights
-- Sailor Shift released 4 songs in 2028
-- Among those, only 1 is a single
-- Therefore, the viral song that spark her breakthrough is 	High Tide Heartbeat
+
+-   Sailor Shift released 4 songs in 2028
+-   Among those, only 1 is a single
+-   Therefore, the viral song that spark her breakthrough is High Tide Heartbeat
 :::
 
 ## [2:]{style="color:DarkOrange"} 4.1 Question 1a) Who has she been most influenced by over time?
