@@ -660,10 +660,8 @@ Note: The term music refers to either Song or Album.
 #### Navigate through the tabs to explore visualizations of musical influences for:
 
 - Sailor Shift (individual influence network)
-
 - Ivy Echos (individual influence network)
-
-- Combined network (interconnected influences)
+- Combined Network (interconnected influences)
 
 ::: panel-tabset
 
@@ -952,15 +950,20 @@ node_data %>%
 
 ## [2:]{style="color:DarkOrange"} 4.3 Question 1b) Who has she collaborated with and directly or indirectly influenced?
 
-The start uses sailor_music_all from Section 4.2.1 and filters out the music with more that 2 inward edges. This removes music that she produced that has no collaborators or influences. However, 2 of her music (The Current & The Chord and Salty Dreams) has 2 inward edges and have to be manually removed. Then all in neighbours to her music are found. These contains these are the Songs and Albums that her music have influenced as well as Person or Musical Groups that she has collaborated with. A filter is applied to retain Songs and Albums and the inward neighbours to those are found. These are the Person and Musical Groups that produced the music that her music have been influenced by as well as Songs and Albums that have been influenced by the music that her music have been influenced by.
+The analysis begins with the sailor_music_all dataset from Section 4.2.1, filtering to retain only music with more than two inward edges. This step eliminates works without collaborators or external influences. Two Song/Albums are ("The Current & The Chord" and "Salty Dreams") exceptions and are manually removed since their inward edges are from Sailor herself. Next, all inward neighbours (source nodes) of Sailor's music are identified, representing both influenced works (Songs/Albums) and collaborators (Persons/Musical Groups). After filtering to keep only Songs and Albums, their inward neighbours are examined. This reveals: (1) Persons/Musical Groups who have been influenced by Sailor's music (Persons/Musical Groups), and (2) secondary influenced works (Songs/Albums) that were impacted by the same sources that were influenced by Sailor's compositions.
 
-::: callout-tip
-## Sailor Shift's Insights
+In addition, since Sailor Shift is a member of Ivy Echos, the members of Ivy Echos will be her collaborators. Thus, the next graph investigates the structure of Ivy Echos.
 
--   The graph shows that Sailor Shift collaborated with many Persons and Musical Groups
--   However, it seems that no music have been influenced by the music that she produced
--   The influence of Ivy Echos will be investigated in the next section
-:::
+Next, the steps to investigate influence are repeated for Ivy Echos to obtain the Musical Group's influence.
+
+Finally, all the graphs are combined together to provide an overview of Sailor's influence including Ivy Echos' connections.
+
+#### Navigate through the tabs to explore visualizations of musical influences for:
+
+- Sailor Shift (individual influence network)
+- Ivy Echos Members
+- Ivy Echos (individual influence network)
+- Combined Network (interconnected influences)
 
 ::: panel-tabset
 
@@ -1377,9 +1380,17 @@ mc1_nodes_clean %>%
 
 ## [2:]{style="color:DarkOrange"} 4.2 Question 1c) How has she influenced collaborators of the broader Oceanus Folk community?
 
+This question is tackled by first identifying all Songs and Albums belonging to the **Oceanus Folk** *Genre* and retrieved their associated creators (Persons/Musical Groups). These results were then combined with Sailor Shift's influence network including Ivy Echos' connections (from Question 1b) to examine her impact within the broader Oceanus Folk community.
+
+Note: To declutter the resulting graph, the edge MemberOf is removed since this does not provide useful information.
+
 ```{r}
 #| code-fold: true
 #| code-summary: "Show Code"
+
+# Data Preparation
+
+# Step 0: Remove edges containing MemberOf
 mc1_edges_no_member <- mc1_edges_clean %>%
   filter(`Edge Type` != "MemberOf")
 
@@ -1389,11 +1400,7 @@ graph_no_member = tbl_graph(edges = mc1_edges_no_member,
 
 # Convert tbl_graph to igraph
 ig <- as.igraph(graph_no_member)
-```
 
-```{r}
-#| code-fold: true
-#| code-summary: "Show Code"
 # Step 1: Get all node names in Oceanus Folk genre
 oceanus_nodes <- mc1_nodes_clean %>%
   filter(is_oceanus_folk == TRUE) %>%
@@ -1416,13 +1423,13 @@ all_nodes <- unique(c(oceanus_nodes,
                     in_neighbours_people,
                     collaborate_all_nodes))
 
+# Create subgraph
 sub_graph_no_member <- graph_no_member %>%
   filter(name %in% all_nodes)
-```
 
-```{r}
-#| code-fold: true
-#| code-summary: "Show Code"
+
+# Visualisation
+
 g <- sub_graph_no_member %>%
   ggraph(layout = "kk") + 
   geom_edge_link(
@@ -1460,3 +1467,11 @@ g <- sub_graph_no_member %>%
 
 girafe(ggobj = g, width_svg = 11, height_svg = 8)
 ```
+
+::: callout-tip
+## How has she influenced collaborators of the broader Oceanus Folk community?
+
+- This graph is displays a network overview of all People/Musical Groups who have produced Oceanus Folk Songs/Albums.
+- While Sailor Shift is connected to a portion of the community, most Oceanus Folk artists remain outside her influence network.
+- In conclusion, Sailor Shift has a moderate influence on the broader Oceanus Folk community since her impact is discernible but not widespread.
+:::
