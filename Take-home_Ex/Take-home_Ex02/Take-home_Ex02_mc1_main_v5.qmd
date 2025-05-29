@@ -1380,7 +1380,7 @@ mc1_nodes_clean %>%
 
 ## [2:]{style="color:DarkOrange"} 4.2 Question 1c) How has she influenced collaborators of the broader Oceanus Folk community?
 
-This question is tackled by first identifying all Songs and Albums belonging to the **Oceanus Folk** *Genre* and retrieved their associated creators (Persons/Musical Groups). These results were then combined with Sailor Shift's influence network including Ivy Echos' connections (from Question 1b) to examine her impact within the broader Oceanus Folk community.
+This question is tackled by first identifying all Songs and Albums belonging to the **Oceanus Folk** *Genre* and retriving their associated creators (Persons/Musical Groups). Then Sailor Shift's is identified to examine her impact within the broader Oceanus Folk community.
 
 Note: To declutter the resulting graph, the edge MemberOf is removed since this does not provide useful information.
 
@@ -1420,8 +1420,7 @@ in_neighbours_people <- mc1_nodes_clean %>%
 
 # Step 5: Create subgraph using these nodes
 all_nodes <- unique(c(oceanus_nodes,
-                    in_neighbours_people,
-                    collaborate_all_nodes))
+                    in_neighbours_people))
 
 # Create subgraph
 sub_graph_no_member <- graph_no_member %>%
