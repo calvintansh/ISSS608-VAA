@@ -1,5 +1,5 @@
 ---
-title: "[Take-Home Exercise 2:]{style='color:DarkOrange'} VAST Mini-Challenge 1 2025 (Sailor Shift and Oceanus Folk)"
+title: "[Take-Home Exercise 2:]{style='color:DarkOrange'} VAST 2025 Mini-Challenge 1 (Sailor Shift Music)"
 date: 2025-05-15
 date-modified: "last-modified"
 format: html
@@ -90,7 +90,7 @@ Graphing Tools
 pacman::p_load(jsonlite, tidyverse, ggtext,
                 knitr, lubridate, patchwork,
                 ggraph, tidygraph, igraph,
-                ggiraph, kableExtra)
+                ggiraph, kableExtra, ggnewscale)
 ```
 
 ## [1-1:]{style="color:DarkOrange"} 1.6 Importing Data
@@ -531,7 +531,30 @@ ggplot(data = mc1_nodes_clean,
   geom_bar()
 ```
 
-## [2:]{style="color:DarkOrange"} 3.8 Creating the Global Knowledge Graph
+## [2:]{style="color:DarkOrange"} 3.8 Creating Infomative Columns
+
+The code groups different types of edges and nodes into broader categories for consistent colouring in the graphs.
+
+```{r}
+mc1_edges_clean <- mc1_edges_clean %>%
+  mutate(`Edge Colour` = case_when(
+    `Edge Type` %in% c("PerformerOf", "ComposerOf", "ProducerOf", "LyricistOf", "RecordedBy", "DistributedBy") ~ "Creater Of",
+    `Edge Type` %in% c("InStyleOf", "InterpolatesFrom", "CoverOf", "LyricalReferenceTo", "DirectlySamples") ~ "Influenced By",
+    `Edge Type` == "MemberOf" ~ "Member Of",
+    TRUE ~ "Other"
+  ))
+
+mc1_nodes_clean <- mc1_nodes_clean %>%
+  mutate(
+    `Node Colour` = case_when(
+      `Node Type` %in% c("Person", "MusicalGroup", "RecordLabel") ~ "Musician",
+      genre == "Oceanus Folk" ~ "Oceanus Folk",
+      TRUE ~ "Other Genre"
+    )
+  )
+```
+
+## [2:]{style="color:DarkOrange"} 3.9 Creating the Global Knowledge Graph
 
 The code below uses `tbl_graph()` to create a tidygraph's graph object.
 
@@ -587,41 +610,78 @@ sub_graph <- graph %>%
   filter(name %in% sub_nodes)
 
 g <- sub_graph %>%
-  ggraph(layout = "nicely") + 
+  ggraph(layout = "fr") + 
   geom_edge_fan(
     aes(
-      colour = `Edge Type`,
+      edge_colour = `Edge Colour`,
       start_cap = circle(1, 'mm'),
       end_cap = circle(1, 'mm')
       ),
-    arrow = arrow(length = unit(2, 'mm')),
-    alpha = 0.4
-    ) +
+    arrow = arrow(length = unit(1, 'mm')),
+    alpha = 0.3
+  ) +
   geom_point_interactive(
     aes(
       x = x,
       y = y,
       data_id = name,
-      tooltip = sprintf("%s<br/>(%s)<br/>(%s)<br/>(%s)", node_name, release_date, notable, name),
-      colour = genre,
-      shape = `Node Type`
-      ),
+      colour = `Node Colour`,
+      shape = `Node Type`,
+      size = ifelse(`node_name` %in% c("Sailor Shift", "Ivy Echos", "Wei Zhao"), 3, 1),
+      tooltip = case_when(
+        `Node Type` == "Album" ~ sprintf(
+          "%s<br/>%s<br/>Notable: %s<br/>(%s)", node_name, genre, notable, release_date
+        ),
+        `Node Type` == "Song" ~ sprintf(
+          "%s<br/>%s<br/>Notable: %s<br/>(%s)<br/>Single: %s", node_name, genre, notable, release_date, single
+        ),
+        TRUE ~ sprintf("%s", node_name)
+      )
+    ),
     show.legend = c(size = FALSE)
-    )+ 
+  )+ 
   geom_node_text(
     aes(
-      label = ifelse(`node_name` == "Sailor Shift", "Sailor Shift", NA)
+      label = ifelse(`node_name` == "Sailor Shift", "Sailor Shift",
+              ifelse(`node_name` == "Ivy Echos", "Ivy Echos",
+              ifelse(`node_name` == "Wei Zhao", "Wei Zhao", NA)))
     ),
-    size = 4,
+    fontface = "bold",
+    size = 2.5,
     colour = 'red',
     show.legend = FALSE
-    ) +
+  ) +
+  scale_shape_manual(
+    name = "Node Type",
+    values = c(
+      "Album" = 16,
+      "MusicalGroup" = 15,
+      "Person" = 17,
+      "Song" = 10
+    )
+  ) +
+  scale_edge_colour_manual(
+    name = "Edge Colour",
+    values = c(
+      `Creater Of` = "#47D45A",
+      `Influenced By` = "#FF5757",
+      `Member Of` = "#CF57FF"
+    )
+  ) +
+  scale_colour_manual(
+    name = "Node Colour",
+    values = c(
+      "Musician" = "grey40",
+      "Oceanus Folk" = "#0027EA",
+      "Other Genre" = "#A45200"
+    )
+  ) +
   theme_graph() +
   theme(legend.text = element_text(size = 6),
         legend.title = element_text(size = 9)) +
-  scale_shape_discrete(name = "Node Type")
+  scale_size_identity()
 
-girafe(ggobj = g, width_svg = 10, height_svg = 9)
+girafe(ggobj = g, width_svg = 7, height_svg = 6)
 ```
 
 ::: callout-tip
@@ -632,6 +692,7 @@ girafe(ggobj = g, width_svg = 10, height_svg = 9)
 -   Sailor Shift released 4 Songs in 2028
     -   Among those, only 1 is a Single
     -   Therefore, the viral Song that spark her breakthrough is **High Tide Heartbeat**
+- Among her Songs and Albums, 36 belong to the Oceanus Folk genre, while there is 1 Americana and 1 Synthwave Album each.
 :::
 
 ```{r}
@@ -689,18 +750,15 @@ sailor_music_out_nodes <- mc1_edges_clean %>%
   filter(from %in% sailor_music) %>%
   pull(to)
 
-# Step 4: Define relevant edge types
-creator_edge_types <- c("PerformerOf", "ComposerOf", "ProducerOf", "LyricistOf")
-
-# Step 5: Identify source nodes of creator edges pointing to those neighbours
+# Step 4 Identify source nodes of creator edges pointing to those neighbours
 creator_edges <- mc1_edges_clean %>%
-  filter(to %in% sailor_music_out_nodes, `Edge Type` %in% creator_edge_types)
+  filter(to %in% sailor_music_out_nodes, `Edge Colour` == "CreatorOf")
 
 sailor_people_group_neighbourhood_nodes <- creator_edges %>%
   pull(from) %>%
   unique()
 
-# Step 6: Combine all relevant node names
+# Step 5: Combine all relevant node names
 sailor_all_node_names <- unique(c(
   sailor_vertex_name,
   sailor_person_group,
@@ -709,7 +767,7 @@ sailor_all_node_names <- unique(c(
   sailor_people_group_neighbourhood_nodes
 ))
 
-# Step 7: Filter graph to relevant nodes only
+# Step 6: Filter graph to relevant nodes only
 sub_graph <- graph %>%
   filter(name %in% sailor_all_node_names)
 
@@ -717,41 +775,77 @@ sub_graph <- graph %>%
 # Visualisation
 
 g <- sub_graph %>%
-  ggraph(layout = "nicely") + 
+  ggraph(layout = "fr") + 
   geom_edge_fan(
     aes(
-      colour = `Edge Type`,
+      edge_colour = `Edge Colour`,
       start_cap = circle(1, 'mm'),
       end_cap = circle(1, 'mm')
       ),
-    arrow = arrow(length = unit(2, 'mm')),
-    alpha = 0.4
-    ) +
+    arrow = arrow(length = unit(1, 'mm')),
+    alpha = 0.3
+  ) +
   geom_point_interactive(
     aes(
       x = x,
       y = y,
       data_id = name,
-      tooltip = sprintf("%s<br/>(%s)", node_name, release_date),
-      colour = genre,
-      shape = `Node Type`
-      ),
+      colour = `Node Colour`,
+      shape = `Node Type`,
+      size = ifelse(`node_name` %in% c("Sailor Shift", "Ivy Echos"), 3, 1),
+      tooltip = case_when(
+        `Node Type` == "Album" ~ sprintf(
+          "%s<br/>%s<br/>Notable: %s<br/>(%s)", node_name, genre, notable, release_date
+        ),
+        `Node Type` == "Song" ~ sprintf(
+          "%s<br/>%s<br/>Notable: %s<br/>(%s)<br/>Single: %s", node_name, genre, notable, release_date, single
+        ),
+        TRUE ~ sprintf("%s", node_name)
+      )
+    ),
     show.legend = c(size = FALSE)
-    )+ 
+  )+ 
   geom_node_text(
     aes(
-      label = ifelse(`node_name` == "Sailor Shift", "Sailor Shift", NA)
+      label = ifelse(`node_name` == "Sailor Shift", "Sailor Shift",
+              ifelse(`node_name` == "Ivy Echos", "Ivy Echos", NA))
     ),
-    size = 4,
+    fontface = "bold",
+    size = 2.5,
     colour = 'red',
     show.legend = FALSE
-    ) +
+  ) +
+  scale_shape_manual(
+    name = "Node Type",
+    values = c(
+      "Album" = 16,
+      "MusicalGroup" = 15,
+      "Person" = 17,
+      "Song" = 10
+    )
+  ) +
+  scale_edge_colour_manual(
+    name = "Edge Colour",
+    values = c(
+      `Creater Of` = "#47D45A",
+      `Influenced By` = "#FF5757",
+      `Member Of` = "#CF57FF"
+    )
+  ) +
+  scale_colour_manual(
+    name = "Node Colour",
+    values = c(
+      "Musician" = "grey40",
+      "Oceanus Folk" = "#0027EA",
+      "Other Genre" = "#A45200"
+    )
+  ) +
   theme_graph() +
   theme(legend.text = element_text(size = 6),
         legend.title = element_text(size = 9)) +
-  scale_shape_discrete(name = "Node Type")
+  scale_size_identity()
 
-girafe(ggobj = g, width_svg = 10, height_svg = 9)
+girafe(ggobj = g, width_svg = 7, height_svg = 6)
 ```
 
 ## Ivy Echos
@@ -795,18 +889,15 @@ ivy_music_out_nodes <- mc1_edges_clean %>%
   filter(from %in% ivy_music) %>%
   pull(to)
 
-# Step 7: Define relevant edge types
-creator_edge_types <- c("PerformerOf", "ComposerOf", "ProducerOf", "LyricistOf")
-
-# Step 8: Identify source nodes of creator edges pointing to those neighbours
+# Step 7: Identify source nodes of creator edges pointing to those neighbours
 creator_edges <- mc1_edges_clean %>%
-  filter(to %in% ivy_music_out_nodes, `Edge Type` %in% creator_edge_types)
+  filter(to %in% sailor_music_out_nodes, `Edge Colour` == "CreatorOf")
 
 ivy_people_group_neighbourhood_nodes <- creator_edges %>%
   pull(from) %>%
   unique()
 
-# Step 9: Combine all relevant node names
+# Step 8: Combine all relevant node names
 ivy_all_node_names <- unique(c(
   ivy_vertex_name,
   ivy_person_group,
@@ -815,7 +906,7 @@ ivy_all_node_names <- unique(c(
   ivy_people_group_neighbourhood_nodes
 ))
 
-# Step 10: Filter graph to relevant nodes only
+# Step 9: Filter graph to relevant nodes only
 sub_graph <- graph %>%
   filter(name %in% ivy_all_node_names)
 
@@ -823,41 +914,78 @@ sub_graph <- graph %>%
 # Visualisation
 
 g <- sub_graph %>%
-  ggraph(layout = "nicely") + 
+  ggraph(layout = "fr") + 
   geom_edge_fan(
     aes(
-      colour = `Edge Type`,
+      edge_colour = `Edge Colour`,
       start_cap = circle(1, 'mm'),
       end_cap = circle(1, 'mm')
       ),
-    arrow = arrow(length = unit(2, 'mm')),
-    alpha = 0.4
-    ) +
+    arrow = arrow(length = unit(1, 'mm')),
+    alpha = 0.3
+  ) +
   geom_point_interactive(
     aes(
       x = x,
       y = y,
       data_id = name,
-      tooltip = sprintf("%s<br/>(%s)", node_name, release_date),
-      colour = genre,
-      shape = `Node Type`
-      ),
+      colour = `Node Colour`,
+      shape = `Node Type`,
+      size = ifelse(`node_name` %in% c("Sailor Shift", "Ivy Echos", "Wei Zhao"), 3, 1),
+      tooltip = case_when(
+        `Node Type` == "Album" ~ sprintf(
+          "%s<br/>%s<br/>Notable: %s<br/>(%s)", node_name, genre, notable, release_date
+        ),
+        `Node Type` == "Song" ~ sprintf(
+          "%s<br/>%s<br/>Notable: %s<br/>(%s)<br/>Single: %s", node_name, genre, notable, release_date, single
+        ),
+        TRUE ~ sprintf("%s", node_name)
+      )
+    ),
     show.legend = c(size = FALSE)
-    )+ 
+  )+ 
   geom_node_text(
     aes(
-      label = ifelse(`node_name` == "Ivy Echos", "Ivy Echos", NA)
+      label = ifelse(`node_name` == "Sailor Shift", "Sailor Shift",
+              ifelse(`node_name` == "Ivy Echos", "Ivy Echos",
+              ifelse(`node_name` == "Wei Zhao", "Wei Zhao", NA)))
     ),
-    size = 4,
+    fontface = "bold",
+    size = 2.5,
     colour = 'red',
     show.legend = FALSE
-    ) +
+  ) +
+  scale_shape_manual(
+    name = "Node Type",
+    values = c(
+      "Album" = 16,
+      "MusicalGroup" = 15,
+      "Person" = 17,
+      "Song" = 10
+    )
+  ) +
+  scale_edge_colour_manual(
+    name = "Edge Colour",
+    values = c(
+      `Creater Of` = "#47D45A",
+      `Influenced By` = "#FF5757",
+      `Member Of` = "#CF57FF"
+    )
+  ) +
+  scale_colour_manual(
+    name = "Node Colour",
+    values = c(
+      "Musician" = "grey40",
+      "Oceanus Folk" = "#0027EA",
+      "Other Genre" = "#A45200"
+    )
+  ) +
   theme_graph() +
   theme(legend.text = element_text(size = 6),
         legend.title = element_text(size = 9)) +
-  scale_shape_discrete(name = "Node Type")
+  scale_size_identity()
 
-girafe(ggobj = g, width_svg = 10, height_svg = 9)
+girafe(ggobj = g, width_svg = 7, height_svg = 6)
 ```
 
 ## Combined
@@ -885,39 +1013,75 @@ g <- sub_graph %>%
   ggraph(layout = "fr") + 
   geom_edge_fan(
     aes(
-      colour = `Edge Type`,
+      edge_colour = `Edge Colour`,
       start_cap = circle(1, 'mm'),
       end_cap = circle(1, 'mm')
       ),
-    tooltip = function(data) data$`Edge Type`,
-    arrow = arrow(length = unit(2, 'mm')),
-    alpha = 0.4
-    ) +
+    arrow = arrow(length = unit(1, 'mm')),
+    alpha = 0.3
+  ) +
   geom_point_interactive(
     aes(
       x = x,
       y = y,
       data_id = name,
-      tooltip = sprintf("%s<br/>(%s)", node_name, release_date),
-      colour = genre,
-      shape = `Node Type`
-      ),
+      colour = `Node Colour`,
+      shape = `Node Type`,
+      size = ifelse(`node_name` %in% c("Sailor Shift", "Ivy Echos", "Wei Zhao"), 3, 1),
+      tooltip = case_when(
+        `Node Type` == "Album" ~ sprintf(
+          "%s<br/>%s<br/>Notable: %s<br/>(%s)", node_name, genre, notable, release_date
+        ),
+        `Node Type` == "Song" ~ sprintf(
+          "%s<br/>%s<br/>Notable: %s<br/>(%s)<br/>Single: %s", node_name, genre, notable, release_date, single
+        ),
+        TRUE ~ sprintf("%s", node_name)
+      )
+    ),
     show.legend = c(size = FALSE)
-    )+ 
+  )+ 
   geom_node_text(
     aes(
-      label = ifelse(`node_name` == "Sailor Shift", "Sailor Shift", ifelse(`node_name` == "Ivy Echos", "Ivy Echos", ifelse(`node_name` == "Wei Zhao", "Wei Zhao", NA)))
+      label = ifelse(`node_name` == "Sailor Shift", "Sailor Shift",
+              ifelse(`node_name` == "Ivy Echos", "Ivy Echos",
+              ifelse(`node_name` == "Wei Zhao", "Wei Zhao", NA)))
     ),
-    size = 4,
+    fontface = "bold",
+    size = 2.5,
     colour = 'red',
     show.legend = FALSE
-    ) +
+  ) +
+  scale_shape_manual(
+    name = "Node Type",
+    values = c(
+      "Album" = 16,
+      "MusicalGroup" = 15,
+      "Person" = 17,
+      "Song" = 10
+    )
+  ) +
+  scale_edge_colour_manual(
+    name = "Edge Colour",
+    values = c(
+      `Creater Of` = "#47D45A",
+      `Influenced By` = "#FF5757",
+      `Member Of` = "#CF57FF"
+    )
+  ) +
+  scale_colour_manual(
+    name = "Node Colour",
+    values = c(
+      "Musician" = "grey40",
+      "Oceanus Folk" = "#0027EA",
+      "Other Genre" = "#A45200"
+    )
+  ) +
   theme_graph() +
   theme(legend.text = element_text(size = 6),
         legend.title = element_text(size = 9)) +
-  scale_shape_discrete(name = "Node Type")
+  scale_size_identity()
 
-girafe(ggobj = g, width_svg = 10, height_svg = 9)
+girafe(ggobj = g, width_svg = 7, height_svg = 6)
 ```
 
 :::
@@ -1036,38 +1200,75 @@ g <- sub_graph %>%
   ggraph(layout = "fr") + 
   geom_edge_fan(
     aes(
-      colour = `Edge Type`,
-      start_cap = circle(2, 'mm'),
-      end_cap = circle(2, 'mm')
+      edge_colour = `Edge Colour`,
+      start_cap = circle(1, 'mm'),
+      end_cap = circle(1, 'mm')
       ),
-    arrow = arrow(length = unit(2, 'mm')),
-    alpha = 0.4
-    ) +
+    arrow = arrow(length = unit(1, 'mm')),
+    alpha = 0.3
+  ) +
   geom_point_interactive(
     aes(
       x = x,
       y = y,
       data_id = name,
-      tooltip = sprintf("%s<br/>(%s)", node_name, release_date),
-      colour = genre,
-      shape = `Node Type`
-      ),
+      colour = `Node Colour`,
+      shape = `Node Type`,
+      size = ifelse(`node_name` %in% c("Sailor Shift", "Ivy Echos", "Wei Zhao"), 3, 1),
+      tooltip = case_when(
+        `Node Type` == "Album" ~ sprintf(
+          "%s<br/>%s<br/>Notable: %s<br/>(%s)", node_name, genre, notable, release_date
+        ),
+        `Node Type` == "Song" ~ sprintf(
+          "%s<br/>%s<br/>Notable: %s<br/>(%s)<br/>Single: %s", node_name, genre, notable, release_date, single
+        ),
+        TRUE ~ sprintf("%s", node_name)
+      )
+    ),
     show.legend = c(size = FALSE)
-    )+ 
+  )+ 
   geom_node_text(
     aes(
-      label = ifelse(`node_name` == "Sailor Shift", "Sailor Shift", NA)
+      label = ifelse(`node_name` == "Sailor Shift", "Sailor Shift",
+              ifelse(`node_name` == "Ivy Echos", "Ivy Echos",
+              ifelse(`node_name` == "Wei Zhao", "Wei Zhao", NA)))
     ),
-    size = 4,
+    fontface = "bold",
+    size = 2.5,
     colour = 'red',
     show.legend = FALSE
-    ) +
+  ) +
+  scale_shape_manual(
+    name = "Node Type",
+    values = c(
+      "Album" = 16,
+      "MusicalGroup" = 15,
+      "Person" = 17,
+      "Song" = 10
+    )
+  ) +
+  scale_edge_colour_manual(
+    name = "Edge Colour",
+    values = c(
+      `Creater Of` = "#47D45A",
+      `Influenced By` = "#FF5757",
+      `Member Of` = "#CF57FF"
+    )
+  ) +
+  scale_colour_manual(
+    name = "Node Colour",
+    values = c(
+      "Musician" = "grey40",
+      "Oceanus Folk" = "#0027EA",
+      "Other Genre" = "#A45200"
+    )
+  ) +
   theme_graph() +
   theme(legend.text = element_text(size = 6),
         legend.title = element_text(size = 9)) +
-  scale_shape_discrete(name = "Node Type")
+  scale_size_identity()
 
-girafe(ggobj = g, width_svg = 8, height_svg = 6)
+girafe(ggobj = g, width_svg = 7, height_svg = 6)
 ```
 
 <br>
@@ -1109,38 +1310,75 @@ g <- sub_graph %>%
   ggraph(layout = "fr") + 
   geom_edge_fan(
     aes(
-      colour = `Edge Type`,
-      start_cap = circle(2, 'mm'),
-      end_cap = circle(2, 'mm')
+      edge_colour = `Edge Colour`,
+      start_cap = circle(1, 'mm'),
+      end_cap = circle(1, 'mm')
       ),
-    arrow = arrow(length = unit(2, 'mm')),
-    alpha = 0.4
-    ) +
+    arrow = arrow(length = unit(1, 'mm')),
+    alpha = 0.3
+  ) +
   geom_point_interactive(
     aes(
       x = x,
       y = y,
       data_id = name,
-      tooltip = sprintf("%s<br/>(%s)", node_name, release_date),
-      colour = genre,
-      shape = `Node Type`
-      ),
+      colour = `Node Colour`,
+      shape = `Node Type`,
+      size = ifelse(`node_name` %in% c("Sailor Shift", "Ivy Echos", "Wei Zhao"), 3, 1),
+      tooltip = case_when(
+        `Node Type` == "Album" ~ sprintf(
+          "%s<br/>%s<br/>Notable: %s<br/>(%s)", node_name, genre, notable, release_date
+        ),
+        `Node Type` == "Song" ~ sprintf(
+          "%s<br/>%s<br/>Notable: %s<br/>(%s)<br/>Single: %s", node_name, genre, notable, release_date, single
+        ),
+        TRUE ~ sprintf("%s", node_name)
+      )
+    ),
     show.legend = c(size = FALSE)
-    )+ 
+  )+ 
   geom_node_text(
     aes(
-      label = ifelse(`node_name` == "Sailor Shift", "Sailor Shift", ifelse(`node_name` == "Ivy Echos", "Ivy Echos",NA))
+      label = ifelse(`node_name` == "Sailor Shift", "Sailor Shift",
+              ifelse(`node_name` == "Ivy Echos", "Ivy Echos",
+              ifelse(`node_name` == "Wei Zhao", "Wei Zhao", NA)))
     ),
-    size = 4,
+    fontface = "bold",
+    size = 2.5,
     colour = 'red',
     show.legend = FALSE
-    ) +
+  ) +
+  scale_shape_manual(
+    name = "Node Type",
+    values = c(
+      "Album" = 16,
+      "MusicalGroup" = 15,
+      "Person" = 17,
+      "Song" = 10
+    )
+  ) +
+  scale_edge_colour_manual(
+    name = "Edge Colour",
+    values = c(
+      `Creater Of` = "#47D45A",
+      `Influenced By` = "#FF5757",
+      `Member Of` = "#CF57FF"
+    )
+  ) +
+  scale_colour_manual(
+    name = "Node Colour",
+    values = c(
+      "Musician" = "grey40",
+      "Oceanus Folk" = "#0027EA",
+      "Other Genre" = "#A45200"
+    )
+  ) +
   theme_graph() +
   theme(legend.text = element_text(size = 6),
         legend.title = element_text(size = 9)) +
-  scale_shape_discrete(name = "Node Type")
+  scale_size_identity()
 
-girafe(ggobj = g, width_svg = 8, height_svg = 6)
+girafe(ggobj = g, width_svg = 7, height_svg = 6)
 ```
 
 ## Ivy Echos' Influence
@@ -1210,38 +1448,75 @@ g <- sub_graph %>%
   ggraph(layout = "fr") + 
   geom_edge_fan(
     aes(
-      colour = `Edge Type`,
-      start_cap = circle(2, 'mm'),
-      end_cap = circle(2, 'mm')
+      edge_colour = `Edge Colour`,
+      start_cap = circle(1, 'mm'),
+      end_cap = circle(1, 'mm')
       ),
-    arrow = arrow(length = unit(2, 'mm')),
-    alpha = 0.4
-    ) +
+    arrow = arrow(length = unit(1, 'mm')),
+    alpha = 0.3
+  ) +
   geom_point_interactive(
     aes(
       x = x,
       y = y,
       data_id = name,
-      tooltip = sprintf("%s<br/>(%s)", node_name, release_date),
-      colour = genre,
-      shape = `Node Type`
-      ),
+      colour = `Node Colour`,
+      shape = `Node Type`,
+      size = ifelse(`node_name` %in% c("Sailor Shift", "Ivy Echos", "Wei Zhao"), 3, 1),
+      tooltip = case_when(
+        `Node Type` == "Album" ~ sprintf(
+          "%s<br/>%s<br/>Notable: %s<br/>(%s)", node_name, genre, notable, release_date
+        ),
+        `Node Type` == "Song" ~ sprintf(
+          "%s<br/>%s<br/>Notable: %s<br/>(%s)<br/>Single: %s", node_name, genre, notable, release_date, single
+        ),
+        TRUE ~ sprintf("%s", node_name)
+      )
+    ),
     show.legend = c(size = FALSE)
-    )+ 
+  )+ 
   geom_node_text(
     aes(
-      label = ifelse(`node_name` == "Ivy Echos", "Ivy Echos", NA)
+      label = ifelse(`node_name` == "Sailor Shift", "Sailor Shift",
+              ifelse(`node_name` == "Ivy Echos", "Ivy Echos",
+              ifelse(`node_name` == "Wei Zhao", "Wei Zhao", NA)))
     ),
-    size = 4,
+    fontface = "bold",
+    size = 2.5,
     colour = 'red',
     show.legend = FALSE
-    ) +
+  ) +
+  scale_shape_manual(
+    name = "Node Type",
+    values = c(
+      "Album" = 16,
+      "MusicalGroup" = 15,
+      "Person" = 17,
+      "Song" = 10
+    )
+  ) +
+  scale_edge_colour_manual(
+    name = "Edge Colour",
+    values = c(
+      `Creater Of` = "#47D45A",
+      `Influenced By` = "#FF5757",
+      `Member Of` = "#CF57FF"
+    )
+  ) +
+  scale_colour_manual(
+    name = "Node Colour",
+    values = c(
+      "Musician" = "grey40",
+      "Oceanus Folk" = "#0027EA",
+      "Other Genre" = "#A45200"
+    )
+  ) +
   theme_graph() +
   theme(legend.text = element_text(size = 6),
         legend.title = element_text(size = 9)) +
-  scale_shape_discrete(name = "Node Type")
+  scale_size_identity()
 
-girafe(ggobj = g, width_svg = 8, height_svg = 6)
+girafe(ggobj = g, width_svg = 7, height_svg = 6)
 ```
 
 ## Combined
@@ -1268,38 +1543,75 @@ g <- sub_graph %>%
   ggraph(layout = "fr") + 
   geom_edge_fan(
     aes(
-      colour = `Edge Type`,
-      start_cap = circle(2, 'mm'),
-      end_cap = circle(2, 'mm')
+      edge_colour = `Edge Colour`,
+      start_cap = circle(1, 'mm'),
+      end_cap = circle(1, 'mm')
       ),
-    arrow = arrow(length = unit(2, 'mm')),
-    alpha = 0.4
-    ) +
+    arrow = arrow(length = unit(1, 'mm')),
+    alpha = 0.3
+  ) +
   geom_point_interactive(
     aes(
       x = x,
       y = y,
       data_id = name,
-      tooltip = sprintf("%s<br/>(%s)", node_name, release_date),
-      colour = genre,
-      shape = `Node Type`
-      ),
+      colour = `Node Colour`,
+      shape = `Node Type`,
+      size = ifelse(`node_name` %in% c("Sailor Shift", "Ivy Echos", "Wei Zhao"), 3, 1),
+      tooltip = case_when(
+        `Node Type` == "Album" ~ sprintf(
+          "%s<br/>%s<br/>Notable: %s<br/>(%s)", node_name, genre, notable, release_date
+        ),
+        `Node Type` == "Song" ~ sprintf(
+          "%s<br/>%s<br/>Notable: %s<br/>(%s)<br/>Single: %s", node_name, genre, notable, release_date, single
+        ),
+        TRUE ~ sprintf("%s", node_name)
+      )
+    ),
     show.legend = c(size = FALSE)
-    )+ 
+  )+ 
   geom_node_text(
     aes(
-      label = ifelse(`node_name` == "Sailor Shift", "Sailor Shift", ifelse(`node_name` == "Ivy Echos", "Ivy Echos",NA))
+      label = ifelse(`node_name` == "Sailor Shift", "Sailor Shift",
+              ifelse(`node_name` == "Ivy Echos", "Ivy Echos",
+              ifelse(`node_name` == "Wei Zhao", "Wei Zhao", NA)))
     ),
-    size = 4,
+    fontface = "bold",
+    size = 2.5,
     colour = 'red',
     show.legend = FALSE
-    ) +
+  ) +
+  scale_shape_manual(
+    name = "Node Type",
+    values = c(
+      "Album" = 16,
+      "MusicalGroup" = 15,
+      "Person" = 17,
+      "Song" = 10
+    )
+  ) +
+  scale_edge_colour_manual(
+    name = "Edge Colour",
+    values = c(
+      `Creater Of` = "#47D45A",
+      `Influenced By` = "#FF5757",
+      `Member Of` = "#CF57FF"
+    )
+  ) +
+  scale_colour_manual(
+    name = "Node Colour",
+    values = c(
+      "Musician" = "grey40",
+      "Oceanus Folk" = "#0027EA",
+      "Other Genre" = "#A45200"
+    )
+  ) +
   theme_graph() +
   theme(legend.text = element_text(size = 6),
         legend.title = element_text(size = 9)) +
-  scale_shape_discrete(name = "Node Type")
+  scale_size_identity()
 
-girafe(ggobj = g, width_svg = 8, height_svg = 6)
+girafe(ggobj = g, width_svg = 7, height_svg = 6)
 ```
 
 :::
@@ -1398,9 +1710,6 @@ graph_no_member = tbl_graph(edges = mc1_edges_no_member,
                              nodes = mc1_nodes_clean,
                              directed = TRUE)
 
-# Convert tbl_graph to igraph
-ig <- as.igraph(graph_no_member)
-
 # Step 1: Get all node names in Oceanus Folk genre
 oceanus_nodes <- mc1_nodes_clean %>%
   filter(is_oceanus_folk == TRUE) %>%
@@ -1431,40 +1740,77 @@ sub_graph_no_member <- graph_no_member %>%
 
 g <- sub_graph_no_member %>%
   ggraph(layout = "kk") + 
-  geom_edge_link(
+  geom_edge_fan(
     aes(
-      colour = `Edge Type`,
+      edge_colour = `Edge Colour`,
       start_cap = circle(1, 'mm'),
       end_cap = circle(1, 'mm')
       ),
-    arrow = arrow(length = unit(2, 'mm')),
-    alpha = 0.4
-    ) +
+    arrow = arrow(length = unit(1, 'mm')),
+    alpha = 0.3
+  ) +
   geom_point_interactive(
     aes(
       x = x,
       y = y,
       data_id = name,
-      tooltip = sprintf("%s<br/>(%s)", node_name, release_date),
-      colour = genre,
-      shape = `Node Type`
-      ),
+      colour = `Node Colour`,
+      shape = `Node Type`,
+      size = ifelse(`node_name` %in% c("Sailor Shift", "Ivy Echos", "Wei Zhao"), 3, 1),
+      tooltip = case_when(
+        `Node Type` == "Album" ~ sprintf(
+          "%s<br/>%s<br/>Notable: %s<br/>(%s)", node_name, genre, notable, release_date
+        ),
+        `Node Type` == "Song" ~ sprintf(
+          "%s<br/>%s<br/>Notable: %s<br/>(%s)<br/>Single: %s", node_name, genre, notable, release_date, single
+        ),
+        TRUE ~ sprintf("%s", node_name)
+      )
+    ),
     show.legend = c(size = FALSE)
-    )+ 
+  )+ 
   geom_node_text(
     aes(
-      label = ifelse(`node_name` == "Sailor Shift", "Sailor Shift", NA)
+      label = ifelse(`node_name` == "Sailor Shift", "Sailor Shift",
+              ifelse(`node_name` == "Ivy Echos", "Ivy Echos",
+              ifelse(`node_name` == "Wei Zhao", "Wei Zhao", NA)))
     ),
-    size = 4,
+    fontface = "bold",
+    size = 3,
     colour = 'red',
     show.legend = FALSE
-    ) +
+  ) +
+  scale_shape_manual(
+    name = "Node Type",
+    values = c(
+      "Album" = 16,
+      "MusicalGroup" = 15,
+      "Person" = 17,
+      "Song" = 10
+    )
+  ) +
+  scale_edge_colour_manual(
+    name = "Edge Colour",
+    values = c(
+      `Creater Of` = "#47D45A",
+      `Influenced By` = "#FF5757",
+      `Member Of` = "#CF57FF"
+    )
+  ) +
+  scale_colour_manual(
+    name = "Node Colour",
+    values = c(
+      "Musician" = "grey40",
+      "Oceanus Folk" = "#0027EA",
+      "Other Genre" = "#A45200"
+    )
+  ) +
   theme_graph() +
   theme(legend.text = element_text(size = 6),
         legend.title = element_text(size = 9)) +
-  scale_shape_discrete(name = "Node Type")
+  scale_size_identity()
 
-girafe(ggobj = g, width_svg = 11, height_svg = 8)
+girafe(ggobj = g, width_svg = 8, height_svg = 7)
 ```
 
 ::: callout-tip
@@ -1473,4 +1819,11 @@ girafe(ggobj = g, width_svg = 11, height_svg = 8)
 - This graph is displays a network overview of all People/Musical Groups who have produced Oceanus Folk Songs/Albums.
 - While Sailor Shift is connected to a portion of the community, most Oceanus Folk artists remain outside her influence network.
 - In conclusion, Sailor Shift has a moderate influence on the broader Oceanus Folk community since her impact is discernible but not widespread.
+:::
+
+::: callout-tip
+## Othere Insights
+
+- It seems the Oceanus Folk community places a strong emphasis on collaboration
+- Rather than simply drawing influence from each other’s work, they prefer to create music together directly
 :::
