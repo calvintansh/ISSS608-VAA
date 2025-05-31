@@ -538,7 +538,7 @@ The code groups different types of edges and nodes into broader categories for c
 ```{r}
 mc1_edges_clean <- mc1_edges_clean %>%
   mutate(`Edge Colour` = case_when(
-    `Edge Type` %in% c("PerformerOf", "ComposerOf", "ProducerOf", "LyricistOf", "RecordedBy", "DistributedBy") ~ "Creater Of",
+    `Edge Type` %in% c("PerformerOf", "ComposerOf", "ProducerOf", "LyricistOf", "RecordedBy", "DistributedBy") ~ "Creator Of",
     `Edge Type` %in% c("InStyleOf", "InterpolatesFrom", "CoverOf", "LyricalReferenceTo", "DirectlySamples") ~ "Influenced By",
     `Edge Type` == "MemberOf" ~ "Member Of",
     TRUE ~ "Other"
@@ -663,7 +663,7 @@ g <- sub_graph %>%
   scale_edge_colour_manual(
     name = "Edge Colour",
     values = c(
-      `Creater Of` = "#47D45A",
+      `Creator Of` = "#47D45A",
       `Influenced By` = "#FF5757",
       `Member Of` = "#CF57FF"
     )
@@ -671,7 +671,7 @@ g <- sub_graph %>%
   scale_colour_manual(
     name = "Node Colour",
     values = c(
-      "Musician" = "grey40",
+      "Musician" = "grey50",
       "Oceanus Folk" = "#0027EA",
       "Other Genre" = "#A45200"
     )
@@ -752,7 +752,7 @@ sailor_music_out_nodes <- mc1_edges_clean %>%
 
 # Step 4 Identify source nodes of creator edges pointing to those neighbours
 creator_edges <- mc1_edges_clean %>%
-  filter(to %in% sailor_music_out_nodes, `Edge Colour` == "CreatorOf")
+  filter(to %in% sailor_music_out_nodes, `Edge Colour` == "Creator Of")
 
 sailor_people_group_neighbourhood_nodes <- creator_edges %>%
   pull(from) %>%
@@ -827,7 +827,7 @@ g <- sub_graph %>%
   scale_edge_colour_manual(
     name = "Edge Colour",
     values = c(
-      `Creater Of` = "#47D45A",
+      `Creator Of` = "#47D45A",
       `Influenced By` = "#FF5757",
       `Member Of` = "#CF57FF"
     )
@@ -835,7 +835,7 @@ g <- sub_graph %>%
   scale_colour_manual(
     name = "Node Colour",
     values = c(
-      "Musician" = "grey40",
+      "Musician" = "grey50",
       "Oceanus Folk" = "#0027EA",
       "Other Genre" = "#A45200"
     )
@@ -967,7 +967,7 @@ g <- sub_graph %>%
   scale_edge_colour_manual(
     name = "Edge Colour",
     values = c(
-      `Creater Of` = "#47D45A",
+      `Creator Of` = "#47D45A",
       `Influenced By` = "#FF5757",
       `Member Of` = "#CF57FF"
     )
@@ -975,7 +975,7 @@ g <- sub_graph %>%
   scale_colour_manual(
     name = "Node Colour",
     values = c(
-      "Musician" = "grey40",
+      "Musician" = "grey50",
       "Oceanus Folk" = "#0027EA",
       "Other Genre" = "#A45200"
     )
@@ -1063,7 +1063,7 @@ g <- sub_graph %>%
   scale_edge_colour_manual(
     name = "Edge Colour",
     values = c(
-      `Creater Of` = "#47D45A",
+      `Creator Of` = "#47D45A",
       `Influenced By` = "#FF5757",
       `Member Of` = "#CF57FF"
     )
@@ -1071,7 +1071,7 @@ g <- sub_graph %>%
   scale_colour_manual(
     name = "Node Colour",
     values = c(
-      "Musician" = "grey40",
+      "Musician" = "grey50",
       "Oceanus Folk" = "#0027EA",
       "Other Genre" = "#A45200"
     )
@@ -1250,7 +1250,7 @@ g <- sub_graph %>%
   scale_edge_colour_manual(
     name = "Edge Colour",
     values = c(
-      `Creater Of` = "#47D45A",
+      `Creator Of` = "#47D45A",
       `Influenced By` = "#FF5757",
       `Member Of` = "#CF57FF"
     )
@@ -1258,7 +1258,7 @@ g <- sub_graph %>%
   scale_colour_manual(
     name = "Node Colour",
     values = c(
-      "Musician" = "grey40",
+      "Musician" = "grey50",
       "Oceanus Folk" = "#0027EA",
       "Other Genre" = "#A45200"
     )
@@ -1360,7 +1360,7 @@ g <- sub_graph %>%
   scale_edge_colour_manual(
     name = "Edge Colour",
     values = c(
-      `Creater Of` = "#47D45A",
+      `Creator Of` = "#47D45A",
       `Influenced By` = "#FF5757",
       `Member Of` = "#CF57FF"
     )
@@ -1368,7 +1368,7 @@ g <- sub_graph %>%
   scale_colour_manual(
     name = "Node Colour",
     values = c(
-      "Musician" = "grey40",
+      "Musician" = "grey50",
       "Oceanus Folk" = "#0027EA",
       "Other Genre" = "#A45200"
     )
@@ -1498,7 +1498,7 @@ g <- sub_graph %>%
   scale_edge_colour_manual(
     name = "Edge Colour",
     values = c(
-      `Creater Of` = "#47D45A",
+      `Creator Of` = "#47D45A",
       `Influenced By` = "#FF5757",
       `Member Of` = "#CF57FF"
     )
@@ -1506,7 +1506,7 @@ g <- sub_graph %>%
   scale_colour_manual(
     name = "Node Colour",
     values = c(
-      "Musician" = "grey40",
+      "Musician" = "grey50",
       "Oceanus Folk" = "#0027EA",
       "Other Genre" = "#A45200"
     )
@@ -1593,7 +1593,7 @@ g <- sub_graph %>%
   scale_edge_colour_manual(
     name = "Edge Colour",
     values = c(
-      `Creater Of` = "#47D45A",
+      `Creator Of` = "#47D45A",
       `Influenced By` = "#FF5757",
       `Member Of` = "#CF57FF"
     )
@@ -1601,7 +1601,7 @@ g <- sub_graph %>%
   scale_colour_manual(
     name = "Node Colour",
     values = c(
-      "Musician" = "grey40",
+      "Musician" = "grey50",
       "Oceanus Folk" = "#0027EA",
       "Other Genre" = "#A45200"
     )
@@ -1694,21 +1694,11 @@ mc1_nodes_clean %>%
 
 This question is tackled by first identifying all Songs and Albums belonging to the **Oceanus Folk** *Genre* and retriving their associated creators (Persons/Musical Groups). Then Sailor Shift's is identified to examine her impact within the broader Oceanus Folk community.
 
-Note: To declutter the resulting graph, the edge MemberOf is removed since this does not provide useful information.
-
 ```{r}
 #| code-fold: true
 #| code-summary: "Show Code"
 
 # Data Preparation
-
-# Step 0: Remove edges containing MemberOf
-mc1_edges_no_member <- mc1_edges_clean %>%
-  filter(`Edge Type` != "MemberOf")
-
-graph_no_member = tbl_graph(edges = mc1_edges_no_member,
-                             nodes = mc1_nodes_clean,
-                             directed = TRUE)
 
 # Step 1: Get all node names in Oceanus Folk genre
 oceanus_nodes <- mc1_nodes_clean %>%
@@ -1716,7 +1706,7 @@ oceanus_nodes <- mc1_nodes_clean %>%
   pull(name)
 
 # Step 2: Get all incoming edges to Oceanus Folk nodes
-in_edges <- mc1_edges_no_member %>%
+in_edges <- mc1_edges_clean %>%
   filter(to %in% oceanus_nodes)
 
 # Step 3: Get unique source (from) nodes of those edges
@@ -1732,13 +1722,13 @@ all_nodes <- unique(c(oceanus_nodes,
                     in_neighbours_people))
 
 # Create subgraph
-sub_graph_no_member <- graph_no_member %>%
+sub_graph <- graph %>%
   filter(name %in% all_nodes)
 
 
 # Visualisation
 
-g <- sub_graph_no_member %>%
+g <- sub_graph %>%
   ggraph(layout = "kk") + 
   geom_edge_fan(
     aes(
@@ -1792,7 +1782,7 @@ g <- sub_graph_no_member %>%
   scale_edge_colour_manual(
     name = "Edge Colour",
     values = c(
-      `Creater Of` = "#47D45A",
+      `Creator Of` = "#47D45A",
       `Influenced By` = "#FF5757",
       `Member Of` = "#CF57FF"
     )
@@ -1800,7 +1790,7 @@ g <- sub_graph_no_member %>%
   scale_colour_manual(
     name = "Node Colour",
     values = c(
-      "Musician" = "grey40",
+      "Musician" = "grey50",
       "Oceanus Folk" = "#0027EA",
       "Other Genre" = "#A45200"
     )
@@ -1810,7 +1800,7 @@ g <- sub_graph_no_member %>%
         legend.title = element_text(size = 9)) +
   scale_size_identity()
 
-girafe(ggobj = g, width_svg = 8, height_svg = 7)
+girafe(ggobj = g, width_svg = 9, height_svg = 8)
 ```
 
 ::: callout-tip
