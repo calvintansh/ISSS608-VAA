@@ -720,7 +720,7 @@ mc1_nodes_clean %>%
 
 ## [2:]{style="color:DarkOrange"} 4.2 Question 1a) Who has she been most influenced by over time?
 
-This section is a continuation from the previous section where all her outgoing edges were found. Music that she produced were already found and now Persons and Musical Groups that are outgoing from her are included. From these Songs, Albums, Persons and Musical Groups, only those Songs and Albums with further outgoing edges are kept. Then, the nodes connected to those are found. These are music that her music have been influenced by. Finally, the last step finds Person and Musical Groups who produced the music that have influenced her music. 
+This section is a continuation from the previous [section](https://isss608-ay2024-25t3.netlify.app/take-home_ex/take-home_ex02/take-home_ex02_mc1_main_v5#visualising-sailor-shifts-music) where all her outgoing edges were found. Music that she produced were already found and now Persons and Musical Groups that are outgoing from her are included. From these Songs, Albums, Persons and Musical Groups, only those Songs and Albums with further outgoing edges are kept. Then, the nodes connected to those are found. These are music that her music have been influenced by. Finally, the last step finds Person and Musical Groups who produced the music that have influenced her music. 
 
 Furthermore, since Sailor Shift is a member of Ivy Echos, those who influence Ivy Echos will also influence her. Thus, the above steps were repeated for Ivy Echos.
 
@@ -1124,7 +1124,7 @@ node_data %>%
 
 ## [2:]{style="color:DarkOrange"} 4.3 Question 1b) Who has she collaborated with and directly or indirectly influenced?
 
-The analysis begins with the sailor_music_all dataset from [Section 4.2.1](https://isss608-ay2024-25t3.netlify.app/take-home_ex/take-home_ex02/take-home_ex02_mc1_main_v5#visualising-sailor-shifts-music), filtering to retain only music with more than two inward edges. This step eliminates works without collaborators or external influences. Two Song/Albums ("The Current & The Chord" and "Salty Dreams") have to be manually removed since their inward edges are from Sailor herself and therefore not needed. Next, all inward neighbours (source nodes) of Sailor's music are identified, representing both influenced works (Songs/Albums) and collaborators (Persons/Musical Groups). After filtering to keep only Songs and Albums, their inward neighbours are examined. This reveals: (1) Persons/Musical Groups who have been influenced by Sailor's music (Persons/Musical Groups), and (2) secondary influenced works (Songs/Albums) that were impacted by the same sources that were influenced by Sailor's compositions.
+The analysis begins with the sailor_music_all dataset from [Section 4.1](https://isss608-ay2024-25t3.netlify.app/take-home_ex/take-home_ex02/take-home_ex02_mc1_main_v5#visualising-sailor-shifts-music), filtering to retain only music with more than two inward edges. This step eliminates works without collaborators or external influences. Two Song/Albums ("The Current & The Chord" and "Salty Dreams") have to be manually removed since their inward edges are from Sailor herself and therefore not needed. Next, all inward neighbours (source nodes) of Sailor's music are identified, representing both influenced works (Songs/Albums) and collaborators (Persons/Musical Groups). After filtering to keep only Songs and Albums, their inward neighbours are examined. This reveals: (1) Persons/Musical Groups who have been influenced by Sailor's music (Persons/Musical Groups), and (2) secondary influenced works (Songs/Albums) that were impacted by the same sources that were influenced by Sailor's compositions.
 
 In addition, since Sailor Shift is a member of Ivy Echos, the members of Ivy Echos will be her collaborators. Thus, the next graph investigates the structure of Ivy Echos.
 
@@ -1700,7 +1700,7 @@ mc1_nodes_clean %>%
 
 :::
 
-## [2:]{style="color:DarkOrange"} 4.2 Question 1c) How has she influenced collaborators of the broader Oceanus Folk community?
+## [2:]{style="color:DarkOrange"} 4.4 Question 1c) How has she influenced collaborators of the broader Oceanus Folk community?
 
 This question is tackled by first identifying all Songs and Albums belonging to the **Oceanus Folk** *Genre* and retriving their associated creators (Persons/Musical Groups). Then Sailor Shift's is identified and her degree of separation is calculated to examine her impact on the broader Oceanus Folk community.
 
