@@ -56,7 +56,15 @@ The data for this exercise is from [VAST 2025 MC1](https://github.com/vast-chall
 
 ## [2:]{style="color:DarkOrange"} 1.4 Data Description
 
-Graph Description - Directed Multigraph - \# nodes: 17,412 - \# edges: 37, 857 - 18 connected components - Possible node types are: {Person, Song, RecordLabel, Album, MusicalGroup} - Possible edge types are: {MemberOf, PerformerOf, ComposerOf, ProducerOf, LyricistOf, InStyleOf, InterpolatesFrom, CoverOf, LyricalReferenceTo, DirectlySamples, RecordedBy, DistributedBy} - The graph format is a JSON file. The root-level JSON object consists of graph-level properties specifying that it is directed and a multigraph, a “nodes” key which holds the list of nodes, and a “links” key which holds the list of edges.
+**Graph Description**
+
+- Directed Multigraph 
+- Number of nodes: 17,412 
+- Number of edges: 37,857 
+- 18 connected components 
+- Possible node types are: {Person, Song, RecordLabel, Album, MusicalGroup} 
+- Possible edge types are: {MemberOf, PerformerOf, ComposerOf, ProducerOf, LyricistOf, InStyleOf, InterpolatesFrom, CoverOf, LyricalReferenceTo, DirectlySamples, RecordedBy, DistributedBy} 
+- The graph format is a JSON file. The root-level JSON object consists of graph-level properties specifying that it is directed and a multigraph, a “nodes” key which holds the list of nodes, and a “links” key which holds the list of edges.
 
 The data for this challenge comes from two different sources:
 
@@ -90,7 +98,7 @@ Graphing Tools
 pacman::p_load(jsonlite, tidyverse, ggtext,
                 knitr, lubridate, patchwork,
                 ggraph, tidygraph, igraph,
-                ggiraph, kableExtra, ggnewscale)
+                ggiraph, kableExtra)
 ```
 
 ## [1-1:]{style="color:DarkOrange"} 1.6 Importing Data
@@ -160,7 +168,7 @@ kable(mc1_nodes_raw %>%
   filter(grepl("Ivy Echos", name))) #Ivy Echos is also in name column and not in stage_name column
 ```
 
-Identifying columns for Sailor Shift, Ivy Echos and Oceanus Folk are added to aid identification and filtering for further analysis.
+Identifying columns for Sailor Shift, Ivy Echos and Oceanus Folk are added to aid in the identification and filtering of these key variables for further analysis.
 
 ```{r}
 #| code-fold: true
@@ -282,7 +290,7 @@ mc1_nodes_dedup %>%
 
 ### [1-1:]{style="color:DarkOrange"} 2.4.2 Duplicates in Edges
 
-For Edges, there are duplicates but only their *key* are different. Since, information on *key* were not provided by VAST 2024 MC1, their purpose cannot be determined. Therefore, duplicated edges differing only by their *key* will be removed.
+For Edges, there are duplicates but only their *key* are different. Since, information on *key* is not provided by [VAST 2025 MC1](https://github.com/vast-challenge/2025-data/blob/main/MC1_release.zip), its purpose cannot be determined. Therefore, the *key* column will be redundant and duplicated edges differing only by their *key* will be removed.
 
 ```{r}
 #| code-fold: true
@@ -347,7 +355,7 @@ kable(head(mc1_nodes_clean,5))
 
 ### [2:]{style="color:DarkOrange"} 3.2.1 Create Edge Mapping from original id to Kept id
 
-However, this is not enough because in Section 2.4, duplicated Nodes and their respective *id* (now called *name*) were removed. Therefore, without treating edges, there will be edges that do not have a match to nodes since they are matching the removed *id*.
+However, this is not enough because in [Section 2.4](https://isss608-ay2024-25t3.netlify.app/take-home_ex/take-home_ex02/take-home_ex02_mc1_main_v5#check-for-duplicates), duplicated Nodes and their respective *id* (now called *name*) were removed. Therefore, without treating edges, there will be edges that do not have a match to nodes since they are matching the removed *id*.
 
 The code below maps the *original_id* to the *kept_id* in preparation for the next step.
 
@@ -423,7 +431,7 @@ setdiff(
 
 ## [2:]{style="color:DarkOrange"} 3.5 Checking Edges Schema
 
-The code below defines valid source and destination types for each edge type as per the VAST 2025 MC1 Data Description file provided.
+The code below defines valid source and destination types for each edge type as per the [VAST 2025 MC1](https://github.com/vast-challenge/2025-data/blob/main/MC1_release.zip) Data Description file provided.
 
 ```{r}
 #| code-fold: true
@@ -533,9 +541,11 @@ ggplot(data = mc1_nodes_clean,
 
 ## [2:]{style="color:DarkOrange"} 3.8 Creating Infomative Columns
 
-The code groups different types of edges and nodes into broader categories for consistent colouring in the graphs.
+The code below groups different types of edges and nodes into broader categories for consistent visualisation colouring.
 
 ```{r}
+#| code-fold: true
+#| code-summary: "Show Code"
 mc1_edges_clean <- mc1_edges_clean %>%
   mutate(`Edge Colour` = case_when(
     `Edge Type` %in% c("PerformerOf", "ComposerOf", "ProducerOf", "LyricistOf", "RecordedBy", "DistributedBy") ~ "Creator Of",
@@ -566,7 +576,7 @@ graph = tbl_graph(edges = mc1_edges_clean,
                              directed = TRUE)
 ```
 
-Since several of the ggraph layouts involve randomisation, the code below is used to set the seed value to ensure reproducibility of plots.
+Since several of the ggraph layouts involve randomisation, this code sets the seed value to ensure reproducibility of all the plots.
 
 ```{r}
 #| code-fold: true
@@ -705,7 +715,7 @@ mc1_nodes_clean %>%
   select(`Node Type`, node_name, release_date, genre, notable, single, notoriety_date) %>%
   kable() %>%
   kable_styling("striped", full_width = F) %>% 
-  scroll_box(height = "200px")
+  scroll_box(height = "300px")
 ```
 
 ## [2:]{style="color:DarkOrange"} 4.2 Question 1a) Who has she been most influenced by over time?
@@ -714,7 +724,7 @@ This section is a continuation from the previous section where all her outgoing 
 
 Furthermore, since Sailor Shift is a member of Ivy Echos, those who influence Ivy Echos will also influence her. Thus, the above steps were repeated for Ivy Echos.
 
-Finally, both Sailor Shift and Ivy Echos grats are combined to produce a holistic graph of those who have influenced Sailor Shift.
+Finally, both Sailor Shift and Ivy Echos graphs are combined to produce a holistic graph of those who have influenced Sailor Shift.
 
 Note: The term music refers to either Song or Album.
 
@@ -1114,7 +1124,7 @@ node_data %>%
 
 ## [2:]{style="color:DarkOrange"} 4.3 Question 1b) Who has she collaborated with and directly or indirectly influenced?
 
-The analysis begins with the sailor_music_all dataset from Section 4.2.1, filtering to retain only music with more than two inward edges. This step eliminates works without collaborators or external influences. Two Song/Albums are ("The Current & The Chord" and "Salty Dreams") exceptions and are manually removed since their inward edges are from Sailor herself. Next, all inward neighbours (source nodes) of Sailor's music are identified, representing both influenced works (Songs/Albums) and collaborators (Persons/Musical Groups). After filtering to keep only Songs and Albums, their inward neighbours are examined. This reveals: (1) Persons/Musical Groups who have been influenced by Sailor's music (Persons/Musical Groups), and (2) secondary influenced works (Songs/Albums) that were impacted by the same sources that were influenced by Sailor's compositions.
+The analysis begins with the sailor_music_all dataset from [Section 4.2.1](https://isss608-ay2024-25t3.netlify.app/take-home_ex/take-home_ex02/take-home_ex02_mc1_main_v5#visualising-sailor-shifts-music), filtering to retain only music with more than two inward edges. This step eliminates works without collaborators or external influences. Two Song/Albums ("The Current & The Chord" and "Salty Dreams") have to be manually removed since their inward edges are from Sailor herself and therefore not needed. Next, all inward neighbours (source nodes) of Sailor's music are identified, representing both influenced works (Songs/Albums) and collaborators (Persons/Musical Groups). After filtering to keep only Songs and Albums, their inward neighbours are examined. This reveals: (1) Persons/Musical Groups who have been influenced by Sailor's music (Persons/Musical Groups), and (2) secondary influenced works (Songs/Albums) that were impacted by the same sources that were influenced by Sailor's compositions.
 
 In addition, since Sailor Shift is a member of Ivy Echos, the members of Ivy Echos will be her collaborators. Thus, the next graph investigates the structure of Ivy Echos.
 
@@ -1620,13 +1630,13 @@ girafe(ggobj = g, width_svg = 7, height_svg = 6)
 ## Who has she collaborated with and directly or indirectly influenced?
 
 1.  The first graph and table shows everyone that she has collaborated with excluding Ivy Echos.
-    -   The graph of Sailor Shift shows that she has collaborated with numerous different artists and information in them can be found in the table.
-    -   However, none of her music has influenced others, as no Songs or Albums reference her Songs or Albums.
+    -   The graph of Sailor Shift shows that she has collaborated with numerous different artists and information on them can be found in the table below.
+    -   However, none of her music has influenced others, as no Songs or Albums referenced her Songs or Albums.
 2.  The second graph and table shows all members of Ivy Echos.
     -   Being part of the same group, Sailor Shift has collaborated with them to produce a few Songs / Albums.
 3.  The third graph shows who Ivy Echos have collaborated with and directly influenced.
     -   The third table shows the Persons and Musical Group who collaborated with Ivy Echos.
-    -   Unlike Sailor Shift, one of Ivy Echo's songs has influenced an Album. The final table displays the affected Persons and Musical Group.
+    -   Unlike Sailor Shift, one of Ivy Echo's songs has influenced an Albumm. The final table displays the affected Persons and Musical Group.
 4.  Neither Sailor Shift nor Ivy Echos has indirectly influenced anyone, as no Songs or Albums reference their works in a secondary chain 
     -  For example, no Songs/Albums refer to other Songs/Albums that were themselves influenced by theirs.
 :::
@@ -1693,6 +1703,12 @@ mc1_nodes_clean %>%
 ## [2:]{style="color:DarkOrange"} 4.2 Question 1c) How has she influenced collaborators of the broader Oceanus Folk community?
 
 This question is tackled by first identifying all Songs and Albums belonging to the **Oceanus Folk** *Genre* and retriving their associated creators (Persons/Musical Groups). Then Sailor Shift's is identified and her degree of separation is calculated to examine her impact on the broader Oceanus Folk community.
+
+#### Navigate through the tabs to explore visualizations of the Oceanus Folk community for:
+
+- All works of the Oceanus Folk community
+- The degree of separation of the Oceanus Folk community from Sailor Shift 
+- Three degrees of separation from Sailor Shift
 
 ::: panel-tabset
 
@@ -2041,5 +2057,6 @@ girafe(ggobj = g, width_svg = 9, height_svg = 8)
 ## Other Insights
 
 - It seems that the Oceanus Folk community places a strong emphasis on collaboration
-- Rather than simply drawing influence from each other’s work, they prefer to create music together directly
+- Rather than simply drawing influence from each other's work, they prefer collaborating directly
+    - Evidenced by the sporadic 'Influenced By' connections in the network graph
 :::
