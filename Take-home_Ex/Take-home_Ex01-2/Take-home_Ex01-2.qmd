@@ -243,14 +243,14 @@ r1 + r2 +
 
 ### [1-2:]{style="color:DarkOrange"} 2.1.1 Techical Explanation
 
-This section will cover the code and techniques used to improve on Rajesh's "*Singapore’s Population Pyramid*" visualisation. 
+This section will cover the code and techniques used to improve on Rajesh's "*Singapore’s Population Pyramid*" visualisation.
 
-- The **Age** column was converted to string format before replacing *90_and_Over* with *90*. Then, the column was converted to a numerical formal. 
-- The bar graph was changed to an area graph using *geom_area()* instead of *geom_bar()*. 
-- The x-axis scale was fixed by using *scale_y_continuous(labels = abs, limits = c(-40000, 40000))* to set the range to be from -40,000 to 40,000.
-- *scale_y_continuous()* was used because after *coord_flip()*, it adjusts the x-axis instead. 
-- The legend position was switch to the bottom using *theme()* and the legend order was fixed using *scale_fill_manual()*. 
-- Finally, the overlaid gender chart was created using the same *geom_area()* method but using *y = Pop* instead of *y = inv_Pop*.
+-   The **Age** column was converted to string format before replacing *90_and_Over* with *90*. Then, the column was converted to a numerical formal.
+-   The bar graph was changed to an area graph using *geom_area()* instead of *geom_bar()*.
+-   The x-axis scale was fixed by using *scale_y_continuous(labels = abs, limits = c(-40000, 40000))* to set the range to be from -40,000 to 40,000.
+-   *scale_y_continuous()* was used because after *coord_flip()*, it adjusts the x-axis instead.
+-   The legend position was switch to the bottom using *theme()* and the legend order was fixed using *scale_fill_manual()*.
+-   Finally, the overlaid gender chart was created using the same *geom_area()* method but using *y = Pop* instead of *y = inv_Pop*.
 
 ### [1-2:]{style="color:DarkOrange"} 2.1.1 Summary
 
@@ -519,20 +519,19 @@ ggdraw() +
 
 ### [1-2:]{style="color:DarkOrange"} 2.2.1 Techical Explanation
 
-This section will cover the code and techniques used to improve on Rajesh's "*Most Populous Planning Areas*" visualisation. 
+This section will cover the code and techniques used to improve on Rajesh's "*Most Populous Planning Areas*" visualisation.
 
-- I had already implemented segregating **Planning Areas** by **Sex** in [Take-Home Exercise 1-1: Population Across Planning Areas by Sex](https://isss608-ay2024-25t3.netlify.app/take-home_ex/take-home_ex01-1/take-home_ex01-1#plots-and-analysis). Therefore, while looking through my classmates' submissions, I was inspired to use the approach by [DO QUYNH TRANG](https://isss608-ay2425-qtd.netlify.app/take-home_ex/take-home_ex01/take-home_ex01#singapores-population-distribution-and-density) in implementing **Regions**. 
-- The data was then grouped by **PA** and **Region**. 
-- *scale_y_continuous(labels = scales::comma)* was used to convert the x-axis formatting from standard numerical values to comma-separators for thousands. 
-- The rest of the implementation is similar to my approach in [Take-Home Exercise 1-1: Population Across Planning Areas by Sex](https://isss608-ay2024-25t3.netlify.app/take-home_ex/take-home_ex01-1/take-home_ex01-1#methods-and-explanation).
+-   I had already implemented segregating **Planning Areas** by **Sex** in [Take-Home Exercise 1-1: Population Across Planning Areas by Sex](https://isss608-ay2024-25t3.netlify.app/take-home_ex/take-home_ex01-1/take-home_ex01-1#plots-and-analysis). Therefore, while looking through my classmates' submissions, I was inspired to use the approach by [DO QUYNH TRANG](https://isss608-ay2425-qtd.netlify.app/take-home_ex/take-home_ex01/take-home_ex01#singapores-population-distribution-and-density) in implementing **Regions**.
+-   The data was then grouped by **PA** and **Region**.
+-   *scale_y_continuous(labels = scales::comma)* was used to convert the x-axis formatting from standard numerical values to comma-separators for thousands.
+-   The rest of the implementation is similar to my approach in [Take-Home Exercise 1-1: Population Across Planning Areas by Sex](https://isss608-ay2024-25t3.netlify.app/take-home_ex/take-home_ex01-1/take-home_ex01-1#methods-and-explanation).
 
 ### [1-2:]{style="color:DarkOrange"} 2.2.1 Summary
 
 ::: callout-tip
 ## Improvements
 
--   The improved graph provides information on all the **Planning Areas** instead of just the top 10 most populous ones. 
-_ The improved graph is segregated by **Regions** and provides additional insights.
+-   The improved graph provides information on all the **Planning Areas** instead of just the top 10 most populous ones. \_ The improved graph is segregated by **Regions** and provides additional insights.
     -   For example, the **Planning Areas** in the bottom half of the plot are predominately composed of those in the **Central** region.
 :::
 
@@ -703,11 +702,11 @@ ggplot(gender_ratio, aes(x = Proportion, y = PA, fill = Sex)) +
 
 ### [1-2:]{style="color:DarkOrange"} 2.3.1 Techical Explanation
 
-This section will cover the code and techniques used to improve on Rajesh's "*Gender Ratio by Planning Areas*" visualisation. 
+This section will cover the code and techniques used to improve on Rajesh's "*Gender Ratio by Planning Areas*" visualisation.
 
-- The height of the plot was lengthened using *#| fig-height: 6*.
-- The data preparation step is similar to my approach in [Take-Home Exercise 1-1: Percentage of Age Groups by Planning Areas](https://isss608-ay2024-25t3.netlify.app/take-home_ex/take-home_ex01-1/take-home_ex01-1#methods-and-explanation-1), but instead of calculating the percentage of **Age Groups** for each **Planning Area**, I calculated the percentage of **Sex** for each **Planning Area**. 
-- A median line at 50% was added using *geom_vline()*.
+-   The height of the plot was lengthened using *#\| fig-height: 6*.
+-   The data preparation step is similar to my approach in [Take-Home Exercise 1-1: Percentage of Age Groups by Planning Areas](https://isss608-ay2024-25t3.netlify.app/take-home_ex/take-home_ex01-1/take-home_ex01-1#methods-and-explanation-1), but instead of calculating the percentage of **Age Groups** for each **Planning Area**, I calculated the percentage of **Sex** for each **Planning Area**.
+-   A median line at 50% was added using *geom_vline()*.
 
 ### [1-2:]{style="color:DarkOrange"} 2.3.1 Summary
 
