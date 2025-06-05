@@ -239,8 +239,9 @@ The table below shows some of the duplicated *name*.
 mc1_nodes_raw %>%
   filter(name %in% duplicated_name$name) %>%
   arrange(name) %>%
-  head(5) %>%
-  kable()
+  kable() %>%
+  kable_styling("striped", full_width = F) %>% 
+  scroll_box(height = "200px")
 ```
 
 #### [1-1:]{style="color:DarkOrange"} 2.4.1 Fixing Duplicates in Nodes
@@ -2059,17 +2060,17 @@ Develop visualizations that illustrate how the influence of Oceanus Folk has spr
 
 This question is broken down into 3 parts:
 
-1. Number of Oceanus Folk Music (Songs/Albums) releases per Year
+1.  Number of Oceanus Folk Music (Songs/Albums) releases per Year
 
-    - Continues from Section 4.4 using oceanus_nodes and counts the number of songs/albums released in each year.
-    
-2. Number of Oceanus Folk Connections (Created Of/Influenced By) per Year
+    -   Continues from Section 4.4 using oceanus_nodes and counts the number of songs/albums released in each year.
 
-    - Continues from Section 4.4 using in_edges to find all the connections to oceanus_nodes and counts the number of connections made each year.
-    
-3. Number of Oceanus Folk Artists (Person/Musical Group) and Influenced Artists per Year
+2.  Number of Oceanus Folk Connections (Created Of/Influenced By) per Year
 
-    - Continues from Section 4.4 using in_neighbours to find all the artists of Oceanus Folk music as well as artists who have been influenced by Oceanus Folk music. Then, the number of artists who produced music in each year was found.
+    -   Continues from Section 4.4 using in_edges to find all the connections to oceanus_nodes and counts the number of connections made each year.
+
+3.  Number of Oceanus Folk Artists (Person/Musical Group) and Influenced Artists per Year
+
+    -   Continues from Section 4.4 using in_neighbours to find all the artists of Oceanus Folk music as well as artists who have been influenced by Oceanus Folk music. Then, the number of artists who produced music in each year was found.
 
 ::: panel-tabset
 ## Releases
@@ -2321,7 +2322,7 @@ all_creators_with_dates <- all_edges %>%
   left_join(mc1_nodes_clean %>% select(name, release_date),
             by = c("to" = "name"))
 
-# Step 7: For each release date, count distinct creators
+# Step 8: For each release date, count distinct creators
 creators_by_date <- all_creators_with_dates %>%
   filter(!is.na(release_date)) %>%
   count(release_date, name = "people_count") %>%
@@ -2412,7 +2413,6 @@ plot_ly(
     )
   )
 ```
-
 :::
 
 ::: callout-tip
@@ -2445,34 +2445,41 @@ music_out_edges <- mc1_edges_clean %>%
 influenced_music <- mc1_nodes_clean %>%
   filter(name %in% music_out_edges$to)
 
-# First join to get music names (from)
+# Step 4: First join to get music names (from)
 music1 <- all_music %>%
   select(name, node_name, genre) %>%
   left_join(music_out_edges %>% select(from, to), by = c("name" = "from")) %>%
   rename(from = name, original_name = node_name, original_genre = genre)
 
-# Second join to get influenced music names (to)
+# Step 5: Second join to get influenced music names (to)
 music2 <- music1 %>%
   left_join(mc1_nodes_clean, by = c("to" = "name")) %>%
   select(from, original_name, original_genre, to, node_name, genre) %>%
   rename(influenced_name = node_name, influenced_genre = genre) %>%
   distinct()
 
+# Step 6: To create a summary
 genre_influence_stats <- music2 %>%
   group_by(original_genre) %>%
   summarize(
-    total_influences = n(),
+    total_music = n(),
+    total_influences = sum(!is.na(to)),
     oceanus_influences = sum(influenced_genre == "Oceanus Folk", na.rm = TRUE),
+    other_influences = total_influences - oceanus_influences,
+    perc_oceanus = round(oceanus_influences / total_influences * 100, 1),
     no_influences = sum(is.na(influenced_genre)),
-    other_influences = total_influences - oceanus_influences - no_influences,
-    perc_oceanus = round(oceanus_influences / total_influences * 100, 1)
   ) %>%
-  arrange(desc(perc_oceanus))
+  arrange(desc(perc_oceanus)) %>%
+  head(10)
 
 genre_influence_stats %>%
-  head(10) %>%
   kable()
 ```
+
+```{r}
+music2
+```
+
 
 ```{r}
 #| code-fold: true
@@ -2480,12 +2487,17 @@ genre_influence_stats %>%
 
 # Data Preparation
 
+# Step 1: Chose genre
 chosen_genre = "Desert Rock"
 
+# Step 2: Select all music in chosen genre
 original_genre_songs <- music2 %>%
   filter(original_genre == chosen_genre) %>%
   pull(from)
 
+# Future work: This this graph contains other genres besides Oceanus Folk and currently everything is labeled as other genre
+
+# Step 3: Find all music that has influenced chosen genre
 influenced_songs <- music2 %>%
   filter(from %in% original_genre_songs, !is.na(to)) %>%
   pull(to)
@@ -2561,7 +2573,7 @@ g <- sub_graph %>%
     values = c(
       "Musician" = "grey50",
       "Oceanus Folk" = "#0027EA",
-      "Other Genre" = "#A45200"
+      "Other Genre" = "#A45200" # Future work: need to create a colour schema for all other genres
     )
   ) +
   theme_graph() +
@@ -2576,7 +2588,7 @@ girafe(ggobj = g, width_svg = 9, height_svg = 8)
 ## What genres have been most influenced by Oceanus Folk?
 
 -   The table above show the top 10 genres who was most influenced by Oceanus Folk
--   The Oceanus Folk genre has been the most influenced by itself with about a third of all music (Songs/Albums) drawing inspiration from Oceanus Folk music.
+-   The Oceanus Folk genre has been the most influenced by itself with about 40% of all music (Songs/Albums) drawing inspiration from Oceanus Folk music.
 -   The next most influenced genre is Desert Rock with about a fifth of all music drawing inspiration from Oceanus Folk.
 :::
 
@@ -2599,57 +2611,70 @@ all_creator <- mc1_nodes_clean %>%
 creator_out_edges <- mc1_edges_clean %>%
   filter(from %in% all_creator, `Edge Colour` == "Creator Of")
 
-# Step 3: Get all songs made by creators that are not oceanus folk
+# Step 3: Get all songs made by creators
 creator_music <- mc1_nodes_clean %>%
-  filter(name %in% creator_out_edges$to, genre != "Oceanus Folk")
+  filter(name %in% creator_out_edges$to)
 
-# Step 4: Get all outgoing edges from songs
+# Step 4: Get all songs made by creators that are not oceanus folk
+creator_music_no_oceanus <- creator_music %>%
+  filter(genre != "Oceanus Folk")
+
+# Step 5: Get all outgoing edges from songs
 creator_songs_out_edges <- mc1_edges_clean %>%
-  filter(from %in% creator_music$name, `Edge Colour` == "Influenced By")
+  filter(from %in% creator_music_no_oceanus$name, `Edge Colour` == "Influenced By")
 
-# First join to get creator names (from)
+# Step 6: First join to get creator names (from)
 creators <- creator_out_edges %>%
   left_join(mc1_nodes_clean, by = c("from" = "name")) %>%
   select(from, to, node_name, `Node Type`) %>%
-  rename(creator_name = node_name, creator_node_type = `Node Type`)
+  rename(creator_from = from, creator_name = node_name, creator_node_type = `Node Type`)
 
-# Second join to get song names (to)
+# Step 7: Second join to get song names (to)
 creator_and_songs <- creators %>%
   left_join(mc1_nodes_clean, by = c("to" = "name")) %>%
-  select(from, creator_name, creator_node_type, to, node_name, release_date, genre, notable) %>%
+  select(creator_from, creator_name, creator_node_type, to, node_name, release_date, genre, notable) %>%
   rename(song_name = node_name, song_genre = genre, song_to = to) %>%
   distinct()
 
-# Third join to get song's influenced genre (to)
+# Step 8: Third join to get song's influenced genre (to)
 creator_and_songs_and_influences <- creator_and_songs %>%
   left_join(creator_songs_out_edges %>% select(from, to), by = c("song_to" = "from")) %>%
   left_join(mc1_nodes_clean %>% select(name, genre), by = c("to" = "name")) %>%
   rename(influenced_genre = genre, influenced_to = to) %>%
-  select(from, creator_name, creator_node_type, song_to, song_name, release_date, song_genre, notable, influenced_to, influenced_genre) %>%
   distinct()
 
-# To find songs influenced by Oceanus Folk
-creator_and_songs_and_influences_compressed <- creator_and_songs_and_influences %>%
-  group_by(creator_name, creator_node_type,song_name, release_date, song_genre, notable) %>%
+# Step 9: Fourth join to itself influenced song's creator
+creator_and_songs_and_influences_and_creators <- creator_and_songs_and_influences %>%
+  left_join(creator_out_edges %>% select(from, to), by = c("influenced_to" = "to")) %>%
+  rename(influenced_from = from)
+
+# Step 10: To highlight songs influenced by Oceanus Folk that is not produced by same creator
+creator_and_songs_and_influences_and_creators_compressed <- creator_and_songs_and_influences_and_creators %>%
+  group_by(creator_name, creator_node_type, song_to, song_name, release_date, song_genre, notable) %>%
   summarize(
-    influenced_by_oceanus = ifelse(
-      any(influenced_genre == "Oceanus Folk", na.rm = TRUE),
-      TRUE,
-      FALSE
+    # Count distinct Oceanus Folk influences NOT from same creator
+    oceanus_influence_count = n_distinct(
+      case_when(
+        influenced_genre == "Oceanus Folk" & creator_from != influenced_from ~ influenced_to,
+        TRUE ~ NA_character_
+      ),
+      na.rm = TRUE
     ),
     .groups = "drop"
   )
 
-creator_stats <- creator_and_songs_and_influences_compressed %>%
+# Step 11: Create summary stats
+creator_stats <- creator_and_songs_and_influences_and_creators_compressed %>%
   group_by(creator_name, creator_node_type) %>%
   summarize(
-    total_songs = n_distinct(song_name),
-    oceanus_folk_songs = sum(song_genre == "Oceanus Folk", na.rm = TRUE),
-    oceanus_influence = sum(influenced_by_oceanus == TRUE, na.rm = TRUE),
-    notable_hits = sum(notable == TRUE, na.rm = TRUE),
-    perc_oceanus = round((oceanus_folk_songs + oceanus_influence) / total_songs * 100, 1)
+    total_songs = n_distinct(song_to),
+    oceanus_songs = sum(song_genre == "Oceanus Folk", na.rm = TRUE),
+    oceanus_influence = sum(oceanus_influence_count, na.rm = TRUE),
+    total_oceanus_influence = oceanus_songs + oceanus_influence,
+    notable_hits = sum(notable == TRUE, na.rm = TRUE)
   ) %>%
-  arrange(desc(notable_hits)) %>%
+  filter(notable_hits > 10) %>%
+  arrange(desc(total_oceanus_influence)) %>%
   head(10)
 
 creator_stats %>%
@@ -2662,15 +2687,18 @@ creator_stats %>%
 
 # Data Preparation
 
-top_creators <- creator_and_songs_and_influences %>%
+# Step 1: Get the nodes of the top creators
+top_creators <- creator_and_songs_and_influences_and_creators %>%
   filter(creator_name %in% creator_stats$creator_name) %>%
-  pull(from)
+  pull(creator_from)
 
-top_creators_songs <- creator_and_songs_and_influences %>%
+# Step 2: Get the songs that the top creators produced
+top_creators_songs <- creator_and_songs_and_influences_and_creators %>%
   filter(creator_name %in% creator_stats$creator_name) %>%
   pull(song_to)
 
-top_creators_songs_influenced <- creator_and_songs_and_influences %>%
+# Step 3: Get the Oceanus Folk songs that influenced their songs
+top_creators_songs_influenced <- creator_and_songs_and_influences_and_creators %>%
   filter(creator_name %in% creator_stats$creator_name, 
          !is.na(influenced_to), 
          influenced_genre == "Oceanus Folk") %>%
@@ -2686,7 +2714,7 @@ sub_graph <- graph %>%
 
 # First join perc_oceanus data to your node data
 sub_graph <- sub_graph %>%
-  left_join(creator_stats %>% select(creator_name, perc_oceanus),
+  left_join(creator_stats %>% select(creator_name, total_oceanus_influence),
             by = c("node_name" = "creator_name"))
 
 # Visualisation
@@ -2709,7 +2737,7 @@ g <- sub_graph %>%
       data_id = name,
       colour = `Node Colour`,
       shape = `Node Type`,
-      size = ifelse(name %in% top_creators, perc_oceanus, 1),
+      size = ifelse(name %in% top_creators, total_oceanus_influence, 1),
       tooltip = case_when(
         `Node Type` == "Album" ~ sprintf(
           "%s<br/>%s<br/>Notable: %s<br/>(%s)", node_name, genre, notable, release_date
@@ -2717,7 +2745,7 @@ g <- sub_graph %>%
         `Node Type` == "Song" ~ sprintf(
           "%s<br/>%s<br/>Notable: %s<br/>(%s)<br/>Single: %s", node_name, genre, notable, release_date, single
         ),
-        TRUE ~ sprintf("%s<br/>perc_oceanus: %s", node_name, perc_oceanus)
+        TRUE ~ sprintf("%s<br/>perc_oceanus: %s", node_name, total_oceanus_influence)
       )
     )
   )+ 
@@ -2768,10 +2796,11 @@ girafe(ggobj = g, width_svg = 9, height_svg = 8)
 ## Which top artists have been most influenced by Oceanus Folk?
 
 -   The table above show the top 10 artists who was most influenced by Oceanus Folk
-    - These are artists who have produced Oceaus Folk music or have been influenced by it.
-    - These artists are rank by the number of notable hits that they have.
-- The top artist is Jing Kang who has produced one Oceanus Folk song and has an influence score of 3.4%.
-- Next is Sailor Shift who has produced 36 Oceanus Folk songs with an influence score of 94.7%.
+    -   These are artists who have produced Oceaus Folk music or have been influenced by it.
+    -   Top artists are defined by having more than 10 notable hits.
+    -   These artists are rank by the amount that Oceanus Folk has influenced them.
+-   The top artist is Sailor Shift who has produced 36 Oceanus Folk songs.
+-   The next artist is Min He, who has produced one Oceanus Folk song and has been influenced by 10 other Oceanus Folk songs, bringing the total to 11 songs.
 :::
 
 ## [2:]{style="color:DarkOrange"} 5.3 Question 2c) On the converse, how has Oceanus Folk changed with the rise of Sailor Shift? From which genres does it draw most of its contemporary inspiration?
@@ -2811,15 +2840,216 @@ oceanus_influence_stats %>%
 ::: callout-tip
 ## From which genres does Oceanus Folk draw most of its contemporary inspiration?
 
-- As expected, Oceanus Folk artists primarily draw inspiration from other Oceanus Folk works, demonstrating strong genre continuity.
-- Approximately a fifth of Oceanus Folk compositions appear to be original works without direct influences from existing pieces.
-- Indie Folk emerges as the second most influential genre, accounting for roughly 21% of all Oceanus Folk musical references.
+-   As expected, Oceanus Folk artists primarily draw inspiration from other Oceanus Folk works, demonstrating strong genre continuity.
+-   Approximately a fifth of Oceanus Folk compositions appear to be original works without direct influences from existing pieces.
+-   Indie Folk emerges as the second most influential genre, accounting for roughly 21% of all Oceanus Folk musical references.
 :::
 
 # [2:]{style="color:DarkOrange"} 6 VAST 2025 MC1 Question 3
 
 Use your visualizations to develop a profile of what it means to be a rising star in the music industry.
 
-## [2:]{style="color:DarkOrange"} 6.1 Question 3a) Visualize the careers of three artists. Compare and contrast their rise in popularity and influence.?
+## [2:]{style="color:DarkOrange"} 6.1 Question 3a) Visualize the careers of three artists. Compare and contrast their rise in popularity and influence?
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show Code"
+
+# Data Preparation
+
+# Step 1: Get all creator names
+global_creators <- mc1_nodes_clean %>%
+  filter(`Node Type` %in% c("Person", "MusicalGroup"))
+
+# Step 2: Get all outgoing edges from these creators
+creator_out_edges <- mc1_edges_clean %>%
+  filter(from %in% global_creators$name, `Edge Colour` == "Creator Of")
+
+# Step 3: Get all songs made by creators
+creator_music <- mc1_nodes_clean %>%
+  filter(name %in% creator_out_edges$to)
+
+# Step 4: Get all incoming edges from songs
+creator_songs_in_edges <- mc1_edges_clean %>%
+  filter(to %in% creator_music$name, `Edge Colour` == "Influenced By")
+
+# First join to get creator names (from)
+creators <- creator_out_edges %>%
+  left_join(mc1_nodes_clean, by = c("from" = "name")) %>%
+  select(from, to, node_name, `Node Type`) %>%
+  rename(creator_name = node_name, creator_node_type = `Node Type`)
+
+# Second join to get song names (to)
+creator_and_songs <- creators %>%
+  left_join(mc1_nodes_clean, by = c("to" = "name")) %>%
+  select(from, creator_name, creator_node_type, to, node_name, release_date, genre, notable) %>%
+  rename(creator_from = from, song_name = node_name, song_genre = genre, song_to = to) %>%
+  distinct()
+
+# Third join to get influenced songs (to)
+creator_and_songs_and_influences <- creator_and_songs %>%
+  left_join(creator_songs_out_edges %>% select(from, to), by = c("song_to" = "to")) %>%
+  left_join(mc1_nodes_clean %>% select(name, genre, node_name), by = c("from" = "name")) %>%
+  rename(influence_genre = genre, influence_from = from, infuence_name = node_name) %>%
+  select(creator_from, creator_name, creator_node_type, song_to, song_name, release_date, song_genre, notable, influence_from, infuence_name, influence_genre) %>%
+  distinct()
+
+# First get song-level stats
+song_stats <- creator_and_songs_and_influences %>%
+  group_by(creator_name, creator_node_type, song_to, song_name, song_genre, notable) %>%
+  summarize(influence_count = n_distinct(influence_from),
+            influence_genre_count = n_distinct(influence_genre))
+
+# Then aggregate to creator level
+creator_stats <- song_stats %>%
+  group_by(creator_name, creator_node_type) %>%
+  summarize(
+    total_songs = n_distinct(song_to),
+    total_genre = n_distinct(song_genre),
+    notable_hits = sum(notable == TRUE, na.rm = TRUE),
+    total_influence = sum(influence_count),
+    total_influence_genre = sum(influence_genre_count)
+  ) %>%
+  arrange(desc(notable_hits))
+
+creator_stats %>%
+  head(10) %>%
+  kable()
+```
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show Code"
+
+# Data Preparation
+
+# Step 1: Get all creator names
+chosen_creator <- mc1_nodes_clean %>%
+  filter(`Node Type` %in% c("Person", "MusicalGroup"), node_name == "Guiying Liao") %>%
+  pull(name)
+
+# Step 2: Get all outgoing edges from these creators
+creator_out_edges <- mc1_edges_clean %>%
+  filter(from %in% chosen_creator, `Edge Colour` == "Creator Of")
+
+# Step 3: Get all songs made by creators
+creator_music <- mc1_nodes_clean %>%
+  filter(name %in% creator_out_edges$to) %>%
+  pull(name)
+
+# Step 4: Get all incoming edges from songs
+creator_songs_in_edges <- mc1_edges_clean %>%
+  filter(to %in% creator_music, `Edge Colour` == "Influenced By")
+
+# Step 3: Get all songs influenced by creator's songs
+influenced_music <- mc1_nodes_clean %>%
+  filter(name %in% creator_songs_in_edges$from) %>%
+  pull(name)
+
+# Step 4: Get all incoming edges from these influenced songs
+influenced_music_in_edges <- mc1_edges_clean %>%
+  filter(to %in% influenced_music, `Edge Colour` == "Creator Of")
+
+# Step 3: Get all influenced creators
+influenced_music_creators <- mc1_nodes_clean %>%
+  filter(name %in% influenced_music_in_edges$from) %>%
+  pull(name)
+```
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show Code"
+
+# Data Preparation
+
+# Combine relevant nodes
+all_nodes <- unique(c(chosen_creator,
+                      creator_music))
+
+# Create subgraph
+sub_graph <- graph %>%
+  filter(name %in% all_nodes)
+
+# Visualisation
+
+g <- sub_graph %>%
+  ggraph(layout = "fr") + 
+  geom_edge_fan(
+    aes(
+      edge_colour = `Edge Colour`,
+      start_cap = circle(1, 'mm'),
+      end_cap = circle(1, 'mm')
+      ),
+    arrow = arrow(length = unit(1, 'mm')),
+    alpha = 0.3
+  ) +
+  geom_point_interactive(
+    aes(
+      x = x,
+      y = y,
+      data_id = name,
+      colour = `Node Colour`,
+      shape = `Node Type`,
+      size = ifelse(`node_name` %in% c("Sailor Shift", "Ivy Echos", "Wei Zhao"), 3, 1),
+      tooltip = case_when(
+        `Node Type` == "Album" ~ sprintf(
+          "%s<br/>%s<br/>Notable: %s<br/>(%s)", node_name, genre, notable, release_date
+        ),
+        `Node Type` == "Song" ~ sprintf(
+          "%s<br/>%s<br/>Notable: %s<br/>(%s)<br/>Single: %s", node_name, genre, notable, release_date, single
+        ),
+        TRUE ~ sprintf("%s", node_name)
+      )
+    ),
+    show.legend = c(size = FALSE)
+  )+ 
+  geom_node_text(
+    aes(
+      label = ifelse(`node_name` == "Sailor Shift", "Sailor Shift",
+              ifelse(`node_name` == "Ivy Echos", "Ivy Echos",
+              ifelse(`node_name` == "Wei Zhao", "Wei Zhao", NA)))
+    ),
+    fontface = "bold",
+    size = 2.5,
+    colour = 'red',
+    show.legend = FALSE
+  ) +
+  scale_shape_manual(
+    name = "Node Type",
+    values = c(
+      "Album" = 16,
+      "MusicalGroup" = 15,
+      "Person" = 17,
+      "Song" = 10
+    )
+  ) +
+  scale_edge_colour_manual(
+    name = "Edge Colour",
+    values = c(
+      `Creator Of` = "#47D45A",
+      `Influenced By` = "#FF5757",
+      `Member Of` = "#CF57FF"
+    )
+  ) +
+  scale_colour_manual(
+    name = "Node Colour",
+    values = c(
+      "Musician" = "grey50",
+      "Oceanus Folk" = "#0027EA",
+      "Other Genre" = "#A45200"
+    )
+  ) +
+  theme_graph() +
+  theme(legend.text = element_text(size = 6),
+        legend.title = element_text(size = 9)) +
+  scale_size_identity()
+
+girafe(ggobj = g, width_svg = 7, height_svg = 6)
+```
+
+```{r}
+mc1_nodes_clean %>%
+  filter(name %in% creator_music)
+```
 
 ## [2:]{style="color:DarkOrange"} 6.2 Question 3b) Using this characterization, give three predictions of who the next Oceanus Folk stars with be over the next five years.

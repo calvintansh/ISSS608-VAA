@@ -58,13 +58,13 @@ The data for this exercise is from [VAST 2025 MC1](https://github.com/vast-chall
 
 **Graph Description**
 
-- Directed Multigraph 
-- Number of nodes: 17,412 
-- Number of edges: 37,857 
-- 18 connected components 
-- Possible node types are: {Person, Song, RecordLabel, Album, MusicalGroup} 
-- Possible edge types are: {MemberOf, PerformerOf, ComposerOf, ProducerOf, LyricistOf, InStyleOf, InterpolatesFrom, CoverOf, LyricalReferenceTo, DirectlySamples, RecordedBy, DistributedBy} 
-- The graph format is a JSON file. The root-level JSON object consists of graph-level properties specifying that it is directed and a multigraph, a “nodes” key which holds the list of nodes, and a “links” key which holds the list of edges.
+-   Directed Multigraph
+-   Number of nodes: 17,412
+-   Number of edges: 37,857
+-   18 connected components
+-   Possible node types are: {Person, Song, RecordLabel, Album, MusicalGroup}
+-   Possible edge types are: {MemberOf, PerformerOf, ComposerOf, ProducerOf, LyricistOf, InStyleOf, InterpolatesFrom, CoverOf, LyricalReferenceTo, DirectlySamples, RecordedBy, DistributedBy}
+-   The graph format is a JSON file. The root-level JSON object consists of graph-level properties specifying that it is directed and a multigraph, a “nodes” key which holds the list of nodes, and a “links” key which holds the list of edges.
 
 The data for this challenge comes from two different sources:
 
@@ -591,7 +591,7 @@ Design and develop visualizations and visual analytic tools that will allow Sila
 
 ## [2:]{style="color:DarkOrange"} 4.1 Visualising Sailor Shift's Music
 
-The analysis begins by extracting Sailor Shift's *name* from the node dataset. Following this, all outgoing edges originating from her node are  identified. The resulting nodes from those edges are filtered to isolate only those classified as Songs and Albums, thereby displaying her musical career.
+The analysis begins by extracting Sailor Shift's *name* from the node dataset. Following this, all outgoing edges originating from her node are identified. The resulting nodes from those edges are filtered to isolate only those classified as Songs and Albums, thereby displaying her musical career.
 
 ```{r}
 #| code-fold: true
@@ -703,7 +703,7 @@ girafe(ggobj = g, width_svg = 7, height_svg = 6)
 -   Sailor Shift released 4 Songs in 2028
     -   Among those, only 1 is a Single
     -   Therefore, the viral Song that spark her breakthrough is **High Tide Heartbeat**
-- Among her Songs and Albums, 36 belong to the Oceanus Folk genre, while there is 1 Americana and 1 Synthwave Album each.
+-   Among her Songs and Albums, 36 belong to the Oceanus Folk genre, while there is 1 Americana and 1 Synthwave Album each.
 :::
 
 ```{r}
@@ -721,7 +721,7 @@ mc1_nodes_clean %>%
 
 ## [2:]{style="color:DarkOrange"} 4.2 Question 1a) Who has she been most influenced by over time?
 
-This section is a continuation from the previous [section](https://isss608-ay2024-25t3.netlify.app/take-home_ex/take-home_ex02/take-home_ex02_mc1_main_v5#visualising-sailor-shifts-music) where all her outgoing edges were found. Music that she produced were already found and now Persons and Musical Groups that are outgoing from her are included. From these Songs, Albums, Persons and Musical Groups, only those Songs and Albums with further outgoing edges are kept. Then, the nodes connected to those are found. These are music that her music have been influenced by. Finally, the last step finds Person and Musical Groups who produced the music that have influenced her music. 
+This section is a continuation from the previous [section](https://isss608-ay2024-25t3.netlify.app/take-home_ex/take-home_ex02/take-home_ex02_mc1_main_v5#visualising-sailor-shifts-music) where all her outgoing edges were found. Music that she produced were already found and now Persons and Musical Groups that are outgoing from her are included. From these Songs, Albums, Persons and Musical Groups, only those Songs and Albums with further outgoing edges are kept. Then, the nodes connected to those are found. These are music that her music have been influenced by. Finally, the last step finds Person and Musical Groups who produced the music that have influenced her music.
 
 Furthermore, since Sailor Shift is a member of Ivy Echos, those who influence Ivy Echos will also influence her. Thus, the above steps were repeated for Ivy Echos.
 
@@ -731,12 +731,11 @@ Note: The term music refers to either Song or Album.
 
 #### Navigate through the tabs to explore visualizations of musical influences for:
 
-- Sailor Shift (individual influence network)
-- Ivy Echos (individual influence network)
-- Combined Network (interconnected influences)
+-   Sailor Shift (individual influence network)
+-   Ivy Echos (individual influence network)
+-   Combined Network (interconnected influences)
 
 ::: panel-tabset
-
 ## Sailor Shift
 
 ```{r}
@@ -1094,7 +1093,6 @@ g <- sub_graph %>%
 
 girafe(ggobj = g, width_svg = 7, height_svg = 6)
 ```
-
 :::
 
 ::: callout-tip
@@ -1135,13 +1133,12 @@ Finally, all the graphs are combined together to provide an overview of Sailor's
 
 #### Navigate through the tabs to explore visualizations of musical influences for:
 
-- Sailor Shift (individual influence network)
-- Ivy Echos Members
-- Ivy Echos (individual influence network)
-- Combined Network (interconnected influences)
+-   Sailor Shift (individual influence network)
+-   Ivy Echos Members
+-   Ivy Echos (individual influence network)
+-   Combined Network (interconnected influences)
 
 ::: panel-tabset
-
 ## Sailor Shift's Influence
 
 ```{r}
@@ -1282,8 +1279,7 @@ g <- sub_graph %>%
 girafe(ggobj = g, width_svg = 7, height_svg = 6)
 ```
 
-<br>
-Note: Excluding Ivy Echos  & Members
+<br> Note: Excluding Ivy Echos & Members
 
 ## Ivy Echos' Members
 
@@ -1624,7 +1620,6 @@ g <- sub_graph %>%
 
 girafe(ggobj = g, width_svg = 7, height_svg = 6)
 ```
-
 :::
 
 ::: callout-tip
@@ -1638,13 +1633,11 @@ girafe(ggobj = g, width_svg = 7, height_svg = 6)
 3.  The third graph shows who Ivy Echos have collaborated with and directly influenced.
     -   The third table shows the Persons and Musical Group who collaborated with Ivy Echos.
     -   Unlike Sailor Shift, one of Ivy Echo's songs has influenced an Albumm. The final table displays the affected Persons and Musical Group.
-4.  Neither Sailor Shift nor Ivy Echos has indirectly influenced anyone, as no Songs or Albums reference their works in a secondary chain 
-    -  For example, no Songs/Albums refer to other Songs/Albums that were themselves influenced by theirs.
+4.  Neither Sailor Shift nor Ivy Echos has indirectly influenced anyone, as no Songs or Albums reference their works in a secondary chain
+    -   For example, no Songs/Albums refer to other Songs/Albums that were themselves influenced by theirs.
 :::
 
-
 ::: panel-tabset
-
 ## Sailor Shift's Collaborations
 
 ```{r}
@@ -1658,8 +1651,7 @@ mc1_nodes_clean %>%
   scroll_box(height = "200px")
 ```
 
-<br>
-Note: Excluding Ivy Echos  & Members
+<br> Note: Excluding Ivy Echos & Members
 
 ## Ivy Echos Members
 
@@ -1698,7 +1690,6 @@ mc1_nodes_clean %>%
   select(`Node Type`, node_name) %>%
   kable()
 ```
-
 :::
 
 ## [2:]{style="color:DarkOrange"} 4.4 Question 1c) How has she influenced collaborators of the broader Oceanus Folk community?
@@ -1707,12 +1698,11 @@ This question is tackled by first identifying all Songs and Albums belonging to 
 
 #### Navigate through the tabs to explore visualizations of the Oceanus Folk community for:
 
-- All works of the Oceanus Folk community
-- The degree of separation of the Oceanus Folk community from Sailor Shift 
-- Three degrees of separation from Sailor Shift
+-   All works of the Oceanus Folk community
+-   The degree of separation of the Oceanus Folk community from Sailor Shift
+-   Three degrees of separation from Sailor Shift
 
 ::: panel-tabset
-
 ## Oceanus Folk Community
 
 ```{r}
@@ -2043,21 +2033,20 @@ g <- filtered_graph %>%
 
 girafe(ggobj = g, width_svg = 9, height_svg = 8)
 ```
-
 :::
 
 ::: callout-tip
 ## How has she influenced collaborators of the broader Oceanus Folk community?
 
-- This graph is displays a network overview of all People/Musical Groups who have produced Oceanus Folk Songs/Albums.
-- While Sailor Shift is connected to a portion of the Oceanus Folk community, most artists in this genre remain outside her influence network - either as distant connections (3rd to 13th degree) or completely unconnected.
-- In conclusion, Sailor Shift has a moderate influence on the broader Oceanus Folk community since her impact is discernible but not widespread.
+-   This graph is displays a network overview of all People/Musical Groups who have produced Oceanus Folk Songs/Albums.
+-   While Sailor Shift is connected to a portion of the Oceanus Folk community, most artists in this genre remain outside her influence network - either as distant connections (3rd to 13th degree) or completely unconnected.
+-   In conclusion, Sailor Shift has a moderate influence on the broader Oceanus Folk community since her impact is discernible but not widespread.
 :::
 
 ::: callout-warning
 ## Other Insights
 
-- It seems that the Oceanus Folk community places a strong emphasis on collaboration
-- Rather than simply drawing influence from each other's work, they prefer collaborating directly
-    - Evidenced by the sporadic 'Influenced By' connections in the network graph
+-   It seems that the Oceanus Folk community places a strong emphasis on collaboration
+-   Rather than simply drawing influence from each other's work, they prefer collaborating directly
+    -   Evidenced by the sporadic 'Influenced By' connections in the network graph
 :::
