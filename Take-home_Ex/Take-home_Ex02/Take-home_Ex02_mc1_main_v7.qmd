@@ -1184,7 +1184,7 @@ sub_igraph <- as.igraph(sub_graph)
 sailor_id <- which(V(sub_igraph)$name == sailor_vertex_name)
 
 # Calculate distances from Sailor Shift
-distances <- distances(sub_igraph, v = sailor_id, mode = "all")
+distances <- distances(sub_igraph, v = sailor_id, mode = "all") # Future work: somehow there are some degree infinite when the graph shows that they are connected. How to fix?
 
 # Convert to tidy format, calculate distances and handle infinite values
 distance_df <- tibble(
