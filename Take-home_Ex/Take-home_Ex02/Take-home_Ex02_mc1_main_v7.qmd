@@ -1031,9 +1031,9 @@ girafe(ggobj = g, width_svg = 7, height_svg = 6)
 ::: callout-tip
 ## Who has she collaborated with and directly or indirectly influenced?
 
--  The graph and table shows everyone that she has collaborated with.
+-   The graph and table shows everyone that she has collaborated with.
     -   Sailor Shift has collaborated with numerous different artists and information on them can be found in the table below.
--  However, Sailor Shift has not directly or indirectly influenced anyone, since none of her music has influenced others.
+-   However, Sailor Shift has not directly or indirectly influenced anyone, since none of her music has influenced others.
     -   For example, no Songs/Albums has referenced her Songs or Albums.
 :::
 
@@ -2373,9 +2373,9 @@ creator_stats %>%
 
 Based on the results of the analysis above, the top artists in each category will be selected.
 
-- Greatest Number of Music Released: Sailor Shift
-- Most Popular Artist (Highest Number of Notable Hits): Jay Walters
-- Most Influential Artist (Music, Artists & Reference Frequency): Qiang Yuan
+-   Greatest Number of Music Released: Sailor Shift
+-   Most Popular Artist (Highest Number of Notable Hits): Jay Walters
+-   Most Influential Artist (Music, Artists & Reference Frequency): Qiang Yuan
 
 ### [2:]{style="color:DarkOrange"} 6.2.1 Visualizing the career of Sailor Shift
 
@@ -2497,9 +2497,9 @@ g <- sub_graph %>%
 girafe(ggobj = g, width_svg = 7, height_svg = 6)
 ```
 
-::: panel-tabset
-
+:::::: panel-tabset
 ## Music Releases
+
 ```{r}
 #| code-fold: true
 #| code-summary: "Show Code"
@@ -2565,6 +2565,7 @@ plot_ly(
 ```
 
 ## Notable Music Releases
+
 ```{r}
 #| code-fold: true
 #| code-summary: "Show Code"
@@ -2630,6 +2631,7 @@ plot_ly(
 ```
 
 ## New Artist Influence
+
 ```{r}
 #| code-fold: true
 #| code-summary: "Show Code"
@@ -2707,10 +2709,12 @@ plot_ly(
 
 ::: callout-warning
 ## Note
-- Sailor Shift has no influence
+
+-   Sailor Shift has no influence
 :::
 
 ## Influenced Music
+
 ```{r}
 #| code-fold: true
 #| code-summary: "Show Code"
@@ -2777,10 +2781,12 @@ plot_ly(
 
 ::: callout-warning
 ## Note
-- Sailor Shift has no influence
+
+-   Sailor Shift has no influence
 :::
 
 ## Reference Frequency
+
 ```{r}
 #| code-fold: true
 #| code-summary: "Show Code"
@@ -2850,10 +2856,10 @@ plot_ly(
 
 ::: callout-warning
 ## Note
-- Sailor Shift has no influence
-:::
 
+-   Sailor Shift has no influence
 :::
+::::::
 
 ### [2:]{style="color:DarkOrange"} 6.2.2 Visualizing the career of Jay Walters
 
@@ -2976,8 +2982,8 @@ girafe(ggobj = g, width_svg = 7, height_svg = 6)
 ```
 
 ::: panel-tabset
-
 ## Music Releases
+
 ```{r}
 #| code-fold: true
 #| code-summary: "Show Code"
@@ -3043,6 +3049,7 @@ plot_ly(
 ```
 
 ## Notable Music Releases
+
 ```{r}
 #| code-fold: true
 #| code-summary: "Show Code"
@@ -3108,6 +3115,7 @@ plot_ly(
 ```
 
 ## New Artist Influence
+
 ```{r}
 #| code-fold: true
 #| code-summary: "Show Code"
@@ -3184,6 +3192,7 @@ plot_ly(
 ```
 
 ## Influenced Music
+
 ```{r}
 #| code-fold: true
 #| code-summary: "Show Code"
@@ -3439,8 +3448,8 @@ girafe(ggobj = g, width_svg = 7, height_svg = 6)
 ```
 
 ::: panel-tabset
-
 ## Music Releases
+
 ```{r}
 #| code-fold: true
 #| code-summary: "Show Code"
@@ -3506,6 +3515,7 @@ plot_ly(
 ```
 
 ## Notable Music Releases
+
 ```{r}
 #| code-fold: true
 #| code-summary: "Show Code"
@@ -3650,6 +3660,7 @@ plot_ly(
 ```
 
 ## Influenced Music
+
 ```{r}
 #| code-fold: true
 #| code-summary: "Show Code"
@@ -3782,16 +3793,15 @@ plot_ly(
     )
   )
 ```
-
 :::
 
 ### [2:]{style="color:DarkOrange"} 6.2.4 Compare and contrast the three artists' rise in popularity and influence
 
 The cumulative graphs of the 3 artists (Sailor Shift, Jay Walters and Qiang Yuan) will be overlaid for comparison of their musical careers.
 
-::: panel-tabset
-
+:::::: panel-tabset
 ## Music Releases
+
 ```{r}
 #| code-fold: true
 #| code-summary: "Show Code"
@@ -3868,6 +3878,7 @@ plot_ly(
 ```
 
 ## Notable Music Releases
+
 ```{r}
 #| code-fold: true
 #| code-summary: "Show Code"
@@ -3944,6 +3955,7 @@ plot_ly(
 ```
 
 ## New Artist Influence
+
 ```{r}
 #| code-fold: true
 #| code-summary: "Show Code"
@@ -4021,10 +4033,12 @@ plot_ly(
 
 ::: callout-warning
 ## Note
-- Sailor Shift has no influence
+
+-   Sailor Shift has no influence
 :::
 
 ## Influenced Music
+
 ```{r}
 #| code-fold: true
 #| code-summary: "Show Code"
@@ -4102,10 +4116,12 @@ plot_ly(
 
 ::: callout-warning
 ## Note
-- Sailor Shift has no influence
+
+-   Sailor Shift has no influence
 :::
 
 ## Reference Frequency
+
 ```{r}
 #| code-fold: true
 #| code-summary: "Show Code"
@@ -4183,25 +4199,25 @@ plot_ly(
 
 ::: callout-warning
 ## Note
-- Sailor Shift has no influence
-:::
 
+-   Sailor Shift has no influence
 :::
+::::::
 
 ::: callout-tip
 ## Visualize the careers of three artists. Compare and contrast their rise in popularity and influence?
 
 -   Among the three artists, Sailor Shift is the most recent entrant to the music industry, having debuted in 2024.
-    - She maintained consistent music releases through 2040.
-    - With 38 total releases, she surpassed Jay Walters' record (37 releases) in 2040, establishing herself as the most prolific artist.
-    - Qian Yuan has 9 records.
+    -   She maintained consistent music releases through 2040.
+    -   With 38 total releases, she surpassed Jay Walters' record (37 releases) in 2040, establishing herself as the most prolific artist.
+    -   Qian Yuan has 9 records.
 -   While Sailor Shift has released more music than Jay Walters, Jay Walters is the most popular Artist having released 35 hits that made the top record chart.
-    - Sailor Shift has 25 hits while Qian Yuan has 9.
--  Qian Yuan is the most influential artist having influenced 388 artists, 92 music and being referenced to 489 times.
-    - Jay Walters has a much lower influence having influenced 18 artists, 10 music  and being referenced to 87 times.
-    - Sailor Shift has no influence on the music scene.
--  Qian Yuan's influence is also more recent since she has influenced new artists as recent as 2029.
-    - In contrast, Jay Walters has only influenced new artists till 1996.
+    -   Sailor Shift has 25 hits while Qian Yuan has 9.
+-   Qian Yuan is the most influential artist having influenced 388 artists, 92 music and being referenced to 489 times.
+    -   Jay Walters has a much lower influence having influenced 18 artists, 10 music and being referenced to 87 times.
+    -   Sailor Shift has no influence on the music scene.
+-   Qian Yuan's influence is also more recent since she has influenced new artists as recent as 2029.
+    -   In contrast, Jay Walters has only influenced new artists till 1996.
 :::
 
 ## [2:]{style="color:DarkOrange"} 6.3 Question 3b) Using this characterization, give three predictions of who the next Oceanus Folk stars with be over the next five years.
@@ -4405,8 +4421,8 @@ girafe(ggobj = g, width_svg = 7, height_svg = 6)
 ```
 
 ::: panel-tabset
-
 ## Music Releases
+
 ```{r}
 #| code-fold: true
 #| code-summary: "Show Code"
@@ -4472,6 +4488,7 @@ plot_ly(
 ```
 
 ## Notable Music Releases
+
 ```{r}
 #| code-fold: true
 #| code-summary: "Show Code"
@@ -4537,6 +4554,7 @@ plot_ly(
 ```
 
 ## New Artist Influence
+
 ```{r}
 #| code-fold: true
 #| code-summary: "Show Code"
@@ -4613,6 +4631,7 @@ plot_ly(
 ```
 
 ## Influenced Music
+
 ```{r}
 #| code-fold: true
 #| code-summary: "Show Code"
@@ -4676,7 +4695,6 @@ plot_ly(
     )
   )
 ```
-
 :::
 
 ### [2:]{style="color:DarkOrange"} 6.3.3 Visualizing the career of Xia Jia
@@ -4800,8 +4818,8 @@ girafe(ggobj = g, width_svg = 7, height_svg = 6)
 ```
 
 ::: panel-tabset
-
 ## Music Releases
+
 ```{r}
 #| code-fold: true
 #| code-summary: "Show Code"
@@ -4867,6 +4885,7 @@ plot_ly(
 ```
 
 ## Notable Music Releases
+
 ```{r}
 #| code-fold: true
 #| code-summary: "Show Code"
@@ -4932,6 +4951,7 @@ plot_ly(
 ```
 
 ## New Artist Influence
+
 ```{r}
 #| code-fold: true
 #| code-summary: "Show Code"
@@ -5008,6 +5028,7 @@ plot_ly(
 ```
 
 ## Influenced Music
+
 ```{r}
 #| code-fold: true
 #| code-summary: "Show Code"
@@ -5071,7 +5092,6 @@ plot_ly(
     )
   )
 ```
-
 :::
 
 ### [2:]{style="color:DarkOrange"} 6.3.4 Visualizing the career of Sailor Shift
@@ -5195,8 +5215,8 @@ girafe(ggobj = g, width_svg = 7, height_svg = 6)
 ```
 
 ::: panel-tabset
-
 ## Music Releases
+
 ```{r}
 #| code-fold: true
 #| code-summary: "Show Code"
@@ -5262,6 +5282,7 @@ plot_ly(
 ```
 
 ## Notable Music Releases
+
 ```{r}
 #| code-fold: true
 #| code-summary: "Show Code"
@@ -5327,6 +5348,7 @@ plot_ly(
 ```
 
 ## New Artist Influence
+
 ```{r}
 #| code-fold: true
 #| code-summary: "Show Code"
@@ -5403,6 +5425,7 @@ plot_ly(
 ```
 
 ## Influenced Music
+
 ```{r}
 #| code-fold: true
 #| code-summary: "Show Code"
@@ -5466,7 +5489,6 @@ plot_ly(
     )
   )
 ```
-
 :::
 
 ### [2:]{style="color:DarkOrange"} 6.3.5 Visualizing the career of Donna Caldwell
@@ -5590,8 +5612,8 @@ girafe(ggobj = g, width_svg = 7, height_svg = 6)
 ```
 
 ::: panel-tabset
-
 ## Music Releases
+
 ```{r}
 #| code-fold: true
 #| code-summary: "Show Code"
@@ -5657,6 +5679,7 @@ plot_ly(
 ```
 
 ## Notable Music Releases
+
 ```{r}
 #| code-fold: true
 #| code-summary: "Show Code"
@@ -5722,6 +5745,7 @@ plot_ly(
 ```
 
 ## New Artist Influence
+
 ```{r}
 #| code-fold: true
 #| code-summary: "Show Code"
@@ -5798,6 +5822,7 @@ plot_ly(
 ```
 
 ## Influenced Music
+
 ```{r}
 #| code-fold: true
 #| code-summary: "Show Code"
@@ -5861,7 +5886,6 @@ plot_ly(
     )
   )
 ```
-
 :::
 
 ### [2:]{style="color:DarkOrange"} 6.3.6 Visualizing the career of Xiulan Ye
@@ -5985,8 +6009,8 @@ girafe(ggobj = g, width_svg = 7, height_svg = 6)
 ```
 
 ::: panel-tabset
-
 ## Music Releases
+
 ```{r}
 #| code-fold: true
 #| code-summary: "Show Code"
@@ -6052,6 +6076,7 @@ plot_ly(
 ```
 
 ## Notable Music Releases
+
 ```{r}
 #| code-fold: true
 #| code-summary: "Show Code"
@@ -6117,6 +6142,7 @@ plot_ly(
 ```
 
 ## New Artist Influence
+
 ```{r}
 #| code-fold: true
 #| code-summary: "Show Code"
@@ -6193,6 +6219,7 @@ plot_ly(
 ```
 
 ## Influenced Music
+
 ```{r}
 #| code-fold: true
 #| code-summary: "Show Code"
@@ -6256,16 +6283,15 @@ plot_ly(
     )
   )
 ```
-
 :::
 
 ### [2:]{style="color:DarkOrange"} 6.3.7 Compare and contrast the five artists' rise in popularity and influence
 
 The cumulative graphs of the 5 artists (Yang Wan, Ping Meng, Jing Kang, Chao Tan and Yang Zhao) will be overlaid for comparison of their musical careers.
 
-::: panel-tabset
-
+::::::: panel-tabset
 ## Music Releases
+
 ```{r}
 #| code-fold: true
 #| code-summary: "Show Code"
@@ -6387,10 +6413,12 @@ plot_ly(
 
 ::: callout-warning
 ## Note
+
 Donna Caldwell and Xiulan Ye are at 2017 with a count of 2.
 :::
 
 ## Notable Music Releases
+
 ```{r}
 #| code-fold: true
 #| code-summary: "Show Code"
@@ -6512,10 +6540,12 @@ plot_ly(
 
 ::: callout-warning
 ## Note
+
 Donna Caldwell and Xiulan Ye are at 2017 with a count of 1.
 :::
 
 ## New Artist Influence
+
 ```{r}
 #| code-fold: true
 #| code-summary: "Show Code"
@@ -6637,11 +6667,13 @@ plot_ly(
 
 ::: callout-warning
 ## Note
-- Donna Caldwell is also at 2017 with a count of 110
-- Sailor Shift has no influence
+
+-   Donna Caldwell is also at 2017 with a count of 110
+-   Sailor Shift has no influence
 :::
 
 ## Influenced Music
+
 ```{r}
 #| code-fold: true
 #| code-summary: "Show Code"
@@ -6763,11 +6795,11 @@ plot_ly(
 
 ::: callout-warning
 ## Note
-- Donna Caldwell overlaps with Xiulan Ye
-- Sailor Shift has no influence
-:::
 
+-   Donna Caldwell overlaps with Xiulan Ye
+-   Sailor Shift has no influence
 :::
+:::::::
 
 ### [2:]{style="color:DarkOrange"} 6.3.8 Analysing the relationships between these five artists
 
@@ -6920,11 +6952,10 @@ girafe(ggobj = g, width_svg = 7, height_svg = 6)
 ```
 
 ::: callout-tip
-
-- All five artists are solo artists and none of them are part of the same musical group
-- Chao Wu, Xia Jia, Donna Caldwell and Xiulan Ye have some collaborative works with each other which can explain why some of their graphs overlaps.
-   - Chao Wu, Xia Jia, Donna Caldwell and Xiulan Ye produced Winds of the Basque Shore together.
-   - Xia Jia, Donna Caldwell and Xiulan Ye produced Destiny's Call together
+-   All five artists are solo artists and none of them are part of the same musical group
+-   Chao Wu, Xia Jia, Donna Caldwell and Xiulan Ye have some collaborative works with each other which can explain why some of their graphs overlaps.
+    -   Chao Wu, Xia Jia, Donna Caldwell and Xiulan Ye produced Winds of the Basque Shore together.
+    -   Xia Jia, Donna Caldwell and Xiulan Ye produced Destiny's Call together
 :::
 
 ### [2:]{style="color:DarkOrange"} 6.3.8 Predicting who the next three Oceanus Folk stars with be over the next five years
@@ -6933,21 +6964,21 @@ girafe(ggobj = g, width_svg = 7, height_svg = 6)
 ## Chao Wu
 
 -   Chao Wu is the first on the Star Potential list and his influence is large having influenced 119 Artists and 29 Music with his Oceanus Folk music.
-    - Furthermore, he gained this large following despite having only released 4  music.
-    - His last Oceanus Folk work was in 2025 but it is still being referred to in 2038.
+    -   Furthermore, he gained this large following despite having only released 4 music.
+    -   His last Oceanus Folk work was in 2025 but it is still being referred to in 2038.
 :::
 
 ::: callout-tip
 ## Xia Jia
 
 -   Xia Jia is the next on the Star Potential list and her influence is equally large having influenced 111 Artists and 27 Music with her Oceanus Folk music.
-    - Furthermore, she has also gained this large following despite having only released 4 music.
-    - Her last Oceanus Folk work was in 2028 but was last refered to in 2029 which is about older than Chao Wu.
+    -   Furthermore, she has also gained this large following despite having only released 4 music.
+    -   Her last Oceanus Folk work was in 2028 but was last refered to in 2029 which is about older than Chao Wu.
 :::
 
 ::: callout-tip
 ## Xiulan Ye
 
 -   Both Xiulan Ye and Donna Caldwell have produced the 2 influential songs Basque Shore and Destiny's Call together. However, Xiulan Ye is more established in the music scene having also produced Unbound from the Doom Metal genre.
-- Therefore, the third predicted star will be Xiulan Ye but Donna Caldwell has very good potential as well.
+-   Therefore, the third predicted star will be Xiulan Ye but Donna Caldwell has very good potential as well.
 :::

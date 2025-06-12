@@ -27,6 +27,12 @@ website:
           href: "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05.html"
         - text: "Hands-On Exercise 6: Visualising and Analysing Time-oriented Data"
           href: "Hands-on_Ex/Hands-on_Ex06/Hands-on_Ex06.html"
+        - text: "Hands-On Exercise 8-1: Choropleth Mapping in R"
+          href: "Hands-on_Ex/Hands-on_Ex08-1/Hands-on_Ex08-1.html"
+        - text: "Hands-On Exercise 8-2: Visualising Geospatial Point Data"
+          href: "Hands-on_Ex/Hands-on_Ex08-2/Hands-on_Ex08-2.html"
+        - text: "Hands-On Exercise 8-3: Analytical Mapping"
+          href: "Hands-on_Ex/Hands-on_Ex08-3/Hands-on_Ex08-3.html"
     - text: "<i class='bi bi-bar-chart-line'></i> In-class Exercises"
       menu:
         - text: "In-Class Exercise 5: Preparation for VAST Mini Mini-Challenge 1 2025"
@@ -72,6 +78,12 @@ website:
               href: Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05.qmd
             - text: "6: Visualising and Analysing Time-oriented Data"
               href: Hands-on_Ex/Hands-on_Ex06/Hands-on_Ex06.qmd
+            - text: "8-1: Choropleth Mapping in R"
+              href: Hands-on_Ex/Hands-on_Ex08-1/Hands-on_Ex08-1.qmd
+            - text: "8-2: Visualising Geospatial Point Data"
+              href: Hands-on_Ex/Hands-on_Ex08-2/Hands-on_Ex08-2.qmd
+            - text: "8-3: Analytical Mapping"
+              href: Hands-on_Ex/Hands-on_Ex08-3/Hands-on_Ex08-3.qmd
     - title: "Take-Home Exercise"
       style: "floating"
       collapse-level: 2
