@@ -13,7 +13,7 @@ execute:
 
 # [8-1:]{style="color:DarkOrange"} 1 Overview
 
-Choropleth mapping involves the symbolisation of enumeration units, such as countries, provinces, states, counties or census units, using area patterns or graduated colors. For example, a social scientist may need to use a choropleth map to portray the spatial distribution of aged population of Singapore by Master Plan 2014 Subzone Boundary.
+Choropleth mapping involves the symbolisation of enumeration units, such as countries, provinces, states, counties or census units, using area patterns or graduated colours. For example, a social scientist may need to use a choropleth map to portray the spatial distribution of aged population of Singapore by Master Plan 2014 Subzone Boundary.
 
 This exercise will cover how to plot functional and truthful choropleth maps by using an R package called [**tmap**](https://cran.r-project.org/web/packages/tmap/) package.
 
@@ -262,8 +262,8 @@ tm_shape(mpsz_pop2020)+
 ::: callout-tip
 ## Things to learn from *tm_polygons()*
 
--   The default interval binning used to draw the choropleth map is called “pretty”. A detailed discussion of the data classification methods supported by **tmap** will be provided in [Section 4.3]((https://isss608-ay2024-25t3.netlify.app/hands-on_ex/hands-on_ex08-1/hands-on_ex08-1#data-classification-methods-of-tmap).
--   The default colour scheme used is `YlOrRd` of ColorBrewer. More information about this colour scheme can be found in [Section 4.4]((https://isss608-ay2024-25t3.netlify.app/hands-on_ex/hands-on_ex08-1/hands-on_ex08-1#color-scheme).
+-   The default interval binning used to draw the choropleth map is called “pretty”. A detailed discussion of the data classification methods supported by **tmap** will be provided in [Section 4.3](https://isss608-ay2024-25t3.netlify.app/hands-on_ex/hands-on_ex08-1/hands-on_ex08-1#data-classification-methods-of-tmap).
+-   The default colour scheme used is `YlOrRd` of ColorBrewer. More information about this colour scheme can be found in [Section 4.4](https://isss608-ay2024-25t3.netlify.app/hands-on_ex/hands-on_ex08-1/hands-on_ex08-1#color-scheme).
 -   By default, *Missing* value will be shaded in grey.
 :::
 
