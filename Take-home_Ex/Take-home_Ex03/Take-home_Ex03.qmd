@@ -1,0 +1,3962 @@
+---
+title: "[Take-Home Exercise 3:]{style='color:DarkOrange'} VAST 2025 Mini-Challenge 1 (Sailor Shift Music)"
+date: 2025-05-15
+date-modified: "last-modified"
+format: html
+editor: visual
+execute: 
+  eval: true
+  echo: true
+  warning: false
+  freeze: true
+---
+
+# [3:]{style="color:DarkOrange"} 1 Overview
+
+This exercise will target to answer one of the three challenges from [VAST 2025](https://vast-challenge.github.io/2025/index.html) which features a fictitious island nation, Oceanus, famous for fishing and quiet seaside communities.
+
+The chosen challenge is [Mini-Challenge 1](https://vast-challenge.github.io/2025/MC1.html) and the background is covered in [Take-Home Exercise 2](https://isss608-ay2024-25t3.netlify.app/take-home_ex/take-home_ex02/take-home_ex02_mc1_main_v5).
+
+## [3:]{style="color:DarkOrange"} 1.1 Tasks
+
+Select one of the module of my group's proposed Shiny application and complete the following tasks:
+
+-   Evaluate and determine the necessary R packages needed for your Shiny application are supported in R CRAN
+-   Prepare and test the specific R codes can be run and returned the correct output as expected
+-   Determine the parameters and outputs that will be exposed on the Shiny applications
+-   Select the appropriate Shiny UI components for exposing the parameters determine above
+
+This report must provide detail discussion and explanation of:
+
+-   Data preparation process
+-   Selection of data visualisation techniques used
+-   Data visualisation design and interactivity principles and best practices implemented
+
+## [3:]{style="color:DarkOrange"} 1.2 Data Source
+
+The data for this exercise is from [VAST 2025 MC1](https://github.com/vast-challenge/2025-data/blob/main/MC1_release.zip).
+
+## [1-1:]{style="color:DarkOrange"} 1.3 Install and Load the Required Libraries
+
+The following libraries are used in this exercise and the code below loads them into the working environment.
+
+Utility Tools
+
+-   jsonlite: To parse JSON
+-   tidyverse - Data science tools
+-   ggtext - Tools for text formatting
+-   knitr - For better table displays
+-   lubridate - For processing date and time
+-   kableExtra - For tabular properties
+
+Graphing Tools
+
+-   patchwork - For combining ggplot plots
+-   ggraph - For plotting network data
+-   tidygraph - For graph manipulations
+-   igraph - Contains functions for network analysis
+-   ggiraph - Interactive plots
+-   plotly - Professional visualisations
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show Code"
+pacman::p_load(jsonlite, tidyverse, ggtext,
+                knitr, lubridate, patchwork,
+                ggraph, tidygraph, igraph,
+                ggiraph, kableExtra, plotly)
+```
+
+## [1-1:]{style="color:DarkOrange"} 1.4 Importing Data
+
+For the purpose of this exercise, a data file called *MC1_graph* will be used. The code below imports *MC1_graph.json* into R environment by using *fromJSON()* function of *jsonlite* package.
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show Code"
+mc1_data <- fromJSON("data/MC1_graph.json")
+glimpse(mc1_data)
+```
+
+# [1-1:]{style="color:DarkOrange"} 2 Data Pre-Processing
+
+## [1-1:]{style="color:DarkOrange"} 2.1 Split into Nodes and Edges
+
+The *mc1_data.json* data file provided by VAST 2025 for Mini-Challenge 1 consists of both nodes and links. The following codes will be used to split them into individual files for easier data matriculation.
+
+### [1-1:]{style="color:DarkOrange"} 2.1.1 Get Nodes
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show Code"
+mc1_nodes_raw <- as_tibble(mc1_data$nodes)
+
+glimpse(mc1_nodes_raw)
+```
+
+The first 5 rows of *mc1_nodes_raw* are shown below.
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show Code"
+kable(head(mc1_nodes_raw, 5))
+```
+
+### [1-1:]{style="color:DarkOrange"} 2.1.2 Get Edges
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show Code"
+mc1_edges_raw <- as_tibble(mc1_data$links)
+
+glimpse(mc1_edges_raw)
+```
+
+The first 5 rows of *mc1_edges_raw* are shown below.
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show Code"
+kable(head(mc1_edges_raw, 5))
+```
+
+## [1-1:]{style="color:DarkOrange"} 2.2 Adding Identifying Columns
+
+There are 2 columns that provides information on names, the *name* and *stage_name* column. The code below shows that the *name* column is the one that contains information on our target of interest Sailor Shift.
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show Code"
+kable(mc1_nodes_raw %>%
+  filter(grepl("Sailor Shift", name))) #Sailor Shift is in name column and not in stage_name column
+
+kable(mc1_nodes_raw %>%
+  filter(grepl("Ivy Echos", name))) #Ivy Echos is also in name column and not in stage_name column
+```
+
+Identifying columns for Sailor Shift, Ivy Echos and Oceanus Folk are added to aid in the identification and filtering of these key variables for further analysis.
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show Code"
+mc1_nodes_raw <- mc1_nodes_raw %>%
+  mutate(
+    is_sailor = (
+      str_detect(name, regex("sailor shift", ignore_case = TRUE))
+    ) %>% replace_na(FALSE),
+    is_ivy = (
+      str_detect(name, regex("ivy echos", ignore_case = TRUE))
+    ) %>% replace_na(FALSE),
+    is_oceanus_folk = str_detect(genre, regex("oceanus folk", ignore_case = TRUE)) %>% #na/not oceanus folk = false
+      replace_na(FALSE)
+  )
+
+kable(head(mc1_nodes_raw,5))
+```
+
+## [1-1:]{style="color:DarkOrange"} 2.3 Convert Date Fields
+
+The columns related to date are in *char* format and will be converted to *int* using the code below.
+
+Note: Dates only appears in Songs and Albums.
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show Code"
+mc1_nodes_raw <- mc1_nodes_raw %>%
+  mutate(across(c(release_date, notoriety_date, written_date),
+                ~as.integer(if_else(`Node Type` %in% c("Song", "Album"), ., NA_character_))))
+```
+
+## [1-1:]{style="color:DarkOrange"} 2.4 Check for Duplicates
+
+### [1-1:]{style="color:DarkOrange"} 2.4.1 Duplicates in Nodes
+
+For Nodes, there are no duplicated *id*.
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show Code"
+mc1_nodes_raw %>%
+  count(id) %>%
+  filter(n > 1)
+```
+
+But, there are many duplicated records in the *name* column.
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show Code"
+duplicated_name <- mc1_nodes_raw %>%
+  count(name) %>%
+  filter(n > 1)
+
+kable(head(duplicated_name,5))
+
+cat("Total number of duplicated name:", sum(duplicated_name$n), "\n")
+```
+
+The table below shows some of the duplicated *name*.
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show Code"
+mc1_nodes_raw %>%
+  filter(name %in% duplicated_name$name) %>%
+  arrange(name) %>%
+  kable() %>%
+  kable_styling("striped", full_width = F) %>% 
+  scroll_box(height = "200px")
+```
+
+#### [1-1:]{style="color:DarkOrange"} 2.4.1 Fixing Duplicates in Nodes
+
+The code below marks all node rows with a hash key for grouping.
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show Code"
+mc1_nodes_tagged <- mc1_nodes_raw %>%
+  mutate(group_key = paste(`Node Type`, name, single, release_date, genre,
+                           notable, written_date, notoriety_date, is_sailor,
+                           is_oceanus_folk, sep = "|"))
+
+kable(head(mc1_nodes_tagged,5))
+```
+
+The following code removes duplicates in *name* and checks for remaining duplicates. This step reduced the number of duplicated *name* from 4,953 to 14 records.
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show Code"
+# Step 3: De-duplicate and keep the preferred (with stage_name if available)
+mc1_nodes_dedup <- mc1_nodes_tagged %>%
+  group_by(group_key) %>%
+  arrange(desc(!is.na(stage_name))) %>%
+  slice(1) %>%
+  ungroup()
+
+duplicated_name <- mc1_nodes_dedup %>%
+  count(name) %>%
+  filter(n > 1)
+
+cat("Remaining number of duplicated name:", sum(duplicated_name$n), "\n")
+```
+
+The table displays remaining nodes that appear duplicated but are actually unique, differentiated by specific columns. This affects Song, Album, and Record Label node types.
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show Code"
+mc1_nodes_dedup %>%
+  filter(name %in% duplicated_name$name) %>%
+  arrange(name) %>%
+  kable() %>%
+  kable_styling("striped", full_width = F) %>% 
+  scroll_box(height = "200px")
+```
+
+### [1-1:]{style="color:DarkOrange"} 2.4.2 Duplicates in Edges
+
+For Edges, there are duplicates but only their *key* are different. Since, information on *key* is not provided by [VAST 2025 MC1](https://github.com/vast-challenge/2025-data/blob/main/MC1_release.zip), its purpose cannot be determined. Therefore, the *key* column will be redundant and duplicated edges differing only by their *key* will be removed.
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show Code"
+# Step 1: Identify duplicate combinations
+duplicate_summary <- mc1_edges_raw %>%
+  count(source, target, `Edge Type`) %>%
+  filter(n > 1)
+
+# Step 3: Join back to get all original duplicate rows
+mc1_edges_raw %>%
+  inner_join(duplicate_summary, by = c("source", "target", "Edge Type")) %>%
+  kable()
+```
+
+All duplicates are removed using the code below and a check was performed to show that no duplicated edges remains.
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show Code"
+mc1_edges_raw <- mc1_edges_raw %>%
+  distinct(source, target, `Edge Type`, .keep_all = TRUE) %>%
+  select(!key)
+
+mc1_edges_raw %>%
+  count(source, target, `Edge Type`) %>%
+  filter(n > 1)
+```
+
+# [3:]{style="color:DarkOrange"} 3 Exploratory Data Analysis (EDA)
+
+## [3:]{style="color:DarkOrange"} 3.1 Explore Nodes and Edges range
+
+The *source* and *target* columns seems to refer to the *id* column in nodes. The code below is used to confirm this assumption since they have the same range.
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show Code"
+range(mc1_nodes_dedup$id)
+
+range(mc1_edges_raw$source)
+
+range(mc1_edges_raw$target)
+```
+
+## [3:]{style="color:DarkOrange"} 3.2 Mapping Node name to Edges id
+
+tidygraph uses the *from* and *to* columns in the edges and matches them with the *name* column in nodes. Currently, the *source* and *target* columns in edges contains the *id* matches to the *id* column in nodes. This is the wrong syntax for tidygraph because edges need to match the *name* column in nodes.
+
+Therefore, the *name* column in nodes needs to contain the *id* values in the *id* column. This can be done by renaming the *name* column to *node_name* and then rename *id* column to *name* to match the *source* and *target* columns in the edges. And then rename the *source* and *target* columns to *from* and *to* respectively.
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show Code"
+mc1_nodes_clean <- mc1_nodes_dedup %>%
+  rename(node_name = name, name = id) %>%
+  mutate(name = as.character(name)) %>%
+  select(`Node Type`, node_name, release_date, genre, notable, name, single, written_date, stage_name, notoriety_date, is_sailor, is_ivy, is_oceanus_folk)
+
+kable(head(mc1_nodes_clean,5))
+```
+
+### [3:]{style="color:DarkOrange"} 3.2.1 Create Edge Mapping from original id to Kept id
+
+However, this is not enough because in [Section 2.4](https://isss608-ay2024-25t3.netlify.app/take-home_ex/take-home_ex02/take-home_ex02_mc1_main_v5#check-for-duplicates), duplicated Nodes and their respective *id* (now called *name*) were removed. Therefore, without treating edges, there will be edges that do not have a match to nodes since they are matching the removed *id*.
+
+The code below maps the *original_id* to the *kept_id* in preparation for the next step.
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show Code"
+# Step 1: Create mapping of all group_key → kept id
+key_to_id_map <- mc1_nodes_dedup %>%
+  select(group_key, kept_id = id)
+
+# Step 3: Map all original rows to the retained ID
+id_remap <- mc1_nodes_tagged %>%
+  left_join(key_to_id_map, by = "group_key") %>%
+  select(original_id = id, kept_id)
+
+kable(head(id_remap,5))
+```
+
+This step adds the *kept_id* column to the edge data.
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show Code"
+# Step 3: Replace edges' source and target with mapped kept_id
+mc1_edges_mapped <- mc1_edges_raw %>%
+  left_join(id_remap, by = c("source" = "original_id"))
+
+kable(head(mc1_edges_mapped,5))
+```
+
+Next, the *source* is replaced by the *kept_id*. This is also repeated for *target*.
+
+Lastly, the *source* and *target* columns are then renamed *from* and *to* respectively to follow tidygraph syntax.
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show Code"
+mc1_edges_mapped <- mc1_edges_mapped %>%
+  mutate(source = kept_id) %>%
+  select(-kept_id) %>%
+  left_join(id_remap, by = c("target" = "original_id")) %>%
+  mutate(target = kept_id) %>%
+  select(-kept_id) %>%
+  rename(from = source, to = target) %>%
+  mutate(from = as.character(from), to = as.character(to))
+
+kable(head(mc1_edges_mapped,5))
+```
+
+## [3:]{style="color:DarkOrange"} 3.3 Filter out any unmatched (invalid) edges
+
+This step removes any null values in edges.
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show Code"
+mc1_edges_clean <- mc1_edges_mapped %>%
+  filter(!is.na(from), !is.na(to))
+```
+
+## [3:]{style="color:DarkOrange"} 3.4 Check for any missing nodes
+
+This steps looks for any unmatched nodes and edges and the result shows that all nodes have matching edges and vice versa.
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show Code"
+setdiff(
+  unique(c(mc1_edges_clean$from, mc1_edges_clean$to)),
+  mc1_nodes_clean$name
+)
+```
+
+## [3:]{style="color:DarkOrange"} 3.5 Checking Edges Schema
+
+The code below defines valid source and destination types for each edge type as per the [VAST 2025 MC1](https://github.com/vast-challenge/2025-data/blob/main/MC1_release.zip) Data Description file provided.
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show Code"
+# Define valid source and destination types for each edge type
+edge_rules <- list(
+  PerformerOf = list(source = c("Person", "MusicalGroup"), target = c("Song", "Album")),
+  ComposerOf = list(source = c("Person"), target = c("Song", "Album")),
+  ProducerOf = list(source = c("Person", "RecordLabel"), target = c("Song", "Album", "Person", "MusicalGroup")),
+  LyricistOf = list(source = c("Person"), target = c("Song", "Album")),
+  RecordedBy = list(source = c("Song", "Album"), target = c("RecordLabel")),
+  DistributedBy = list(source = c("Song", "Album"), target = c("RecordLabel")),
+  InStyleOf = list(source = c("Song", "Album"), target = c("Song", "Album", "Person", "MusicalGroup")),
+  InterpolatesFrom = list(source = c("Song", "Album"), target = c("Song", "Album")),
+  CoverOf = list(source = c("Song", "Album"), target = c("Song", "Album")),
+  LyricalReferenceTo = list(source = c("Song", "Album"), target = c("Song", "Album")),
+  DirectlySamples = list(source = c("Song", "Album"), target = c("Song", "Album")),
+  MemberOf = list(source = c("Person"), target = c("MusicalGroup"))
+)
+```
+
+Using the rules defined above, the code below checks for erroneous edge and node relationships and shows that there are multiple invalid edges.
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show Code"
+# Create a lookup for node types
+node_type_lookup <- mc1_nodes_clean %>%
+  select(name, `Node Type`) %>%
+  deframe()
+
+# Add source and target node types to the edge table
+mc1_edges_checked <- mc1_edges_clean %>%
+  mutate(
+    source_type = node_type_lookup[from],
+    target_type = node_type_lookup[to]
+  )
+
+mc1_edges_tagged <- mc1_edges_checked %>%
+  rowwise() %>%
+  mutate(
+    valid = {
+      rule <- edge_rules[[`Edge Type`]]
+      if (is.null(rule)) TRUE
+      else {
+        source_type %in% rule$source && target_type %in% rule$target
+      }
+    }
+  ) %>%
+  ungroup()
+
+# Count and display invalid edge combinations
+invalid_edge_summary <- mc1_edges_tagged %>%
+  filter(!valid) %>%
+  count(`Edge Type`, source_type, target_type, sort = TRUE)
+
+kable(head(invalid_edge_summary,5))
+```
+
+In total, there are 550 invalid edges.
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show Code"
+# Check total invalid edge count
+cat("Total invalid edges:", sum(!mc1_edges_tagged$valid), "\n")
+```
+
+Finally, the invalid edges are removed.
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show Code"
+# Keep only valid edges
+mc1_edges_clean <- mc1_edges_tagged %>%
+  filter(valid) 
+
+cat("Total invalid edges:", sum(!mc1_edges_clean$valid), "\n")
+
+mc1_edges_clean <- mc1_edges_clean %>%
+  select(from, to, `Edge Type`)  # drop helper columns
+```
+
+## [3:]{style="color:DarkOrange"} 3.6 Visualising Edge Types
+
+The most common edge type is PerformerOf.
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show Code"
+ggplot(data = mc1_edges_clean,
+       aes(y = `Edge Type`)) +
+  geom_bar()
+```
+
+## [3:]{style="color:DarkOrange"} 3.7 Visualising Node Types
+
+The most common node type is Person.
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show Code"
+ggplot(data = mc1_nodes_clean,
+       aes(y = `Node Type`)) +
+  geom_bar()
+```
+
+## [3:]{style="color:DarkOrange"} 3.8 Temporal Validation
+
+The following code chunk is used to ensure any influenced songs/albums are not released before the songs/albums that influenced them. If there are any of such cases, it will be flagged out.
+
+```{r}
+
+# Define which edge types represent influence relationships between songs/albums
+influence_edge_types <- c("InStyleOf", "InterpolatesFrom", "CoverOf", 
+                         "LyricalReferenceTo", "DirectlySamples")
+
+# Check for temporal inconsistencies in song/album influence relationships
+temporal_check <- mc1_edges_clean %>%
+  # Focus only on influence edge types
+  filter(`Edge Type` %in% influence_edge_types) %>%
+  # Add source node info (the influenced song/album)
+  left_join(mc1_nodes_clean %>% 
+            select(name, source_type = `Node Type`, source_release = release_date), 
+            by = c("from" = "name")) %>%
+  # Add target node info (the influencer song/album)
+  left_join(mc1_nodes_clean %>% 
+            select(name, target_type = `Node Type`, target_release = release_date), 
+            by = c("to" = "name")) %>%
+  # Only check Song/Album -> Song/Album relationships
+  filter(source_type %in% c("Song", "Album"),
+         target_type %in% c("Song", "Album")) %>%
+  # Check for temporal violations
+  mutate(
+    temporal_violation = case_when(
+      is.na(source_release) | is.na(target_release) ~ FALSE,  # Skip if dates missing
+      source_release < target_release ~ TRUE,  # Influenced before influencer
+      TRUE ~ FALSE
+    )
+  )
+
+# Summary of temporal violations
+violation_summary <- temporal_check %>%
+  filter(temporal_violation) %>%
+  count(`Edge Type`, sort = TRUE)
+
+kable(head(violation_summary))
+```
+
+```{r}
+# Show examples of violations with node names
+violation_examples <- temporal_check %>%
+  filter(temporal_violation) %>%
+  left_join(mc1_nodes_clean %>% select(name, source_name = node_name), 
+            by = c("from" = "name")) %>%
+  left_join(mc1_nodes_clean %>% select(name, target_name = node_name), 
+            by = c("to" = "name")) %>%
+  select(source_name, target_name, `Edge Type`, source_release, target_release) %>%
+  arrange(source_release)
+  
+
+kable(head(violation_examples,5))
+```
+
+```{r}
+
+total_violations <- sum(temporal_check$temporal_violation, na.rm = TRUE)
+total_checked <- nrow(temporal_check)
+cat("\nTotal song/album influence relationships checked:", total_checked, "\n")
+cat("Total temporal violations found:", total_violations, "\n")
+```
+
+#### 3.8.1 Removing all edges that have temporal issues
+
+The following code chunk will remove all edges which was highlighted in Section 3.8 that has violated the temporal influence.
+
+```{r}
+# Get all edges that are not influence relationships (keep as-is)
+non_influence_edges <- mc1_edges_clean %>%
+  filter(!(`Edge Type` %in% influence_edge_types))
+
+# Get temporally consistent influence edges
+consistent_influence_edges <- temporal_check %>%
+  filter(!temporal_violation) %>%
+  select(from, to, `Edge Type`)
+
+# Combine all valid edges
+mc1_edges_clean <- bind_rows(non_influence_edges, consistent_influence_edges)
+
+```
+
+```{r}
+total_cleaned_influences <- consistent_influence_edges %>% nrow()
+cat("Total song/album influence relationships after cleaning:", total_cleaned_influences, "\n")
+```
+
+## [3:]{style="color:DarkOrange"} 3.9 Check for orphan nodes
+
+```{r}
+# Get all node IDs that appear in edges (either as source or target)
+nodes_with_edges <- unique(c(mc1_edges_clean$from, mc1_edges_clean$to))
+
+# Find nodes that don't appear in any edges
+orphan_nodes <- mc1_nodes_clean %>%
+  filter(!name %in% nodes_with_edges)
+
+# Summary of orphan nodes
+cat("Total nodes:", nrow(mc1_nodes_clean), "\n")
+cat("Nodes with edges:", length(nodes_with_edges), "\n")
+cat("Orphan nodes (no edges):", nrow(orphan_nodes), "\n")
+
+
+```
+
+## [3:]{style="color:DarkOrange"} 3.10 Creating Consistent Visualisation Colouring
+
+The code below groups different types of edges and nodes into broader categories for consistent visualisation colouring.
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show Code"
+mc1_edges_clean <- mc1_edges_clean %>%
+  mutate(`Edge Colour` = case_when(
+    `Edge Type` %in% c("PerformerOf", "ComposerOf", "ProducerOf", "LyricistOf", "RecordedBy", "DistributedBy") ~ "Creator Of",
+    `Edge Type` %in% c("InStyleOf", "InterpolatesFrom", "CoverOf", "LyricalReferenceTo", "DirectlySamples") ~ "Influenced By",
+    `Edge Type` == "MemberOf" ~ "Member Of",
+    TRUE ~ "Other"
+  ))
+
+mc1_nodes_clean <- mc1_nodes_clean %>%
+  mutate(
+    `Node Colour` = case_when(
+      `Node Type` %in% c("Person", "MusicalGroup", "RecordLabel") ~ "Musician",
+      genre == "Oceanus Folk" ~ "Oceanus Folk",
+      TRUE ~ "Other Genre"
+    )
+  )
+```
+
+## [3:]{style="color:DarkOrange"} 3.11 Creating the Global Knowledge Graph
+
+The code below uses `tbl_graph()` to create a tidygraph's graph object.
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show Code"
+graph = tbl_graph(edges = mc1_edges_clean,
+                             nodes = mc1_nodes_clean,
+                             directed = TRUE)
+```
+
+Since several of the ggraph layouts involve randomisation, this code sets the seed value to ensure reproducibility of all the plots.
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show Code"
+set.seed(1234)
+```
+
+# [3:]{style="color:DarkOrange"} 4 Confirmatory Data Analysis (CDA)
+
+Hypothesis testing will be conducted to move beyond descriptive observations and rigorously validate whether patterns in your music influence network are statistically significant
+
+## [3:]{style="color:DarkOrange"} 4.1 Is Sailor Shift the Most Popular Artist?
+
+The analysis identifies all musical artists, including both the songs/albums they produced and their influence relationships—tracking both the musical works they have influenced and the artists they have impacted throughout their careers.
+
+A grading rubric will be added where their ranking in these 4 categories (Number of Music released, Number of Notable Music, Number of New Artists Influenced / Collaborated With and Number of Music influenced). Each category will be given equal weighting with a maximum score of 4 and the artists will be ranked using this rubric.
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show Code"
+
+# Data Preparation
+
+# Step 1: Get all creator names
+global_creators <- mc1_nodes_clean %>%
+  filter(`Node Type` %in% c("Person", "MusicalGroup"))
+
+# Step 3: Get all outgoing edges from these creators
+creator_out_edges <- mc1_edges_clean %>%
+  filter(from %in% global_creators$name, `Edge Colour` == "Creator Of")
+
+# Step 3: Get all songs made by creators
+creator_music <- mc1_nodes_clean %>%
+  filter(name %in% creator_out_edges$to)
+
+# Step 4: Get all incoming edges from songs (music and collaborators)
+creator_songs_in_edges <- mc1_edges_clean %>%
+  filter(to %in% creator_music$name)
+
+# Step 5: First join to get creator names (from)
+creators <- creator_out_edges %>%
+  left_join(mc1_nodes_clean, by = c("from" = "name")) %>%
+  select(from, to, node_name, `Node Type`) %>%
+  rename(creator_name = node_name, creator_node_type = `Node Type`)
+
+# Step 6: Second join to get song names (to)
+creator_and_songs <- creators %>%
+  left_join(mc1_nodes_clean, by = c("to" = "name")) %>%
+  select(from, creator_name, creator_node_type, to, node_name, release_date, genre, notable) %>%
+  rename(creator_from = from, song_name = node_name, creator_release_date = release_date, song_genre = genre, song_to = to) %>%
+  distinct()
+
+# Step 7: Third join to get influenced songs / collaborators
+creator_and_songs_and_influences <- creator_and_songs %>%
+  left_join(creator_songs_in_edges %>% select(from, to, `Edge Colour`), by = c("song_to" = "to"), relationship = "many-to-many") %>%
+  left_join(mc1_nodes_clean %>% select(name, genre, node_name, release_date), by = c("from" = "name")) %>%
+  rename(influence_genre = genre, infuence_music_collaborate = from, infuence_music_collaborate_name = node_name, influence_release_date = release_date) %>%
+  distinct()
+
+# Step 8: Fourth join to get influenced song's creator
+creator_and_songs_and_influences_and_creators <- creator_and_songs_and_influences %>%
+  left_join(creator_out_edges %>% select(from, to), by = c("infuence_music_collaborate" = "to"), relationship = "many-to-many") %>%
+  rename(influence_creator = from)
+
+# Step 9: Add release date for collaborators
+creator_and_songs_and_influences_and_creators_collaborate <- creator_and_songs_and_influences_and_creators %>%
+  mutate(
+    influence_release_date = case_when(
+      `Edge Colour` == "Creator Of" ~ creator_release_date,
+      TRUE ~ influence_release_date  # Keeps original value if not "Creator Of"
+    ),
+    influence_creator = case_when(   # A collaborator can also be considered influenced
+      `Edge Colour` == "Creator Of" ~ infuence_music_collaborate,
+      TRUE ~ influence_creator
+    )
+  )
+  
+# Step 10: To highlight songs that the creator influence that is not produced by same creator
+creator_influence_lists <- creator_and_songs_and_influences_and_creators_collaborate %>%
+  group_by(creator_name, creator_node_type, song_to, song_name, creator_release_date, song_genre, notable) %>%
+  distinct () %>%
+  summarize(
+    unique_collaborate = list(unique(na.omit(infuence_music_collaborate[creator_from != influence_creator & `Edge Colour` == "Creator Of"]))),
+    unique_influence_creators = list(unique(na.omit(influence_creator[creator_from != influence_creator & `Edge Colour` == "Influenced By"]))),
+    unique_influence_music = list(unique(na.omit(infuence_music_collaborate[creator_from != influence_creator & !is.na(influence_genre)])))
+  )
+
+# Step 11: Aggregate unique influences per creator
+creator_stats <- creator_influence_lists %>%
+  group_by(creator_name) %>%
+  summarize(
+    total_songs = n_distinct(song_to),
+    notable_hits = sum(notable == TRUE, na.rm = TRUE),
+    collaboration = length(unique(unlist(unique_collaborate))),
+    influence_creators = length(unique(unlist(unique_influence_creators))),
+    collaboration_influence_creator = length(unique(c(unlist(unique_influence_creators),unlist( unique_collaborate)))),
+    influence_music = length(unique(unlist(unique_influence_music)))
+  )
+
+# Step 13: Create Scoring Rubric
+creator_rankings <- creator_stats %>%
+  mutate(
+    # Normalize each metric (0-1 scale)
+    songs_score = (total_songs - min(total_songs)) / (max(total_songs) - min(total_songs)),
+    notable_score = (notable_hits - min(notable_hits)) / (max(notable_hits) - min(notable_hits)),
+    artists_score = (collaboration_influence_creator - min(collaboration_influence_creator)) / (max(collaboration_influence_creator) - min(collaboration_influence_creator)),
+    music_score = (influence_music - min(influence_music)) / (max(influence_music) - min(influence_music)),
+    
+    # Calculate composite score (equal weighting)
+    composite_score = songs_score + notable_score + artists_score + music_score
+  ) %>%
+  arrange(desc(composite_score)) %>%
+  select(creator_name, total_songs, notable_hits, collaboration_influence_creator, influence_music, composite_score)
+
+# Step 13: Final Ranked Table
+creator_rankings %>%
+  mutate(
+    Rank = row_number(),
+    `Star Potential` = round(composite_score, 2)
+  ) %>%
+  select(Rank, creator_name, total_songs, notable_hits, collaboration_influence_creator, 
+         influence_music, `Star Potential`) %>%
+  rename(
+    `Artist` = creator_name,
+    `Total Songs` = total_songs,
+    `Notable Hits` = notable_hits,
+    `Artist Influ & Colab` = collaboration_influence_creator,
+    `Music Influenced` = influence_music
+  ) %>%
+  kable(caption = "Artists Ranked by Star Potential") %>%
+  kable_styling("striped", full_width = F) %>%
+  scroll_box(height = "300px")
+```
+
+### [3:]{style="color:DarkOrange"} 4.1.1 Visualize the careers of Sailor Shift and Min Fu
+
+```{r}
+#| echo: FALSE
+creator_rankings %>%
+  mutate(
+    Rank = row_number(),
+    `Star Potential` = round(composite_score, 2)
+  ) %>%
+  select(Rank, creator_name, total_songs, notable_hits, collaboration_influence_creator, 
+         influence_music, `Star Potential`) %>%
+  rename(
+    `Artist` = creator_name,
+    `Total Songs` = total_songs,
+    `Notable Hits` = notable_hits,
+    `Artist Influ & Colab` = collaboration_influence_creator,
+    `Music Influenced` = influence_music
+  ) %>%
+  filter(Artist %in% c("Min Fu", "Sailor Shift")) %>%
+  kable(caption = "Min Fu and Sailor Shift Star Potential")
+```
+
+Based on the results of the analysis above, the artist with the most Star Potential Min Fu will be compared to Sailor Shift who has released the greatest number of music and is ranked 15 in Star Potential.
+
+#### [3:]{style="color:DarkOrange"} 4.1.1.1 Visualizing the career of Sailor Shift
+
+Sailor Shift has released the most number of music (Song/Album).
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show Code"
+
+# Data Preparation
+
+chosen_creator_1 = "Sailor Shift"
+
+# Step 1: Get the node of the chosen creator
+chosen_node_1 <- creator_and_songs_and_influences_and_creators_collaborate %>%
+  filter(creator_name == chosen_creator_1) %>%
+  pull(creator_from) %>%
+  unique()
+
+# Step 3: Get the songs that the top creator produced
+creator_songs_1 <- creator_and_songs_and_influences_and_creators_collaborate %>%
+  filter(creator_name == chosen_creator_1) %>%
+  pull(song_to)
+
+# Step 3: Get the songs they have influenced / artists they collaborate with
+creators_songs_collaborate_influence_1 <- creator_and_songs_and_influences_and_creators_collaborate %>%
+  filter(creator_name == chosen_creator_1,
+         infuence_music_collaborate != chosen_node_1) %>%
+  pull(infuence_music_collaborate)
+
+# Step 4: Get the songs they have influenced
+creators_songs_influence_1 <- creator_and_songs_and_influences_and_creators_collaborate %>%
+  filter(creator_name == chosen_creator_1,
+         infuence_music_collaborate != chosen_node_1,
+         `Edge Colour` == "Influenced By") %>%
+  pull(infuence_music_collaborate)
+
+# Step 5: Get the influenced creators of the influenced songs
+creators_songs_influence_creators_1 <- creator_and_songs_and_influences_and_creators_collaborate %>%
+  filter(creator_name == chosen_creator_1, 
+         influence_creator != chosen_node_1,
+         !is.na(influence_creator),
+         infuence_music_collaborate %in% creators_songs_influence_1) %>%
+  pull(influence_creator)
+
+all_nodes <- unique(c(chosen_node_1, 
+                      creator_songs_1, 
+                      creators_songs_collaborate_influence_1,
+                      creators_songs_influence_creators_1))
+
+# Create subgraph
+sub_graph <- graph %>%
+  filter(name %in% all_nodes)
+
+
+
+# Visualisation
+
+g <- sub_graph %>%
+  ggraph(layout = "fr") + 
+  geom_edge_fan(
+    aes(
+      edge_colour = `Edge Colour`,
+      start_cap = circle(1, 'mm'),
+      end_cap = circle(1, 'mm')
+      ),
+    arrow = arrow(length = unit(1, 'mm')),
+    alpha = 0.3
+  ) +
+  geom_point_interactive(
+    aes(
+      x = x,
+      y = y,
+      data_id = name,
+      colour = `Node Colour`,
+      shape = `Node Type`,
+      size = ifelse(node_name == chosen_creator_1, 3, 1),
+      tooltip = case_when(
+        `Node Type` == "Album" ~ sprintf(
+          "%s<br/>%s<br/>Notable: %s<br/>(%s)", node_name, genre, notable, release_date
+        ),
+        `Node Type` == "Song" ~ sprintf(
+          "%s<br/>%s<br/>Notable: %s<br/>(%s)<br/>Single: %s", node_name, genre, notable, release_date, single
+        ),
+        TRUE ~ sprintf("%s", node_name)
+      )
+    ),
+    show.legend = c(size = FALSE)
+  )+ 
+  geom_node_text(
+    aes(
+      label = ifelse(node_name == chosen_creator_1, chosen_creator_1, NA)
+    ),
+    fontface = "bold",
+    size = 2.5,
+    colour = 'red',
+    show.legend = FALSE
+  ) +
+  scale_shape_manual(
+    name = "Node Type",
+    values = c(
+      "Album" = 16,
+      "MusicalGroup" = 15,
+      "Person" = 17,
+      "Song" = 10
+    )
+  ) +
+  scale_edge_colour_manual(
+    name = "Edge Colour",
+    values = c(
+      `Creator Of` = "#47D45A",
+      `Influenced By` = "#FF5757",
+      `Member Of` = "#CF57FF"
+    )
+  ) +
+  scale_colour_manual(
+    name = "Node Colour",
+    values = c(
+      "Musician" = "grey50",
+      "Oceanus Folk" = "#0027EA",
+      "Other Genre" = "#A45200"
+    )
+  ) +
+  theme_graph() +
+  theme(legend.text = element_text(size = 6),
+        legend.title = element_text(size = 9)) +
+  scale_size_identity()
+
+girafe(ggobj = g, width_svg = 7, height_svg = 6)
+```
+
+::: callout-note
+Check that the number song nodes is the same as in the table (38)
+```{r}
+length(creator_songs_1 %>% unique())
+```
+
+Check that the number influenced nodes (songs / collaborators) is the same as in the table (48)
+```{r}
+length(c(setdiff(creators_songs_collaborate_influence_1, creators_songs_influence_1), creators_songs_influence_creators_1)  %>% unique())
+```
+
+Check that the number influenced music is the same as in the table (0)
+```{r}
+length(creators_songs_influence_1 %>% unique())
+```
+:::
+
+:::: panel-tabset
+## Music Releases
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show Code"
+
+# Data Preparation
+
+# Step 1: Count number of music by release date
+music_by_date_1 <- mc1_nodes_clean %>%
+  filter(name %in% unique(creator_songs_1)) %>%
+  count(release_date, name = "music_count") %>%
+  arrange(release_date) %>%  # Ensure dates are in chronological order
+  mutate(cumulative_count = cumsum(music_count))
+
+
+
+# Visualisation
+
+plot_ly(
+  data = music_by_date_1,
+  x = ~release_date,
+  y = ~music_count,
+  type = "bar",
+  name = "Number of Music Releases",
+  marker = list(color = "#2E3192"),
+  hoverinfo = "text",
+  hovertext = ~paste0(
+    "Released Date: ", release_date,
+    "<br>Count: ", music_count
+    )
+  ) %>%
+  add_trace(
+    y = ~cumulative_count,
+    type = "scatter",
+    mode = "lines+markers",
+    name = "Cumulative Count",
+    line = list(color = "black", width = 2),
+    marker = list(color = "red", size = 6),
+    hoverinfo = "text",
+    hovertext = ~paste0(
+      "Released Date: ", release_date,
+      "<br>Cumulative Count: ", cumulative_count
+    )
+  ) %>%
+  layout(
+    title = "Yearly Music (Song/Album) Releases",
+    margin = list(b = 80, t = 80),      
+    xaxis = list(
+      title = NA,  
+      dtick = 5,
+      automargin = TRUE
+    ),
+    yaxis = list(
+      title = "Count",
+      automargin = TRUE
+    ),
+    legend = list(
+      orientation = "h",
+      x = 0.5,
+      xanchor = "center",
+      y = -0.1
+    )
+  )
+```
+
+## Notable Music Releases
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show Code"
+
+# Data Preparation
+
+# Step 1: Count number of notable music by release date
+notable_music_by_date_1 <- mc1_nodes_clean %>%
+  filter(name %in% unique(creator_songs_1), notable == TRUE) %>%
+  count(release_date, name = "music_count") %>%
+  arrange(release_date) %>%  # Ensure dates are in chronological order
+  mutate(cumulative_count = cumsum(music_count))
+
+
+
+# Visualisation
+
+plot_ly(
+  data = notable_music_by_date_1,
+  x = ~release_date,
+  y = ~music_count,
+  type = "bar",
+  name = "Number of Notable Music Releases",
+  marker = list(color = "#2E3192"),
+  hoverinfo = "text",
+  hovertext = ~paste0(
+    "Released Date: ", release_date,
+    "<br>Count: ", music_count
+    )
+  ) %>%
+  add_trace(
+    y = ~cumulative_count,
+    type = "scatter",
+    mode = "lines+markers",
+    name = "Cumulative Count",
+    line = list(color = "black", width = 2),
+    marker = list(color = "red", size = 6),
+    hoverinfo = "text",
+    hovertext = ~paste0(
+      "Released Date: ", release_date,
+      "<br>Cumulative Count: ", cumulative_count
+    )
+  ) %>%
+  layout(
+    title = "Yearly Notable Music (Song/Album) Releases",
+    margin = list(b = 80, t = 80),      
+    xaxis = list(
+      title = NA,  
+      dtick = 5,
+      automargin = TRUE
+    ),
+    yaxis = list(
+      title = "Count",
+      automargin = TRUE
+    ),
+    legend = list(
+      orientation = "h",
+      x = 0.5,
+      xanchor = "center",
+      y = -0.1
+    )
+  )
+```
+
+## Artist Influ & Colab
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show Code"
+
+# Data Preparation
+
+# Step 1: Count number of influenced artists by release date
+influence_artists_by_date_1 <- creator_and_songs_and_influences_and_creators_collaborate %>%
+  filter(creator_from %in% unique(chosen_node_1),
+         influence_creator != unique(chosen_node_1)) %>%
+  # Get unique artist-date pairs first
+  distinct(influence_creator, creator_release_date) %>%
+  # Find first influence date for each artist
+  group_by(influence_creator) %>%
+  summarize(
+    first_influence_date = if(n() > 0) min(creator_release_date) else NA_real_,
+    .groups = "drop"
+  ) %>%
+  # Count new artists by first influence date
+  count(first_influence_date, name = "music_count") %>%
+  arrange(first_influence_date) %>%
+  rename(creator_release_date = first_influence_date) %>%
+  # Calculate cumulative unique artists
+  mutate(cumulative_count = cumsum(music_count))
+
+
+
+# Visualisation
+
+plot_ly(
+  data = influence_artists_by_date_1,
+  x = ~creator_release_date,
+  y = ~music_count,
+  type = "bar",
+  name = "Number of Influenced Artists",
+  marker = list(color = "#2E3192"),
+  hoverinfo = "text",
+  hovertext = ~paste0(
+    "Influence Date: ", creator_release_date,
+    "<br>Count: ", music_count
+    )
+  ) %>%
+  add_trace(
+    y = ~cumulative_count,
+    type = "scatter",
+    mode = "lines+markers",
+    name = "Cumulative Count",
+    line = list(color = "black", width = 2),
+    marker = list(color = "red", size = 6),
+    hoverinfo = "text",
+    hovertext = ~paste0(
+      "Influence Date: ", creator_release_date,
+      "<br>Cumulative Count: ", cumulative_count
+    )
+  ) %>%
+  layout(
+    title = "Annual Count of New Artist Influences & Collaborations",
+    margin = list(b = 80, t = 80),      
+    xaxis = list(
+      title = NA,  
+      dtick = 5,
+      automargin = TRUE
+    ),
+    yaxis = list(
+      title = "Count",
+      automargin = TRUE
+    ),
+    legend = list(
+      orientation = "h",
+      x = 0.5,
+      xanchor = "center",
+      y = -0.1
+    )
+  )
+```
+
+## Influenced Music
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show Code"
+
+# Data Preparation
+
+# Step 1: Count number of influenced music by release date
+influence_song_by_date_1 <- mc1_nodes_clean %>%
+  filter(name %in% unique(creators_songs_influence_1)) %>%
+  count(release_date, name = "music_count") %>%
+  arrange(release_date) %>%  # Ensure dates are in chronological order
+  mutate(cumulative_count = cumsum(music_count))
+
+
+
+# Visualisation
+
+plot_ly(
+  data = influence_song_by_date_1,
+  x = ~release_date,
+  y = ~music_count,
+  type = "bar",
+  name = "Number of Influenced Music",
+  marker = list(color = "#2E3192"),
+  hoverinfo = "text",
+  hovertext = ~paste0(
+    "Influence Date: ", release_date,
+    "<br>Count: ", music_count
+    )
+  ) %>%
+  add_trace(
+    y = ~cumulative_count,
+    type = "scatter",
+    mode = "lines+markers",
+    name = "Cumulative Count",
+    line = list(color = "black", width = 2),
+    marker = list(color = "red", size = 6),
+    hoverinfo = "text",
+    hovertext = ~paste0(
+      "Influence Date: ", release_date,
+      "<br>Cumulative Count: ", cumulative_count
+    )
+  ) %>%
+  layout(
+    title = "Yearly Music (Song/Album) Influence",
+    margin = list(b = 80, t = 80),      
+    xaxis = list(
+      title = NA,  
+      dtick = 5,
+      automargin = TRUE
+    ),
+    yaxis = list(
+      title = "Count",
+      automargin = TRUE
+    ),
+    legend = list(
+      orientation = "h",
+      x = 0.5,
+      xanchor = "center",
+      y = -0.1
+    )
+  )
+```
+
+::: callout-warning
+## Note
+
+Sailor Shift has no influence on Music creation
+:::
+::::
+
+```{r}
+#| echo: FALSE
+creator_rankings %>%
+  mutate(
+    Rank = row_number(),
+    `Star Potential` = round(composite_score, 2)
+  ) %>%
+  select(Rank, creator_name, total_songs, notable_hits, collaboration_influence_creator, 
+         influence_music, `Star Potential`) %>%
+  rename(
+    `Artist` = creator_name,
+    `Total Songs` = total_songs,
+    `Notable Hits` = notable_hits,
+    `Artist Influ & Colab` = collaboration_influence_creator,
+    `Music Influenced` = influence_music
+  ) %>%
+  filter(Artist %in% c("Sailor Shift")) %>%
+  kable(caption = "Min Fu and Sailor Shift Star Potential")
+```
+
+::: callout-tip
+The values in the cumulative graphs and the table are the same
+:::
+
+#### [3:]{style="color:DarkOrange"} 4.1.1.2 Visualizing the career of Min Fu
+
+Min Fu is the most influential artist.
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show Code"
+
+# Data Preparation
+
+chosen_creator_2 = "Min Fu"
+
+# Step 1: Get the node of the chosen creator
+chosen_node_2 <- creator_and_songs_and_influences_and_creators_collaborate %>%
+  filter(creator_name == chosen_creator_2) %>%
+  pull(creator_from) %>%
+  unique()
+
+# Step 3: Get the songs that the top creator produced
+creator_songs_2 <- creator_and_songs_and_influences_and_creators_collaborate %>%
+  filter(creator_name == chosen_creator_2) %>%
+  pull(song_to)
+
+# Step 3: Get the songs they have influenced / artists they collaborate with
+creators_songs_collaborate_influence_2 <- creator_and_songs_and_influences_and_creators_collaborate %>%
+  filter(creator_name == chosen_creator_2,
+         infuence_music_collaborate != chosen_node_2) %>%
+  pull(infuence_music_collaborate)
+
+# Step 4: Get the songs they have influenced
+creators_songs_influence_2 <- creator_and_songs_and_influences_and_creators_collaborate %>%
+  filter(creator_name == chosen_creator_2,
+         infuence_music_collaborate != chosen_node_2,
+         `Edge Colour` == "Influenced By") %>%
+  pull(infuence_music_collaborate)
+
+# Step 5: Get the influenced creators of the influenced songs
+creators_songs_influence_creators_2 <- creator_and_songs_and_influences_and_creators_collaborate %>%
+  filter(creator_name == chosen_creator_2,
+         influence_creator != chosen_node_2,
+         !is.na(influence_creator),
+         infuence_music_collaborate %in% creators_songs_influence_2) %>%
+  pull(influence_creator)
+
+all_nodes <- unique(c(chosen_node_2, 
+                      creator_songs_2, 
+                      creators_songs_collaborate_influence_2,
+                      creators_songs_influence_creators_2))
+
+# Create subgraph
+sub_graph <- graph %>%
+  filter(name %in% all_nodes)
+
+
+
+# Visualisation
+
+g <- sub_graph %>%
+  ggraph(layout = "fr") + 
+  geom_edge_fan(
+    aes(
+      edge_colour = `Edge Colour`,
+      start_cap = circle(1, 'mm'),
+      end_cap = circle(1, 'mm')
+      ),
+    arrow = arrow(length = unit(1, 'mm')),
+    alpha = 0.3
+  ) +
+  geom_point_interactive(
+    aes(
+      x = x,
+      y = y,
+      data_id = name,
+      colour = `Node Colour`,
+      shape = `Node Type`,
+      size = ifelse(node_name == chosen_creator_2, 3, 1),
+      tooltip = case_when(
+        `Node Type` == "Album" ~ sprintf(
+          "%s<br/>%s<br/>Notable: %s<br/>(%s)", node_name, genre, notable, release_date
+        ),
+        `Node Type` == "Song" ~ sprintf(
+          "%s<br/>%s<br/>Notable: %s<br/>(%s)<br/>Single: %s", node_name, genre, notable, release_date, single
+        ),
+        TRUE ~ sprintf("%s", node_name)
+      )
+    ),
+    show.legend = c(size = FALSE)
+  )+ 
+  geom_node_text(
+    aes(
+      label = ifelse(node_name == chosen_creator_2, chosen_creator_2, NA)
+    ),
+    fontface = "bold",
+    size = 2.5,
+    colour = 'red',
+    show.legend = FALSE
+  ) +
+  scale_shape_manual(
+    name = "Node Type",
+    values = c(
+      "Album" = 16,
+      "MusicalGroup" = 15,
+      "Person" = 17,
+      "Song" = 10
+    )
+  ) +
+  scale_edge_colour_manual(
+    name = "Edge Colour",
+    values = c(
+      `Creator Of` = "#47D45A",
+      `Influenced By` = "#FF5757",
+      `Member Of` = "#CF57FF"
+    )
+  ) +
+  scale_colour_manual(
+    name = "Node Colour",
+    values = c(
+      "Musician" = "grey50",
+      "Oceanus Folk" = "#0027EA",
+      "Other Genre" = "#A45200"
+    )
+  ) +
+  theme_graph() +
+  theme(legend.text = element_text(size = 6),
+        legend.title = element_text(size = 9)) +
+  scale_size_identity()
+
+girafe(ggobj = g, width_svg = 7, height_svg = 6)
+```
+
+::: callout-note
+
+Check that the number song nodes in the graph is the same as in the table (12)
+```{r}
+length(creator_songs_2 %>% unique())
+```
+
+Check that the number influenced nodes (songs / collaborators) in the graph is the same as in the table (598)
+```{r}
+length(c(setdiff(creators_songs_collaborate_influence_2, creators_songs_influence_2), creators_songs_influence_creators_2)  %>% unique())
+```
+
+Check that the number influenced music nodes in the graph is the same as in the table (162)
+```{r}
+length(creators_songs_influence_2 %>% unique())
+```
+:::
+
+::: panel-tabset
+## Music Releases
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show Code"
+
+# Data Preparation
+
+# Step 1: Count number of music by release date
+music_by_date_2 <- mc1_nodes_clean %>%
+  filter(name %in% unique(creator_songs_2)) %>%
+  count(release_date, name = "music_count") %>%
+  arrange(release_date) %>%  # Ensure dates are in chronological order
+  mutate(cumulative_count = cumsum(music_count))
+
+
+
+# Visualisation
+
+plot_ly(
+  data = music_by_date_2,
+  x = ~release_date,
+  y = ~music_count,
+  type = "bar",
+  name = "Number of Music Releases",
+  marker = list(color = "#2E3192"),
+  hoverinfo = "text",
+  hovertext = ~paste0(
+    "Released Date: ", release_date,
+    "<br>Count: ", music_count
+    )
+  ) %>%
+  add_trace(
+    y = ~cumulative_count,
+    type = "scatter",
+    mode = "lines+markers",
+    name = "Cumulative Count",
+    line = list(color = "black", width = 2),
+    marker = list(color = "red", size = 6),
+    hoverinfo = "text",
+    hovertext = ~paste0(
+      "Released Date: ", release_date,
+      "<br>Cumulative Count: ", cumulative_count
+    )
+  ) %>%
+  layout(
+    title = "Yearly Music (Song/Album) Releases",
+    margin = list(b = 80, t = 80),      
+    xaxis = list(
+      title = NA,  
+      dtick = 5,
+      automargin = TRUE
+    ),
+    yaxis = list(
+      title = "Count",
+      automargin = TRUE
+    ),
+    legend = list(
+      orientation = "h",
+      x = 0.5,
+      xanchor = "center",
+      y = -0.1
+    )
+  )
+```
+
+## Notable Music Releases
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show Code"
+
+# Data Preparation
+
+# Step 1: Count number of notable music by release date
+notable_music_by_date_2 <- mc1_nodes_clean %>%
+  filter(name %in% unique(creator_songs_2), notable == TRUE) %>%
+  count(release_date, name = "music_count") %>%
+  arrange(release_date) %>%  # Ensure dates are in chronological order
+  mutate(cumulative_count = cumsum(music_count))
+
+
+
+# Visualisation
+
+plot_ly(
+  data = notable_music_by_date_2,
+  x = ~release_date,
+  y = ~music_count,
+  type = "bar",
+  name = "Number of Notable Music Releases",
+  marker = list(color = "#2E3192"),
+  hoverinfo = "text",
+  hovertext = ~paste0(
+    "Released Date: ", release_date,
+    "<br>Count: ", music_count
+    )
+  ) %>%
+  add_trace(
+    y = ~cumulative_count,
+    type = "scatter",
+    mode = "lines+markers",
+    name = "Cumulative Count",
+    line = list(color = "black", width = 2),
+    marker = list(color = "red", size = 6),
+    hoverinfo = "text",
+    hovertext = ~paste0(
+      "Released Date: ", release_date,
+      "<br>Cumulative Count: ", cumulative_count
+    )
+  ) %>%
+  layout(
+    title = "Yearly Notable Music (Song/Album) Releases",
+    margin = list(b = 80, t = 80),      
+    xaxis = list(
+      title = NA,  
+      dtick = 5,
+      automargin = TRUE
+    ),
+    yaxis = list(
+      title = "Count",
+      automargin = TRUE
+    ),
+    legend = list(
+      orientation = "h",
+      x = 0.5,
+      xanchor = "center",
+      y = -0.1
+    )
+  )
+```
+
+## Artist Influ & Colab
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show Code"
+
+# Data Preparation
+
+# Step 1: Count number of influenced artists by release date
+influence_artists_by_date_2 <- creator_and_songs_and_influences_and_creators_collaborate %>%
+  filter(creator_from %in% unique(chosen_node_2),
+         influence_creator != unique(chosen_node_2)) %>%
+  # Get unique artist-date pairs first
+  distinct(influence_creator, creator_release_date) %>%
+  # Find first influence date for each artist
+  group_by(influence_creator) %>%
+  summarize(
+    first_influence_date = if(n() > 0) min(creator_release_date) else NA_real_,
+    .groups = "drop"
+  ) %>%
+  # Count new artists by first influence date
+  count(first_influence_date, name = "music_count") %>%
+  arrange(first_influence_date) %>%
+  rename(creator_release_date = first_influence_date) %>%
+  # Calculate cumulative unique artists
+  mutate(cumulative_count = cumsum(music_count))
+
+
+
+# Visualisation
+
+plot_ly(
+  data = influence_artists_by_date_2,
+  x = ~creator_release_date,
+  y = ~music_count,
+  type = "bar",
+  name = "Number of Influenced Artists",
+  marker = list(color = "#2E3192"),
+  hoverinfo = "text",
+  hovertext = ~paste0(
+    "Influence Date: ", creator_release_date,
+    "<br>Count: ", music_count
+    )
+  ) %>%
+  add_trace(
+    y = ~cumulative_count,
+    type = "scatter",
+    mode = "lines+markers",
+    name = "Cumulative Count",
+    line = list(color = "black", width = 2),
+    marker = list(color = "red", size = 6),
+    hoverinfo = "text",
+    hovertext = ~paste0(
+      "Influence Date: ", creator_release_date,
+      "<br>Cumulative Count: ", cumulative_count
+    )
+  ) %>%
+  layout(
+    title = "Annual Count of New Artist Influences & Collaborations",
+    margin = list(b = 80, t = 80),      
+    xaxis = list(
+      title = NA,  
+      dtick = 5,
+      automargin = TRUE
+    ),
+    yaxis = list(
+      title = "Count",
+      automargin = TRUE
+    ),
+    legend = list(
+      orientation = "h",
+      x = 0.5,
+      xanchor = "center",
+      y = -0.1
+    )
+  )
+```
+
+## Influenced Music
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show Code"
+
+# Data Preparation
+
+# Step 1: Count number of influenced music by release date
+influence_song_by_date_2 <- mc1_nodes_clean %>%
+  filter(name %in% unique(creators_songs_influence_2)) %>%
+  count(release_date, name = "music_count") %>%
+  arrange(release_date) %>%  # Ensure dates are in chronological order
+  mutate(cumulative_count = cumsum(music_count))
+
+
+
+# Visualisation
+
+plot_ly(
+  data = influence_song_by_date_2,
+  x = ~release_date,
+  y = ~music_count,
+  type = "bar",
+  name = "Number of Influenced Music",
+  marker = list(color = "#2E3192"),
+  hoverinfo = "text",
+  hovertext = ~paste0(
+    "Influence Date: ", release_date,
+    "<br>Count: ", music_count
+    )
+  ) %>%
+  add_trace(
+    y = ~cumulative_count,
+    type = "scatter",
+    mode = "lines+markers",
+    name = "Cumulative Count",
+    line = list(color = "black", width = 2),
+    marker = list(color = "red", size = 6),
+    hoverinfo = "text",
+    hovertext = ~paste0(
+      "Influence Date: ", release_date,
+      "<br>Cumulative Count: ", cumulative_count
+    )
+  ) %>%
+  layout(
+    title = "Yearly Music (Song/Album) Influence",
+    margin = list(b = 80, t = 80),      
+    xaxis = list(
+      title = NA,  
+      dtick = 5,
+      automargin = TRUE
+    ),
+    yaxis = list(
+      title = "Count",
+      automargin = TRUE
+    ),
+    legend = list(
+      orientation = "h",
+      x = 0.5,
+      xanchor = "center",
+      y = -0.1
+    )
+  )
+```
+:::
+
+```{r}
+#| echo: FALSE
+creator_rankings %>%
+  mutate(
+    Rank = row_number(),
+    `Star Potential` = round(composite_score, 2)
+  ) %>%
+  select(Rank, creator_name, total_songs, notable_hits, collaboration_influence_creator, 
+         influence_music, `Star Potential`) %>%
+  rename(
+    `Artist` = creator_name,
+    `Total Songs` = total_songs,
+    `Notable Hits` = notable_hits,
+    `Artist Influ & Colab` = collaboration_influence_creator,
+    `Music Influenced` = influence_music
+  ) %>%
+  filter(Artist %in% c("Min Fu")) %>%
+  kable(caption = "Min Fu and Sailor Shift Star Potential")
+```
+
+### [3:]{style="color:DarkOrange"} 4.1.2 Compare and contrast the two artists' rise in popularity and influence
+
+The cumulative graphs of the 2 artists (Sailor Shift, Min Fu) will be overlaid for comparison of their musical careers.
+
+::::: panel-tabset
+## Music Releases
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show Code"
+
+# Visualisation
+
+plot_ly(
+  data = music_by_date_1,
+  x = ~release_date,
+  y = ~cumulative_count,
+  type = "scatter",
+  mode = "lines+markers",
+  name = chosen_creator_1,
+  line = list(color = "#2E3192", width = 2),
+  marker = list(color = "red", size = 6),
+  hoverinfo = "text",
+  hovertext = ~paste0(
+    "Artist: ", chosen_creator_1,
+    "<br>Influence Date: ", release_date,
+    "<br>Cumulative Count: ", cumulative_count
+    )
+  ) %>%
+  add_trace(
+    data = music_by_date_2,
+    x = ~release_date,
+    y = ~cumulative_count,
+    type = "scatter",
+    mode = "lines+markers",
+    name = chosen_creator_2,
+    line = list(color = "green", width = 2),
+    marker = list(color = "red", size = 6),
+    hoverinfo = "text",
+    hovertext = ~paste0(
+      "Artist: ", chosen_creator_2,
+      "<br>Influence Date: ", release_date,
+      "<br>Cumulative Count: ", cumulative_count
+    )
+  ) %>%
+  layout(
+    title = "Yearly Music (Song/Album) Releases",
+    margin = list(b = 80, t = 80),      
+    xaxis = list(
+      title = NA,  
+      dtick = 5,
+      automargin = TRUE
+    ),
+    yaxis = list(
+      title = "Count",
+      automargin = TRUE
+    ),
+    legend = list(
+      orientation = "h",
+      x = 0.5,
+      xanchor = "center",
+      y = -0.1
+    )
+  )
+```
+
+## Notable Music Releases
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show Code"
+
+# Visualisation
+
+plot_ly(
+  data = notable_music_by_date_1,
+  x = ~release_date,
+  y = ~cumulative_count,
+  type = "scatter",
+  mode = "lines+markers",
+  name = chosen_creator_1,
+  line = list(color = "#2E3192", width = 2),
+  marker = list(color = "red", size = 6),
+  hoverinfo = "text",
+  hovertext = ~paste0(
+    "Artist: ", chosen_creator_1,
+    "<br>Influence Date: ", release_date,
+    "<br>Cumulative Count: ", cumulative_count
+    )
+  ) %>%
+  add_trace(
+    data = notable_music_by_date_2,
+    x = ~release_date,
+    y = ~cumulative_count,
+    type = "scatter",
+    mode = "lines+markers",
+    name = chosen_creator_2,
+    line = list(color = "green", width = 2),
+    marker = list(color = "red", size = 6),
+    hoverinfo = "text",
+    hovertext = ~paste0(
+      "Artist: ", chosen_creator_2,
+      "<br>Influence Date: ", release_date,
+      "<br>Cumulative Count: ", cumulative_count
+    )
+  ) %>%
+  layout(
+    title = "Yearly Notable Music (Song/Album) Releases",
+    margin = list(b = 80, t = 80),      
+    xaxis = list(
+      title = NA,  
+      dtick = 5,
+      automargin = TRUE
+    ),
+    yaxis = list(
+      title = "Count",
+      automargin = TRUE
+    ),
+    legend = list(
+      orientation = "h",
+      x = 0.5,
+      xanchor = "center",
+      y = -0.1
+    )
+  )
+```
+
+## Artist Influ & Colab
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show Code"
+
+# Visualisation
+
+plot_ly(
+  data = influence_artists_by_date_1,
+  x = ~creator_release_date,
+  y = ~cumulative_count,
+  type = "scatter",
+  mode = "lines+markers",
+  name = chosen_creator_1,
+  line = list(color = "#2E3192", width = 2),
+  marker = list(color = "red", size = 6),
+  hoverinfo = "text",
+  hovertext = ~paste0(
+    "Artist: ", chosen_creator_1,
+    "<br>Influence Date: ", creator_release_date,
+    "<br>Cumulative Count: ", cumulative_count
+    )
+  ) %>%
+  add_trace(
+    data = influence_artists_by_date_2,
+    x = ~creator_release_date,
+    y = ~cumulative_count,
+    type = "scatter",
+    mode = "lines+markers",
+    name = chosen_creator_2,
+    line = list(color = "green", width = 2),
+    marker = list(color = "red", size = 6),
+    hoverinfo = "text",
+    hovertext = ~paste0(
+      "Artist: ", chosen_creator_2,
+      "<br>Influence Date: ", creator_release_date,
+      "<br>Cumulative Count: ", cumulative_count
+    )
+  ) %>%
+  layout(
+    title = "Annual Count of New Artist Influences & Collaborations",
+    margin = list(b = 80, t = 80),      
+    xaxis = list(
+      title = NA,  
+      dtick = 5,
+      automargin = TRUE
+    ),
+    yaxis = list(
+      title = "Count",
+      automargin = TRUE
+    ),
+    legend = list(
+      orientation = "h",
+      x = 0.5,
+      xanchor = "center",
+      y = -0.1
+    )
+  )
+```
+
+::: callout-warning
+## Note
+
+Sailor Shift has only Collaborations and no Artist Influence
+:::
+
+## Influenced Music
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show Code"
+
+# Visualisation
+
+plot_ly(
+  data = influence_song_by_date_1,
+  x = ~release_date,
+  y = ~cumulative_count,
+  type = "scatter",
+  mode = "lines+markers",
+  name = chosen_creator_1,
+  line = list(color = "#2E3192", width = 2),
+  marker = list(color = "red", size = 6),
+  hoverinfo = "text",
+  hovertext = ~paste0(
+    "Artist: ", chosen_creator_1,
+    "<br>Influence Date: ", release_date,
+    "<br>Cumulative Count: ", cumulative_count
+    )
+  ) %>%
+  add_trace(
+    data = influence_song_by_date_2,
+    x = ~release_date,
+    y = ~cumulative_count,
+    type = "scatter",
+    mode = "lines+markers",
+    name = chosen_creator_2,
+    line = list(color = "green", width = 2),
+    marker = list(color = "red", size = 6),
+    hoverinfo = "text",
+    hovertext = ~paste0(
+      "Artist: ", chosen_creator_2,
+      "<br>Influence Date: ", release_date,
+      "<br>Cumulative Count: ", cumulative_count
+    )
+  ) %>%
+  layout(
+    title = "Yearly Music (Song/Album) Influence",
+    margin = list(b = 80, t = 80),      
+    xaxis = list(
+      title = NA,  
+      dtick = 5,
+      automargin = TRUE
+    ),
+    yaxis = list(
+      title = "Count",
+      automargin = TRUE
+    ),
+    legend = list(
+      orientation = "h",
+      x = 0.5,
+      xanchor = "center",
+      y = -0.1
+    )
+  )
+```
+
+::: callout-warning
+## Note
+
+Sailor Shift has no influence on music creation
+:::
+:::::
+
+::: callout-tip
+## Is Sailor Shift the Most Popular Artist?
+1. Career Output & Commercial Success
+    - Sailor Shift has produced more successful music:
+        - 38 total releases (vs Min Fu's 12)
+        - 35 chart-topping hits (triple Min Fu's 12)
+2. Network Influence & Legacy
+    - Min Fu dominates in cultural impact:
+        - 598 artist collaborations/influences
+        - Inspired 192 derivative works
+        - Influence period ended in 2029
+    - Sailor Shift shows limited artistic influence:
+        - 48 direct collaborations
+        - 0 inspired works despite high music output
+        - Maintains connections to present (2040)
+3. Star Potential
+    - Min Fu ranks 1st on Star Potential with a score of 2.64
+    - Sailor Shift is down at 15th with a score of 1.79
+:::
+
+### [3:]{style="color:DarkOrange"} 4.1.3 Is Min Fu's Star Potential Significally Higher than Sailor Shift?
+
+A one-tailed comparison of the Z-scores for Min Fu and Sailor Shift will be conducted to determine whether Min Fu's score is statistically significantly higher than Sailor Shift's.
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show Code"
+
+star_potential <- creator_rankings %>%
+  mutate(
+    Rank = row_number(),
+    `Star Potential` = round(composite_score, 2)
+  ) %>%
+  select(Rank, creator_name, total_songs, notable_hits, collaboration_influence_creator, 
+         influence_music, `Star Potential`) %>%
+  rename(
+    `Artist` = creator_name,
+    `Total Songs` = total_songs,
+    `Notable Hits` = notable_hits,
+    `Artist Influ & Colab` = collaboration_influence_creator,
+    `Music Influenced` = influence_music
+  ) 
+
+summary_stats <- star_potential %>%
+  select(Artist, Artist, `Star Potential`) %>%
+  summarise(
+    mean_score = mean(`Star Potential`),
+    sd_score = sd(`Star Potential`)
+  )
+
+z_score <- star_potential %>%
+  filter(Artist %in% c("Min Fu", "Sailor Shift")) %>%
+  mutate(
+    z_score = (`Star Potential` - summary_stats$mean_score) / summary_stats$sd_score
+  )
+
+z_score %>%
+  kable()
+```
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show Code"
+z_score_1 <- z_score %>%
+  filter(Artist == "Min Fu") %>%
+  pull(z_score)
+
+z_score_2 <- z_score %>%
+  filter(Artist == "Sailor Shift") %>%
+  pull(z_score)
+
+z_diff <- z_score_1 - z_score_2
+
+p_value <- 1 - pnorm(z_diff)
+
+alpha <- 0.05
+
+cat(sprintf("Since p-value %.4f is less than or equal to %.0f%%, we reject the null hypothesis.\n", 
+            p_value, alpha * 100))
+```
+
+There is sufficient evidence to support the claim that the Star Potential of Min Fu is significantly higher than Sailor Shift. Therefore, Min Fu is the most popular Artist and not Sailor Shift.
+
+## [3:]{style="color:DarkOrange"} 4.2 Is Sailor Shift the Most Popular Artist in Oceanus Folk?
+
+Since Sailor Shift is not the most popular artist globally, this will be a continuation of the previous hypothesis where only Oceanus Folk artists and the Oceanus Folk songs that they have produced are analysed.
+
+A genre filter will be applied to the steps done in Section 4.1 to include only Oceanus Folk artists.
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show Code"
+
+# Step 0A: Get all node names in Oceanus Folk genre
+oceanus_nodes <- mc1_nodes_clean %>%
+  filter(is_oceanus_folk == TRUE) %>%
+  pull(name)
+
+# Step 0B: Get all incoming edges to Oceanus Folk nodes
+in_edges <- mc1_edges_clean %>%
+  filter(to %in% oceanus_nodes)
+
+# Step 0C: Get unique source (from) nodes of those edges
+in_neighbours <- unique(in_edges$from)
+
+# Step 1: Filter to only Oceanus Folk Artists
+oceanus_creator_and_songs_and_influences_and_creators_collaborate <- creator_and_songs_and_influences_and_creators_collaborate %>%
+  filter(creator_from %in% in_neighbours, song_genre == "Oceanus Folk")
+
+# Step 3: To highlight songs that the creator influence that is not produced by same creator
+oceanus_creator_influence_lists <- oceanus_creator_and_songs_and_influences_and_creators_collaborate %>%
+  group_by(creator_name, creator_node_type, song_to, song_name, creator_release_date, song_genre, notable) %>%
+  distinct () %>%
+  summarize(
+    unique_collaborate = list(unique(na.omit(infuence_music_collaborate[creator_from != influence_creator & `Edge Colour` == "Creator Of"]))),
+    unique_influence_creators = list(unique(na.omit(influence_creator[creator_from != influence_creator & `Edge Colour` == "Influenced By"]))),
+    unique_influence_music = list(unique(na.omit(infuence_music_collaborate[creator_from != influence_creator & !is.na(influence_genre)])))
+  )
+
+# Step 3: Aggregate unique influences per creator
+oceanus_creator_stats <- oceanus_creator_influence_lists %>%
+  group_by(creator_name) %>%
+  summarize(
+    total_songs = n_distinct(song_to),
+    notable_hits = sum(notable == TRUE, na.rm = TRUE),
+    collaboration = length(unique(unlist(unique_collaborate))),
+    influence_creators = length(unique(unlist(unique_influence_creators))),
+    collaboration_influence_creator = length(unique(c(unlist(unique_influence_creators),unlist( unique_collaborate)))),
+    influence_music = length(unique(unlist(unique_influence_music)))
+  )
+
+# Step 4: Create Scoring Rubric
+oceanus_creator_rankings <- oceanus_creator_stats %>%
+  mutate(
+    # Normalize each metric (0-1 scale)
+    songs_score = (total_songs - min(total_songs)) / (max(total_songs) - min(total_songs)),
+    notable_score = (notable_hits - min(notable_hits)) / (max(notable_hits) - min(notable_hits)),
+    artists_score = (collaboration_influence_creator - min(collaboration_influence_creator)) / (max(collaboration_influence_creator) - min(collaboration_influence_creator)),
+    music_score = (influence_music - min(influence_music)) / (max(influence_music) - min(influence_music)),
+    
+    # Calculate composite score (equal weighting)
+    composite_score = songs_score + notable_score + artists_score + music_score
+  ) %>%
+  arrange(desc(composite_score)) %>%
+  select(creator_name, total_songs, notable_hits, collaboration_influence_creator, influence_music, composite_score)
+
+# Final Ranked Table
+oceanus_creator_rankings %>%
+  mutate(
+    Rank = row_number(),
+    `Star Potential` = round(composite_score, 3)
+  ) %>%
+  select(Rank, creator_name, total_songs, notable_hits, collaboration_influence_creator, 
+         influence_music, `Star Potential`) %>%
+  rename(
+    `Artist` = creator_name,
+    `Total Songs` = total_songs,
+    `Notable Hits` = notable_hits,
+    `Artist Influ & Colab` = collaboration_influence_creator,
+    `Music Influenced` = influence_music
+  ) %>%
+  kable(caption = "Oceanus Folk Artists Ranked by Star Potential") %>%
+  kable_styling("striped", full_width = F) %>%
+  scroll_box(height = "300px")
+```
+
+### [3:]{style="color:DarkOrange"} 4.2.1 Visualize the careers of the Top 3 Oceanus Folk Star Potential
+
+Based on the results of the analysis above, the top 3 Oceanus Folk artists with the most Star Potential (Sailor Shift, Chao Wu and Xin Jia) be compared.
+
+#### [3:]{style="color:DarkOrange"} 4.2.1.1 Visualizing the career of Sailor Shift
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show Code"
+
+# Data Preparation
+
+chosen_creator_1 = "Sailor Shift"
+
+# Step 1: Get the node of the chosen creator
+chosen_node_1 <- oceanus_creator_and_songs_and_influences_and_creators_collaborate %>%
+  filter(creator_name == chosen_creator_1) %>%
+  pull(creator_from) %>%
+  unique()
+
+# Step 3: Get the songs that the top creator produced
+creator_songs_1 <- oceanus_creator_and_songs_and_influences_and_creators_collaborate %>%
+  filter(creator_name == chosen_creator_1) %>%
+  pull(song_to)
+
+# Step 3: Get the songs they have influenced / artists they collaborate with
+creators_songs_collaborate_influence_1 <- oceanus_creator_and_songs_and_influences_and_creators_collaborate %>%
+  filter(creator_name == chosen_creator_1,
+         infuence_music_collaborate != chosen_node_1) %>%
+  pull(infuence_music_collaborate)
+
+# Step 4: Get the songs they have influenced
+creators_songs_influence_1 <- oceanus_creator_and_songs_and_influences_and_creators_collaborate %>%
+  filter(creator_name == chosen_creator_1,
+         infuence_music_collaborate != chosen_node_1,
+         `Edge Colour` == "Influenced By") %>%
+  pull(infuence_music_collaborate)
+
+# Step 5: Get the influenced creators of the influenced songs
+creators_songs_influence_creators_1 <- oceanus_creator_and_songs_and_influences_and_creators_collaborate %>%
+  filter(creator_name == chosen_creator_1,
+         influence_creator != chosen_node_1,
+         !is.na(influence_creator),
+         infuence_music_collaborate %in% creators_songs_influence_1) %>%
+  pull(influence_creator)
+
+all_nodes <- unique(c(chosen_node_1, 
+                      creator_songs_1, 
+                      creators_songs_collaborate_influence_1,
+                      creators_songs_influence_creators_1))
+
+# Create subgraph
+sub_graph <- graph %>%
+  filter(name %in% all_nodes)
+
+
+
+# Visualisation
+
+g <- sub_graph %>%
+  ggraph(layout = "fr") + 
+  geom_edge_fan(
+    aes(
+      edge_colour = `Edge Colour`,
+      start_cap = circle(1, 'mm'),
+      end_cap = circle(1, 'mm')
+      ),
+    arrow = arrow(length = unit(1, 'mm')),
+    alpha = 0.3
+  ) +
+  geom_point_interactive(
+    aes(
+      x = x,
+      y = y,
+      data_id = name,
+      colour = `Node Colour`,
+      shape = `Node Type`,
+      size = ifelse(node_name == chosen_creator_1, 3, 1),
+      tooltip = case_when(
+        `Node Type` == "Album" ~ sprintf(
+          "%s<br/>%s<br/>Notable: %s<br/>(%s)", node_name, genre, notable, release_date
+        ),
+        `Node Type` == "Song" ~ sprintf(
+          "%s<br/>%s<br/>Notable: %s<br/>(%s)<br/>Single: %s", node_name, genre, notable, release_date, single
+        ),
+        TRUE ~ sprintf("%s", node_name)
+      )
+    ),
+    show.legend = c(size = FALSE)
+  )+ 
+  geom_node_text(
+    aes(
+      label = ifelse(node_name == chosen_creator_1, chosen_creator_1, NA)
+    ),
+    fontface = "bold",
+    size = 2.5,
+    colour = 'red',
+    show.legend = FALSE
+  ) +
+  scale_shape_manual(
+    name = "Node Type",
+    values = c(
+      "Album" = 16,
+      "MusicalGroup" = 15,
+      "Person" = 17,
+      "Song" = 10
+    )
+  ) +
+  scale_edge_colour_manual(
+    name = "Edge Colour",
+    values = c(
+      `Creator Of` = "#47D45A",
+      `Influenced By` = "#FF5757",
+      `Member Of` = "#CF57FF"
+    )
+  ) +
+  scale_colour_manual(
+    name = "Node Colour",
+    values = c(
+      "Musician" = "grey50",
+      "Oceanus Folk" = "#0027EA",
+      "Other Genre" = "#A45200"
+    )
+  ) +
+  theme_graph() +
+  theme(legend.text = element_text(size = 6),
+        legend.title = element_text(size = 9)) +
+  scale_size_identity()
+
+girafe(ggobj = g, width_svg = 7, height_svg = 6)
+```
+
+::: callout-note
+
+Check that the number song nodes in the graph is the same as in the table (36)
+```{r}
+length(creator_songs_1 %>% unique())
+```
+
+Check that the number influenced nodes (songs / collaborators) in the graph is the same as in the table (41)
+```{r}
+length(c(setdiff(creators_songs_collaborate_influence_1, creators_songs_influence_1), creators_songs_influence_creators_1)  %>% unique())
+```
+
+Check that the number influenced music nodesin the graph is the same as in the table (0)
+```{r}
+length(creators_songs_influence_1 %>% unique())
+```
+:::
+
+::: panel-tabset
+## Music Releases
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show Code"
+
+# Data Preparation
+
+# Step 1: Count number of music by release date
+music_by_date_1 <- mc1_nodes_clean %>%
+  filter(name %in% unique(creator_songs_1)) %>%
+  count(release_date, name = "music_count") %>%
+  arrange(release_date) %>%  # Ensure dates are in chronological order
+  mutate(cumulative_count = cumsum(music_count))
+
+
+
+# Visualisation
+
+plot_ly(
+  data = music_by_date_1,
+  x = ~release_date,
+  y = ~music_count,
+  type = "bar",
+  name = "Number of Music Releases",
+  marker = list(color = "#2E3192"),
+  hoverinfo = "text",
+  hovertext = ~paste0(
+    "Released Date: ", release_date,
+    "<br>Count: ", music_count
+    )
+  ) %>%
+  add_trace(
+    y = ~cumulative_count,
+    type = "scatter",
+    mode = "lines+markers",
+    name = "Cumulative Count",
+    line = list(color = "black", width = 2),
+    marker = list(color = "red", size = 6),
+    hoverinfo = "text",
+    hovertext = ~paste0(
+      "Released Date: ", release_date,
+      "<br>Cumulative Count: ", cumulative_count
+    )
+  ) %>%
+  layout(
+    title = "Yearly Music (Song/Album) Releases",
+    margin = list(b = 80, t = 80),      
+    xaxis = list(
+      title = NA,  
+      dtick = 5,
+      automargin = TRUE
+    ),
+    yaxis = list(
+      title = "Count",
+      automargin = TRUE
+    ),
+    legend = list(
+      orientation = "h",
+      x = 0.5,
+      xanchor = "center",
+      y = -0.1
+    )
+  )
+```
+
+## Notable Music Releases
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show Code"
+
+# Data Preparation
+
+# Step 1: Count number of notable music by release date
+notable_music_by_date_1 <- mc1_nodes_clean %>%
+  filter(name %in% unique(creator_songs_1), notable == TRUE) %>%
+  count(release_date, name = "music_count") %>%
+  arrange(release_date) %>%  # Ensure dates are in chronological order
+  mutate(cumulative_count = cumsum(music_count))
+
+
+
+# Visualisation
+
+plot_ly(
+  data = notable_music_by_date_1,
+  x = ~release_date,
+  y = ~music_count,
+  type = "bar",
+  name = "Number of Notable Music Releases",
+  marker = list(color = "#2E3192"),
+  hoverinfo = "text",
+  hovertext = ~paste0(
+    "Released Date: ", release_date,
+    "<br>Count: ", music_count
+    )
+  ) %>%
+  add_trace(
+    y = ~cumulative_count,
+    type = "scatter",
+    mode = "lines+markers",
+    name = "Cumulative Count",
+    line = list(color = "black", width = 2),
+    marker = list(color = "red", size = 6),
+    hoverinfo = "text",
+    hovertext = ~paste0(
+      "Released Date: ", release_date,
+      "<br>Cumulative Count: ", cumulative_count
+    )
+  ) %>%
+  layout(
+    title = "Yearly Notable Music (Song/Album) Releases",
+    margin = list(b = 80, t = 80),      
+    xaxis = list(
+      title = NA,  
+      dtick = 5,
+      automargin = TRUE
+    ),
+    yaxis = list(
+      title = "Count",
+      automargin = TRUE
+    ),
+    legend = list(
+      orientation = "h",
+      x = 0.5,
+      xanchor = "center",
+      y = -0.1
+    )
+  )
+```
+
+## Artist Influ & Colab
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show Code"
+
+# Data Preparation
+
+# Step 1: Count number of influenced artists by release date
+influence_artists_by_date_1 <- oceanus_creator_and_songs_and_influences_and_creators_collaborate %>%
+  filter(creator_from %in% unique(chosen_node_1),
+         influence_creator != unique(chosen_node_1)) %>%
+  # Get unique artist-date pairs first
+  distinct(influence_creator, creator_release_date) %>%
+  # Find first influence date for each artist
+  group_by(influence_creator) %>%
+  summarize(
+    first_influence_date = if(n() > 0) min(creator_release_date) else NA_real_,
+    .groups = "drop"
+  ) %>%
+  # Count new artists by first influence date
+  count(first_influence_date, name = "music_count") %>%
+  arrange(first_influence_date) %>%
+  rename(creator_release_date = first_influence_date) %>%
+  # Calculate cumulative unique artists
+  mutate(cumulative_count = cumsum(music_count))
+
+
+
+# Visualisation
+
+plot_ly(
+  data = influence_artists_by_date_1,
+  x = ~creator_release_date,
+  y = ~music_count,
+  type = "bar",
+  name = "Number of Influenced Artists",
+  marker = list(color = "#2E3192"),
+  hoverinfo = "text",
+  hovertext = ~paste0(
+    "Influence Date: ", creator_release_date,
+    "<br>Count: ", music_count
+    )
+  ) %>%
+  add_trace(
+    y = ~cumulative_count,
+    type = "scatter",
+    mode = "lines+markers",
+    name = "Cumulative Count",
+    line = list(color = "black", width = 2),
+    marker = list(color = "red", size = 6),
+    hoverinfo = "text",
+    hovertext = ~paste0(
+      "Influence Date: ", creator_release_date,
+      "<br>Cumulative Count: ", cumulative_count
+    )
+  ) %>%
+  layout(
+    title = "Annual Count of New Artist Influences & Collaborations",
+    margin = list(b = 80, t = 80),      
+    xaxis = list(
+      title = NA,  
+      dtick = 5,
+      automargin = TRUE
+    ),
+    yaxis = list(
+      title = "Count",
+      automargin = TRUE
+    ),
+    legend = list(
+      orientation = "h",
+      x = 0.5,
+      xanchor = "center",
+      y = -0.1
+    )
+  )
+```
+
+## Influenced Music
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show Code"
+
+# Data Preparation
+
+# Step 1: Count number of influenced music by release date
+influence_song_by_date_1 <- mc1_nodes_clean %>%
+  filter(name %in% unique(creators_songs_influence_1)) %>%
+  count(release_date, name = "music_count") %>%
+  arrange(release_date) %>%  # Ensure dates are in chronological order
+  mutate(cumulative_count = cumsum(music_count))
+
+
+
+# Visualisation
+
+plot_ly(
+  data = influence_song_by_date_1,
+  x = ~release_date,
+  y = ~music_count,
+  type = "bar",
+  name = "Number of Influenced Music",
+  marker = list(color = "#2E3192"),
+  hoverinfo = "text",
+  hovertext = ~paste0(
+    "Influence Date: ", release_date,
+    "<br>Count: ", music_count
+    )
+  ) %>%
+  add_trace(
+    y = ~cumulative_count,
+    type = "scatter",
+    mode = "lines+markers",
+    name = "Cumulative Count",
+    line = list(color = "black", width = 2),
+    marker = list(color = "red", size = 6),
+    hoverinfo = "text",
+    hovertext = ~paste0(
+      "Influence Date: ", release_date,
+      "<br>Cumulative Count: ", cumulative_count
+    )
+  ) %>%
+  layout(
+    title = "Yearly Music (Song/Album) Influence",
+    margin = list(b = 80, t = 80),      
+    xaxis = list(
+      title = NA,  
+      dtick = 5,
+      automargin = TRUE
+    ),
+    yaxis = list(
+      title = "Count",
+      automargin = TRUE
+    ),
+    legend = list(
+      orientation = "h",
+      x = 0.5,
+      xanchor = "center",
+      y = -0.1
+    )
+  )
+```
+:::
+
+#### [3:]{style="color:DarkOrange"} 4.2.1.2 Visualizing the career of Chao Wu
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show Code"
+
+# Data Preparation
+
+chosen_creator_2 = "Chao Wu"
+
+# Step 1: Get the node of the chosen creator
+chosen_node_2 <- oceanus_creator_and_songs_and_influences_and_creators_collaborate %>%
+  filter(creator_name == chosen_creator_2) %>%
+  pull(creator_from) %>%
+  unique()
+
+# Step 3: Get the songs that the top creator produced
+creator_songs_2 <- oceanus_creator_and_songs_and_influences_and_creators_collaborate %>%
+  filter(creator_name == chosen_creator_2) %>%
+  pull(song_to)
+
+# Step 3: Get the songs they have influenced / artists they collaborate with
+creators_songs_collaborate_influence_2 <- oceanus_creator_and_songs_and_influences_and_creators_collaborate %>%
+  filter(creator_name == chosen_creator_2,
+         infuence_music_collaborate != chosen_node_2) %>%
+  pull(infuence_music_collaborate)
+
+# Step 4: Get the songs they have influenced
+creators_songs_influence_2 <- oceanus_creator_and_songs_and_influences_and_creators_collaborate %>%
+  filter(creator_name == chosen_creator_2,
+         infuence_music_collaborate != chosen_node_2,
+         `Edge Colour` == "Influenced By") %>%
+  pull(infuence_music_collaborate)
+
+# Step 5: Get the influenced creators of the influenced songs
+creators_songs_influence_creators_2 <- oceanus_creator_and_songs_and_influences_and_creators_collaborate %>%
+  filter(creator_name == chosen_creator_2,
+         influence_creator != chosen_node_2,
+         !is.na(influence_creator),
+         infuence_music_collaborate %in% creators_songs_influence_2) %>%
+  pull(influence_creator)
+
+all_nodes <- unique(c(chosen_node_2, 
+                      creator_songs_2, 
+                      creators_songs_collaborate_influence_2,
+                      creators_songs_influence_creators_2))
+
+# Create subgraph
+sub_graph <- graph %>%
+  filter(name %in% all_nodes)
+
+
+
+# Visualisation
+
+g <- sub_graph %>%
+  ggraph(layout = "fr") + 
+  geom_edge_fan(
+    aes(
+      edge_colour = `Edge Colour`,
+      start_cap = circle(1, 'mm'),
+      end_cap = circle(1, 'mm')
+      ),
+    arrow = arrow(length = unit(1, 'mm')),
+    alpha = 0.3
+  ) +
+  geom_point_interactive(
+    aes(
+      x = x,
+      y = y,
+      data_id = name,
+      colour = `Node Colour`,
+      shape = `Node Type`,
+      size = ifelse(node_name == chosen_creator_2, 3, 1),
+      tooltip = case_when(
+        `Node Type` == "Album" ~ sprintf(
+          "%s<br/>%s<br/>Notable: %s<br/>(%s)", node_name, genre, notable, release_date
+        ),
+        `Node Type` == "Song" ~ sprintf(
+          "%s<br/>%s<br/>Notable: %s<br/>(%s)<br/>Single: %s", node_name, genre, notable, release_date, single
+        ),
+        TRUE ~ sprintf("%s", node_name)
+      )
+    ),
+    show.legend = c(size = FALSE)
+  )+ 
+  geom_node_text(
+    aes(
+      label = ifelse(node_name == chosen_creator_2, chosen_creator_2, NA)
+    ),
+    fontface = "bold",
+    size = 2.5,
+    colour = 'red',
+    show.legend = FALSE
+  ) +
+  scale_shape_manual(
+    name = "Node Type",
+    values = c(
+      "Album" = 16,
+      "MusicalGroup" = 15,
+      "Person" = 17,
+      "Song" = 10
+    )
+  ) +
+  scale_edge_colour_manual(
+    name = "Edge Colour",
+    values = c(
+      `Creator Of` = "#47D45A",
+      `Influenced By` = "#FF5757",
+      `Member Of` = "#CF57FF"
+    )
+  ) +
+  scale_colour_manual(
+    name = "Node Colour",
+    values = c(
+      "Musician" = "grey50",
+      "Oceanus Folk" = "#0027EA",
+      "Other Genre" = "#A45200"
+    )
+  ) +
+  theme_graph() +
+  theme(legend.text = element_text(size = 6),
+        legend.title = element_text(size = 9)) +
+  scale_size_identity()
+
+girafe(ggobj = g, width_svg = 7, height_svg = 6)
+```
+
+::: callout-note
+
+Check that the number song nodes in the graph is the same as in the table (4)
+```{r}
+length(creator_songs_2 %>% unique())
+```
+
+Check that the number influenced nodes (songs / collaborators) in the graph is the same as in the table (190)
+```{r}
+length(c(setdiff(creators_songs_collaborate_influence_2, creators_songs_influence_2), creators_songs_influence_creators_2) %>% unique())
+```
+
+Check that the number influenced music nods in the graph is the same as in the table (44)
+```{r}
+length(creators_songs_influence_2 %>% unique())
+```
+
+:::
+
+::: panel-tabset
+## Music Releases
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show Code"
+
+# Data Preparation
+
+# Step 1: Count number of music by release date
+music_by_date_2 <- mc1_nodes_clean %>%
+  filter(name %in% unique(creator_songs_2)) %>%
+  count(release_date, name = "music_count") %>%
+  arrange(release_date) %>%  # Ensure dates are in chronological order
+  mutate(cumulative_count = cumsum(music_count))
+
+
+
+# Visualisation
+
+plot_ly(
+  data = music_by_date_2,
+  x = ~release_date,
+  y = ~music_count,
+  type = "bar",
+  name = "Number of Music Releases",
+  marker = list(color = "#2E3192"),
+  hoverinfo = "text",
+  hovertext = ~paste0(
+    "Released Date: ", release_date,
+    "<br>Count: ", music_count
+    )
+  ) %>%
+  add_trace(
+    y = ~cumulative_count,
+    type = "scatter",
+    mode = "lines+markers",
+    name = "Cumulative Count",
+    line = list(color = "black", width = 2),
+    marker = list(color = "red", size = 6),
+    hoverinfo = "text",
+    hovertext = ~paste0(
+      "Released Date: ", release_date,
+      "<br>Cumulative Count: ", cumulative_count
+    )
+  ) %>%
+  layout(
+    title = "Yearly Music (Song/Album) Releases",
+    margin = list(b = 80, t = 80),      
+    xaxis = list(
+      title = NA,  
+      dtick = 5,
+      automargin = TRUE
+    ),
+    yaxis = list(
+      title = "Count",
+      automargin = TRUE
+    ),
+    legend = list(
+      orientation = "h",
+      x = 0.5,
+      xanchor = "center",
+      y = -0.1
+    )
+  )
+```
+
+## Notable Music Releases
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show Code"
+
+# Data Preparation
+
+# Step 1: Count number of notable music by release date
+notable_music_by_date_2 <- mc1_nodes_clean %>%
+  filter(name %in% unique(creator_songs_2), notable == TRUE) %>%
+  count(release_date, name = "music_count") %>%
+  arrange(release_date) %>%  # Ensure dates are in chronological order
+  mutate(cumulative_count = cumsum(music_count))
+
+
+
+# Visualisation
+
+plot_ly(
+  data = notable_music_by_date_2,
+  x = ~release_date,
+  y = ~music_count,
+  type = "bar",
+  name = "Number of Notable Music Releases",
+  marker = list(color = "#2E3192"),
+  hoverinfo = "text",
+  hovertext = ~paste0(
+    "Released Date: ", release_date,
+    "<br>Count: ", music_count
+    )
+  ) %>%
+  add_trace(
+    y = ~cumulative_count,
+    type = "scatter",
+    mode = "lines+markers",
+    name = "Cumulative Count",
+    line = list(color = "black", width = 2),
+    marker = list(color = "red", size = 6),
+    hoverinfo = "text",
+    hovertext = ~paste0(
+      "Released Date: ", release_date,
+      "<br>Cumulative Count: ", cumulative_count
+    )
+  ) %>%
+  layout(
+    title = "Yearly Notable Music (Song/Album) Releases",
+    margin = list(b = 80, t = 80),      
+    xaxis = list(
+      title = NA,  
+      dtick = 5,
+      automargin = TRUE
+    ),
+    yaxis = list(
+      title = "Count",
+      automargin = TRUE
+    ),
+    legend = list(
+      orientation = "h",
+      x = 0.5,
+      xanchor = "center",
+      y = -0.1
+    )
+  )
+```
+
+## Artist Influ & Colab
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show Code"
+
+# Data Preparation
+
+# Step 1: Count number of influenced artists by release date
+influence_artists_by_date_2 <- oceanus_creator_and_songs_and_influences_and_creators_collaborate %>%
+  filter(creator_from %in% unique(chosen_node_2),
+         influence_creator != unique(chosen_node_2)) %>%
+  # Get unique artist-date pairs first
+  distinct(influence_creator, creator_release_date) %>%
+  # Find first influence date for each artist
+  group_by(influence_creator) %>%
+  summarize(
+    first_influence_date = if(n() > 0) min(creator_release_date) else NA_real_,
+    .groups = "drop"
+  ) %>%
+  # Count new artists by first influence date
+  count(first_influence_date, name = "music_count") %>%
+  arrange(first_influence_date) %>%
+  rename(creator_release_date = first_influence_date) %>%
+  # Calculate cumulative unique artists
+  mutate(cumulative_count = cumsum(music_count))
+
+
+
+# Visualisation
+
+plot_ly(
+  data = influence_artists_by_date_2,
+  x = ~creator_release_date,
+  y = ~music_count,
+  type = "bar",
+  name = "Number of Influenced Artists",
+  marker = list(color = "#2E3192"),
+  hoverinfo = "text",
+  hovertext = ~paste0(
+    "Influence Date: ", creator_release_date,
+    "<br>Count: ", music_count
+    )
+  ) %>%
+  add_trace(
+    y = ~cumulative_count,
+    type = "scatter",
+    mode = "lines+markers",
+    name = "Cumulative Count",
+    line = list(color = "black", width = 2),
+    marker = list(color = "red", size = 6),
+    hoverinfo = "text",
+    hovertext = ~paste0(
+      "Influence Date: ", creator_release_date,
+      "<br>Cumulative Count: ", cumulative_count
+    )
+  ) %>%
+  layout(
+    title = "Annual Count of New Artist Influences & Collaborations",
+    margin = list(b = 80, t = 80),      
+    xaxis = list(
+      title = NA,  
+      dtick = 5,
+      automargin = TRUE
+    ),
+    yaxis = list(
+      title = "Count",
+      automargin = TRUE
+    ),
+    legend = list(
+      orientation = "h",
+      x = 0.5,
+      xanchor = "center",
+      y = -0.1
+    )
+  )
+```
+
+## Influenced Music
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show Code"
+
+# Data Preparation
+
+# Step 1: Count number of influenced music by release date
+influence_song_by_date_2 <- mc1_nodes_clean %>%
+  filter(name %in% unique(creators_songs_influence_2)) %>%
+  count(release_date, name = "music_count") %>%
+  arrange(release_date) %>%  # Ensure dates are in chronological order
+  mutate(cumulative_count = cumsum(music_count))
+
+
+
+# Visualisation
+
+plot_ly(
+  data = influence_song_by_date_2,
+  x = ~release_date,
+  y = ~music_count,
+  type = "bar",
+  name = "Number of Influenced Music",
+  marker = list(color = "#2E3192"),
+  hoverinfo = "text",
+  hovertext = ~paste0(
+    "Influence Date: ", release_date,
+    "<br>Count: ", music_count
+    )
+  ) %>%
+  add_trace(
+    y = ~cumulative_count,
+    type = "scatter",
+    mode = "lines+markers",
+    name = "Cumulative Count",
+    line = list(color = "black", width = 2),
+    marker = list(color = "red", size = 6),
+    hoverinfo = "text",
+    hovertext = ~paste0(
+      "Influence Date: ", release_date,
+      "<br>Cumulative Count: ", cumulative_count
+    )
+  ) %>%
+  layout(
+    title = "Yearly Music (Song/Album) Influence",
+    margin = list(b = 80, t = 80),      
+    xaxis = list(
+      title = NA,  
+      dtick = 5,
+      automargin = TRUE
+    ),
+    yaxis = list(
+      title = "Count",
+      automargin = TRUE
+    ),
+    legend = list(
+      orientation = "h",
+      x = 0.5,
+      xanchor = "center",
+      y = -0.1
+    )
+  )
+```
+:::
+
+#### [3:]{style="color:DarkOrange"} 4.2.1.3 Visualizing the career of Xia Jia
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show Code"
+
+# Data Preparation
+
+chosen_creator_3 = "Xia Jia"
+
+# Step 1: Get the node of the chosen creator
+chosen_node_3 <- oceanus_creator_and_songs_and_influences_and_creators_collaborate %>%
+  filter(creator_name == chosen_creator_3) %>%
+  pull(creator_from) %>%
+  unique()
+
+# Step 3: Get the songs that the top creator produced
+creator_songs_3 <- oceanus_creator_and_songs_and_influences_and_creators_collaborate %>%
+  filter(creator_name == chosen_creator_3) %>%
+  pull(song_to)
+
+# Step 3: Get the songs they have influenced / artists they collaborate with
+creators_songs_collaborate_influence_3 <- oceanus_creator_and_songs_and_influences_and_creators_collaborate %>%
+  filter(creator_name == chosen_creator_3,
+         infuence_music_collaborate != chosen_node_3) %>%
+  pull(infuence_music_collaborate)
+
+# Step 4: Get the songs they have influenced
+creators_songs_influence_3 <- oceanus_creator_and_songs_and_influences_and_creators_collaborate %>%
+  filter(creator_name == chosen_creator_3,
+         infuence_music_collaborate != chosen_node_3,
+         `Edge Colour` == "Influenced By") %>%
+  pull(infuence_music_collaborate)
+
+# Step 5: Get the influenced creators of the influenced songs
+creators_songs_influence_creators_3 <- oceanus_creator_and_songs_and_influences_and_creators_collaborate %>%
+  filter(creator_name == chosen_creator_3,
+         influence_creator != chosen_node_3,
+         !is.na(influence_creator),
+         infuence_music_collaborate %in% creators_songs_influence_3) %>%
+  pull(influence_creator)
+
+all_nodes <- unique(c(chosen_node_3, 
+                      creator_songs_3, 
+                      creators_songs_collaborate_influence_3,
+                      creators_songs_influence_creators_3))
+
+# Create subgraph
+sub_graph <- graph %>%
+  filter(name %in% all_nodes)
+
+
+
+# Visualisation
+
+g <- sub_graph %>%
+  ggraph(layout = "fr") + 
+  geom_edge_fan(
+    aes(
+      edge_colour = `Edge Colour`,
+      start_cap = circle(1, 'mm'),
+      end_cap = circle(1, 'mm')
+      ),
+    arrow = arrow(length = unit(1, 'mm')),
+    alpha = 0.3
+  ) +
+  geom_point_interactive(
+    aes(
+      x = x,
+      y = y,
+      data_id = name,
+      colour = `Node Colour`,
+      shape = `Node Type`,
+      size = ifelse(node_name == chosen_creator_3, 3, 1),
+      tooltip = case_when(
+        `Node Type` == "Album" ~ sprintf(
+          "%s<br/>%s<br/>Notable: %s<br/>(%s)", node_name, genre, notable, release_date
+        ),
+        `Node Type` == "Song" ~ sprintf(
+          "%s<br/>%s<br/>Notable: %s<br/>(%s)<br/>Single: %s", node_name, genre, notable, release_date, single
+        ),
+        TRUE ~ sprintf("%s", node_name)
+      )
+    ),
+    show.legend = c(size = FALSE)
+  )+ 
+  geom_node_text(
+    aes(
+      label = ifelse(node_name == chosen_creator_3, chosen_creator_3, NA)
+    ),
+    fontface = "bold",
+    size = 2.5,
+    colour = 'red',
+    show.legend = FALSE
+  ) +
+  scale_shape_manual(
+    name = "Node Type",
+    values = c(
+      "Album" = 16,
+      "MusicalGroup" = 15,
+      "Person" = 17,
+      "Song" = 10
+    )
+  ) +
+  scale_edge_colour_manual(
+    name = "Edge Colour",
+    values = c(
+      `Creator Of` = "#47D45A",
+      `Influenced By` = "#FF5757",
+      `Member Of` = "#CF57FF"
+    )
+  ) +
+  scale_colour_manual(
+    name = "Node Colour",
+    values = c(
+      "Musician" = "grey50",
+      "Oceanus Folk" = "#0027EA",
+      "Other Genre" = "#A45200"
+    )
+  ) +
+  theme_graph() +
+  theme(legend.text = element_text(size = 6),
+        legend.title = element_text(size = 9)) +
+  scale_size_identity()
+
+girafe(ggobj = g, width_svg = 7, height_svg = 6)
+```
+
+::: callout-note
+
+Check that the number song nodes in the graph is the same as in the table (4)
+```{r}
+length(creator_songs_3 %>% unique())
+```
+
+Check that the number influenced nodes (songs / collaborators) in the graph is the same as in the table (178)
+```{r}
+length(c(setdiff(creators_songs_collaborate_influence_3, creators_songs_influence_3), creators_songs_influence_creators_3) %>% unique())
+```
+
+Check that the number influenced music nods in the graph is the same as in the table (42)
+```{r}
+length(creators_songs_influence_3 %>% unique())
+```
+:::
+
+::: panel-tabset
+## Music Releases
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show Code"
+
+# Data Preparation
+
+# Step 1: Count number of music by release date
+music_by_date_3 <- mc1_nodes_clean %>%
+  filter(name %in% unique(creator_songs_3)) %>%
+  count(release_date, name = "music_count") %>%
+  arrange(release_date) %>%  # Ensure dates are in chronological order
+  mutate(cumulative_count = cumsum(music_count))
+
+
+
+# Visualisation
+
+plot_ly(
+  data = music_by_date_3,
+  x = ~release_date,
+  y = ~music_count,
+  type = "bar",
+  name = "Number of Music Releases",
+  marker = list(color = "#2E3192"),
+  hoverinfo = "text",
+  hovertext = ~paste0(
+    "Released Date: ", release_date,
+    "<br>Count: ", music_count
+    )
+  ) %>%
+  add_trace(
+    y = ~cumulative_count,
+    type = "scatter",
+    mode = "lines+markers",
+    name = "Cumulative Count",
+    line = list(color = "black", width = 2),
+    marker = list(color = "red", size = 6),
+    hoverinfo = "text",
+    hovertext = ~paste0(
+      "Released Date: ", release_date,
+      "<br>Cumulative Count: ", cumulative_count
+    )
+  ) %>%
+  layout(
+    title = "Yearly Music (Song/Album) Releases",
+    margin = list(b = 80, t = 80),      
+    xaxis = list(
+      title = NA,  
+      dtick = 5,
+      automargin = TRUE
+    ),
+    yaxis = list(
+      title = "Count",
+      automargin = TRUE
+    ),
+    legend = list(
+      orientation = "h",
+      x = 0.5,
+      xanchor = "center",
+      y = -0.1
+    )
+  )
+```
+
+## Notable Music Releases
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show Code"
+
+# Data Preparation
+
+# Step 1: Count number of notable music by release date
+notable_music_by_date_3 <- mc1_nodes_clean %>%
+  filter(name %in% unique(creator_songs_3), notable == TRUE) %>%
+  count(release_date, name = "music_count") %>%
+  arrange(release_date) %>%  # Ensure dates are in chronological order
+  mutate(cumulative_count = cumsum(music_count))
+
+
+
+# Visualisation
+
+plot_ly(
+  data = notable_music_by_date_3,
+  x = ~release_date,
+  y = ~music_count,
+  type = "bar",
+  name = "Number of Notable Music Releases",
+  marker = list(color = "#2E3192"),
+  hoverinfo = "text",
+  hovertext = ~paste0(
+    "Released Date: ", release_date,
+    "<br>Count: ", music_count
+    )
+  ) %>%
+  add_trace(
+    y = ~cumulative_count,
+    type = "scatter",
+    mode = "lines+markers",
+    name = "Cumulative Count",
+    line = list(color = "black", width = 2),
+    marker = list(color = "red", size = 6),
+    hoverinfo = "text",
+    hovertext = ~paste0(
+      "Released Date: ", release_date,
+      "<br>Cumulative Count: ", cumulative_count
+    )
+  ) %>%
+  layout(
+    title = "Yearly Notable Music (Song/Album) Releases",
+    margin = list(b = 80, t = 80),      
+    xaxis = list(
+      title = NA,  
+      dtick = 5,
+      automargin = TRUE
+    ),
+    yaxis = list(
+      title = "Count",
+      automargin = TRUE
+    ),
+    legend = list(
+      orientation = "h",
+      x = 0.5,
+      xanchor = "center",
+      y = -0.1
+    )
+  )
+```
+
+## Artist Influ & Colab
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show Code"
+
+# Data Preparation
+
+# Step 1: Count number of influenced artists by release date
+influence_artists_by_date_3 <- oceanus_creator_and_songs_and_influences_and_creators_collaborate %>%
+  filter(creator_from %in% unique(chosen_node_3),
+         influence_creator != unique(chosen_node_3)) %>%
+  # Get unique artist-date pairs first
+  distinct(influence_creator, creator_release_date) %>%
+  # Find first influence date for each artist
+  group_by(influence_creator) %>%
+  summarize(
+    first_influence_date = if(n() > 0) min(creator_release_date) else NA_real_,
+    .groups = "drop"
+  ) %>%
+  # Count new artists by first influence date
+  count(first_influence_date, name = "music_count") %>%
+  arrange(first_influence_date) %>%
+  rename(creator_release_date = first_influence_date) %>%
+  # Calculate cumulative unique artists
+  mutate(cumulative_count = cumsum(music_count))
+
+
+
+# Visualisation
+
+plot_ly(
+  data = influence_artists_by_date_3,
+  x = ~creator_release_date,
+  y = ~music_count,
+  type = "bar",
+  name = "Number of Influenced Artists",
+  marker = list(color = "#2E3192"),
+  hoverinfo = "text",
+  hovertext = ~paste0(
+    "Influence Date: ", creator_release_date,
+    "<br>Count: ", music_count
+    )
+  ) %>%
+  add_trace(
+    y = ~cumulative_count,
+    type = "scatter",
+    mode = "lines+markers",
+    name = "Cumulative Count",
+    line = list(color = "black", width = 2),
+    marker = list(color = "red", size = 6),
+    hoverinfo = "text",
+    hovertext = ~paste0(
+      "Influence Date: ", creator_release_date,
+      "<br>Cumulative Count: ", cumulative_count
+    )
+  ) %>%
+  layout(
+    title = "Annual Count of New Artist Influences & Collaborations",
+    margin = list(b = 80, t = 80),      
+    xaxis = list(
+      title = NA,  
+      dtick = 5,
+      automargin = TRUE
+    ),
+    yaxis = list(
+      title = "Count",
+      automargin = TRUE
+    ),
+    legend = list(
+      orientation = "h",
+      x = 0.5,
+      xanchor = "center",
+      y = -0.1
+    )
+  )
+```
+
+## Influenced Music
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show Code"
+
+# Data Preparation
+
+# Step 1: Count number of influenced music by release date
+influence_song_by_date_3 <- mc1_nodes_clean %>%
+  filter(name %in% unique(creators_songs_influence_3)) %>%
+  count(release_date, name = "music_count") %>%
+  arrange(release_date) %>%  # Ensure dates are in chronological order
+  mutate(cumulative_count = cumsum(music_count))
+
+
+
+# Visualisation
+
+plot_ly(
+  data = influence_song_by_date_3,
+  x = ~release_date,
+  y = ~music_count,
+  type = "bar",
+  name = "Number of Influenced Music",
+  marker = list(color = "#2E3192"),
+  hoverinfo = "text",
+  hovertext = ~paste0(
+    "Influence Date: ", release_date,
+    "<br>Count: ", music_count
+    )
+  ) %>%
+  add_trace(
+    y = ~cumulative_count,
+    type = "scatter",
+    mode = "lines+markers",
+    name = "Cumulative Count",
+    line = list(color = "black", width = 2),
+    marker = list(color = "red", size = 6),
+    hoverinfo = "text",
+    hovertext = ~paste0(
+      "Influence Date: ", release_date,
+      "<br>Cumulative Count: ", cumulative_count
+    )
+  ) %>%
+  layout(
+    title = "Yearly Music (Song/Album) Influence",
+    margin = list(b = 80, t = 80),      
+    xaxis = list(
+      title = NA,  
+      dtick = 5,
+      automargin = TRUE
+    ),
+    yaxis = list(
+      title = "Count",
+      automargin = TRUE
+    ),
+    legend = list(
+      orientation = "h",
+      x = 0.5,
+      xanchor = "center",
+      y = -0.1
+    )
+  )
+```
+:::
+
+#### [3:]{style="color:DarkOrange"} 4.2.1.4 Visualising the relationships between the three artists
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show Code"
+
+# Data Preparation
+
+# Step 1: Find outgoing edges from Chao Wu
+out_edges_1 <- mc1_edges_clean %>%
+  filter(from == unique(chosen_node_1))
+
+# Step 3: Identify neighbour node names
+out_node_names_1 <- out_edges_1$to
+
+
+
+# Step 1: Find outgoing edges from Chao Wu
+out_edges_2 <- mc1_edges_clean %>%
+  filter(from == unique(chosen_node_2))
+
+# Step 3: Identify neighbour node names
+out_node_names_2 <- out_edges_2$to
+
+
+
+# Step 1: Find outgoing edges from Chao Wu
+out_edges_3 <- mc1_edges_clean %>%
+  filter(from == unique(chosen_node_3))
+
+# Step 3: Identify neighbour node names
+out_node_names_3 <- out_edges_3$to
+
+
+
+# Build subgraph using names
+sub_nodes <- unique(c(chosen_node_1,
+                      chosen_node_2,
+                      chosen_node_3,
+                      out_node_names_1,
+                      out_node_names_2,
+                      out_node_names_3))
+
+sub_graph <- graph %>%
+  activate(nodes) %>%
+  filter(name %in% sub_nodes)
+
+g <- sub_graph %>%
+  ggraph(layout = "fr") + 
+  geom_edge_fan(
+    aes(
+      edge_colour = `Edge Colour`,
+      start_cap = circle(1, 'mm'),
+      end_cap = circle(1, 'mm')
+      ),
+    arrow = arrow(length = unit(1, 'mm')),
+    alpha = 0.3
+  ) +
+  geom_point_interactive(
+    aes(
+      x = x,
+      y = y,
+      data_id = name,
+      colour = `Node Colour`,
+      shape = `Node Type`,
+      size = ifelse(`node_name` %in% c(chosen_node_1, 
+                                       chosen_node_2, 
+                                       chosen_node_3), 3, 1),
+      tooltip = case_when(
+        `Node Type` == "Album" ~ sprintf(
+          "%s<br/>%s<br/>Notable: %s<br/>(%s)", node_name, genre, notable, release_date
+        ),
+        `Node Type` == "Song" ~ sprintf(
+          "%s<br/>%s<br/>Notable: %s<br/>(%s)<br/>Single: %s", node_name, genre, notable, release_date, single
+        ),
+        TRUE ~ sprintf("%s", node_name)
+      )
+    ),
+    show.legend = c(size = FALSE)
+  )+ 
+  geom_node_text(
+    aes(
+      label = ifelse(`node_name` == chosen_creator_1, chosen_creator_1,
+              ifelse(`node_name` == chosen_creator_2, chosen_creator_2,
+              ifelse(`node_name` == chosen_creator_3, chosen_creator_3, NA)))
+    ),
+    fontface = "bold",
+    size = 2.5,
+    colour = 'red',
+    show.legend = FALSE
+  ) +
+  scale_shape_manual(
+    name = "Node Type",
+    values = c(
+      "Album" = 16,
+      "MusicalGroup" = 15,
+      "Person" = 17,
+      "Song" = 10
+    )
+  ) +
+  scale_edge_colour_manual(
+    name = "Edge Colour",
+    values = c(
+      `Creator Of` = "#47D45A",
+      `Influenced By` = "#FF5757",
+      `Member Of` = "#CF57FF"
+    )
+  ) +
+  scale_colour_manual(
+    name = "Node Colour",
+    values = c(
+      "Musician" = "grey50",
+      "Oceanus Folk" = "#0027EA",
+      "Other Genre" = "#A45200"
+    )
+  ) +
+  theme_graph() +
+  theme(legend.text = element_text(size = 6),
+        legend.title = element_text(size = 9)) +
+  scale_size_identity()
+
+girafe(ggobj = g, width_svg = 7, height_svg = 6)
+```
+
+::: callout-tip
+-   All five artists are solo artists and none of them are part of the same musical group
+-   Chao Wu, Xia Jia, Donna Caldwell and Xiulan Ye have some collaborative works with each other which can explain why some of their graphs overlaps.
+    -   Chao Wu, Xia Jia, Donna Caldwell and Xiulan Ye produced Winds of the Basque Shore and Destiny's Call together.
+:::
+
+### [3:]{style="color:DarkOrange"} 4.2.2 Compare and contrast the three artists' rise in popularity and influence
+
+The cumulative graphs of the top 3 oceanus folk artists (Sailor Shift, Chao Wu, Xia Jia) will be overlaid for comparison of their musical careers.
+
+::: panel-tabset
+## Music Releases
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show Code"
+
+# Visualisation
+
+plot_ly(
+  data = music_by_date_1,
+  x = ~release_date,
+  y = ~cumulative_count,
+  type = "scatter",
+  mode = "lines+markers",
+  name = chosen_creator_1,
+  line = list(color = "#2E3192", width = 2),
+  marker = list(color = "red", size = 6),
+  hoverinfo = "text",
+  hovertext = ~paste0(
+    "Artist: ", chosen_creator_1,
+    "<br>Influence Date: ", release_date,
+    "<br>Cumulative Count: ", cumulative_count
+    )
+  ) %>%
+  add_trace(
+    data = music_by_date_2,
+    x = ~release_date,
+    y = ~cumulative_count,
+    type = "scatter",
+    mode = "lines+markers",
+    name = chosen_creator_2,
+    line = list(color = "green", width = 2),
+    marker = list(color = "red", size = 6),
+    hoverinfo = "text",
+    hovertext = ~paste0(
+      "Artist: ", chosen_creator_2,
+      "<br>Influence Date: ", release_date,
+      "<br>Cumulative Count: ", cumulative_count
+    )
+  ) %>%
+  add_trace(
+    data = music_by_date_3,
+    x = ~release_date,
+    y = ~cumulative_count,
+    type = "scatter",
+    mode = "lines+markers",
+    name = chosen_creator_3,
+    line = list(color = "purple", width = 2),
+    marker = list(color = "red", size = 6),
+    hoverinfo = "text",
+    hovertext = ~paste0(
+      "Artist: ", chosen_creator_3,
+      "<br>Influence Date: ", release_date,
+      "<br>Cumulative Count: ", cumulative_count
+    )
+  ) %>%
+  layout(
+    title = "Yearly Music (Song/Album) Releases",
+    margin = list(b = 80, t = 80),      
+    xaxis = list(
+      title = NA,  
+      dtick = 5,
+      automargin = TRUE
+    ),
+    yaxis = list(
+      title = "Count",
+      automargin = TRUE
+    ),
+    legend = list(
+      orientation = "h",
+      x = 0.5,
+      xanchor = "center",
+      y = -0.1
+    )
+  )
+```
+
+## Notable Music Releases
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show Code"
+
+# Visualisation
+
+plot_ly(
+  data = notable_music_by_date_1,
+  x = ~release_date,
+  y = ~cumulative_count,
+  type = "scatter",
+  mode = "lines+markers",
+  name = chosen_creator_1,
+  line = list(color = "#2E3192", width = 2),
+  marker = list(color = "red", size = 6),
+  hoverinfo = "text",
+  hovertext = ~paste0(
+    "Artist: ", chosen_creator_1,
+    "<br>Influence Date: ", release_date,
+    "<br>Cumulative Count: ", cumulative_count
+    )
+  ) %>%
+  add_trace(
+    data = notable_music_by_date_2,
+    x = ~release_date,
+    y = ~cumulative_count,
+    type = "scatter",
+    mode = "lines+markers",
+    name = chosen_creator_2,
+    line = list(color = "green", width = 2),
+    marker = list(color = "red", size = 6),
+    hoverinfo = "text",
+    hovertext = ~paste0(
+      "Artist: ", chosen_creator_2,
+      "<br>Influence Date: ", release_date,
+      "<br>Cumulative Count: ", cumulative_count
+    )
+  ) %>%
+  add_trace(
+    data = notable_music_by_date_3,
+    x = ~release_date,
+    y = ~cumulative_count,
+    type = "scatter",
+    mode = "lines+markers",
+    name = chosen_creator_3,
+    line = list(color = "purple", width = 2),
+    marker = list(color = "red", size = 6),
+    hoverinfo = "text",
+    hovertext = ~paste0(
+      "Artist: ", chosen_creator_3,
+      "<br>Influence Date: ", release_date,
+      "<br>Cumulative Count: ", cumulative_count
+    )
+  ) %>%
+  layout(
+    title = "Yearly Notable Music (Song/Album) Releases",
+    margin = list(b = 80, t = 80),      
+    xaxis = list(
+      title = NA,  
+      dtick = 5,
+      automargin = TRUE
+    ),
+    yaxis = list(
+      title = "Count",
+      automargin = TRUE
+    ),
+    legend = list(
+      orientation = "h",
+      x = 0.5,
+      xanchor = "center",
+      y = -0.1
+    )
+  )
+```
+
+## Artist Influ & Colab
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show Code"
+
+# Visualisation
+
+plot_ly(
+  data = influence_artists_by_date_1,
+  x = ~creator_release_date,
+  y = ~cumulative_count,
+  type = "scatter",
+  mode = "lines+markers",
+  name = chosen_creator_1,
+  line = list(color = "#2E3192", width = 2),
+  marker = list(color = "red", size = 6),
+  hoverinfo = "text",
+  hovertext = ~paste0(
+    "Artist: ", chosen_creator_1,
+    "<br>Influence Date: ", creator_release_date,
+    "<br>Cumulative Count: ", cumulative_count
+    )
+  ) %>%
+  add_trace(
+    data = influence_artists_by_date_2,
+    x = ~creator_release_date,
+    y = ~cumulative_count,
+    type = "scatter",
+    mode = "lines+markers",
+    name = chosen_creator_2,
+    line = list(color = "green", width = 2),
+    marker = list(color = "red", size = 6),
+    hoverinfo = "text",
+    hovertext = ~paste0(
+      "Artist: ", chosen_creator_2,
+      "<br>Influence Date: ", creator_release_date,
+      "<br>Cumulative Count: ", cumulative_count
+    )
+  ) %>%
+  add_trace(
+    data = influence_artists_by_date_3,
+    x = ~creator_release_date,
+    y = ~cumulative_count,
+    type = "scatter",
+    mode = "lines+markers",
+    name = chosen_creator_3,
+    line = list(color = "purple", width = 2),
+    marker = list(color = "red", size = 6),
+    hoverinfo = "text",
+    hovertext = ~paste0(
+      "Artist: ", chosen_creator_3,
+      "<br>Influence Date: ", creator_release_date,
+      "<br>Cumulative Count: ", cumulative_count
+    )
+  ) %>%
+  layout(
+    title = "Annual Count of New Artist Influences & Collaborations",
+    margin = list(b = 80, t = 80),      
+    xaxis = list(
+      title = NA,  
+      dtick = 5,
+      automargin = TRUE
+    ),
+    yaxis = list(
+      title = "Count",
+      automargin = TRUE
+    ),
+    legend = list(
+      orientation = "h",
+      x = 0.5,
+      xanchor = "center",
+      y = -0.1
+    )
+  )
+```
+
+::: callout-warning
+## Note
+
+Sailor Shift has only Collaborations and no Artist Influence
+:::
+
+## Influenced Music
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show Code"
+
+# Visualisation
+
+plot_ly(
+  data = influence_song_by_date_1,
+  x = ~release_date,
+  y = ~cumulative_count,
+  type = "scatter",
+  mode = "lines+markers",
+  name = chosen_creator_1,
+  line = list(color = "#2E3192", width = 2),
+  marker = list(color = "red", size = 6),
+  hoverinfo = "text",
+  hovertext = ~paste0(
+    "Artist: ", chosen_creator_1,
+    "<br>Influence Date: ", release_date,
+    "<br>Cumulative Count: ", cumulative_count
+    )
+  ) %>%
+  add_trace(
+    data = influence_song_by_date_2,
+    x = ~release_date,
+    y = ~cumulative_count,
+    type = "scatter",
+    mode = "lines+markers",
+    name = chosen_creator_2,
+    line = list(color = "green", width = 2),
+    marker = list(color = "red", size = 6),
+    hoverinfo = "text",
+    hovertext = ~paste0(
+      "Artist: ", chosen_creator_2,
+      "<br>Influence Date: ", release_date,
+      "<br>Cumulative Count: ", cumulative_count
+    )
+  ) %>%
+  add_trace(
+    data = influence_song_by_date_3,
+    x = ~release_date,
+    y = ~cumulative_count,
+    type = "scatter",
+    mode = "lines+markers",
+    name = chosen_creator_3,
+    line = list(color = "purple", width = 2),
+    marker = list(color = "red", size = 6),
+    hoverinfo = "text",
+    hovertext = ~paste0(
+      "Artist: ", chosen_creator_3,
+      "<br>Influence Date: ", release_date,
+      "<br>Cumulative Count: ", cumulative_count
+    )
+  ) %>%
+  layout(
+    title = "Yearly Music (Song/Album) Influence",
+    margin = list(b = 80, t = 80),      
+    xaxis = list(
+      title = NA,  
+      dtick = 5,
+      automargin = TRUE
+    ),
+    yaxis = list(
+      title = "Count",
+      automargin = TRUE
+    ),
+    legend = list(
+      orientation = "h",
+      x = 0.5,
+      xanchor = "center",
+      y = -0.1
+    )
+  )
+```
+
+::: callout-warning
+## Note
+
+Sailor Shift has no influence on music creation
+:::
+
+:::
+
+::: callout-tip
+## Is Sailor Shift the Most Popular Artist in Oceanus Folk?
+
+1.  Career Timeline & Output
+    -   Sailor Shift is the newest artist, debuting in 2024, yet dominates in production:
+        -   36 Oceanus Folk releases (vs. 4 each for Chao Wu and Xia Jia)
+        -   24 hit records (vs. 3 each for Chao Wu and Xia Jia)
+2.  Influence & Collaborations
+    -   Chao Wu and Xia Jia lead in network impact:
+        -   Artist Influence Scores: Chao Wu (190), Xia Jia (178) 
+        -   Music Influence: Chao Wu (44 songs influenced), Xia Jia (42)
+        -   Influence period ended in 2025 for Chao Wu and 2028 for Xia Jia
+    -   Sailor Shift lags in influence despite high output:
+        -   Artist Influence Scores: Only 41 (only through collaborations)
+        -   Music Influence: Zero impact on the Oceanus Folk scene
+        -   Maintains connections to present (2040)
+3.  Key Contrast
+    -   While Sailor Shift excels in volume, her work lacks discernible influence.
+    -   Chao Wu and Xia Jia demonstrate stronger cultural impact through collaborations and inspiring works.
+4. Star Potential
+    - All three artists have similar star potential
+        - Sailor Shift (2.216)
+        - Chao Wu (2.11)
+        - Xia Jia (2.102)
+:::
+
+### [3:]{style="color:DarkOrange"} 4.2.3 Is Sailor Shift's Star Potential Significally Higher than Chao Wu?
+
+A one-tailed comparison of the Z-scores for Sailor Shift and Chao Wu will be conducted to determine whether Sailor Shift's score is statistically significantly higher than Chao Wu's.
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show Code"
+oceanus_star_potential <- oceanus_creator_rankings %>%
+  mutate(
+    Rank = row_number(),
+    `Star Potential` = round(composite_score, 2)
+  ) %>%
+  select(Rank, creator_name, total_songs, notable_hits, collaboration_influence_creator, 
+         influence_music, `Star Potential`) %>%
+  rename(
+    `Artist` = creator_name,
+    `Total Songs` = total_songs,
+    `Notable Hits` = notable_hits,
+    `Artist Influ & Colab` = collaboration_influence_creator,
+    `Music Influenced` = influence_music
+  ) 
+
+oceanus_summary_stats <- oceanus_star_potential %>%
+  select(Artist, Artist, `Star Potential`) %>%
+  summarise(
+    mean_score = mean(`Star Potential`),
+    sd_score = sd(`Star Potential`)
+  )
+
+oceanus_z_score <- oceanus_star_potential %>%
+  filter(Artist %in% c("Sailor Shift", "Chao Wu")) %>%
+  mutate(
+    z_score = (`Star Potential` - summary_stats$mean_score) / summary_stats$sd_score
+  )
+
+oceanus_z_score %>%
+  kable()
+```
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show Code"
+z_score_1 <- oceanus_z_score %>%
+  filter(Artist == "Sailor Shift") %>%
+  pull(z_score)
+
+z_score_2 <- oceanus_z_score %>%
+  filter(Artist == "Chao Wu") %>%
+  pull(z_score)
+
+z_diff <- z_score_1 - z_score_2
+
+p_value <- 1 - pnorm(z_diff)
+
+alpha <- 0.05
+
+cat(sprintf("Since p-value %.4f is greater than %.0f%%, we do not reject the null hypothesis.\n", 
+            p_value, alpha * 100))
+```
+
+There is in sufficient evidence to support the claim that the Star Potential of Sailor Shift is significantly higher than Chao Wu. Therefore, it is not certain that Sailor Shift the most popular Artist in Oceanus Folk but she is indeed one of the most popular oceanus Folk artist.

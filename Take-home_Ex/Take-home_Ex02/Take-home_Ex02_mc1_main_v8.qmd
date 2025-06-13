@@ -542,7 +542,6 @@ ggplot(data = mc1_nodes_clean,
   geom_bar()
 ```
 
-
 ## [2:]{style="color:DarkOrange"} 3.8 Temporal Validation
 
 The following code chunk is used to ensure any influenced songs/albums are not released before the songs/albums that influenced them. If there are any of such cases, it will be flagged out.
@@ -2516,7 +2515,8 @@ chosen_creator_1 = "Sailor Shift"
 # Step 1: Get the node of the chosen creator
 chosen_node_1 <- creator_and_songs_and_influences_and_creators_collaborate %>%
   filter(creator_name == chosen_creator_1) %>%
-  pull(creator_from)
+  pull(creator_from) %>%
+  unique()
 
 # Step 2: Get the songs that the top creator produced
 creator_songs_1 <- creator_and_songs_and_influences_and_creators_collaborate %>%
@@ -2525,25 +2525,28 @@ creator_songs_1 <- creator_and_songs_and_influences_and_creators_collaborate %>%
 
 # Step 3: Get the songs they have influenced / artists they collaborate with
 creators_songs_collaborate_influence_1 <- creator_and_songs_and_influences_and_creators_collaborate %>%
-  filter(creator_name == chosen_creator_1) %>%
+  filter(creator_name == chosen_creator_1,
+         infuence_music_collaborate != chosen_node_1) %>%
   pull(infuence_music_collaborate)
 
 # Step 4: Get the songs they have influenced
 creators_songs_influence_1 <- creator_and_songs_and_influences_and_creators_collaborate %>%
   filter(creator_name == chosen_creator_1,
+         infuence_music_collaborate != chosen_node_1,
          `Edge Colour` == "Influenced By") %>%
   pull(infuence_music_collaborate)
 
 # Step 5: Get the influenced creators of the influenced songs
 creators_songs_influence_creators_1 <- creator_and_songs_and_influences_and_creators_collaborate %>%
-  filter(creator_name == chosen_creator_1, 
+  filter(creator_name == chosen_creator_1,
+         influence_creator != chosen_node_1,
          !is.na(influence_creator),
          infuence_music_collaborate %in% creators_songs_influence_1) %>%
   pull(influence_creator)
 
 all_nodes <- unique(c(chosen_node_1, 
                       creator_songs_1, 
-                      creators_songs_influence_1,
+                      creators_songs_collaborate_influence_1,
                       creators_songs_influence_creators_1))
 
 # Create subgraph
@@ -2627,7 +2630,7 @@ g <- sub_graph %>%
 girafe(ggobj = g, width_svg = 7, height_svg = 6)
 ```
 
-:::::: panel-tabset
+:::: panel-tabset
 ## Music Releases
 
 ```{r}
@@ -2909,8 +2912,7 @@ plot_ly(
 
 Sailor Shift has no influence on Music creation
 :::
-
-::::::
+::::
 
 ### [2:]{style="color:DarkOrange"} 6.2.2 Visualizing the career of Jay Walters
 
@@ -2927,7 +2929,8 @@ chosen_creator_2 = "Jay Walters"
 # Step 1: Get the node of the chosen creator
 chosen_node_2 <- creator_and_songs_and_influences_and_creators_collaborate %>%
   filter(creator_name == chosen_creator_2) %>%
-  pull(creator_from)
+  pull(creator_from) %>%
+  unique()
 
 # Step 2: Get the songs that the top creator produced
 creator_songs_2 <- creator_and_songs_and_influences_and_creators_collaborate %>%
@@ -2947,14 +2950,15 @@ creators_songs_influence_2 <- creator_and_songs_and_influences_and_creators_coll
 
 # Step 5: Get the influenced creators of the influenced songs
 creators_songs_influence_creators_2 <- creator_and_songs_and_influences_and_creators_collaborate %>%
-  filter(creator_name == chosen_creator_2, 
+  filter(creator_name == chosen_creator_2,
+         influence_creator != chosen_node_1,
          !is.na(influence_creator),
          infuence_music_collaborate %in% creators_songs_influence_2) %>%
   pull(influence_creator)
 
 all_nodes <- unique(c(chosen_node_2, 
                       creator_songs_2, 
-                      creators_songs_influence_2,
+                      creators_songs_collaborate_influence_2,
                       creators_songs_influence_creators_2))
 
 # Create subgraph
@@ -3314,7 +3318,6 @@ plot_ly(
     )
   )
 ```
-
 :::
 
 ### [2:]{style="color:DarkOrange"} 6.2.3 Visualizing the career of Min Fu
@@ -3332,7 +3335,8 @@ chosen_creator_3 = "Min Fu"
 # Step 1: Get the node of the chosen creator
 chosen_node_3 <- creator_and_songs_and_influences_and_creators_collaborate %>%
   filter(creator_name == chosen_creator_3) %>%
-  pull(creator_from)
+  pull(creator_from) %>%
+  unique()
 
 # Step 2: Get the songs that the top creator produced
 creator_songs_3 <- creator_and_songs_and_influences_and_creators_collaborate %>%
@@ -3341,25 +3345,28 @@ creator_songs_3 <- creator_and_songs_and_influences_and_creators_collaborate %>%
 
 # Step 3: Get the songs they have influenced / artists they collaborate with
 creators_songs_collaborate_influence_3 <- creator_and_songs_and_influences_and_creators_collaborate %>%
-  filter(creator_name == chosen_creator_3) %>%
+  filter(creator_name == chosen_creator_3,
+         infuence_music_collaborate != chosen_node_3) %>%
   pull(infuence_music_collaborate)
 
 # Step 4: Get the songs they have influenced
 creators_songs_influence_3 <- creator_and_songs_and_influences_and_creators_collaborate %>%
   filter(creator_name == chosen_creator_3,
+         infuence_music_collaborate != chosen_node_3,
          `Edge Colour` == "Influenced By") %>%
   pull(infuence_music_collaborate)
 
 # Step 5: Get the influenced creators of the influenced songs
 creators_songs_influence_creators_3 <- creator_and_songs_and_influences_and_creators_collaborate %>%
-  filter(creator_name == chosen_creator_3, 
+  filter(creator_name == chosen_creator_3,
+         influence_creator != chosen_node_3,
          !is.na(influence_creator),
          infuence_music_collaborate %in% creators_songs_influence_3) %>%
   pull(influence_creator)
 
 all_nodes <- unique(c(chosen_node_3, 
                       creator_songs_3, 
-                      creators_songs_influence_3,
+                      creators_songs_collaborate_influence_3,
                       creators_songs_influence_creators_3))
 
 # Create subgraph
@@ -3719,14 +3726,13 @@ plot_ly(
     )
   )
 ```
-
 :::
 
 ### [2:]{style="color:DarkOrange"} 6.2.4 Compare and contrast the three artists' rise in popularity and influence
 
-The cumulative graphs of the 3 artists (Sailor Shift, Jay Walters and Qiang Yuan) will be overlaid for comparison of their musical careers.
+The cumulative graphs of the 3 artists (Sailor Shift, Jay Walters and Min Fu) will be overlaid for comparison of their musical careers.
 
-:::::: panel-tabset
+::::: panel-tabset
 ## Music Releases
 
 ```{r}
@@ -3961,7 +3967,7 @@ plot_ly(
 ::: callout-warning
 ## Note
 
--   Sailor Shift has no influence on Music creation
+Sailor Shift has only Collaborations and no Artist Influence
 :::
 
 ## Influenced Music
@@ -4044,10 +4050,9 @@ plot_ly(
 ::: callout-warning
 ## Note
 
--   Sailor Shift has no influence
+Sailor Shift has no influence on music creation
 :::
-
-::::::
+:::::
 
 ::: callout-tip
 ## Visualize the careers of three artists. Compare and contrast their rise in popularity and influence?
@@ -4055,9 +4060,9 @@ plot_ly(
 -   Among the three artists, Sailor Shift is the most recent entrant to the music industry, having debuted in 2024.
     -   She maintained consistent music releases through 2040.
     -   With 38 total releases, she surpassed Jay Walters' record (37 releases) in 2040, establishing herself as the most prolific artist.
-    -   Qian Yuan has 9 records.
+    -   Min Fu has 12 records.
 -   While Sailor Shift has released more music than Jay Walters, Jay Walters is the most popular Artist having released 35 hits that made the top record chart.
-    -   Sailor Shift has 25 hits while Qian Yuan has 9.
+    -   Sailor Shift has 25 hits while Min Fu has 12.
 -   Min Fu is the most influential artist having influenced/collaborated with 598 artists and influenced the creation of 192 music.
     -   Jay Walters has a much lower influence having influencde/collaborated with 51 artists and 50 music.
     -   Sailor Shift has a similar influence of 48 artists (all collaborations) but 0 influence on the music scene.
@@ -4071,9 +4076,7 @@ This will be a continuation of Question 3a where only Oceanus Folk artists and t
 
 ### [2:]{style="color:DarkOrange"} 6.3.1 Analysing the careers of all Oceanus Folk Artists
 
-In order to predict the next Oceanus Folk stars, a grading rubric will be used where their ranking in these 4 categories (Number of Music released, Number of Notable Music, Number of New Artists Influenced and Number of Music influenced). Each category will be given equal weighting and the Oceanus Folk artists will be ranked using this rubric.
-
-Note: Frequency of References from Artists is not included in the rubric because it is a scaled multiple of Number of Music influenced.
+In order to predict the next Oceanus Folk stars, a grading rubric will be used where their ranking in these 4 categories (Number of Music released, Number of Notable Music, Number of New Artists Influenced / Collaborated With and Number of Music influenced). Each category will be given equal weighting with a maximum score of 4 and the Oceanus Folk artists will be ranked using this rubric.
 
 ```{r}
 #| code-fold: true
@@ -4115,24 +4118,20 @@ oceanus_creator_rankings <- oceanus_creator_stats %>%
     music_score = (influence_music - min(influence_music)) / (max(influence_music) - min(influence_music)),
     
     # Calculate composite score (equal weighting)
-    composite_score = (songs_score + notable_score + artists_score + music_score) / 4,
-    
-    # Convert to percentile rank
-    percentile_rank = percent_rank(composite_score)
+    composite_score = songs_score + notable_score + artists_score + music_score
   ) %>%
   arrange(desc(composite_score)) %>%
   select(creator_name, total_songs, notable_hits, collaboration_influence_creator, influence_music, 
-         composite_score, percentile_rank)
+         composite_score)
 
 # Final Ranked Table
 oceanus_creator_rankings %>%
   mutate(
     Rank = row_number(),
-    `Composite Score` = round(composite_score, 3),
-    `Percentile Rank` = scales::percent(percentile_rank)
+    `Star Potential` = round(composite_score, 3)
   ) %>%
   select(Rank, creator_name, total_songs, notable_hits, collaboration_influence_creator, 
-         influence_music, `Composite Score`, `Percentile Rank`) %>%
+         influence_music, `Star Potential`) %>%
   rename(
     `Artist` = creator_name,
     `Total Songs` = total_songs,
@@ -4158,7 +4157,8 @@ chosen_creator_1 = "Sailor Shift"
 # Step 1: Get the node of the chosen creator
 chosen_node_1 <- oceanus_creator_and_songs_and_influences_and_creators_collaborate %>%
   filter(creator_name == chosen_creator_1) %>%
-  pull(creator_from)
+  pull(creator_from) %>%
+  unique()
 
 # Step 2: Get the songs that the top creator produced
 creator_songs_1 <- oceanus_creator_and_songs_and_influences_and_creators_collaborate %>%
@@ -4167,25 +4167,28 @@ creator_songs_1 <- oceanus_creator_and_songs_and_influences_and_creators_collabo
 
 # Step 3: Get the songs they have influenced / artists they collaborate with
 creators_songs_collaborate_influence_1 <- oceanus_creator_and_songs_and_influences_and_creators_collaborate %>%
-  filter(creator_name == chosen_creator_1) %>%
+  filter(creator_name == chosen_creator_1,
+         infuence_music_collaborate != chosen_node_1) %>%
   pull(infuence_music_collaborate)
 
 # Step 4: Get the songs they have influenced
 creators_songs_influence_1 <- oceanus_creator_and_songs_and_influences_and_creators_collaborate %>%
   filter(creator_name == chosen_creator_1,
+         infuence_music_collaborate != chosen_node_1,
          `Edge Colour` == "Influenced By") %>%
   pull(infuence_music_collaborate)
 
 # Step 5: Get the influenced creators of the influenced songs
 creators_songs_influence_creators_1 <- oceanus_creator_and_songs_and_influences_and_creators_collaborate %>%
-  filter(creator_name == chosen_creator_1, 
+  filter(creator_name == chosen_creator_1,
+         influence_creator != chosen_node_1,
          !is.na(influence_creator),
          infuence_music_collaborate %in% creators_songs_influence_1) %>%
   pull(influence_creator)
 
 all_nodes <- unique(c(chosen_node_1, 
                       creator_songs_1, 
-                      creators_songs_influence_1,
+                      creators_songs_collaborate_influence_1,
                       creators_songs_influence_creators_1))
 
 # Create subgraph
@@ -4560,7 +4563,8 @@ chosen_creator_2 = "Chao Wu"
 # Step 1: Get the node of the chosen creator
 chosen_node_2 <- oceanus_creator_and_songs_and_influences_and_creators_collaborate %>%
   filter(creator_name == chosen_creator_2) %>%
-  pull(creator_from)
+  pull(creator_from) %>%
+  unique()
 
 # Step 2: Get the songs that the top creator produced
 creator_songs_2 <- oceanus_creator_and_songs_and_influences_and_creators_collaborate %>%
@@ -4569,25 +4573,28 @@ creator_songs_2 <- oceanus_creator_and_songs_and_influences_and_creators_collabo
 
 # Step 3: Get the songs they have influenced / artists they collaborate with
 creators_songs_collaborate_influence_2 <- oceanus_creator_and_songs_and_influences_and_creators_collaborate %>%
-  filter(creator_name == chosen_creator_2) %>%
+  filter(creator_name == chosen_creator_2,
+         infuence_music_collaborate != chosen_node_2) %>%
   pull(infuence_music_collaborate)
 
 # Step 4: Get the songs they have influenced
 creators_songs_influence_2 <- oceanus_creator_and_songs_and_influences_and_creators_collaborate %>%
   filter(creator_name == chosen_creator_2,
+         infuence_music_collaborate != chosen_node_2,
          `Edge Colour` == "Influenced By") %>%
   pull(infuence_music_collaborate)
 
 # Step 5: Get the influenced creators of the influenced songs
 creators_songs_influence_creators_2 <- oceanus_creator_and_songs_and_influences_and_creators_collaborate %>%
-  filter(creator_name == chosen_creator_2, 
+  filter(creator_name == chosen_creator_2,
+         influence_creator != chosen_node_2,
          !is.na(influence_creator),
          infuence_music_collaborate %in% creators_songs_influence_2) %>%
   pull(influence_creator)
 
 all_nodes <- unique(c(chosen_node_2, 
                       creator_songs_2, 
-                      creators_songs_influence_2,
+                      creators_songs_collaborate_influence_2,
                       creators_songs_influence_creators_2))
 
 # Create subgraph
@@ -4962,7 +4969,8 @@ chosen_creator_3 = "Xia Jia"
 # Step 1: Get the node of the chosen creator
 chosen_node_3 <- oceanus_creator_and_songs_and_influences_and_creators_collaborate %>%
   filter(creator_name == chosen_creator_3) %>%
-  pull(creator_from)
+  pull(creator_from) %>%
+  unique()
 
 # Step 2: Get the songs that the top creator produced
 creator_songs_3 <- oceanus_creator_and_songs_and_influences_and_creators_collaborate %>%
@@ -4971,25 +4979,28 @@ creator_songs_3 <- oceanus_creator_and_songs_and_influences_and_creators_collabo
 
 # Step 3: Get the songs they have influenced / artists they collaborate with
 creators_songs_collaborate_influence_3 <- oceanus_creator_and_songs_and_influences_and_creators_collaborate %>%
-  filter(creator_name == chosen_creator_3) %>%
+  filter(creator_name == chosen_creator_3,
+         infuence_music_collaborate != chosen_node_3) %>%
   pull(infuence_music_collaborate)
 
 # Step 4: Get the songs they have influenced
 creators_songs_influence_3 <- oceanus_creator_and_songs_and_influences_and_creators_collaborate %>%
   filter(creator_name == chosen_creator_3,
+         infuence_music_collaborate != chosen_node_3,
          `Edge Colour` == "Influenced By") %>%
   pull(infuence_music_collaborate)
 
 # Step 5: Get the influenced creators of the influenced songs
 creators_songs_influence_creators_3 <- oceanus_creator_and_songs_and_influences_and_creators_collaborate %>%
-  filter(creator_name == chosen_creator_3, 
+  filter(creator_name == chosen_creator_3,
+         influence_creator != chosen_node_3,
          !is.na(influence_creator),
          infuence_music_collaborate %in% creators_songs_influence_3) %>%
   pull(influence_creator)
 
 all_nodes <- unique(c(chosen_node_3, 
                       creator_songs_3, 
-                      creators_songs_influence_3,
+                      creators_songs_collaborate_influence_3,
                       creators_songs_influence_creators_3))
 
 # Create subgraph
@@ -5364,7 +5375,8 @@ chosen_creator_4 = "Donna Caldwell"
 # Step 1: Get the node of the chosen creator
 chosen_node_4 <- oceanus_creator_and_songs_and_influences_and_creators_collaborate %>%
   filter(creator_name == chosen_creator_4) %>%
-  pull(creator_from)
+  pull(creator_from) %>%
+  unique()
 
 # Step 2: Get the songs that the top creator produced
 creator_songs_4 <- oceanus_creator_and_songs_and_influences_and_creators_collaborate %>%
@@ -5373,25 +5385,28 @@ creator_songs_4 <- oceanus_creator_and_songs_and_influences_and_creators_collabo
 
 # Step 3: Get the songs they have influenced / artists they collaborate with
 creators_songs_collaborate_influence_4 <- oceanus_creator_and_songs_and_influences_and_creators_collaborate %>%
-  filter(creator_name == chosen_creator_4) %>%
+  filter(creator_name == chosen_creator_4,
+         infuence_music_collaborate != chosen_node_4) %>%
   pull(infuence_music_collaborate)
 
 # Step 4: Get the songs they have influenced
 creators_songs_influence_4 <- oceanus_creator_and_songs_and_influences_and_creators_collaborate %>%
   filter(creator_name == chosen_creator_4,
+         infuence_music_collaborate != chosen_node_4,
          `Edge Colour` == "Influenced By") %>%
   pull(infuence_music_collaborate)
 
 # Step 5: Get the influenced creators of the influenced songs
 creators_songs_influence_creators_4 <- oceanus_creator_and_songs_and_influences_and_creators_collaborate %>%
-  filter(creator_name == chosen_creator_4, 
+  filter(creator_name == chosen_creator_4,
+         influence_creator != chosen_node_4,
          !is.na(influence_creator),
          infuence_music_collaborate %in% creators_songs_influence_4) %>%
   pull(influence_creator)
 
 all_nodes <- unique(c(chosen_node_4, 
                       creator_songs_4, 
-                      creators_songs_influence_4,
+                      creators_songs_collaborate_influence_4,
                       creators_songs_influence_creators_4))
 
 # Create subgraph
@@ -5766,7 +5781,8 @@ chosen_creator_5 = "Xiulan Ye"
 # Step 1: Get the node of the chosen creator
 chosen_node_5 <- oceanus_creator_and_songs_and_influences_and_creators_collaborate %>%
   filter(creator_name == chosen_creator_5) %>%
-  pull(creator_from)
+  pull(creator_from) %>%
+  unique()
 
 # Step 2: Get the songs that the top creator produced
 creator_songs_5 <- oceanus_creator_and_songs_and_influences_and_creators_collaborate %>%
@@ -5775,25 +5791,28 @@ creator_songs_5 <- oceanus_creator_and_songs_and_influences_and_creators_collabo
 
 # Step 3: Get the songs they have influenced / artists they collaborate with
 creators_songs_collaborate_influence_5 <- oceanus_creator_and_songs_and_influences_and_creators_collaborate %>%
-  filter(creator_name == chosen_creator_5) %>%
+  filter(creator_name == chosen_creator_5,
+         infuence_music_collaborate != chosen_node_5) %>%
   pull(infuence_music_collaborate)
 
 # Step 4: Get the songs they have influenced
 creators_songs_influence_5 <- oceanus_creator_and_songs_and_influences_and_creators_collaborate %>%
   filter(creator_name == chosen_creator_5,
+         infuence_music_collaborate != chosen_node_5,
          `Edge Colour` == "Influenced By") %>%
   pull(infuence_music_collaborate)
 
 # Step 5: Get the influenced creators of the influenced songs
 creators_songs_influence_creators_5 <- oceanus_creator_and_songs_and_influences_and_creators_collaborate %>%
-  filter(creator_name == chosen_creator_5, 
+  filter(creator_name == chosen_creator_5,
+         influence_creator != chosen_node_5,
          !is.na(influence_creator),
          infuence_music_collaborate %in% creators_songs_influence_5) %>%
   pull(influence_creator)
 
 all_nodes <- unique(c(chosen_node_5, 
                       creator_songs_5, 
-                      creators_songs_influence_5,
+                      creators_songs_collaborate_influence_5,
                       creators_songs_influence_creators_5))
 
 # Create subgraph
@@ -6827,6 +6846,15 @@ girafe(ggobj = g, width_svg = 7, height_svg = 6)
 :::
 
 ### [2:]{style="color:DarkOrange"} 6.3.8 Predicting who the next three Oceanus Folk stars with be over the next five years
+
+::: callout-tip
+## Sailor Shift
+
+-   Sailor Shift is ranked 1st in Oceanus Folk star potential.
+    -   Per the VAST Challenge background, she is already one of music's biggest superstars and a dominant figure in the Oceanus Folk community.
+    -   Therefore, she will not be included in these predictions, as she has already achieved superstar status.
+-   This analysis will continue to identity the next 3 emerging artists poised to become the next Oceanus Folk stars.
+:::
 
 ::: callout-tip
 ## Chao Wu
