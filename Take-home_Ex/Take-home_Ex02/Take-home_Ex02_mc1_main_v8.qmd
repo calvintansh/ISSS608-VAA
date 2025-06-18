@@ -1535,6 +1535,75 @@ girafe(ggobj = g, width_svg = 9, height_svg = 8)
 
 Develop visualizations that illustrate how the influence of Oceanus Folk has spread through the musical world.
 
+# **4  Exploratory Data Analysis (EDA) - Sailor's Network**
+
+-   In total, Sailor Shift released 38 Songs and Albums from 2024 to 2040
+-   Details on the Songs and Albums can be found in the table below
+-   Sailor Shift released 4 Songs in 2028
+    -   Among those, only 1 is a Single
+    -   Therefore, the viral Song that spark her breakthrough is **High Tide Heartbeat**
+-   Among her Songs and Albums, 36 belong to the Oceanus Folk genre, while there is 1 Americana and 1 Synthwave Album each. :::
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show Code"
+
+# Step 0: Get name of 'Sailor Shift'
+sailor_vertex_name <- mc1_nodes_clean %>%
+  filter(is_sailor == TRUE) %>%
+  pull(name)
+
+# Step 1: Find outgoing edges from Sailor Shift
+sailor_out_edges <- mc1_edges_clean %>%
+  filter(from == sailor_vertex_name)
+
+# Step 2: Identify neighbour node names
+sailor_out_node_names <- sailor_out_edges$to
+
+# Step 4: Identify songs/albums
+sailor_music_all <- mc1_nodes_clean %>%
+  filter(name %in% sailor_out_node_names, `Node Type` %in% c("Song", "Album")) %>%
+  pull(name)
+
+mc1_nodes_clean %>%
+  filter(name %in% sailor_music_all) %>%
+  arrange(release_date) %>%
+  select(`Node Type`, node_name, release_date, genre, notable, single, notoriety_date) %>%
+  kable() %>%
+  kable_styling("striped", full_width = F) %>% 
+  scroll_box(height = "300px")
+```
+
+```{r}
+# Prepare data
+sailor_release_data <- mc1_nodes_clean %>%
+  filter(name %in% sailor_music_all) %>%
+  count(release_date, genre)
+
+# Plot
+ggplot(sailor_release_data, aes(x = release_date, y = n, fill = genre)) +
+  geom_col() +
+  geom_vline(xintercept = 2028, linetype = "dashed", color = "red") +
+    annotate("text", 
+           x = 2028, 
+           y = max(sailor_release_data$n) + 0.5,
+           label = "Viral Breakthrough", 
+           color = "red", 
+           size = 3.5,
+           angle = 0,        # <- horizontal
+           vjust = -0.5,     # <- moves it slightly above
+           hjust = 0.5       # <- centers it horizontally
+  ) +
+  scale_fill_brewer(palette = "Pastel1") +
+  labs(
+    title = "Sailor Shift's Music Releases (2024–2040)",
+    x = "Year",
+    y = "Number of Songs/Albums",
+    fill = "Genre"
+  ) +
+  theme_minimal()
+```
+
 ## [2:]{style="color:DarkOrange"} 5.1 Question 2a) Was this influence intermittent or did it have a gradual rise?
 
 This question is broken down into 3 parts:
@@ -2341,6 +2410,25 @@ Use your visualizations to develop a profile of what it means to be a rising sta
 
 The analysis identifies all musical artists, including both the songs/albums they produced and their influence relationships—tracking both the musical works they have influenced and the artists they have impacted throughout their careers.
 
+A grading rubric is added to assess artists based on four equally weighted categories:
+
+1. Number of Music Releases
+2. Number of Notable Music
+3. Number of New Artists Influenced and Collaborated With
+4. Number of Music Influenced
+
+Each category's score will be normalised using the formula:
+
+```{r}
+library(latex2exp)
+plot(1, 1, type = "n", ann = FALSE, axes = FALSE)
+text(1, 1, 
+     latex2exp::TeX("$\\frac{Artist's\\ Score - min((Score))}{max((Score)) - min((Score))}$"), 
+     cex = 2)
+```
+
+The Star Factor will aggregate these normalized scores (maximum: 4) to rank the artists.
+
 ```{r}
 #| code-fold: true
 #| code-summary: "Show Code"
@@ -2422,74 +2510,40 @@ creator_stats <- creator_influence_lists %>%
     collaboration_influence_creator = length(unique(c(unlist(unique_influence_creators),unlist( unique_collaborate)))),
     influence_music = length(unique(unlist(unique_influence_music)))
   )
-```
 
-```{r}
-#| echo: FALSE
+# Step 12: Create Scoring Rubric
+creator_rankings <- creator_stats %>%
+  mutate(
+    # Normalize each metric (0-1 scale)
+    songs_score = (total_songs - min(total_songs)) / (max(total_songs) - min(total_songs)),
+    notable_score = (notable_hits - min(notable_hits)) / (max(notable_hits) - min(notable_hits)),
+    artists_score = (collaboration_influence_creator - min(collaboration_influence_creator)) / (max(collaboration_influence_creator) - min(collaboration_influence_creator)),
+    music_score = (influence_music - min(influence_music)) / (max(influence_music) - min(influence_music)),
+    
+    # Calculate composite score (equal weighting)
+    composite_score = songs_score + notable_score + artists_score + music_score
+  ) %>%
+  arrange(desc(composite_score)) %>%
+  select(creator_name, total_songs, notable_hits, collaboration_influence_creator, influence_music, composite_score)
 
-creator_stats %>%
-  arrange(desc(total_songs)) %>%
-  head(10) %>%
+# Step 13: Final Ranked Table
+creator_rankings %>%
+  mutate(
+    Rank = row_number(),
+    `Star Factor` = round(composite_score, 2)
+  ) %>%
+  select(Rank, creator_name, total_songs, notable_hits, collaboration_influence_creator, 
+         influence_music, `Star Factor`) %>%
   rename(
     `Artist` = creator_name,
     `Total Songs` = total_songs,
     `Notable Hits` = notable_hits,
-    `Collaborators` = collaboration,
-    `Artists Influenced` = influence_creators,
     `Artist Influ & Colab` = collaboration_influence_creator,
     `Music Influenced` = influence_music
   ) %>%
-  kable(caption = "Top 10 Artists by Number of Music Produced") %>%
-  kable_styling("striped", full_width = F) %>% 
-  scroll_box(height = "200px")
-
-creator_stats %>%
-  arrange(desc(notable_hits)) %>%
-  head(10) %>%
-  rename(
-    `Artist` = creator_name,
-    `Total Songs` = total_songs,
-    `Notable Hits` = notable_hits,
-    `Collaborators` = collaboration,
-    `Artists Influenced` = influence_creators,
-    `Artist Influ & Colab` = collaboration_influence_creator,
-    `Music Influenced` = influence_music
-  ) %>%
-  kable(caption = "Top 10 Artists by Number of Notable Hits") %>%
-  kable_styling("striped", full_width = F) %>% 
-  scroll_box(height = "200px")
-
-creator_stats %>%
-  arrange(desc(collaboration_influence_creator)) %>%
-  head(10) %>%
-  rename(
-    `Artist` = creator_name,
-    `Total Songs` = total_songs,
-    `Notable Hits` = notable_hits,
-    `Collaborators` = collaboration,
-    `Artists Influenced` = influence_creators,
-    `Artist Influ & Colab` = collaboration_influence_creator,
-    `Music Influenced` = influence_music
-  ) %>%
-  kable(caption = "Top 10 Artists by Number of Influencd Artists and Collaborations") %>%
-  kable_styling("striped", full_width = F) %>% 
-  scroll_box(height = "200px")
-
-creator_stats %>%
-  arrange(desc(influence_music)) %>%
-  head(10) %>%
-  rename(
-    `Artist` = creator_name,
-    `Total Songs` = total_songs,
-    `Notable Hits` = notable_hits,
-    `Collaborators` = collaboration,
-    `Artists Influenced` = influence_creators,
-    `Artist Influ & Colab` = collaboration_influence_creator,
-    `Music Influenced` = influence_music
-  ) %>%
-  kable(caption = "Top 10 Artists by Musical Influence") %>%
-  kable_styling("striped", full_width = F) %>% 
-  scroll_box(height = "200px")
+  kable(caption = "Artists Ranked by Star Factor") %>%
+  kable_styling("striped", full_width = F) %>%
+  scroll_box(height = "300px")
 ```
 
 ## [2:]{style="color:DarkOrange"} 6.2 Question 3a) Visualize the careers of three artists. Compare and contrast their rise in popularity and influence?
@@ -2498,7 +2552,7 @@ Based on the results of the analysis above, the top artists in each category wil
 
 -   Greatest Number of Music Released: Sailor Shift
 -   Most Popular Artist (Highest Number of Notable Hits): Jay Walters
--   Most Influential Artist (Influence Artists and Collaborations) and Most Music Influence: Min Fu
+-   Most Influential Artist (Influence Artists and Collaborations), Most Music Influence & Highest Star Factor: Min Fu
 
 ### [2:]{style="color:DarkOrange"} 6.2.1 Visualizing the career of Sailor Shift
 
@@ -2776,11 +2830,11 @@ influence_artists_by_date_1 <- creator_and_songs_and_influences_and_creators_col
   filter(creator_from %in% unique(chosen_node_1),
          influence_creator != unique(chosen_node_1)) %>%
   # Get unique artist-date pairs first
-  distinct(influence_creator, creator_release_date) %>%
+  distinct(influence_creator, influence_release_date) %>%
   # Find first influence date for each artist
   group_by(influence_creator) %>%
   summarize(
-    first_influence_date = if(n() > 0) min(creator_release_date) else NA_real_,
+    first_influence_date = if(n() > 0) min(influence_release_date) else NA_real_,
     .groups = "drop"
   ) %>%
   # Count new artists by first influence date
@@ -3188,11 +3242,11 @@ influence_artists_by_date_2 <- creator_and_songs_and_influences_and_creators_col
   filter(creator_from %in% unique(chosen_node_2),
          influence_creator != unique(chosen_node_2)) %>%
   # Get unique artist-date pairs first
-  distinct(influence_creator, creator_release_date) %>%
+  distinct(influence_creator, influence_release_date) %>%
   # Find first influence date for each artist
   group_by(influence_creator) %>%
   summarize(
-    first_influence_date = if(n() > 0) min(creator_release_date) else NA_real_,
+    first_influence_date = if(n() > 0) min(influence_release_date) else NA_real_,
     .groups = "drop"
   ) %>%
   # Count new artists by first influence date
@@ -3596,11 +3650,11 @@ influence_artists_by_date_3 <- creator_and_songs_and_influences_and_creators_col
   filter(creator_from %in% unique(chosen_node_3),
          influence_creator != unique(chosen_node_3)) %>%
   # Get unique artist-date pairs first
-  distinct(influence_creator, creator_release_date) %>%
+  distinct(influence_creator, influence_release_date) %>%
   # Find first influence date for each artist
   group_by(influence_creator) %>%
   summarize(
-    first_influence_date = if(n() > 0) min(creator_release_date) else NA_real_,
+    first_influence_date = if(n() > 0) min(influence_release_date) else NA_real_,
     .groups = "drop"
   ) %>%
   # Count new artists by first influence date
@@ -4064,10 +4118,10 @@ Sailor Shift has no influence on music creation
 -   While Sailor Shift has released more music than Jay Walters, Jay Walters is the most popular Artist having released 35 hits that made the top record chart.
     -   Sailor Shift has 25 hits while Min Fu has 12.
 -   Min Fu is the most influential artist having influenced/collaborated with 598 artists and influenced the creation of 192 music.
-    -   Jay Walters has a much lower influence having influencde/collaborated with 51 artists and 50 music.
+    -   Jay Walters has a much lower influence having influence/collaborated with 51 artists and 50 music.
     -   Sailor Shift has a similar influence of 48 artists (all collaborations) but 0 influence on the music scene.
 -   However, Sailor Shift has the most recent influence, with new artist connections as recent as 2040.
-    -   In contrast, Min Fu's influence period ended earlier (last connection in 2029), while Jay Walters' influence dates back only to 1996.
+    -   In contrast, Jay Walters' influence period ended earlier (last connection in 2035), while Min Fu's influence dates back to 2030.
 :::
 
 ## [2:]{style="color:DarkOrange"} 6.3 Question 3b) Using this characterization, give three predictions of who the next Oceanus Folk stars with be over the next five years.
@@ -4128,10 +4182,10 @@ oceanus_creator_rankings <- oceanus_creator_stats %>%
 oceanus_creator_rankings %>%
   mutate(
     Rank = row_number(),
-    `Star Potential` = round(composite_score, 3)
+    `Star Factor` = round(composite_score, 3)
   ) %>%
   select(Rank, creator_name, total_songs, notable_hits, collaboration_influence_creator, 
-         influence_music, `Star Potential`) %>%
+         influence_music, `Star Factor`) %>%
   rename(
     `Artist` = creator_name,
     `Total Songs` = total_songs,
@@ -4139,7 +4193,7 @@ oceanus_creator_rankings %>%
     `Artist Influ & Colab` = collaboration_influence_creator,
     `Music Influenced` = influence_music
   ) %>%
-  kable(caption = "Oceanus Folk Artists Ranked by Star Potential") %>%
+  kable(caption = "Oceanus Folk Artists Ranked by Star Factor") %>%
   kable_styling("striped", full_width = F) %>%
   scroll_box(height = "300px")
 ```
@@ -4418,11 +4472,11 @@ influence_artists_by_date_1 <- oceanus_creator_and_songs_and_influences_and_crea
   filter(creator_from %in% unique(chosen_node_1),
          influence_creator != unique(chosen_node_1)) %>%
   # Get unique artist-date pairs first
-  distinct(influence_creator, creator_release_date) %>%
+  distinct(influence_creator, influence_release_date) %>%
   # Find first influence date for each artist
   group_by(influence_creator) %>%
   summarize(
-    first_influence_date = if(n() > 0) min(creator_release_date) else NA_real_,
+    first_influence_date = if(n() > 0) min(influence_release_date) else NA_real_,
     .groups = "drop"
   ) %>%
   # Count new artists by first influence date
@@ -4824,11 +4878,11 @@ influence_artists_by_date_2 <- oceanus_creator_and_songs_and_influences_and_crea
   filter(creator_from %in% unique(chosen_node_2),
          influence_creator != unique(chosen_node_2)) %>%
   # Get unique artist-date pairs first
-  distinct(influence_creator, creator_release_date) %>%
+  distinct(influence_creator, influence_release_date) %>%
   # Find first influence date for each artist
   group_by(influence_creator) %>%
   summarize(
-    first_influence_date = if(n() > 0) min(creator_release_date) else NA_real_,
+    first_influence_date = if(n() > 0) min(influence_release_date) else NA_real_,
     .groups = "drop"
   ) %>%
   # Count new artists by first influence date
@@ -5230,11 +5284,11 @@ influence_artists_by_date_3 <- oceanus_creator_and_songs_and_influences_and_crea
   filter(creator_from %in% unique(chosen_node_3),
          influence_creator != unique(chosen_node_3)) %>%
   # Get unique artist-date pairs first
-  distinct(influence_creator, creator_release_date) %>%
+  distinct(influence_creator, influence_release_date) %>%
   # Find first influence date for each artist
   group_by(influence_creator) %>%
   summarize(
-    first_influence_date = if(n() > 0) min(creator_release_date) else NA_real_,
+    first_influence_date = if(n() > 0) min(influence_release_date) else NA_real_,
     .groups = "drop"
   ) %>%
   # Count new artists by first influence date
@@ -5636,11 +5690,11 @@ influence_artists_by_date_4 <- oceanus_creator_and_songs_and_influences_and_crea
   filter(creator_from %in% unique(chosen_node_4),
          influence_creator != unique(chosen_node_4)) %>%
   # Get unique artist-date pairs first
-  distinct(influence_creator, creator_release_date) %>%
+  distinct(influence_creator, influence_release_date) %>%
   # Find first influence date for each artist
   group_by(influence_creator) %>%
   summarize(
-    first_influence_date = if(n() > 0) min(creator_release_date) else NA_real_,
+    first_influence_date = if(n() > 0) min(influence_release_date) else NA_real_,
     .groups = "drop"
   ) %>%
   # Count new artists by first influence date
@@ -6042,11 +6096,11 @@ influence_artists_by_date_5 <- oceanus_creator_and_songs_and_influences_and_crea
   filter(creator_from %in% unique(chosen_node_5),
          influence_creator != unique(chosen_node_5)) %>%
   # Get unique artist-date pairs first
-  distinct(influence_creator, creator_release_date) %>%
+  distinct(influence_creator, influence_release_date) %>%
   # Find first influence date for each artist
   group_by(influence_creator) %>%
   summarize(
-    first_influence_date = if(n() > 0) min(creator_release_date) else NA_real_,
+    first_influence_date = if(n() > 0) min(influence_release_date) else NA_real_,
     .groups = "drop"
   ) %>%
   # Count new artists by first influence date
@@ -6541,13 +6595,13 @@ plot_ly(
     ),
     annotations = list(
       list(
-        x = 2017, 
-        y = 170,
-        text = "<b>2017:<br>Donna Caldwell <br>& Xiulan Ye</b>",
+        x = 2029, 
+        y = 159,
+        text = "<b>Donna Caldwell</b>",
         xref = "x", yref = "y",
-        xanchor = "right",
+        xanchor = "left",
         showarrow = TRUE, arrowhead = 2,
-        ax = -20, ay = -20,
+        ax = 30, ay = 30,
         font = list(color="black", size=12)
       )
     )
@@ -6557,7 +6611,7 @@ plot_ly(
 ::: callout-warning
 ## Note
 
-Donna Caldwell and Xiulan Ye are at 2017 with a count of 170.
+Donna Caldwell overlaps with Xiulan Ye
 :::
 
 ## Influenced Music
@@ -6670,7 +6724,7 @@ plot_ly(
       list(
         x = 2024, 
         y = 16,
-        text = "<b>2017: <br>Donna Caldwell</b>",
+        text = "<b>Donna Caldwell</b>",
         xref = "x", yref = "y",
         xanchor = "right",
         showarrow = TRUE, arrowhead = 2,
@@ -6850,7 +6904,7 @@ girafe(ggobj = g, width_svg = 7, height_svg = 6)
 ::: callout-tip
 ## Sailor Shift
 
--   Sailor Shift is ranked 1st in Oceanus Folk star potential.
+-   Sailor Shift is ranked 1st in Oceanus Folk star factor.
     -   Per the VAST Challenge background, she is already one of music's biggest superstars and a dominant figure in the Oceanus Folk community.
     -   Therefore, she will not be included in these predictions, as she has already achieved superstar status.
 -   This analysis will continue to identity the next 3 emerging artists poised to become the next Oceanus Folk stars.
@@ -6859,7 +6913,7 @@ girafe(ggobj = g, width_svg = 7, height_svg = 6)
 ::: callout-tip
 ## Chao Wu
 
--   Chao Wu is the second on the Star Potential list and his influence is large having influenced/collaborated with 190 Artists and influenced the creation of 44 Music with his Oceanus Folk music.
+-   Chao Wu is the second on the Star Factor list and his influence is large having influenced/collaborated with 190 Artists and influenced the creation of 44 Music with his Oceanus Folk music.
     -   Furthermore, he gained his large following despite having only released 4 music.
     -   Among his 4 music,3 of them are hits.
     -   His last Oceanus Folk work was in 2025 but his work is still being referred to in 2038.
@@ -6868,7 +6922,7 @@ girafe(ggobj = g, width_svg = 7, height_svg = 6)
 ::: callout-tip
 ## Xia Jia
 
--   Xia Jia is the next on the Star Potential list and her influence is equally large having influenced 178 Artists and 42 Music with her Oceanus Folk music.
+-   Xia Jia is the next on the Star Factor list and her influence is equally large having influenced 178 Artists and 42 Music with her Oceanus Folk music.
     -   Furthermore, she has also gained this large following despite having only released 4 music.
     -   Similarly, 3 of them are hits.
     -   Her last Oceanus Folk work was in 2028 but her works were last refereed to in 2030 which is less recent than Chao Wu.
@@ -6877,6 +6931,8 @@ girafe(ggobj = g, width_svg = 7, height_svg = 6)
 ::: callout-tip
 ## Xiulan Ye
 
--   Both Xiulan Ye and Donna Caldwell have produced the 2 influential songs Basque Shore and Destiny's Call together. However, Xiulan Ye is slightly more established in the music scene having also produced Unbound from the Doom Metal genre.
+-   Both Xiulan Ye and Donna Caldwell have produced the 2 influential songs Basque Shore and Destiny's Call together.
+-   Their last Oceaus Folk work was in 2017 and was last refereed to in 2030.
+-   However, Xiulan Ye is slightly more established in the music scene having also produced Unbound from the Doom Metal genre.
 -   Therefore, the third predicted star will be Xiulan Ye but Donna Caldwell has very good potential as well.
 :::

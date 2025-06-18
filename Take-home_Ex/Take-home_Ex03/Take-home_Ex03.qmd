@@ -942,16 +942,19 @@ girafe(ggobj = g, width_svg = 7, height_svg = 6)
 
 ::: callout-note
 Check that the number song nodes is the same as in the table (38)
+
 ```{r}
 length(creator_songs_1 %>% unique())
 ```
 
 Check that the number influenced nodes (songs / collaborators) is the same as in the table (48)
+
 ```{r}
 length(c(setdiff(creators_songs_collaborate_influence_1, creators_songs_influence_1), creators_songs_influence_creators_1)  %>% unique())
 ```
 
 Check that the number influenced music is the same as in the table (0)
+
 ```{r}
 length(creators_songs_influence_1 %>% unique())
 ```
@@ -1396,18 +1399,20 @@ girafe(ggobj = g, width_svg = 7, height_svg = 6)
 ```
 
 ::: callout-note
-
 Check that the number song nodes in the graph is the same as in the table (12)
+
 ```{r}
 length(creator_songs_2 %>% unique())
 ```
 
 Check that the number influenced nodes (songs / collaborators) in the graph is the same as in the table (598)
+
 ```{r}
 length(c(setdiff(creators_songs_collaborate_influence_2, creators_songs_influence_2), creators_songs_influence_creators_2)  %>% unique())
 ```
 
 Check that the number influenced music nodes in the graph is the same as in the table (162)
+
 ```{r}
 length(creators_songs_influence_2 %>% unique())
 ```
@@ -1975,22 +1980,23 @@ Sailor Shift has no influence on music creation
 
 ::: callout-tip
 ## Is Sailor Shift the Most Popular Artist?
-1. Career Output & Commercial Success
-    - Sailor Shift has produced more successful music:
-        - 38 total releases (vs Min Fu's 12)
-        - 35 chart-topping hits (triple Min Fu's 12)
-2. Network Influence & Legacy
-    - Min Fu dominates in cultural impact:
-        - 598 artist collaborations/influences
-        - Inspired 192 derivative works
-        - Influence period ended in 2029
-    - Sailor Shift shows limited artistic influence:
-        - 48 direct collaborations
-        - 0 inspired works despite high music output
-        - Maintains connections to present (2040)
-3. Star Potential
-    - Min Fu ranks 1st on Star Potential with a score of 2.64
-    - Sailor Shift is down at 15th with a score of 1.79
+
+1.  Career Output & Commercial Success
+    -   Sailor Shift has produced more successful music:
+        -   38 total releases (vs Min Fu's 12)
+        -   35 chart-topping hits (triple Min Fu's 12)
+2.  Network Influence & Legacy
+    -   Min Fu dominates in cultural impact:
+        -   598 artist collaborations/influences
+        -   Inspired 192 derivative works
+        -   Influence period ended in 2029
+    -   Sailor Shift shows limited artistic influence:
+        -   48 direct collaborations
+        -   0 inspired works despite high music output
+        -   Maintains connections to present (2040)
+3.  Star Potential
+    -   Min Fu ranks 1st on Star Potential with a score of 2.64
+    -   Sailor Shift is down at 15th with a score of 1.79
 :::
 
 ### [3:]{style="color:DarkOrange"} 4.1.3 Is Min Fu's Star Potential Significally Higher than Sailor Shift?
@@ -2272,18 +2278,20 @@ girafe(ggobj = g, width_svg = 7, height_svg = 6)
 ```
 
 ::: callout-note
-
 Check that the number song nodes in the graph is the same as in the table (36)
+
 ```{r}
 length(creator_songs_1 %>% unique())
 ```
 
 Check that the number influenced nodes (songs / collaborators) in the graph is the same as in the table (41)
+
 ```{r}
 length(c(setdiff(creators_songs_collaborate_influence_1, creators_songs_influence_1), creators_songs_influence_creators_1)  %>% unique())
 ```
 
 Check that the number influenced music nodesin the graph is the same as in the table (0)
+
 ```{r}
 length(creators_songs_influence_1 %>% unique())
 ```
@@ -2696,22 +2704,23 @@ girafe(ggobj = g, width_svg = 7, height_svg = 6)
 ```
 
 ::: callout-note
-
 Check that the number song nodes in the graph is the same as in the table (4)
+
 ```{r}
 length(creator_songs_2 %>% unique())
 ```
 
 Check that the number influenced nodes (songs / collaborators) in the graph is the same as in the table (190)
+
 ```{r}
 length(c(setdiff(creators_songs_collaborate_influence_2, creators_songs_influence_2), creators_songs_influence_creators_2) %>% unique())
 ```
 
 Check that the number influenced music nods in the graph is the same as in the table (44)
+
 ```{r}
 length(creators_songs_influence_2 %>% unique())
 ```
-
 :::
 
 ::: panel-tabset
@@ -3121,18 +3130,20 @@ girafe(ggobj = g, width_svg = 7, height_svg = 6)
 ```
 
 ::: callout-note
-
 Check that the number song nodes in the graph is the same as in the table (4)
+
 ```{r}
 length(creator_songs_3 %>% unique())
 ```
 
 Check that the number influenced nodes (songs / collaborators) in the graph is the same as in the table (178)
+
 ```{r}
 length(c(setdiff(creators_songs_collaborate_influence_3, creators_songs_influence_3), creators_songs_influence_creators_3) %>% unique())
 ```
 
 Check that the number influenced music nods in the graph is the same as in the table (42)
+
 ```{r}
 length(creators_songs_influence_3 %>% unique())
 ```
@@ -3550,7 +3561,7 @@ girafe(ggobj = g, width_svg = 7, height_svg = 6)
 
 The cumulative graphs of the top 3 oceanus folk artists (Sailor Shift, Chao Wu, Xia Jia) will be overlaid for comparison of their musical careers.
 
-::: panel-tabset
+::::: panel-tabset
 ## Music Releases
 
 ```{r}
@@ -3870,8 +3881,7 @@ plot_ly(
 
 Sailor Shift has no influence on music creation
 :::
-
-:::
+:::::
 
 ::: callout-tip
 ## Is Sailor Shift the Most Popular Artist in Oceanus Folk?
@@ -3882,7 +3892,7 @@ Sailor Shift has no influence on music creation
         -   24 hit records (vs. 3 each for Chao Wu and Xia Jia)
 2.  Influence & Collaborations
     -   Chao Wu and Xia Jia lead in network impact:
-        -   Artist Influence Scores: Chao Wu (190), Xia Jia (178) 
+        -   Artist Influence Scores: Chao Wu (190), Xia Jia (178)
         -   Music Influence: Chao Wu (44 songs influenced), Xia Jia (42)
         -   Influence period ended in 2025 for Chao Wu and 2028 for Xia Jia
     -   Sailor Shift lags in influence despite high output:
@@ -3892,11 +3902,11 @@ Sailor Shift has no influence on music creation
 3.  Key Contrast
     -   While Sailor Shift excels in volume, her work lacks discernible influence.
     -   Chao Wu and Xia Jia demonstrate stronger cultural impact through collaborations and inspiring works.
-4. Star Potential
-    - All three artists have similar star potential
-        - Sailor Shift (2.216)
-        - Chao Wu (2.11)
-        - Xia Jia (2.102)
+4.  Star Potential
+    -   All three artists have similar star potential
+        -   Sailor Shift (2.216)
+        -   Chao Wu (2.11)
+        -   Xia Jia (2.102)
 :::
 
 ### [3:]{style="color:DarkOrange"} 4.2.3 Is Sailor Shift's Star Potential Significally Higher than Chao Wu?
