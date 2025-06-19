@@ -33,6 +33,16 @@ website:
           href: "Hands-on_Ex/Hands-on_Ex08-2/Hands-on_Ex08-2.html"
         - text: "Hands-On Exercise 8-3: Analytical Mapping"
           href: "Hands-on_Ex/Hands-on_Ex08-3/Hands-on_Ex08-3.html"
+        - text: "Hands-On Exercise 9-1: Creating Ternary Plot with R"
+          href: "Hands-on_Ex/Hands-on_Ex09-1/Hands-on_Ex09-1.html"
+        - text: "Hands-On Exercise 9-2: Visual Correlation Analysis"
+          href: "Hands-on_Ex/Hands-on_Ex09-2/Hands-on_Ex09-2.html"
+        - text: "Hands-On Exercise 9-3: Heatmap for Visualising and Analysing Multivariate Data"
+          href: "Hands-on_Ex/Hands-on_Ex09-3/Hands-on_Ex09-3.html"
+        - text: "Hands-On Exercise 9-4: Visual Multivariate Analysis with Parallel Coordinates Plot"
+          href: "Hands-on_Ex/Hands-on_Ex09-4/Hands-on_Ex09-4.html"
+        - text: "Hands-On Exercise 9-5: Treemap Visualisation with R"
+          href: "Hands-on_Ex/Hands-on_Ex09-5/Hands-on_Ex09-5.html"
     - text: "<i class='bi bi-bar-chart-line'></i> In-class Exercises"
       menu:
         - text: "In-Class Exercise 5: Preparation for VAST Mini Mini-Challenge 1 2025"
@@ -84,6 +94,16 @@ website:
               href: Hands-on_Ex/Hands-on_Ex08-2/Hands-on_Ex08-2.qmd
             - text: "8-3: Analytical Mapping"
               href: Hands-on_Ex/Hands-on_Ex08-3/Hands-on_Ex08-3.qmd
+            - text: "9-1: Creating Ternary Plot with R"
+              href: Hands-on_Ex/Hands-on_Ex09-1/Hands-on_Ex09-1.qmd
+            - text: "9-2: Visual Correlation Analysis"
+              href: Hands-on_Ex/Hands-on_Ex09-2/Hands-on_Ex09-2.qmd
+            - text: "9-3: Heatmap for Visualising and Analysing Multivariate Data"
+              href: Hands-on_Ex/Hands-on_Ex09-3/Hands-on_Ex09-3.qmd
+            - text: "9-4: Visual Multivariate Analysis with Parallel Coordinates Plot"
+              href: Hands-on_Ex/Hands-on_Ex09-4/Hands-on_Ex09-4.qmd
+            - text: "9-5: Treemap Visualisation with R"
+              href: Hands-on_Ex/Hands-on_Ex09-5/Hands-on_Ex09-5.qmd
     - title: "Take-Home Exercise"
       style: "floating"
       collapse-level: 2

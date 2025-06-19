@@ -2394,6 +2394,196 @@ oceanus_influence_stats %>%
   scroll_box(height = "200px")
 ```
 
+
+
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show Code"
+
+# Data Preparation
+
+# Step 1: Get all music names
+all_music <- mc1_nodes_clean %>%
+  filter(`Node Type` %in% c("Song", "Album"), genre == "Oceanus Folk")
+
+# Step 2: Get all outgoing edges from these music
+music_out_edges <- mc1_edges_clean %>%
+  filter(from %in% all_music$name, `Edge Colour` == "Influenced By")
+
+# Step 3: Get all songs that has influenced the original song
+influenced_music <- mc1_nodes_clean %>%
+  filter(name %in% music_out_edges$to)
+
+# Step 4: First join to get music names (from)
+music1 <- all_music %>%
+  select(name, node_name, genre) %>%
+  left_join(music_out_edges %>% select(from, to), by = c("name" = "from")) %>%
+  rename(from = name, original_name = node_name, original_genre = genre)
+
+# Step 5: Second join to get influenced music names (to)
+music2 <- music1 %>%
+  left_join(mc1_nodes_clean, by = c("to" = "name")) %>%
+  select(from, original_name, original_genre, to, node_name, genre) %>%
+  rename(influenced_name = node_name, influenced_genre = genre) %>%
+  distinct()
+
+# Step 6: To create a summary
+genre_influence_stats <- music2 %>%
+  group_by(original_genre) %>%
+  summarize(
+    total_music = n(),
+    total_influences = sum(!is.na(to)),
+    oceanus_influences = sum(influenced_genre == "Oceanus Folk", na.rm = TRUE),
+    other_influences = total_influences - oceanus_influences,
+    perc_oceanus = round(oceanus_influences / total_influences * 100, 1),
+    no_influences = sum(is.na(influenced_genre)),
+  ) %>%
+  arrange(desc(perc_oceanus)) %>%
+  head(10)
+
+genre_influence_stats %>%
+  kable()
+```
+
+```{r}
+influenced_music
+```
+
+
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show Code"
+
+# Data Preparation
+
+# Step 1: Chose genre
+chosen_genre = "Desert Rock"
+
+# Step 2: Select all music in chosen genre
+original_genre_songs <- music2 %>%
+  filter(original_genre == chosen_genre) %>%
+  pull(from)
+
+# Future work: This this graph contains other genres besides Oceanus Folk and currently everything is labeled as other genre
+
+# Step 3: Find all music that has influenced chosen genre
+influenced_songs <- music2 %>%
+  filter(from %in% original_genre_songs, !is.na(to)) %>%
+  pull(to)
+
+
+
+
+
+
+# Step 1: Get all music names
+all_music <- mc1_nodes_clean %>%
+  filter(`Node Type` %in% c("Song", "Album"), genre == "Oceanus Folk") %>%
+  pull(name)
+
+# Step 2: Get all outgoing edges from these music
+music_out_edges <- mc1_edges_clean %>%
+  filter(from %in% all_music, `Edge Colour` == "Influenced By")
+
+# Step 3: Get all songs that has influenced the original song
+influenced_music <- mc1_nodes_clean %>%
+  filter(name %in% music_out_edges$to, genre == "Oceanus Folk") %>%
+  pull(name)
+
+all_nodes <- unique(c(
+                      influenced_music))
+
+sort(influenced_music)
+```
+
+```{r}
+# Create subgraph
+sub_graph <- graph %>%
+  filter(name %in% all_nodes)
+
+
+
+# Visualisation
+
+g <- sub_graph %>%
+  ggraph(layout = "kk") + 
+  geom_edge_fan(
+    aes(
+      edge_colour = `Edge Colour`,
+      start_cap = circle(1, 'mm'),
+      end_cap = circle(1, 'mm')
+      ),
+    arrow = arrow(length = unit(1, 'mm')),
+    alpha = 0.3
+  ) +
+  geom_point_interactive(
+    aes(
+      x = x,
+      y = y,
+      data_id = name,
+      colour = `Node Colour`,
+      shape = `Node Type`,
+      size = ifelse(node_name %in% c("Sailor Shift", "Ivy Echos", "Wei Zhao"), 3, 1),
+      tooltip = case_when(
+        `Node Type` == "Album" ~ sprintf(
+          "%s<br/>%s<br/>Notable: %s<br/>(%s)", node_name, genre, notable, release_date
+        ),
+        `Node Type` == "Song" ~ sprintf(
+          "%s<br/>%s<br/>Notable: %s<br/>(%s)<br/>Single: %s", node_name, genre, notable, release_date, single
+        ),
+        TRUE ~ sprintf("%s", node_name)
+      )
+    ),
+    show.legend = c(size = FALSE)
+  )+ 
+  geom_node_text(
+    aes(
+      label = ifelse(node_name == "Sailor Shift", "Sailor Shift", NA)
+    ),
+    fontface = "bold",
+    size = 3,
+    colour = 'red',
+    show.legend = FALSE
+  ) +
+  scale_shape_manual(
+    name = "Node Type",
+    values = c(
+      "Album" = 16,
+      "MusicalGroup" = 15,
+      "Person" = 17,
+      "Song" = 10
+    )
+  ) +
+  scale_edge_colour_manual(
+    name = "Edge Colour",
+    values = c(
+      `Creator Of` = "#47D45A",
+      `Influenced By` = "#FF5757",
+      `Member Of` = "#CF57FF"
+    )
+  ) +
+  scale_colour_manual(
+    name = "Node Colour",
+    values = c(
+      "Musician" = "grey50",
+      "Oceanus Folk" = "#0027EA",
+      "Other Genre" = "#A45200" # Future work: need to create a colour schema for all other genres
+    )
+  ) +
+  theme_graph() +
+  theme(legend.text = element_text(size = 6),
+        legend.title = element_text(size = 9)) +
+  scale_size_identity()
+
+girafe(ggobj = g, width_svg = 9, height_svg = 8)
+```
+
+
+
+
+
 ::: callout-tip
 ## From which genres does Oceanus Folk draw most of its contemporary inspiration?
 
@@ -2412,10 +2602,10 @@ The analysis identifies all musical artists, including both the songs/albums the
 
 A grading rubric is added to assess artists based on four equally weighted categories:
 
-1. Number of Music Releases
-2. Number of Notable Music
-3. Number of New Artists Influenced and Collaborated With
-4. Number of Music Influenced
+1.  Number of Music Releases
+2.  Number of Notable Music
+3.  Number of New Artists Influenced and Collaborated With
+4.  Number of Music Influenced
 
 Each category's score will be normalised using the formula:
 

@@ -1,0 +1,271 @@
+---
+title: "[Hands-On Exercise 9-4:]{style='color:DarkOrange'} Visual Multivariate Analysis with Parallel Coordinates Plot"
+date: 2025-06-18
+date-modified: "last-modified"
+format: html
+editor: visual
+execute: 
+  eval: true
+  echo: true
+  warning: false
+  freeze: true
+---
+
+# [9-4:]{style="color:DarkOrange"} 1 Overview
+
+Parallel coordinates plot is a data visualisation specially designed for visualising and analysing multivariate, numerical data. It is ideal for comparing multiple variables together and seeing the relationships between them. For example, variables contributing to a Happiness Index. 
+
+Parallel coordinates was invented by [Alfred Inselberg](http://www.math.tau.ac.il/~aiisreal/) in the 1970s as a way to visualise high-dimensional data. This data visualisation technique is more often found in academic and scientific communities than in business and consumer data visualizations. 
+
+As pointed out by [Stephen Few](https://www.perceptualedge.com/articles/b-eye/parallel_coordinates.pdf)(2006):
+- “This certainly isn’t a chart that you would present to the board of directors or place on your Web site for the general public. In fact, the strength of parallel coordinates isn’t in their ability to communicate some truth in the data to others, but rather in their ability to bring meaningful multivariate patterns and comparisons to light when used interactively for analysis.”
+
+For example, parallel coordinates plot can be used to characterise clusters detected during customer segmentation.
+
+This exercise will cover:
+- Plotting statistic parallel coordinates plots using [`ggparcoord()`](https://ggobi.github.io/ggally/reference/ggparcoord.html) of [**GGally package**](https://r4va.netlify.app/chap15)
+- Plotting interactive parallel coordinates plots using [**parallelPlot**](https://cran.r-project.org/web/packages/parallelPlot/) package
+
+# [9-4:]{style="color:DarkOrange"} 2 Install and Launch R Packages
+
+The code chunks below are used to installs and loads **GGally**, **parcoords**, **parallelPlot** and **tidyverse** packages into R
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show Code"
+pacman::p_load(GGally, parallelPlot, tidyverse, patchwork)
+```
+
+# [9-4:]{style="color:DarkOrange"} 3 Data Preparation
+
+The [World Happinees 2018](http://worldhappiness.report/ed/2018/) data will be used. The original data set is in Microsoft Excel format and has been extracted and saved in a csv file called **WHData-2018.csv**.
+
+In the code chunk below, `read_csv()` of **readr** package is used to import *WHData-2018.csv* into R and save it into a tibble data frame object called *wh*.
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show Code"
+wh <- read_csv("data/WHData-2018.csv")
+```
+
+# [9-4:]{style="color:DarkOrange"} 4 Plot Static Parallel Coordinates
+
+This section will cover plotting static parallel coordinates plot by using [`ggparcoord()`](https://ggobi.github.io/ggally/reference/ggparcoord.html) of **GGally** package.
+
+## [9-4:]{style="color:DarkOrange"} 4.1 Plot Simple Parallel Coordinates
+
+Code chunk below shows a typical syntax used to plot a basic static parallel coordinates plot using `ggparcoord()`.
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+#| fig-width: 14
+ggparcoord(data = wh, 
+           columns = c(7:12))
+```
+
+::: callout-note
+- Only two argument namely `data` and `columns` are used. 
+      - `Data` argument is used to map the data object (i.e. *wh*)
+      - `columns` is used to select the columns for preparing the parallel coordinates plot
+:::
+
+## [9-4:]{style="color:DarkOrange"} 4.2 Plot a Parallel Coordinates with boxplot
+
+The basic parallel coordinates failed to reveal any meaning understanding of the World Happiness measures. In this section, the plot will be modified using a collection of arguments provided by `ggparcoord()`.
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show Code"
+#| fig-width: 14
+ggparcoord(data = wh, 
+           columns = c(7:12), 
+           groupColumn = 2,
+           scale = "uniminmax",
+           alphaLines = 0.2,
+           boxplot = TRUE, 
+           title = "Parallel Coordinates Plot of World Happines Variables")
+```
+
+::: callout-tip
+# Things to learn from the code
+
+-   `groupColumn` argument is used to group the observations (i.e. parallel lines) by using a single variable (i.e. Region) and colour the parallel coordinates lines by region name.
+-   `scale` argument is used to scale the variables in the parallel coordinate plot by using `uniminmax` method. The method univariately scales each variable so the minimum of the variable is zero and the maximum is one.
+-   `alphaLines` argument is used to reduce the intensity of the line colour to 0.2. The permissible value range is between 0 to 1.
+-   `boxplot` argument is used to turn on the boxplot by using logical `TRUE`. The default is `FALSE`.
+-   `title` argument is used to provide the parallel coordinates plot a title.
+:::
+
+## [9-4:]{style="color:DarkOrange"} 4.3 Parallel Coordinates with facet
+
+Since `ggparcoord()` is developed as an extension of ggplot2 package, some of the ggplot2 function can be combined when plotting a parallel coordinates plot.
+
+In the code chunk below, `facet_wrap()` of ggplot2 is used to plot 10 small multiple parallel coordinates plots. Each plot represent one geographical region such as East Asia.
+
+::: panel-tabset
+## Default
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show Code"
+#| fig-width: 14
+#| fig-height: 12
+ggparcoord(data = wh, 
+           columns = c(7:12), 
+           groupColumn = 2,
+           scale = "uniminmax",
+           alphaLines = 0.2,
+           boxplot = TRUE, 
+           title = "Multiple Parallel Coordinates Plots of World Happines Variables by Region") +
+  facet_wrap(~ Region)
+```
+
+## Improved
+```{r}
+#| code-fold: true
+#| code-summary: "Show Code"
+#| fig-width: 14
+#| fig-height: 12
+ggparcoord(data = wh, 
+           columns = c(7:12), 
+           groupColumn = 2,
+           scale = "uniminmax",
+           alphaLines = 0.2,
+           boxplot = TRUE, 
+           title = "Multiple Parallel Coordinates Plots of World Happines Variables by Region") +
+  facet_wrap(~ Region) +
+  theme(legend.position = "bottom")
+```
+
+:::
+
+::: callout-warning
+One of the aesthetic defect of the current design is that some of the variable names overlap on x-axis.
+:::
+
+## [9-4:]{style="color:DarkOrange"} 4.4 Roate x-axis Text Label
+
+To make the x-axis text label easy to read, the labels will be rotated by 30 degrees. This can be done using using the `theme()` function in ggplot2 as shown in the code chunk below
+
+```{r}
+#| fig-width: 14
+#| fig-height: 12
+#| code-fold: true
+#| code-summary: "Show Code"
+ggparcoord(data = wh, 
+           columns = c(7:12), 
+           groupColumn = 2,
+           scale = "uniminmax",
+           alphaLines = 0.2,
+           boxplot = TRUE, 
+           title = "Multiple Parallel Coordinates Plots of World Happines Variables by Region") +
+  facet_wrap(~ Region) + 
+  theme(axis.text.x = element_text(angle = 30),
+        legend.position = "bottom")
+```
+
+::: callout-tip
+## Things to learn from the code
+
+- `axis.text.x` argument within `theme()` function is used to rotate x-axis text labels
+- Specified `element_text(angle = 30)` to rotate the x-axis text by 30 degrees
+:::
+
+## [9-4:]{style="color:DarkOrange"} 4.5 Adjust the Rotated x-axis Text Label
+
+Rotating x-axis text labels to 30 degrees makes the label overlap with the plot. This can be avoided by adjusting the text location using `hjust` argument in theme’s text element with `element_text()`. `axis.text.x` can be used to change the look of x-axis text.
+
+```{r}
+#| fig-width: 14
+#| fig-height: 12
+#| code-fold: true
+#| code-summary: "Show the code"
+ggparcoord(data = wh, 
+           columns = c(7:12), 
+           groupColumn = 2,
+           scale = "uniminmax",
+           alphaLines = 0.2,
+           boxplot = TRUE, 
+           title = "Multiple Parallel Coordinates Plots of World Happines Variables by Region") +
+  facet_wrap(~ Region) + 
+  theme(axis.text.x = element_text(angle = 30, hjust=1),
+        legend.position = "bottom")
+```
+
+
+# [9-4:]{style="color:DarkOrange"} 5 Plot Interactive Parallel Coordinates Plot: ParallelPlot methods
+
+[**parallelPlot**](https://cran.r-project.org/web/packages/parallelPlot/) is an R package specially designed to plot a parallel coordinates plot by using ‘htmlwidgets’ package and [d3.js](https://cran.r-project.org/web/packages/parallelPlot/). This section will cover how to use the functions provided in parallelPlot package to build an interactive parallel coordinates plot.
+
+## [9-4:]{style="color:DarkOrange"} 5.1 Basic Plot
+
+The code chunk below plot an interactive parallel coordinates plot by using `parallelPlot()`.
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show Code"
+wh <- wh %>%
+  select("Happiness score", c(7:12))
+parallelPlot(wh,
+             width = 100,
+             height = 100)
+```
+
+::: callout-warning
+Some labels are long and overlapping
+:::
+
+## [9-4:]{style="color:DarkOrange"} 5.2 Rotate Axis Label
+
+In the code chunk below, the `rotateTitle` argument is used to avoid overlapping axis labels.
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show Code"
+parallelPlot(wh,
+             rotateTitle = TRUE,
+             width = 100,
+             height = 100)
+```
+
+::: callout-tip
+
+- One of the useful interactive feature of parallelPlot is that the user can click on a variable of interest
+- For example Happiness score, the monotonous blue colour (default) will change a blues with different colour intensity to highlight the chosen variable and mute the rest of the variables.
+:::
+
+
+## [9-4:]{style="color:DarkOrange"} 5.3 Change Colour Scheme
+
+The default blue colour scheme can be changed by using `continuousCS` arguement as shown in the code chunk below.
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show Code"
+parallelPlot(wh,
+             continuousCS = "YlOrRd",
+             rotateTitle = TRUE,
+             width = 100,
+             height = 100)
+```
+
+## [9-4:]{style="color:DarkOrange"} 5.4 Parallel Coordinates Plot with Histogram
+
+The `histoVisibility` argument is used to plot a histogram along the axis of each variables.
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show Code"
+histoVisibility <- rep(TRUE, ncol(wh))
+parallelPlot(wh,
+             rotateTitle = TRUE,
+             histoVisibility = histoVisibility,
+             width = 100,
+             height = 100)
+```
+
+# [9-4:]{style="color:DarkOrange"} 6 References
+
+-   [*ggparcoord()*](http://ggobi.github.io/ggally/reference/ggparcoord.html) of [**GGally**](http://ggobi.github.io/ggally/index.html) package
+-   [**parallelPlot**](https://cran.r-project.org/web/packages/parallelPlot/parallelPlot.pdf)
