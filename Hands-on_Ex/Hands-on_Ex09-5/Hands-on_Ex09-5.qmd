@@ -15,9 +15,9 @@ execute:
 
 This exercise will cover designing treemap using appropriate R package and consists of three main sections
 
-- Manipulate transaction data into a treemap structure by using selected functions provided in **dplyr** package 
-- Plot static treemap by using **treemap** package
-- Design interactive treemap by using **d3treeR** package.
+-   Manipulate transaction data into a treemap structure by using selected functions provided in **dplyr** package
+-   Plot static treemap by using **treemap** package
+-   Design interactive treemap by using **d3treeR** package.
 
 # [9-5:]{style="color:DarkOrange"} 2 Install and Launch R Packages
 
@@ -43,23 +43,23 @@ realis2018 <- read_csv("data/realis2018.csv")
 
 ## [9-5:]{style="color:DarkOrange"} 3.2 Data wrangling and Manipulation
 
-The data.frame *realis2018* is in transaction record form, which is highly disaggregated and not appropriate to be used to plot a treemap. This section will cover the following steps to prepare a data.frame  that is appropriate for treemap visualisation.
+The data.frame *realis2018* is in transaction record form, which is highly disaggregated and not appropriate to be used to plot a treemap. This section will cover the following steps to prepare a data.frame that is appropriate for treemap visualisation.
 
 -   Group transaction records by *Project Name*, *Planning Region*, *Planning Area*, *Property Type* and *Type of Sale*
--   Compute *Total Unit Sold*, *Total Area*, *Median Unit Price* and *Median Transacted Price* by applying appropriate summary statistics on *No. of Units*, *Area (sqm)*, *Unit Price ($ psm)* and *Transacted Price ($)* respectively.
+-   Compute *Total Unit Sold*, *Total Area*, *Median Unit Price* and *Median Transacted Price* by applying appropriate summary statistics on *No. of Units*, *Area (sqm)*, *Unit Price (\$ psm)* and *Transacted Price (\$)* respectively.
 
 Two key verbs of dplyr package, namely: *group_by()* and *summarize()* will be used to perform these steps.
 
-- group_by() breaks down a data.frame into specified groups of rows. 
-- When verbs are applied on the resulting object, they will automatically be applied “by group”.
+-   group_by() breaks down a data.frame into specified groups of rows.
+-   When verbs are applied on the resulting object, they will automatically be applied “by group”.
 
 Grouping affects the verbs as follows:
 
-- Grouped *select()* is the same as ungrouped *select()*, except that grouping variables are always retained
-- Grouped *arrange()* is the same as ungrouped; unless set .by_group = TRUE, in which case it orders first by the grouping variables.
-- *mutate()* and *filter()* are most useful in conjunction with window functions (like *rank()*, or *min(x) == x*). They are described in detail in vignette(“window-functions”).
-- *sample_n()* and *sample_frac()* sample the specified number/fraction of rows in each group.
-- *summarise()* computes the summary for each group.
+-   Grouped *select()* is the same as ungrouped *select()*, except that grouping variables are always retained
+-   Grouped *arrange()* is the same as ungrouped; unless set .by_group = TRUE, in which case it orders first by the grouping variables.
+-   *mutate()* and *filter()* are most useful in conjunction with window functions (like *rank()*, or *min(x) == x*). They are described in detail in vignette(“window-functions”).
+-   *sample_n()* and *sample_frac()* sample the specified number/fraction of rows in each group.
+-   *summarise()* computes the summary for each group.
 
 In this section, *group_by()* will used together with *summarise()* to derive the summarised data.frame.
 
@@ -89,7 +89,7 @@ realis2018_summarised <- summarise(realis2018_grouped,
 
 ## [9-5:]{style="color:DarkOrange"} 3.4 Grouped Summaries With *pipe*
 
-The code chunk below shows a more efficient way to tackle the same processes by using the pipe, %>%. More information about pipe can be found in this article [Pipes in R Tutorial for Beginners](https://www.datacamp.com/community/tutorials/pipe-r-tutorial)
+The code chunk below shows a more efficient way to tackle the same processes by using the pipe, %\>%. More information about pipe can be found in this article [Pipes in R Tutorial for Beginners](https://www.datacamp.com/community/tutorials/pipe-r-tutorial)
 
 ```{r}
 #| code-fold: true
@@ -143,15 +143,14 @@ treemap(realis2018_selected,
 -   index
     -   The index vector must consist of at least two column names or else no hierarchy treemap will be plotted.
     -   If multiple column names are provided, such as the code chunk above, the first name is the highest aggregation level, the second name the second highest aggregation level, and so on.
--   vSize
-    The column must not contain negative values, because its values will be used to map the size of the rectangles of the treemaps.
+-   vSize The column must not contain negative values, because its values will be used to map the size of the rectangles of the treemaps.
 :::
 
 ::: callout-warning
-- The treemap above is **wrongly coloured**. 
-- For a correctly designed treemap, the colours of the rectangles should be in different intensity showing, in our case, median unit prices.
-- For *treemap()*, *vColor* is used in combination with the argument *type* to determine the colours of the rectangles.
-- Without defining *type*, like the code chunk above, *treemap()* assumes type = index, in our case, the hierarchy of planning areas.
+-   The treemap above is **wrongly coloured**.
+-   For a correctly designed treemap, the colours of the rectangles should be in different intensity showing, in our case, median unit prices.
+-   For *treemap()*, *vColor* is used in combination with the argument *type* to determine the colours of the rectangles.
+-   Without defining *type*, like the code chunk above, *treemap()* assumes type = index, in our case, the hierarchy of planning areas.
 :::
 
 ## [9-5:]{style="color:DarkOrange"} 4.3 Work with *vColor* and *type* arguments
@@ -184,11 +183,11 @@ treemap(realis2018_selected,
 
 There are two arguments that determine the mapping to colour palettes: `mapping` and `palette`. The only difference between “value” and “manual” is the default value for mapping.
 
-The “value” treemap considers palette to be a diverging colour palette (say ColorBrewer’s “RdYlBu”), and maps it in such a way that: 
+The “value” treemap considers palette to be a diverging colour palette (say ColorBrewer’s “RdYlBu”), and maps it in such a way that:
 
-- 0 corresponds to the middle colour (typically white or yellow) 
-- max(abs(values)) to the left-end colour 
-- max(abs(values)) to the right-end colour.
+-   0 corresponds to the middle colour (typically white or yellow)
+-   max(abs(values)) to the left-end colour
+-   max(abs(values)) to the right-end colour.
 
 The “manual” treemap simply maps min(values) to the left-end colour, max(values) to the right-end colour, and mean(range(values)) to the middle colour.
 
@@ -215,8 +214,8 @@ treemap(realis2018_selected,
 ::: callout-tip
 ## Things to learn from the code
 
--   Although the colour palette used is RdYlBu, there are no red rectangles in the treemap above. 
-    - This is because all the median unit prices are positive.
+-   Although the colour palette used is RdYlBu, there are no red rectangles in the treemap above.
+    -   This is because all the median unit prices are positive.
 -   The reason why we only see 5000 to 45000 in the legend is because the range argument is by default c(min(values, max(values)) with some pretty rounding.
 :::
 
@@ -247,7 +246,7 @@ treemap(realis2018_selected,
 ## Things to learn from the code
 
 -   The colour scheme used is very confusing.
-      - This is because mapping = (min(values), mean(range(values)), max(values))
+    -   This is because mapping = (min(values), mean(range(values)), max(values))
 -   It is not wise to use diverging colour palette such as RdYlBu if the values are all positive or negative
 :::
 
@@ -268,7 +267,6 @@ treemap(realis2018_selected,
         title.legend = "Median Unit Price (S$ per sq. m)"
         )
 ```
-
 
 ## [9-5:]{style="color:DarkOrange"} 4.7 Treemap Layout
 
@@ -329,8 +327,8 @@ Please refer to this [Introduction to “treemapify”](https://cran.r-project.o
 ## [9-5:]{style="color:DarkOrange"} 5.1 Design a Basic treemap
 
 ::: panel-tabset
-
 ## Default
+
 ```{r}
 #| code-fold: true
 #| code-summary: "Show Code"
@@ -345,6 +343,7 @@ ggplot(data=realis2018_selected,
 ```
 
 ## Improved
+
 ```{r}
 #| fig-width: 12
 #| fig-height: 10
@@ -443,6 +442,7 @@ Step 1) If this is the first time installing a package from github, the devtools
 
 ::: {.callout-note appearance="minimal" collapse="true"}
 ## Show Code
+
 ``` r
 install.packages("devtools")
 ```
@@ -452,6 +452,7 @@ Step 2) Load *devtools* library and install the package found in GitHub using th
 
 ::: {.callout-note appearance="minimal" collapse="true"}
 ## Show Code
+
 ``` r
 library(devtools)
 install_github("timelyportfolio/d3treeR")
@@ -462,6 +463,7 @@ Step 3) The *d3treeR* package can be launched
 
 ::: {.callout-note appearance="minimal" collapse="true"}
 ## Show Code
+
 ```{r}
 library(d3treeR)
 ```

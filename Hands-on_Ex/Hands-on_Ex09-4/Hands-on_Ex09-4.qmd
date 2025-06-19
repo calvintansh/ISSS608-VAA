@@ -13,18 +13,15 @@ execute:
 
 # [9-4:]{style="color:DarkOrange"} 1 Overview
 
-Parallel coordinates plot is a data visualisation specially designed for visualising and analysing multivariate, numerical data. It is ideal for comparing multiple variables together and seeing the relationships between them. For example, variables contributing to a Happiness Index. 
+Parallel coordinates plot is a data visualisation specially designed for visualising and analysing multivariate, numerical data. It is ideal for comparing multiple variables together and seeing the relationships between them. For example, variables contributing to a Happiness Index.
 
-Parallel coordinates was invented by [Alfred Inselberg](http://www.math.tau.ac.il/~aiisreal/) in the 1970s as a way to visualise high-dimensional data. This data visualisation technique is more often found in academic and scientific communities than in business and consumer data visualizations. 
+Parallel coordinates was invented by [Alfred Inselberg](http://www.math.tau.ac.il/~aiisreal/) in the 1970s as a way to visualise high-dimensional data. This data visualisation technique is more often found in academic and scientific communities than in business and consumer data visualizations.
 
-As pointed out by [Stephen Few](https://www.perceptualedge.com/articles/b-eye/parallel_coordinates.pdf)(2006):
-- “This certainly isn’t a chart that you would present to the board of directors or place on your Web site for the general public. In fact, the strength of parallel coordinates isn’t in their ability to communicate some truth in the data to others, but rather in their ability to bring meaningful multivariate patterns and comparisons to light when used interactively for analysis.”
+As pointed out by [Stephen Few](https://www.perceptualedge.com/articles/b-eye/parallel_coordinates.pdf)(2006): - “This certainly isn’t a chart that you would present to the board of directors or place on your Web site for the general public. In fact, the strength of parallel coordinates isn’t in their ability to communicate some truth in the data to others, but rather in their ability to bring meaningful multivariate patterns and comparisons to light when used interactively for analysis.”
 
 For example, parallel coordinates plot can be used to characterise clusters detected during customer segmentation.
 
-This exercise will cover:
-- Plotting statistic parallel coordinates plots using [`ggparcoord()`](https://ggobi.github.io/ggally/reference/ggparcoord.html) of [**GGally package**](https://r4va.netlify.app/chap15)
-- Plotting interactive parallel coordinates plots using [**parallelPlot**](https://cran.r-project.org/web/packages/parallelPlot/) package
+This exercise will cover: - Plotting statistic parallel coordinates plots using [`ggparcoord()`](https://ggobi.github.io/ggally/reference/ggparcoord.html) of [**GGally package**](https://r4va.netlify.app/chap15) - Plotting interactive parallel coordinates plots using [**parallelPlot**](https://cran.r-project.org/web/packages/parallelPlot/) package
 
 # [9-4:]{style="color:DarkOrange"} 2 Install and Launch R Packages
 
@@ -65,9 +62,7 @@ ggparcoord(data = wh,
 ```
 
 ::: callout-note
-- Only two argument namely `data` and `columns` are used. 
-      - `Data` argument is used to map the data object (i.e. *wh*)
-      - `columns` is used to select the columns for preparing the parallel coordinates plot
+-   Only two argument namely `data` and `columns` are used. - `Data` argument is used to map the data object (i.e. *wh*) - `columns` is used to select the columns for preparing the parallel coordinates plot
 :::
 
 ## [9-4:]{style="color:DarkOrange"} 4.2 Plot a Parallel Coordinates with boxplot
@@ -122,6 +117,7 @@ ggparcoord(data = wh,
 ```
 
 ## Improved
+
 ```{r}
 #| code-fold: true
 #| code-summary: "Show Code"
@@ -137,7 +133,6 @@ ggparcoord(data = wh,
   facet_wrap(~ Region) +
   theme(legend.position = "bottom")
 ```
-
 :::
 
 ::: callout-warning
@@ -168,8 +163,8 @@ ggparcoord(data = wh,
 ::: callout-tip
 ## Things to learn from the code
 
-- `axis.text.x` argument within `theme()` function is used to rotate x-axis text labels
-- Specified `element_text(angle = 30)` to rotate the x-axis text by 30 degrees
+-   `axis.text.x` argument within `theme()` function is used to rotate x-axis text labels
+-   Specified `element_text(angle = 30)` to rotate the x-axis text by 30 degrees
 :::
 
 ## [9-4:]{style="color:DarkOrange"} 4.5 Adjust the Rotated x-axis Text Label
@@ -192,7 +187,6 @@ ggparcoord(data = wh,
   theme(axis.text.x = element_text(angle = 30, hjust=1),
         legend.position = "bottom")
 ```
-
 
 # [9-4:]{style="color:DarkOrange"} 5 Plot Interactive Parallel Coordinates Plot: ParallelPlot methods
 
@@ -230,11 +224,9 @@ parallelPlot(wh,
 ```
 
 ::: callout-tip
-
-- One of the useful interactive feature of parallelPlot is that the user can click on a variable of interest
-- For example Happiness score, the monotonous blue colour (default) will change a blues with different colour intensity to highlight the chosen variable and mute the rest of the variables.
+-   One of the useful interactive feature of parallelPlot is that the user can click on a variable of interest
+-   For example Happiness score, the monotonous blue colour (default) will change a blues with different colour intensity to highlight the chosen variable and mute the rest of the variables.
 :::
-
 
 ## [9-4:]{style="color:DarkOrange"} 5.3 Change Colour Scheme
 
