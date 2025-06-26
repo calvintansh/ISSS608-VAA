@@ -24,6 +24,8 @@ This exercise will cover designing treemap using appropriate R package and consi
 The code chunks below are used to installs and loads **treemap** and **tidyverse** packages into R.
 
 ```{r}
+#| code-fold: true
+#| code-summary: "Show Code"
 pacman::p_load(treemap, treemapify, tidyverse) 
 ```
 

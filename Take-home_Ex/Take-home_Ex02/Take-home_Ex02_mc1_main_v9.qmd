@@ -1482,7 +1482,6 @@ g <- filtered_graph %>%
 
 girafe(ggobj = g, width_svg = 9, height_svg = 8)
 ```
-
 :::
 
 ::: callout-tip
@@ -2220,7 +2219,6 @@ sankeyNetwork(
   sinksRight = TRUE  # Flow goes left (source) to right (target)
 )
 ```
-
 
 ::: callout-tip
 ## What genres have been most influenced by Oceanus Folk?
